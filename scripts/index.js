@@ -5,4 +5,5 @@ if (!token) {
 
 document.addEventListener('DOMContentLoaded', function () {
 
+localStorage.clear();
 });
