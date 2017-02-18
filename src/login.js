@@ -1,4 +1,7 @@
-document.addEventListener('DOMContentLoaded', function () {
+
+module.exports = function () {
+  console.log('in Login');
+
   var form = document.querySelector('#login > form');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -12,4 +15,4 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
-});
+};

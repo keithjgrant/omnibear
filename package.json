@@ -1,0 +1,28 @@
+{
+  "name": "omnibear",
+  "version": "0.0.1",
+  "description": "A micropub Chrome extension",
+  "main": "dist/index.html",
+  "scripts": {
+    "test": "mocha",
+    "build": "browserify src/main.js -o dist/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keithjgrant/omnibear.git"
+  },
+  "keywords": [
+    "micropub"
+  ],
+  "author": "Keith J. Grant",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/keithjgrant/omnibear/issues"
+  },
+  "homepage": "https://github.com/keithjgrant/omnibear#readme",
+  "devDependencies": {
+    "browserify": "^14.1.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
