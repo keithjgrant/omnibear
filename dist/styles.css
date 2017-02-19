@@ -1,10 +1,56 @@
+:root {
+  --gray-60: hsl(200, 15%, 60%);
+  --gray-50: hsl(200, 10%, 50%);
+  --gray-20: hsl(200, 15%, 20%);
+  --blue: hsl(200, 40%, 70%);
+  --blue-dark: hsl(200, 40%, 40%);
+}
+
 
 body {
   width: 500px;
-  padding: 10px 50px;
+  padding: 10px 20px;
   font-size: 1rem;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 200;
   letter-spacing: 0.01em;
+}
+
+button,
+input[type="submit"] {
+  font: inherit;
+}
+
+textarea,
+input[type=text] {
+  width: 100%;
+  border: 1px solid var(--gray-50);
+  font: inherit;
+  padding: 0.3em 0.5em;
+}
+
+label {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--gray-50);
+}
+
+textarea:focus,
+button:focus,
+input[type=text]:focus {
+  outline: none;
+  box-shadow: 0 0 5px var(--blue)
+}
+
+form > * + * {
+  margin-top: 1em;
+}
+
+.button-link {
+  border: 0;
+  background-color: transparent;
+  color: var(--blue-dark);
+  display: inline;
+  padding: 0;
 }

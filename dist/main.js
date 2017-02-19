@@ -1,4 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var requests = require('./requests');
 
 var authTabId = null;
 
@@ -34,11 +35,13 @@ function isSuccessfulAuth (changeInfo) {
   return changeInfo.status === 'loading' && changeInfo.url && changeInfo.url.startsWith(url);
 }
 
+// TODO move to util
 function getParamFromUrl(paramName, url) {
   var params = url.split('?')[1];
   return getParamFromUrlString(paramName, params);
 }
 
+// TODO move to util
 function getParamFromUrlString(paramName, params) {
   var matches = params.split('&').filter(param => param.startsWith(`${paramName}=`));
   if (matches && matches.length) {
@@ -49,26 +52,13 @@ function getParamFromUrlString(paramName, params) {
 }
 
 function fetchToken(code) {
-  var params = getParamString({
+  var params = {
     code: code,
     redirect_uri: 'http://omnibear.com/auth/success/',
     client_id: 'http://omnibear.com',
     me: 'http://keithjgrant.com'
-  });
-  return fetch('https://tokens.indieauth.com/token?' + params, {
-    method: 'POST'
-  })
-  .then(function (res) {
-    return res.text();
-  });
-}
-
-function getParamString(payload) {
-  var params = [];
-  for (var prop in payload) {
-    params.push(`${prop}=${payload[prop]}`);
-  }
-  return params.join('&');
+  };
+  return requests.post('https://tokens.indieauth.com/token', params);
 }
 
 module.exports = function () {
@@ -76,7 +66,22 @@ module.exports = function () {
   chrome.tabs.onUpdated.addListener(handleTabChange);
 }
 
-},{}],2:[function(require,module,exports){
+},{"./requests":6}],2:[function(require,module,exports){
+
+function buildFieldsString (form) {
+  var inputs = form.querySelectorAll('input[name]');
+  var values = Array.prototype.map.call(inputs, (i) => {
+    return `${i.name}=${encodeURIComponent(i.value)}`;
+  });
+  return values.join('&');
+}
+
+module.exports = {
+  buildFieldsString: buildFieldsString
+};
+
+},{}],3:[function(require,module,exports){
+var buildFieldsString = require('./formUtil').buildFieldsString;
 
 module.exports = function () {
   console.log('in Login');
@@ -84,9 +89,10 @@ module.exports = function () {
   var form = document.querySelector('#login > form');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var inputs = form.querySelectorAll('input[name]');
-    var values = Array.prototype.map.call(inputs, i => `${i.name}=${encodeURIComponent(i.value)}`);
-    var url = `${form.action}?${values.join('&')}`;
+    // var inputs = form.querySelectorAll('input[name]');
+    // var values = Array.prototype.map.call(inputs, i => `${i.name}=${encodeURIComponent(i.value)}`);
+    var fields = buildFieldsString(form);
+    var url = `${form.action}?${fields}`;
     var domain = document.getElementById('domain').value;
     chrome.tabs.create({url: url}, function (tab) {
       chrome.runtime.sendMessage({
@@ -100,7 +106,7 @@ module.exports = function () {
   });
 };
 
-},{}],3:[function(require,module,exports){
+},{"./formUtil":2}],4:[function(require,module,exports){
 var router = require('./router').router;
 var background = require('./background');
 var login = require('./login');
@@ -114,23 +120,66 @@ document.addEventListener('DOMContentLoaded', function () {
   }, window.location.pathname);
 });
 
-},{"./background":1,"./login":2,"./popup":4,"./router":5}],4:[function(require,module,exports){
+},{"./background":1,"./login":3,"./popup":5,"./router":7}],5:[function(require,module,exports){
+function el(id) {
+  return document.getElementById(id);
+}
 
-module.exports = function () {
-  console.log('in Popup');
+function ensureLoggedIn() {
   var token = localStorage.getItem('token');
   if (!token) {
     window.location.href = 'login.html';
   }
+}
 
-  document.getElementById('logout').addEventListener('click', function (e) {
+function logout() {
+  localStorage.clear();
+  window.location.href = 'login.html';
+}
+
+function postNote () {
+  
+}
+
+module.exports = function () {
+  ensureLoggedIn();
+
+  el('authenticated-to').innerHTML = localStorage.getItem('domain');
+  el('logout').addEventListener('click', function (e) {
     e.preventDefault();
-    localStorage.clear();
-    window.location.href = 'login.html';
+    logout();
+  });
+  setTimeout(function () {
+    el('input-content').focus();
+  }, 100);
+}
+
+},{}],6:[function(require,module,exports){
+
+function post (url, payload) {
+  var params = getParamString(payload);
+  return fetch(`${url}?${params}`, {
+    method: 'POST'
+  })
+  .then(function (res) {
+    return res.text();
   });
 }
 
-},{}],5:[function(require,module,exports){
+function getParamString (payload) {
+  var params = [];
+  for (var prop in payload) {
+    params.push(`${prop}=${payload[prop]}`);
+  }
+  return params.join('&');
+}
+
+module.exports = {
+  post: post,
+  getParamString: getParamString
+};
+
+},{}],7:[function(require,module,exports){
 
 function router (routes, path) {
   var path = trimPath(path);
@@ -159,4 +208,4 @@ module.exports = {
   trimPath: trimPath
 };
 
-},{}]},{},[3]);
+},{}]},{},[4]);

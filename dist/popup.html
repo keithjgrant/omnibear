@@ -4,8 +4,37 @@
   <script src="main.js"></script>
 </head>
 <body style="width: 400px;">
-  <div id="post">
-    Let's make a Note!
-  </div>
-  <button id="logout" class="button-link">Logout</button>
+  <p>
+    Post a note to <strong id="authenticated-to"></strong>
+    <small><button id="logout" class="button-link">Logout</button></small>
+  </p>
+  <form id="post">
+    <div>
+      <label for="input-content">Content</label>
+      <textarea id="input-content" name="content" rows="4"></textarea>
+    </div>
+    <div>
+      <label for="input-tags">Tags</label>
+      <input
+        id="input-tags"
+        type="text"
+        name="tags"
+        placeholder="e.g. web, personal"
+      />
+    </div>
+    <div>
+      <label for="input-slug">Slug</label>
+      <input
+        id="input-tags"
+        type="text"
+        name="slug"
+      />
+    </div>
+    <input type="hidden" name="h" value="entry" />
+    <button
+      id="submit"
+      type="submit"
+    >Post</button>
+  </form>
+
 </body>
