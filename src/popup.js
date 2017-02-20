@@ -1,5 +1,5 @@
-var post = require('.requests').post;
-var buildFieldsString = require('./formUtil').buildFieldsString;
+var post = require('./requests').post;
+var getFormValues = require('./formUtil').getFormValues;
 
 function el(id) {
   return document.getElementById(id);
@@ -19,8 +19,12 @@ function logout() {
 
 function postNote () {
   var form = el('post');
-  var fields = buildFieldsString(form);
-  post('https://keithjgrant-mp.herokuapp.com/micropub/main', fields)
+  var fields = getFormValues(form);
+  fields.access_token = localStorage.getItem('token');
+  console.log('fields', fields);
+  post('https://keithjgrant-mp.herokuapp.com/micropub/main', null, {
+    body: fields
+  })
   .then(function (response) {
     console.log(response);
   });
@@ -34,6 +38,12 @@ module.exports = function () {
     e.preventDefault();
     logout();
   });
+  el('post').addEventListener('submit', function (e) {
+    e.preventDefault();
+    console.log('posting');
+    postNote();
+    return false;
+  })
   setTimeout(function () {
     el('input-content').focus();
   }, 100);

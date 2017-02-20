@@ -1,13 +1,17 @@
 
-function post (url, payload) {
+function post (url, payload, body) {
   var params;
-  if (payload === 'string') {
+  if (typeof payload === 'string') {
+    console.log('a');
     params = payload;
   } else {
+    console.log('b');
     params = getParamString(payload);
   }
+  console.log('posting', params);
   return fetch(`${url}?${params}`, {
-    method: 'POST'
+    method: 'POST',
+    body: body ? JSON.stringify(body) : null
   })
   .then(function (res) {
     return res.text();

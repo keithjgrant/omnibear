@@ -68,8 +68,24 @@ module.exports = function () {
 
 },{"./requests":6}],2:[function(require,module,exports){
 
+function getFormValues (form) {
+  var inputs = form.querySelectorAll('input[name], textarea');
+  var values = {};
+  Array.prototype.forEach.call(inputs, (i) => {
+    if (typeof values[i.name] === 'undefined') {
+      values[i.name] = i.value;
+    } else {
+      if (!Array.isArray(values[i.name])) {
+        values[i.name] = [values[i.name]];
+      }
+      values[i.name].push(i.value);
+    }
+  });
+  return values;
+}
+
 function buildFieldsString (form) {
-  var inputs = form.querySelectorAll('input[name]');
+  var inputs = form.querySelectorAll('input[name], textarea');
   var values = Array.prototype.map.call(inputs, (i) => {
     return `${i.name}=${encodeURIComponent(i.value)}`;
   });
@@ -77,6 +93,7 @@ function buildFieldsString (form) {
 }
 
 module.exports = {
+  getFormValues: getFormValues,
   buildFieldsString: buildFieldsString
 };
 
@@ -89,8 +106,6 @@ module.exports = function () {
   var form = document.querySelector('#login > form');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    // var inputs = form.querySelectorAll('input[name]');
-    // var values = Array.prototype.map.call(inputs, i => `${i.name}=${encodeURIComponent(i.value)}`);
     var fields = buildFieldsString(form);
     var url = `${form.action}?${fields}`;
     var domain = document.getElementById('domain').value;
@@ -121,6 +136,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 },{"./background":1,"./login":3,"./popup":5,"./router":7}],5:[function(require,module,exports){
+var post = require('./requests').post;
+var getFormValues = require('./formUtil').getFormValues;
+
 function el(id) {
   return document.getElementById(id);
 }
@@ -138,7 +156,16 @@ function logout() {
 }
 
 function postNote () {
-  
+  var form = el('post');
+  var fields = getFormValues(form);
+  fields.access_token = localStorage.getItem('token');
+  console.log('fields', fields);
+  post('https://keithjgrant-mp.herokuapp.com/micropub/main', null, {
+    body: fields
+  })
+  .then(function (response) {
+    console.log(response);
+  });
 }
 
 module.exports = function () {
@@ -149,17 +176,32 @@ module.exports = function () {
     e.preventDefault();
     logout();
   });
+  el('post').addEventListener('submit', function (e) {
+    e.preventDefault();
+    console.log('posting');
+    postNote();
+    return false;
+  })
   setTimeout(function () {
     el('input-content').focus();
   }, 100);
 }
 
-},{}],6:[function(require,module,exports){
+},{"./formUtil":2,"./requests":6}],6:[function(require,module,exports){
 
-function post (url, payload) {
-  var params = getParamString(payload);
+function post (url, payload, body) {
+  var params;
+  if (typeof payload === 'string') {
+    console.log('a');
+    params = payload;
+  } else {
+    console.log('b');
+    params = getParamString(payload);
+  }
+  console.log('posting', params);
   return fetch(`${url}?${params}`, {
-    method: 'POST'
+    method: 'POST',
+    body: body ? JSON.stringify(body) : null
   })
   .then(function (res) {
     return res.text();
