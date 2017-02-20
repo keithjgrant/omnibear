@@ -68,7 +68,7 @@ module.exports = function () {
   chrome.tabs.onUpdated.addListener(handleTabChange);
 }
 
-},{"./requests":7}],2:[function(require,module,exports){
+},{"./requests":5}],2:[function(require,module,exports){
 
 function getFormValues (form) {
   var inputs = form.querySelectorAll('input[name], textarea');
@@ -100,58 +100,23 @@ module.exports = {
 };
 
 },{}],3:[function(require,module,exports){
-var fetchSiteMetadata = require('./parseSite').fetchSiteMetadata;
-var buildFieldsString = require('./formUtil').buildFieldsString;
-
-module.exports = function () {
-  var form = document.querySelector('#login > form');
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var fields = buildFieldsString(form);
-    var domain = document.getElementById('domain').value;
-    var submit = document.getElementById('submit');
-    fetchSiteMetadata(domain)
-    .then(function (data) {
-      if (!data.authEndpoint) {
-        throw new Error('authentication_endpoint not found');
-      }
-      if (!data.tokenEndpoint) {
-        throw new Error('token_endpoint not found');
-      }
-      if (!data.micropub) {
-        throw new Error('micropub not found');
-      }
-      localStorage.setItem('authEndpoint', data.authEndpoint);
-      localStorage.setItem('tokenEndpoint', data.tokenEndpoint);
-      localStorage.setItem('micropubEndpoint', data.micropub);
-      chrome.tabs.create({ url: `${data.authEndpoint}?${fields}` }, function (tab) {
-        chrome.runtime.sendMessage({
-          action: 'begin-auth',
-          payload: {
-            tabId: tab.id,
-            domain: domain
-          }
-        });
-      });
-    });
-  });
-};
-
-},{"./formUtil":2,"./parseSite":5}],4:[function(require,module,exports){
 var router = require('./router').router;
 var background = require('./background');
-var login = require('./login');
-var popup = require('./popup');
+var login = require('./routes/login');
+var popup = require('./routes/popup');
+var reply = require('./routes/reply');
 
 document.addEventListener('DOMContentLoaded', function () {
   router({
     background: background,
     login: login,
-    popup: popup
+    popup: popup,
+    reply: reply
+    // itemReply: itemReply
   }, window.location.pathname);
 });
 
-},{"./background":1,"./login":3,"./popup":6,"./router":8}],5:[function(require,module,exports){
+},{"./background":1,"./router":6,"./routes/login":7,"./routes/popup":8,"./routes/reply":9}],4:[function(require,module,exports){
 
 function getLinkValue(page, rel) {
   var link = page.querySelector(`link[rel="${rel}"]`);
@@ -182,55 +147,7 @@ module.exports = {
   fetchSiteMetadata: fetchSiteMetadata
 };
 
-},{}],6:[function(require,module,exports){
-var postMicropub = require('./requests').postMicropub;
-var getFormValues = require('./formUtil').getFormValues;
-
-function el(id) {
-  return document.getElementById(id);
-}
-
-function ensureLoggedIn() {
-  var token = localStorage.getItem('token');
-  if (!token) {
-    window.location.href = 'login.html';
-  }
-}
-
-function logout() {
-  localStorage.clear();
-  window.location.href = 'login.html';
-}
-
-function postNote () {
-  var form = el('post');
-  var token = localStorage.getItem('token');
-  var mpEndpoint = localStorage.getItem('micropubEndpoint');
-  postMicropub(mpEndpoint, form, token)
-  .then(function (response) {
-    // TODO
-  });
-}
-
-module.exports = function () {
-  ensureLoggedIn();
-
-  el('authenticated-to').innerHTML = localStorage.getItem('domain');
-  el('logout').addEventListener('click', function (e) {
-    e.preventDefault();
-    logout();
-  });
-  el('post').addEventListener('submit', function (e) {
-    e.preventDefault();
-    postNote();
-    return false;
-  })
-  setTimeout(function () {
-    el('input-content').focus();
-  }, 100);
-}
-
-},{"./formUtil":2,"./requests":7}],7:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 
 function post (url, payload, body) {
   var params;
@@ -279,7 +196,7 @@ module.exports = {
   getParamString: getParamString
 };
 
-},{}],8:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 
 function router (routes, path) {
   var path = trimPath(path);
@@ -308,4 +225,96 @@ module.exports = {
   trimPath: trimPath
 };
 
-},{}]},{},[4]);
+},{}],7:[function(require,module,exports){
+var fetchSiteMetadata = require('../parseSite').fetchSiteMetadata;
+var buildFieldsString = require('../formUtil').buildFieldsString;
+
+module.exports = function () {
+  var form = document.querySelector('#login > form');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var fields = buildFieldsString(form);
+    var domain = document.getElementById('domain').value;
+    var submit = document.getElementById('submit');
+    fetchSiteMetadata(domain)
+    .then(function (data) {
+      if (!data.authEndpoint) {
+        throw new Error('authentication_endpoint not found');
+      }
+      if (!data.tokenEndpoint) {
+        throw new Error('token_endpoint not found');
+      }
+      if (!data.micropub) {
+        throw new Error('micropub not found');
+      }
+      localStorage.setItem('authEndpoint', data.authEndpoint);
+      localStorage.setItem('tokenEndpoint', data.tokenEndpoint);
+      localStorage.setItem('micropubEndpoint', data.micropub);
+      chrome.tabs.create({ url: `${data.authEndpoint}?${fields}` }, function (tab) {
+        chrome.runtime.sendMessage({
+          action: 'begin-auth',
+          payload: {
+            tabId: tab.id,
+            domain: domain
+          }
+        });
+      });
+    });
+  });
+};
+
+},{"../formUtil":2,"../parseSite":4}],8:[function(require,module,exports){
+var postMicropub = require('../requests').postMicropub;
+var getFormValues = require('../formUtil').getFormValues;
+
+function el(id) {
+  return document.getElementById(id);
+}
+
+function ensureLoggedIn() {
+  var token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = 'login.html';
+  }
+}
+
+function logout() {
+  localStorage.clear();
+  window.location.href = 'login.html';
+}
+
+function postNote () {
+  var form = el('post');
+  var token = localStorage.getItem('token');
+  var mpEndpoint = localStorage.getItem('micropubEndpoint');
+  postMicropub(mpEndpoint, form, token)
+  .then(function (response) {
+    // TODO
+  });
+}
+
+module.exports = function () {
+  ensureLoggedIn();
+
+  el('authenticated-to').innerHTML = localStorage.getItem('domain');
+  el('logout').addEventListener('click', function (e) {
+    e.preventDefault();
+    logout();
+  });
+  el('post').addEventListener('submit', function (e) {
+    e.preventDefault();
+    postNote();
+    return false;
+  })
+  setTimeout(function () {
+    el('input-content').focus();
+  }, 100);
+
+  // chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+  //   var currentPageUrl = tabs[0].url;
+  // });
+}
+
+},{"../formUtil":2,"../requests":5}],9:[function(require,module,exports){
+
+},{}]},{},[3]);

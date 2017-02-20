@@ -4,6 +4,7 @@
   "version": "0.1",
   "permissions": [
      "contextMenus",
+     "tabs",
      "http://omnibear.com/"
   ],
   "content_scripts": [

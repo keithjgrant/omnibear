@@ -4,18 +4,8 @@
   <script src="main.js"></script>
 </head>
 <body>
-  <header class="header header--new">
-    <div>New Note</div>
-  </header>
-  <header class="hidden header header--page">
-    <div>Reply to current page</div>
-    <ul class="quick-actions">
-      <li><button>like</button></li>
-      <li><button>repost</button></li>
-    </ul>
-  </header>
-  <header class="hidden header header--item">
-    <div>Reply to selected item</div>
+  <header class="header header--page">
+    <div>Current page &mdash; reply</div>
     <ul class="quick-actions">
       <li><button>like</button></li>
       <li><button>repost</button></li>
@@ -23,7 +13,7 @@
   </header>
   <div class="container">
     <div class="text-right">
-      <a href="reply.html" class="button-link button-small">Reply to current page</a>
+      <a href="popup.html" class="button-link button-small">Post new note</a>
     </div>
     <form id="post">
       <div>
@@ -48,6 +38,7 @@
         />
       </div>
       <input type="hidden" name="h" value="entry" />
+      <input type="hidden" name="in-reply-to" id="in-reply-to" />
       <button
         id="submit"
         type="submit"

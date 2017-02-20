@@ -1,5 +1,5 @@
-var fetchSiteMetadata = require('./parseSite').fetchSiteMetadata;
-var buildFieldsString = require('./formUtil').buildFieldsString;
+var fetchSiteMetadata = require('../parseSite').fetchSiteMetadata;
+var buildFieldsString = require('../formUtil').buildFieldsString;
 
 module.exports = function () {
   var form = document.querySelector('#login > form');

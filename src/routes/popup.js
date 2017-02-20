@@ -1,5 +1,5 @@
-var postMicropub = require('./requests').postMicropub;
-var getFormValues = require('./formUtil').getFormValues;
+var postMicropub = require('../requests').postMicropub;
+var formUtil = require('../formUtil');
 
 function el(id) {
   return document.getElementById(id);
@@ -43,4 +43,8 @@ module.exports = function () {
   setTimeout(function () {
     el('input-content').focus();
   }, 100);
+
+  // chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+  //   var currentPageUrl = tabs[0].url;
+  // });
 }
