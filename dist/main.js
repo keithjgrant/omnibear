@@ -17,22 +17,20 @@ function handleBeginAuth(payload) {
 }
 
 function handleTabChange (tabId, changeInfo, tab) {
-  if (tabId !== authTabId || !isSuccessfulAuth(changeInfo)) {
+  if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
     return;
   }
   var code = getParamFromUrl('code', changeInfo.url);
-  console.log('code received:', code, changeInfo.url);
   fetchToken(code)
   .then(function (data) {
     var token = getParamFromUrlString('access_token', data);
-    console.log('token received', token);
     localStorage.setItem('token', token)
-    // chrome.tabs.remove(tab.id);
+    chrome.tabs.remove(tab.id);
     authTabId = null;
   });
 }
 
-function isSuccessfulAuth (changeInfo) {
+function isAuthRedirect (changeInfo) {
   var url = 'http://omnibear.com/auth/success';
   return changeInfo.status === 'loading' && changeInfo.url && changeInfo.url.startsWith(url);
 }
@@ -206,13 +204,11 @@ function logout() {
 
 function postNote () {
   var form = el('post');
-  var fields = getFormValues(form);
-  fields.access_token = localStorage.getItem('token');
-  console.log('fields', fields);
+  var token = localStorage.getItem('token');
   var mpEndpoint = localStorage.getItem('micropubEndpoint');
-  postMicropub(mpEndpoint, fields)
+  postMicropub(mpEndpoint, form, token)
   .then(function (response) {
-    console.log(response);
+    // TODO
   });
 }
 
@@ -226,7 +222,6 @@ module.exports = function () {
   });
   el('post').addEventListener('submit', function (e) {
     e.preventDefault();
-    console.log('posting');
     postNote();
     return false;
   })
@@ -240,13 +235,10 @@ module.exports = function () {
 function post (url, payload, body) {
   var params;
   if (typeof payload === 'string') {
-    console.log('a');
     params = payload;
   } else {
-    console.log('b');
     params = getParamString(payload);
   }
-  console.log('posting', params);
   return fetch(`${url}?${params}`, {
     method: 'POST',
     headers: {
@@ -260,12 +252,13 @@ function post (url, payload, body) {
   });
 }
 
-function postMicropub (url, payload) {
-  return fetch(`${url}?micropubDocument=${JSON.stringify(payload)}`, {
+function postMicropub (url, form, token) {
+  return fetch(url, {
     method: 'POST',
     headers: {
-     'Authorization': `Bearer ${payload.access_token}`
-    }
+      'Authorization': `Bearer ${token}`,
+    },
+    body: new FormData(form)
   })
   .then(function (res) {
     return res.text();

@@ -2,13 +2,10 @@
 function post (url, payload, body) {
   var params;
   if (typeof payload === 'string') {
-    console.log('a');
     params = payload;
   } else {
-    console.log('b');
     params = getParamString(payload);
   }
-  console.log('posting', params);
   return fetch(`${url}?${params}`, {
     method: 'POST',
     headers: {
@@ -22,12 +19,13 @@ function post (url, payload, body) {
   });
 }
 
-function postMicropub (url, payload) {
-  return fetch(`${url}?micropubDocument=${JSON.stringify(payload)}`, {
+function postMicropub (url, form, token) {
+  return fetch(url, {
     method: 'POST',
     headers: {
-     'Authorization': `Bearer ${payload.access_token}`
-    }
+      'Authorization': `Bearer ${token}`,
+    },
+    body: new FormData(form)
   })
   .then(function (res) {
     return res.text();

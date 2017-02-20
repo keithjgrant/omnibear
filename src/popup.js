@@ -19,13 +19,11 @@ function logout() {
 
 function postNote () {
   var form = el('post');
-  var fields = getFormValues(form);
-  fields.access_token = localStorage.getItem('token');
-  console.log('fields', fields);
+  var token = localStorage.getItem('token');
   var mpEndpoint = localStorage.getItem('micropubEndpoint');
-  postMicropub(mpEndpoint, fields)
+  postMicropub(mpEndpoint, form, token)
   .then(function (response) {
-    console.log(response);
+    // TODO
   });
 }
 
@@ -39,7 +37,6 @@ module.exports = function () {
   });
   el('post').addEventListener('submit', function (e) {
     e.preventDefault();
-    console.log('posting');
     postNote();
     return false;
   })
