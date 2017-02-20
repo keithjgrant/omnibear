@@ -5,13 +5,13 @@
 </head>
 <body>
   <div id="login">
-    <form method="GET" action="https://indieauth.com/auth">
+    <form method="GET">
       <p>To use Omnibear, sign in with your domain. Your website will need to support Micropub for creating new posts.</p>
       <input type="text" name="me" placeholder="https://example.com" id="domain" />
       <input type="hidden" name="redirect_uri" value="http://omnibear.com/auth/success/" />
       <input type="hidden" name="client_id" value="http://omnibear.com" />
       <input type="hidden" name="response_type" value="id" />
-      <input type="submit" value="Sign in" />
+      <button type="submit" id="submit">Sign in</button>
     </form>
   </div>
 </body>

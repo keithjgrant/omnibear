@@ -58,7 +58,8 @@ function fetchToken(code) {
     client_id: 'http://omnibear.com',
     me: 'http://keithjgrant.com'
   };
-  return requests.post('https://tokens.indieauth.com/token', params);
+  var tokenEndpoint = localStorage.getItem('tokenEndpoint');
+  return requests.post(tokenEndpoint, params);
 }
 
 module.exports = function () {
@@ -66,7 +67,7 @@ module.exports = function () {
   chrome.tabs.onUpdated.addListener(handleTabChange);
 }
 
-},{"./requests":6}],2:[function(require,module,exports){
+},{"./requests":7}],2:[function(require,module,exports){
 
 function getFormValues (form) {
   var inputs = form.querySelectorAll('input[name], textarea');
@@ -98,30 +99,44 @@ module.exports = {
 };
 
 },{}],3:[function(require,module,exports){
+var fetchSiteMetadata = require('./parseSite').fetchSiteMetadata;
 var buildFieldsString = require('./formUtil').buildFieldsString;
 
 module.exports = function () {
-  console.log('in Login');
-
   var form = document.querySelector('#login > form');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var fields = buildFieldsString(form);
-    var url = `${form.action}?${fields}`;
     var domain = document.getElementById('domain').value;
-    chrome.tabs.create({url: url}, function (tab) {
-      chrome.runtime.sendMessage({
-        action: 'begin-auth',
-        payload: {
-          tabId: tab.id,
-          domain: domain
-        }
+    var submit = document.getElementById('submit');
+    fetchSiteMetadata(domain)
+    .then(function (data) {
+      if (!data.authEndpoint) {
+        throw new Error('authentication_endpoint not found');
+      }
+      if (!data.tokenEndpoint) {
+        throw new Error('token_endpoint not found');
+      }
+      if (!data.micropub) {
+        throw new Error('micropub not found');
+      }
+      localStorage.setItem('authEndpoint', data.authEndpoint);
+      localStorage.setItem('tokenEndpoint', data.tokenEndpoint);
+      localStorage.setItem('micropubEndpoint', data.micropub);
+      chrome.tabs.create({ url: `${data.authEndpoint}?${fields}` }, function (tab) {
+        chrome.runtime.sendMessage({
+          action: 'begin-auth',
+          payload: {
+            tabId: tab.id,
+            domain: domain
+          }
+        });
       });
     });
   });
 };
 
-},{"./formUtil":2}],4:[function(require,module,exports){
+},{"./formUtil":2,"./parseSite":5}],4:[function(require,module,exports){
 var router = require('./router').router;
 var background = require('./background');
 var login = require('./login');
@@ -135,7 +150,38 @@ document.addEventListener('DOMContentLoaded', function () {
   }, window.location.pathname);
 });
 
-},{"./background":1,"./login":3,"./popup":5,"./router":7}],5:[function(require,module,exports){
+},{"./background":1,"./login":3,"./popup":6,"./router":8}],5:[function(require,module,exports){
+
+function getLinkValue(page, rel) {
+  var link = page.querySelector(`link[rel="${rel}"]`);
+  if (link) {
+    return link.href;
+  } else {
+    return null;
+  }
+}
+
+function fetchSiteMetadata(url) {
+  return fetch(url)
+  .then(function (res) {
+    return res.text();
+  }).then(function (content) {
+    var page = document.createElement('html');
+    page.innerHTML = content;
+    return {
+      authEndpoint: getLinkValue(page, 'authorization_endpoint'),
+      tokenEndpoint: getLinkValue(page, 'token_endpoint'),
+      micropub: getLinkValue(page, 'micropub')
+    };
+  });
+}
+
+module.exports = {
+  getLinkValue, getLinkValue,
+  fetchSiteMetadata: fetchSiteMetadata
+};
+
+},{}],6:[function(require,module,exports){
 var post = require('./requests').post;
 var getFormValues = require('./formUtil').getFormValues;
 
@@ -160,7 +206,8 @@ function postNote () {
   var fields = getFormValues(form);
   fields.access_token = localStorage.getItem('token');
   console.log('fields', fields);
-  post('https://keithjgrant-mp.herokuapp.com/micropub/main', null, {
+  var mpEndpoint = localStorage.getItem('micropubEndpoint');
+  post(mpEndpoint, null, {
     body: fields
   })
   .then(function (response) {
@@ -187,7 +234,7 @@ module.exports = function () {
   }, 100);
 }
 
-},{"./formUtil":2,"./requests":6}],6:[function(require,module,exports){
+},{"./formUtil":2,"./requests":7}],7:[function(require,module,exports){
 
 function post (url, payload, body) {
   var params;
@@ -221,7 +268,7 @@ module.exports = {
   getParamString: getParamString
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 
 function router (routes, path) {
   var path = trimPath(path);

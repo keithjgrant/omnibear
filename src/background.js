@@ -57,7 +57,8 @@ function fetchToken(code) {
     client_id: 'http://omnibear.com',
     me: 'http://keithjgrant.com'
   };
-  return requests.post('https://tokens.indieauth.com/token', params);
+  var tokenEndpoint = localStorage.getItem('tokenEndpoint');
+  return requests.post(tokenEndpoint, params);
 }
 
 module.exports = function () {

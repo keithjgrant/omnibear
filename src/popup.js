@@ -22,7 +22,8 @@ function postNote () {
   var fields = getFormValues(form);
   fields.access_token = localStorage.getItem('token');
   console.log('fields', fields);
-  post('https://keithjgrant-mp.herokuapp.com/micropub/main', null, {
+  var mpEndpoint = localStorage.getItem('micropubEndpoint');
+  post(mpEndpoint, null, {
     body: fields
   })
   .then(function (response) {
