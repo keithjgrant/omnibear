@@ -16,7 +16,7 @@ function handleBeginAuth(payload) {
 }
 
 function handleTabChange (tabId, changeInfo, tab) {
-  if (tabId !== authTabId || !isSuccessfulAuth(changeInfo)) {
+  if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
     return;
   }
   var code = getParamFromUrl('code', changeInfo.url);
@@ -29,7 +29,7 @@ function handleTabChange (tabId, changeInfo, tab) {
   });
 }
 
-function isSuccessfulAuth (changeInfo) {
+function isAuthRedirect (changeInfo) {
   var url = 'http://omnibear.com/auth/success';
   return changeInfo.status === 'loading' && changeInfo.url && changeInfo.url.startsWith(url);
 }
@@ -44,7 +44,8 @@ function getParamFromUrl(paramName, url) {
 function getParamFromUrlString(paramName, params) {
   var matches = params.split('&').filter(param => param.startsWith(`${paramName}=`));
   if (matches && matches.length) {
-    return matches[0].substr(paramName.length + 1);
+    var value = matches[0].substr(paramName.length + 1);
+    return decodeURIComponent(value);
   } else {
     return null;
   }

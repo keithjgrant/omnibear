@@ -21,11 +21,13 @@ function handleTabChange (tabId, changeInfo, tab) {
     return;
   }
   var code = getParamFromUrl('code', changeInfo.url);
+  console.log('code received:', code, changeInfo.url);
   fetchToken(code)
   .then(function (data) {
     var token = getParamFromUrlString('access_token', data);
+    console.log('token received', token);
     localStorage.setItem('token', token)
-    chrome.tabs.remove(tab.id);
+    // chrome.tabs.remove(tab.id);
     authTabId = null;
   });
 }
@@ -45,7 +47,8 @@ function getParamFromUrl(paramName, url) {
 function getParamFromUrlString(paramName, params) {
   var matches = params.split('&').filter(param => param.startsWith(`${paramName}=`));
   if (matches && matches.length) {
-    return matches[0].substr(paramName.length + 1);
+    var value = matches[0].substr(paramName.length + 1);
+    return decodeURIComponent(value);
   } else {
     return null;
   }
@@ -182,7 +185,7 @@ module.exports = {
 };
 
 },{}],6:[function(require,module,exports){
-var post = require('./requests').post;
+var postMicropub = require('./requests').postMicropub;
 var getFormValues = require('./formUtil').getFormValues;
 
 function el(id) {
@@ -207,9 +210,7 @@ function postNote () {
   fields.access_token = localStorage.getItem('token');
   console.log('fields', fields);
   var mpEndpoint = localStorage.getItem('micropubEndpoint');
-  post(mpEndpoint, null, {
-    body: fields
-  })
+  postMicropub(mpEndpoint, fields)
   .then(function (response) {
     console.log(response);
   });
@@ -248,7 +249,23 @@ function post (url, payload, body) {
   console.log('posting', params);
   return fetch(`${url}?${params}`, {
     method: 'POST',
+    headers: {
+       'Accept': 'application/json, text/plain, */*',
+       'Content-Type': 'application/json'
+   },
     body: body ? JSON.stringify(body) : null
+  })
+  .then(function (res) {
+    return res.text();
+  });
+}
+
+function postMicropub (url, payload) {
+  return fetch(`${url}?micropubDocument=${JSON.stringify(payload)}`, {
+    method: 'POST',
+    headers: {
+     'Authorization': `Bearer ${payload.access_token}`
+    }
   })
   .then(function (res) {
     return res.text();
@@ -265,6 +282,7 @@ function getParamString (payload) {
 
 module.exports = {
   post: post,
+  postMicropub: postMicropub,
   getParamString: getParamString
 };
 

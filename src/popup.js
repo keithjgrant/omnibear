@@ -1,4 +1,4 @@
-var post = require('./requests').post;
+var postMicropub = require('./requests').postMicropub;
 var getFormValues = require('./formUtil').getFormValues;
 
 function el(id) {
@@ -23,9 +23,7 @@ function postNote () {
   fields.access_token = localStorage.getItem('token');
   console.log('fields', fields);
   var mpEndpoint = localStorage.getItem('micropubEndpoint');
-  post(mpEndpoint, null, {
-    body: fields
-  })
+  postMicropub(mpEndpoint, fields)
   .then(function (response) {
     console.log(response);
   });

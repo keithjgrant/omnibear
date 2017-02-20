@@ -11,7 +11,23 @@ function post (url, payload, body) {
   console.log('posting', params);
   return fetch(`${url}?${params}`, {
     method: 'POST',
+    headers: {
+       'Accept': 'application/json, text/plain, */*',
+       'Content-Type': 'application/json'
+   },
     body: body ? JSON.stringify(body) : null
+  })
+  .then(function (res) {
+    return res.text();
+  });
+}
+
+function postMicropub (url, payload) {
+  return fetch(`${url}?micropubDocument=${JSON.stringify(payload)}`, {
+    method: 'POST',
+    headers: {
+     'Authorization': `Bearer ${payload.access_token}`
+    }
   })
   .then(function (res) {
     return res.text();
@@ -28,5 +44,6 @@ function getParamString (payload) {
 
 module.exports = {
   post: post,
+  postMicropub: postMicropub,
   getParamString: getParamString
 };
