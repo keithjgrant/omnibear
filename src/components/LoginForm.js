@@ -3,13 +3,19 @@ import { openLink } from '../utils';
 import { fetchSiteMetadata } from '../parseSite'
 
 export default class LoginForm extends Component {
+  componentDidMount() {
+    setTimeout(() => {
+      this.input.focus();
+    }, 200);
+  }
+
   render() {
     return (
       <form class="container" method="GET" onSubmit={this.handleSubmit}>
         <p>To use Omnibear, sign in with your domain. Your website will need to
-        support
+        support{' '}
         <a href="http://indieweb.org/micropub" onClick={openLink}>Micropub</a>
-        for creating new posts.</p>
+        {' '}for creating new posts.</p>
 
         <div class="fields-inline">
           <input
@@ -19,6 +25,7 @@ export default class LoginForm extends Component {
             className="fields-inline__fill"
             value={this.state.domain}
             onChange={this.handleChange}
+            ref={(el) => this.input = el}
           />
           <button type="submit" disabled={this.state.isLoading}>
             Sign in
@@ -35,7 +42,6 @@ export default class LoginForm extends Component {
   }
 
   handleSubmit = (e) => {
-    console.log('submitting');
     e.preventDefault();
     this.setState({isLoading: true});
     fetchSiteMetadata(this.state.domain)
@@ -44,17 +50,26 @@ export default class LoginForm extends Component {
         return this.setState({hasErrors: true});
       }
       const url = `${data.authEndpoint}?${this.getFields(this.state.domain)}`
-      console.log('opening ' + url);
-      chrome.tabs.create({ url }, (tab) => {
-        chrome.runtime.sendMessage({
-          action: 'begin-auth',
-          payload: {
-            tabId: tab.id,
-            domain: domain,
-            data
-          }
-        });
+      debugger;
+      chrome.runtime.sendMessage({
+        action: 'begin-auth',
+        payload: {
+          authUrl: url,
+          domain: this.state.domain,
+          metadata: data,
+        }
       });
+      // chrome.tabs.create({ url }, (tab) => {
+      //   console.log('tab created');
+      //   chrome.runtime.sendMessage({
+      //     action: 'begin-auth',
+      //     payload: {
+      //       tabId: tab.id,
+      //       domain: domain,
+      //       metadata: data,
+      //     }
+      //   });
+      // });
     });
   }
 
