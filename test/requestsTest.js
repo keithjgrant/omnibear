@@ -1,10 +1,10 @@
-var assert = require('chai').assert;
-var requests = require('../src/requests');
+import {assert} from 'chai';
+import {getParamString, formDataFromObject} from '../src/requests';
 
 describe('requests', function () {
   describe('getParamString', function () {
     it('should build string', function () {
-      var str = requests.getParamString({
+      var str = getParamString({
         foo: 'bar',
         bam: 'baz'
       });
@@ -12,7 +12,7 @@ describe('requests', function () {
     });
 
     it('should build string from single value', function () {
-      var str = requests.getParamString({
+      var str = getParamString({
         foo: 'bar'
       });
       assert.equal(str, 'foo=bar');
@@ -20,4 +20,5 @@ describe('requests', function () {
   });
 
   // TODO: how to stub fetch() in Node?
+  // TODO: how to test FormData in Node?
 });

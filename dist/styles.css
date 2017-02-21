@@ -13,8 +13,12 @@
   --green-dark: hsl(80, 60%, 33%);
   --red-xlight: hsl(320, 60%, 90%);
   --red-dark: hsl(320, 60%, 40%);
+  box-sizing: border-box;
 }
 
+*, *::before, *::after {
+  box-sizing: inherit;
+}
 
 body {
   width: 450px;
@@ -54,6 +58,19 @@ button:focus,
 input[type=text]:focus {
   outline: none;
   box-shadow: 0 0 5px var(--blue)
+}
+
+a {
+  color: var(--blue-dark);
+}
+a:visited {
+  color: var(--blue-dark);
+}
+a:hover {
+  color: var(--blue);
+}
+a:active {
+  color: var(--red-dark);
 }
 
 form > * + * {
@@ -133,6 +150,12 @@ form > * + * {
 .fields-inline__fill {
   width: auto;
   flex: 1;
+}
+
+.metadata {
+  font-size: 0.64em;
+  font-weight: bold;
+  opacity: 0.6;
 }
 
 

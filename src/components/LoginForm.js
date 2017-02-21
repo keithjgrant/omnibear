@@ -6,7 +6,7 @@ export default class LoginForm extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.input.focus();
-    }, 200);
+    }, 150);
   }
 
   render() {
@@ -50,7 +50,6 @@ export default class LoginForm extends Component {
         return this.setState({hasErrors: true});
       }
       const url = `${data.authEndpoint}?${this.getFields(this.state.domain)}`
-      debugger;
       chrome.runtime.sendMessage({
         action: 'begin-auth',
         payload: {
@@ -59,17 +58,6 @@ export default class LoginForm extends Component {
           metadata: data,
         }
       });
-      // chrome.tabs.create({ url }, (tab) => {
-      //   console.log('tab created');
-      //   chrome.runtime.sendMessage({
-      //     action: 'begin-auth',
-      //     payload: {
-      //       tabId: tab.id,
-      //       domain: domain,
-      //       metadata: data,
-      //     }
-      //   });
-      // });
     });
   }
 

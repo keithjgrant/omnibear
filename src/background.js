@@ -3,7 +3,6 @@ import requests from './requests';
 var authTabId = null;
 
 function handleMessage(request, sender, sendResponse) {
-  console.log('handling message', request);
   switch (request.action) {
     case 'begin-auth':
       handleBeginAuth(request.payload);
@@ -17,19 +16,15 @@ function handleBeginAuth(payload) {
   localStorage.setItem('authEndpoint', payload.metadata.authEndpoint);
   localStorage.setItem('tokenEndpoint', payload.metadata.tokenEndpoint);
   localStorage.setItem('micropubEndpoint', payload.metadata.micropub);
-  chrome.tabs.create({url: payload.authUrl}, (tab) => {
-    console.log('tab created');
-    authTabId = payload.tabId;
+  chrome.tabs.create({url: payload.authUrl}, (tab, x, y) => {
+    authTabId = tab.id;
   });
 }
 
 function handleTabChange (tabId, changeInfo, tab) {
-  console.log(tabId, authTabId);
   if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
     return;
   }
-  console.log('match');
-  debugger;
   var code = getParamFromUrl('code', changeInfo.url);
   fetchToken(code)
   .then(function (data) {
@@ -42,7 +37,6 @@ function handleTabChange (tabId, changeInfo, tab) {
 
 function isAuthRedirect (changeInfo) {
   var url = 'http://omnibear.com/auth/success';
-  console.log('changeInfo', changeInfo);
   return changeInfo.status === 'loading' && changeInfo.url && changeInfo.url.startsWith(url);
 }
 

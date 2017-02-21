@@ -4,8 +4,8 @@
   "description": "A micropub Chrome extension",
   "main": "dist/index.html",
   "scripts": {
-    "test": "mocha",
-    "build-x": "browserify src/main.js -o dist/main.js",
+    "test-x": "mocha",
+    "test": "mocha-webpack --webpack-config webpack.config-test.js \"test/**/*.js\"",
     "build": "webpack"
   },
   "repository": {
@@ -29,12 +29,13 @@
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.23.0",
-    "browserify": "^14.1.0",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
+    "mocha-webpack": "^0.7.0",
     "node-jsdom": "^3.1.5",
     "sinon": "^1.17.7",
     "webpack": "^2.2.1",
+    "webpack-node-externals": "^1.5.4",
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {

@@ -4,8 +4,8 @@
   "version": "0.1",
   "permissions": [
      "contextMenus",
-     "tabs",
-     "http://omnibear.com/"
+     "http://omnibear.com/",
+     "tabs"
   ],
   "content_scripts": [
     {
@@ -18,5 +18,10 @@
   },
   "background": {
     "scripts": ["background.js"]
+  },
+  "icons": {
+    "16": "logo-70.png",
+    "48": "logo-70.png",
+    "128": "logo-190.png"
   }
 }
