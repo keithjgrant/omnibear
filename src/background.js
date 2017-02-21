@@ -1,4 +1,4 @@
-var requests = require('./requests');
+import requests from './requests';
 
 var authTabId = null;
 
