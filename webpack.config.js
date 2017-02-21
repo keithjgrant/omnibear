@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+var copy = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -23,6 +24,10 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
+    new copy([{
+      from: 'static',
+      to: '.'
+    }]),
     new webpack.optimize.UglifyJsPlugin({
       output: {
         comments: false

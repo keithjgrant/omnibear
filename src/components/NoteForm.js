@@ -41,8 +41,8 @@ export default class NoteForm extends Component {
           <FormInputs
             entry={this.state.entry}
             updateEntry={this.updateEntry}
-            onSubmit={this.postEntry}
-            disabled={this.state.isDisabled}
+            onSubmit={this.handleSubmit}
+            isDisabled={this.state.isDisabled}
           />
         </div>
         <Footer domain={this.state.userDomain} onLogout={this.props.handleLogout} />
@@ -50,32 +50,52 @@ export default class NoteForm extends Component {
     );
   }
 
-  handleLike() {
-    console.log('liked: ' + this.state.url);
+  handleLike = () => {
+    if (!this.state.url) { return; }
+    this.postEntry({
+      'h': 'entry',
+      'like-of': this.state.url,
+    })
+    .then(() => {
+      const type = (this.state.postType === ITEM_REPLY) ? 'Item' : 'Page';
+      this.props.userFeedback(`${type} liked successfully`);
+    });
   }
 
-  handleRepost() {
-    console.log('reposted: ' + this.state.url);
+  handleRepost = () => {
+    if (!this.state.url) { return; }
+    this.postEntry({
+      'h': 'entry',
+      'repost-of': this.state.url,
+    })
+    .then(() => {
+      const type = (this.state.postType === ITEM_REPLY) ? 'Item' : 'Page';
+      this.props.userFeedback(`${type} reposted successfully`);
+    });
   }
 
   updateEntry = (newEntry) => {
     this.setState({entry: newEntry});
   }
 
-  postEntry = (entry) => {
+  handleSubmit = (entry) => {
     if (this.state.postType !== NEW_NOTE) {
       entry['in-reply-to'] = this.state.url;
     }
+    this.postEntry(entry)
+    .then(() => {
+      const type = (this.state.postType === NEW_NOTE) ? 'Note' : 'Reply';
+      this.props.userFeedback(`${type} posted successfully`);
+    });
+  }
+
+  postEntry(entry) {
     const endpoint = localStorage.getItem('micropubEndpoint')
     const token = localStorage.getItem('token');
     this.setState({
       isDisabled: true,
     });
-    postFormData(endpoint, entry, token)
-    .then(() => {
-      const type = (this.state.postType === NEW_NOTE) ? 'Note' : 'Reply';
-      this.props.userFeedback(`${type} posted successfully`);
-    });
+    return postFormData(endpoint, entry, token);
   }
 
   changeView = (newView) => {

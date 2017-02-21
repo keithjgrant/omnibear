@@ -11,7 +11,6 @@ function handleMessage(request, sender, sendResponse) {
 }
 
 function handleBeginAuth(payload) {
-  console.log(payload);
   localStorage.setItem('domain', payload.domain);
   localStorage.setItem('authEndpoint', payload.metadata.authEndpoint);
   localStorage.setItem('tokenEndpoint', payload.metadata.tokenEndpoint);

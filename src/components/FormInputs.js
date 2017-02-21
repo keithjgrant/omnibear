@@ -3,6 +3,12 @@ import {clone} from '../utils';
 
 
 export default class FormInputs extends Component {
+  componentDidMount() {
+    setTimeout(() => {
+      this.content.focus();
+    }, 150);
+  }
+
   render() {
     return (
       <form onSubmit={this.onSubmit}>
@@ -14,6 +20,7 @@ export default class FormInputs extends Component {
             onChange={this.updateField('content')}
             rows="4"
             disabled={this.props.isDisabled}
+            ref={(el) => {this.content = el;}}
           />
         </div>
         <div>
