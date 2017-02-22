@@ -73,6 +73,9 @@ a:active {
   color: var(--red-dark);
 }
 
+form {
+  margin-bottom: 1em;
+}
 form > * + * {
   margin-top: 1em;
 }
@@ -99,17 +102,34 @@ form > * + * {
   padding: 0.5em 0.5em 0.5em 1em;
   border: 1px solid currentcolor;
 }
-.header--new {
+.header--new,
+.header--info {
   color: var(--blue-dark);
   background-color: var(--blue-xlight);
 }
-.header--page {
+.header--page,
+.header--success {
   color: var(--green-dark);
   background-color: var(--green-xlight);
 }
-.header--item {
+.header--item,
+.header--danger {
   color: var(--red-dark);
   background-color: var(--red-xlight);
+}
+
+.message {
+  padding: 0.3em 1em;
+  border-left: 5px solid currentColor;
+}
+.message--info {
+  color: var(--blue-dark);
+}
+.message--success {
+  color: var(--green-dark);
+}
+.message--danger {
+  color: var(--red-dark);
 }
 
 .footer {

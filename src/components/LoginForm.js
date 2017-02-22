@@ -1,4 +1,5 @@
 import { h, Component } from 'preact';
+import Message from './Message';
 import { openLink } from '../util/utils';
 import { fetchSiteMetadata } from '../util/parseSite'
 
@@ -24,13 +25,15 @@ export default class LoginForm extends Component {
             placeholder="https://example.com"
             className="fields-inline__fill"
             value={this.state.domain}
-            onChange={this.handleChange}
+            onKeyUp={this.handleChange}
             ref={(el) => this.input = el}
           />
           <button type="submit" disabled={this.state.isLoading}>
             Sign in
           </button>
         </div>
+
+        { this.state.hasErrors ? <Message type="error">{this.state.errorMessage || 'Error'}</Message> : null }
       </form>
     );
   }
@@ -38,6 +41,7 @@ export default class LoginForm extends Component {
   handleChange = (e) => {
     this.setState({
       domain: e.target.value,
+      hasErrors: false,
     });
   }
 
@@ -47,7 +51,11 @@ export default class LoginForm extends Component {
     fetchSiteMetadata(this.state.domain)
     .then((data) => {
       if (!data.authEndpoint || !data.tokenEndpoint || !data.micropub) {
-        return this.setState({hasErrors: true});
+        return this.setState({
+          hasErrors: true,
+          errorMessage: `Missing micropub data on ${this.state.domain}. Please ensure the following links are present: authorization_endpoint, token_endpoint, micropub`,
+          isLoading: false,
+        });
       }
       const url = `${data.authEndpoint}?${this.getFields(this.state.domain)}`
       chrome.runtime.sendMessage({
@@ -57,6 +65,12 @@ export default class LoginForm extends Component {
           domain: this.state.domain,
           metadata: data,
         }
+      });
+    }).catch((err) => {
+      this.setState({
+        hasErrors: true,
+        errorMessage: `Error fetching page: ${this.state.domain}`,
+        isLoading: false,
       });
     });
   }

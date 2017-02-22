@@ -45,15 +45,21 @@ export function postMicropub (url, form, token) {
 }
 
 export function postFormData(url, payload, token) {
-  return fetch(url, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-    body: formDataFromObject(payload),
-  })
-  .then(function (res) {
-    return res.text();
+  return new Promise(function (resolve, reject) {
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formDataFromObject(payload),
+    })
+    .then(function (res) {
+      if (res.status < 200 || res.status >= 400) {
+        return reject(res.status);
+      }
+      // TODO: get location/url of post & display somehow
+      resolve(res.text());
+    });
   });
 }
 

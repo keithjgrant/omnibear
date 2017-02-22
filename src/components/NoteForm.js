@@ -1,11 +1,12 @@
 import { h, Component } from 'preact';
 import Header from './Header';
+import Message from './Message';
 import ChangeViewButton from './ChangeViewButton';
 import FormInputs from './FormInputs';
 import Footer from './Footer';
 import {postFormData} from '../util/requests';
 import {getCurrentTabUrl} from '../util/utils';
-import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY} from '../constants';
+import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY, MESSAGE_SUCCESS, MESSAGE_ERROR} from '../constants';
 
 
 export default class NoteForm extends Component {
@@ -44,6 +45,11 @@ export default class NoteForm extends Component {
             onSubmit={this.handleSubmit}
             isDisabled={this.state.isDisabled}
           />
+          {
+            this.state.errorMessage
+            ? <Message type={MESSAGE_ERROR}>{this.state.errorMessage}</Message>
+            : null
+          }
         </div>
         <Footer domain={this.state.userDomain} onLogout={this.props.handleLogout} />
       </div>
@@ -58,7 +64,10 @@ export default class NoteForm extends Component {
     })
     .then(() => {
       const type = (this.state.postType === ITEM_REPLY) ? 'Item' : 'Page';
-      this.props.userFeedback(`${type} liked successfully`);
+      this.flashSuccessMessage(`${type} liked successfully`);
+    }).catch((err) => {
+      console.error(err);
+      this.flashErrorMessage('Error posting like');
     });
   }
 
@@ -70,7 +79,10 @@ export default class NoteForm extends Component {
     })
     .then(() => {
       const type = (this.state.postType === ITEM_REPLY) ? 'Item' : 'Page';
-      this.props.userFeedback(`${type} reposted successfully`);
+      this.flashSuccessMessage(`${type} reposted successfully`);
+    }).catch((err) => {
+      console.error(err);
+      this.flashErrorMessage('Error reposting');
     });
   }
 
@@ -78,14 +90,36 @@ export default class NoteForm extends Component {
     this.setState({entry: newEntry});
   }
 
+  flashSuccessMessage(message) {
+    this.props.userFeedback(message, MESSAGE_SUCCESS);
+    setTimeout(() => {
+      window.close();
+    }, 4000);
+  }
+
+  flashErrorMessage(message) {
+    this.setState({
+      errorMessage: message,
+      isDisabled: false,
+    });
+    setTimeout(() => {
+      if (this.state.errorMessage === message) {
+        this.setState({errorMessage: false});
+      }
+    }, 4000);
+  }
+
   handleSubmit = (entry) => {
     if (this.state.postType !== NEW_NOTE) {
       entry['in-reply-to'] = this.state.url;
     }
     this.postEntry(entry)
-    .then(() => {
+    .then((x) => {
+      console.log(x);
       const type = (this.state.postType === NEW_NOTE) ? 'Note' : 'Reply';
-      this.props.userFeedback(`${type} posted successfully`);
+      this.flashSuccessMessage(`${type} posted successfully`);
+    }).catch((err) => {
+      this.flashErrorMessage('Error posting Note');
     });
   }
 
