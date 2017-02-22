@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import {clone} from '../utils';
+import {clone} from '../util/utils';
 
 
 export default class FormInputs extends Component {

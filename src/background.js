@@ -1,4 +1,4 @@
-import {post} from './requests';
+import {post} from './util/requests';
 
 var authTabId = null;
 

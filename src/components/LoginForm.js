@@ -1,6 +1,6 @@
 import { h, Component } from 'preact';
-import { openLink } from '../utils';
-import { fetchSiteMetadata } from '../parseSite'
+import { openLink } from '../util/utils';
+import { fetchSiteMetadata } from '../util/parseSite'
 
 export default class LoginForm extends Component {
   componentDidMount() {

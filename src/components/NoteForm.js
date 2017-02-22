@@ -3,8 +3,8 @@ import Header from './Header';
 import ChangeViewButton from './ChangeViewButton';
 import FormInputs from './FormInputs';
 import Footer from './Footer';
-import {postFormData} from '../requests';
-import {getCurrentTabUrl} from '../utils';
+import {postFormData} from '../util/requests';
+import {getCurrentTabUrl} from '../util/utils';
 import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY} from '../constants';
 
 
