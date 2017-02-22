@@ -1,4 +1,4 @@
-import requests from './requests';
+import {post} from './requests';
 
 var authTabId = null;
 
@@ -15,7 +15,7 @@ function handleBeginAuth(payload) {
   localStorage.setItem('authEndpoint', payload.metadata.authEndpoint);
   localStorage.setItem('tokenEndpoint', payload.metadata.tokenEndpoint);
   localStorage.setItem('micropubEndpoint', payload.metadata.micropub);
-  chrome.tabs.create({url: payload.authUrl}, (tab, x, y) => {
+  chrome.tabs.create({url: payload.authUrl}, (tab) => {
     authTabId = tab.id;
   });
 }
@@ -64,7 +64,7 @@ function fetchToken(code) {
     me: 'http://keithjgrant.com'
   };
   var tokenEndpoint = localStorage.getItem('tokenEndpoint');
-  return requests.post(tokenEndpoint, params);
+  return post(tokenEndpoint, params);
 }
 
 (function () {
