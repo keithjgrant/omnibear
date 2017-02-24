@@ -67,7 +67,13 @@ function fetchToken(code) {
   return post(tokenEndpoint, params);
 }
 
-(function () {
-  chrome.runtime.onMessage.addListener(handleMessage);
-  chrome.tabs.onUpdated.addListener(handleTabChange);
-}());
+chrome.runtime.onMessage.addListener(handleMessage);
+chrome.tabs.onUpdated.addListener(handleTabChange);
+chrome.contextMenus.create({
+  title: 'Reply to item',
+  contexts: ['page', 'selection', 'link'],
+  onclick: function (e) {
+    console.log(e);
+    window.open("index.html", "extension_popup", "width=450,height=500,status=no,scrollbars=yes,resizable=no");
+  },
+});
