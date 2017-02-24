@@ -1,18 +1,22 @@
 :root {
-  --gray-90: hsl(200, 20%, 90%);
-  --gray-80: hsl(200, 18%, 80%);
-  --gray-60: hsl(200, 15%, 60%);
-  --gray-50: hsl(200, 10%, 50%);
-  --gray-20: hsl(200, 15%, 20%);
-  --blue: hsl(200, 60%, 55%);
-  --blue-xlight: hsl(200, 60%, 90%);
-  --blue-light: hsl(200, 60%, 70%);
-  --blue-dark: hsl(200, 60%, 40%);
+  --gray-90: hsl(198, 20%, 90%);
+  --gray-80: hsl(198, 18%, 80%);
+  --gray-60: hsl(198, 15%, 60%);
+  --gray-50: hsl(198, 10%, 50%);
+  --gray-40: hsl(198, 5%, 43%);
+  --gray-30: hsl(198, 5%, 30%);
 
-  --green-xlight: hsl(80, 60%, 90%);
-  --green-dark: hsl(80, 60%, 33%);
-  --red-xlight: hsl(320, 60%, 90%);
-  --red-dark: hsl(320, 60%, 40%);
+  --yellow: hsl(41, 75%, 49%);
+  --yellow-light: hsl(41, 75%, 90%);
+
+  --orange: hsl(32, 100%, 45%);
+  --orange-light: hsl(32, 60%, 90%);
+  --blue: hsl(198, 70%, 40%);
+  --blue-light: hsl(198, 60%, 90%);
+  --green: hsl(150, 45%, 35%);
+  --green-light: hsl(150, 60%, 90%);
+  --red: hsl(0, 50%, 45%);
+  --red-light: hsl(0, 60%, 90%);
   box-sizing: border-box;
 }
 
@@ -57,20 +61,20 @@ textarea:focus,
 button:focus,
 input[type=text]:focus {
   outline: none;
-  box-shadow: 0 0 5px var(--blue)
+  box-shadow: 0 0 5px var(--yellow)
 }
 
 a {
-  color: var(--blue-dark);
+  color: var(--orange);
 }
 a:visited {
-  color: var(--blue-dark);
+  color: var(--orange);
 }
 a:hover {
-  color: var(--blue);
+  color: var(--yellow);
 }
 a:active {
-  color: var(--red-dark);
+  color: var(--red);
 }
 
 form {
@@ -87,7 +91,7 @@ form > * + * {
 .button-link {
   border: 0;
   background-color: transparent;
-  color: var(--blue);
+  color: var(--orange);
   display: inline;
   padding: 0;
   cursor: pointer;
@@ -102,20 +106,26 @@ form > * + * {
   padding: 0.5em 0.5em 0.5em 1em;
   border: 1px solid currentcolor;
 }
-.header--new,
-.header--info {
-  color: var(--blue-dark);
-  background-color: var(--blue-xlight);
+.header button {
+  border-color: currentColor;
 }
-.header--page,
-.header--success {
-  color: var(--green-dark);
-  background-color: var(--green-xlight);
+.header--new {
+  color: var(--yellow);
+  background-color: var(--yellow-light);
 }
-.header--item,
-.header--danger {
-  color: var(--red-dark);
-  background-color: var(--red-xlight);
+.header--page {
+  color: var(--yellow);
+  background-color: var(--yellow-light);
+}
+.header--page button {
+  color: var(--orange);
+}
+.header--item {
+  color: var(--yellow-light);
+  background-color: var(--yellow);
+}
+.header--item button {
+  color: var(--yellow-light);
 }
 
 .message {
@@ -123,13 +133,16 @@ form > * + * {
   border-left: 5px solid currentColor;
 }
 .message--info {
-  color: var(--blue-dark);
+  color: var(--blue);
 }
 .message--success {
-  color: var(--green-dark);
+  color: var(--green);
 }
 .message--danger {
-  color: var(--red-dark);
+  color: var(--red);
+}
+.message--warning {
+  color: var(--orange);
 }
 
 .footer {
