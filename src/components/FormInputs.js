@@ -4,9 +4,7 @@ import {clone} from '../util/utils';
 
 export default class FormInputs extends Component {
   componentDidMount() {
-    setTimeout(() => {
-      this.content.focus();
-    }, 150);
+    setTimeout(this.focus, 150);
   }
 
   render() {
@@ -17,7 +15,7 @@ export default class FormInputs extends Component {
           <textarea
             id="input-content"
             value={this.props.entry.content}
-            onChange={this.updateField('content')}
+            onKeyup={this.updateField('content')}
             rows="4"
             disabled={this.props.isDisabled}
             ref={(el) => {this.content = el;}}
@@ -47,10 +45,14 @@ export default class FormInputs extends Component {
         </div>
         <button
           type="submit"
-          disabled={this.props.isDisabled}
+          disabled={this.props.isDisabled || !this.props.entry.content}
         >Post</button>
       </form>
     );
+  }
+
+  focus = () => {
+    this.content.focus();
   }
 
   updateField(fieldName) {

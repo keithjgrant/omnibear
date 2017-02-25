@@ -44,6 +44,7 @@ export default class NoteForm extends Component {
             updateEntry={this.updateEntry}
             onSubmit={this.handleSubmit}
             isDisabled={this.state.isDisabled}
+            ref={(el) => this.form = el}
           />
           {
             this.state.errorMessage
@@ -114,8 +115,7 @@ export default class NoteForm extends Component {
       entry['in-reply-to'] = this.state.url;
     }
     this.postEntry(entry)
-    .then((x) => {
-      console.log(x);
+    .then(() => {
       const type = (this.state.postType === NEW_NOTE) ? 'Note' : 'Reply';
       this.flashSuccessMessage(`${type} posted successfully`);
     }).catch((err) => {
@@ -147,5 +147,6 @@ export default class NoteForm extends Component {
         postType: newView,
       });
     }
+    this.form.focus();
   }
 }
