@@ -5,8 +5,8 @@
   "permissions": [
      "contextMenus",
      "http://omnibear.com/",
-     "http://*/",
-     "https://*/",
+     "http://foo.com/*/",
+     "https://foo.com/*/",
      "tabs"
   ],
   "browser_action": {
@@ -15,6 +15,13 @@
   "background": {
     "scripts": ["background.js"]
   },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "css": ["page.css"],
+      "js": ["page.js"]
+    }
+  ],
   "icons": {
     "16": "logo-70.png",
     "48": "logo-70.png",
