@@ -7,6 +7,11 @@ function handleMessage(request, sender, sendResponse) {
     case 'begin-auth':
       handleBeginAuth(request.payload);
       break;
+    case 'select-entry':
+      selectEntry(request.payload.url);
+      break;
+    case 'clear-entry':
+      clearEntry();
   }
 }
 
@@ -18,6 +23,14 @@ function handleBeginAuth(payload) {
   chrome.tabs.create({url: payload.authUrl}, (tab) => {
     authTabId = tab.id;
   });
+}
+
+function selectEntry(url) {
+  localStorage.setItem('selectedEntry', url);
+}
+
+function clearEntry() {
+  localStorage.removeItem('selectedEntry');
 }
 
 function handleTabChange (tabId, changeInfo, tab) {
@@ -70,10 +83,19 @@ function fetchToken(code) {
 chrome.runtime.onMessage.addListener(handleMessage);
 chrome.tabs.onUpdated.addListener(handleTabChange);
 chrome.contextMenus.create({
-  title: 'Reply to item',
-  contexts: ['page', 'selection', 'link'],
-  onclick: function (e) {
-    console.log(e);
+  title: 'Reply to highlighted entry',
+  contexts: ['page', 'selection'],
+  onclick: function () {
+    window.open("index.html", "extension_popup", "width=450,height=500,status=no,scrollbars=yes,resizable=no");
+  },
+});
+
+chrome.contextMenus.create({
+  title: 'Reply to link url',
+  contexts: ['link'],
+  onclick: function (context) {
+    chrome.runtime.sendMessage({ action: 'remove-entry-highlight' });
+    selectEntry(context.linkUrl);
     window.open("index.html", "extension_popup", "width=450,height=500,status=no,scrollbars=yes,resizable=no");
   },
 });

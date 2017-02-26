@@ -12,9 +12,10 @@ import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY, MESSAGE_SUCCESS, MESSAGE_ERROR} from '
 export default class NoteForm extends Component {
   constructor(props) {
     super(props);
+    const entryUrl = localStorage.getItem('selectedEntry');
     this.state = {
-      postType: NEW_NOTE,
-      url: null,
+      postType: entryUrl ? ITEM_REPLY : NEW_NOTE,
+      url: entryUrl || null,
       userDomain: localStorage.getItem('domain'),
       entry: {
         'h': 'entry',
