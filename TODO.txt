@@ -1,0 +1,31 @@
+
+* track active tab url
+* handle navigation away from page in active tab
+* context menu behavior when logged out?
+
+
+localStorage: {
+  pageUrl,
+  selectedEntry,
+  domain,
+  authEndpoint,
+  tokenEndpoint,
+  micropubEndpoint,
+  token,
+}
+
+
+focus page A:
+  pageUrl: 'http://page-a.com',
+
+right-click entry:
+  pageUrl: 'http://page-a.com',
+  selectedEntry: 'http://foo.com',
+
+switch tabs to page B:
+  pageUrl: 'http://page-b.com',
+
+switch tabs to page A:
+  pageUrl: 'http://page-a.com',
+  selectedEntry: 'http://foo.com',
+=> onfocus message must include focused Entry URL

@@ -1,3 +1,4 @@
+import parseUri from 'parse-uri';
 
 export function getParamFromUrl(paramName, url) {
   var params = url.split('?')[1];
@@ -12,4 +13,39 @@ export function getParamFromUrlString(paramName, params) {
   } else {
     return null;
   }
+}
+
+export function cleanParams(params) {
+  const clean = {};
+  for (let i in params) {
+    if (!i.startsWith('utm_')) {
+      clean[i] = params[i];
+    }
+  }
+  return clean;
+}
+
+export function paramsToQueryString(params) {
+  const parts = [];
+  for (let i in params) {
+    parts.push(`${i}=${params[i]}`);
+  }
+  if (!parts.length) {
+    return '';
+  }
+  return `?${parts.join('&')}`;
+}
+
+// strip hashes and utm_* query params
+export function cleanUrl(url) {
+  const parts = parseUri(url);
+  const base = [
+    parts.protocol,
+    '://',
+    parts.host,
+    parts.port ? `:${parts.port}` : '',
+    parts.path,
+    paramsToQueryString(cleanParams(parts.queryKey))
+  ].join('');
+  return base;
 }

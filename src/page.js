@@ -1,8 +1,8 @@
 import microformat from 'microformat-shiv';
 
 (function () {
-  let currentItem;
-  const className = '__omnibear-selected-item';
+  const CLASS_NAME = '__omnibear-selected-item';
+  let currentItem, currentItemUrl;
 
   function clearItem() {
     if (currentItem) {
@@ -16,8 +16,9 @@ import microformat from 'microformat-shiv';
   function removeHighlight() {
     if (currentItem) {
       console.log('removing class');
-      currentItem.classList.remove(className);
+      currentItem.classList.remove(CLASS_NAME);
       currentItem = null;
+      currentItemUrl = null;
     } else {
       console.log('no currentItem');
     }
@@ -49,8 +50,9 @@ import microformat from 'microformat-shiv';
           url: url,
         },
       });
-      el.classList.add(className);
+      el.classList.add(CLASS_NAME);
       currentItem = el;
+      currentItemUrl = url;
     }
   });
 
@@ -62,4 +64,13 @@ import microformat from 'microformat-shiv';
     }
   }
   chrome.runtime.onMessage.addListener(handleMessage);
+
+  window.addEventListener('focus', function(e) {
+    chrome.runtime.sendMessage({
+      action: 'focus-window',
+      payload: {
+        selectedEntry: currentItemUrl,
+      },
+    });
+  });
 }());

@@ -1,5 +1,5 @@
 import {post} from './util/requests';
-import {getParamFromUrl, getParamFromUrlString} from './util/url';
+import {getParamFromUrl, getParamFromUrlString, cleanUrl} from './util/url';
 
 var authTabId = null;
 
@@ -7,6 +7,9 @@ function handleMessage(request, sender, sendResponse) {
   switch (request.action) {
     case 'begin-auth':
       handleBeginAuth(request.payload);
+      break;
+    case 'focus-window':
+      updateFocusedWindow(sender.url, payload.selectedEntry);
       break;
     case 'select-entry':
       selectEntry(request.payload.url);
@@ -26,8 +29,17 @@ function handleBeginAuth(payload) {
   });
 }
 
+function updateFocusedWindow(url, selectedEntry) {
+  localStorage.setItem('pageUrl', cleanUrl(url));
+  if (selectedEntry) {
+    selectEntry(selectedEntry);
+  } else {
+    clearEntry();
+  }
+}
+
 function selectEntry(url) {
-  localStorage.setItem('selectedEntry', url);
+  localStorage.setItem('selectedEntry', cleanUrl(url));
 }
 
 function clearEntry() {
