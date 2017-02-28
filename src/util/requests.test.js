@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import {getParamString, formDataFromObject} from '../src/requests';
+import {getParamString, formDataFromObject} from './requests';
 
 describe('requests', function () {
   describe('getParamString', function () {

@@ -5,7 +5,7 @@
   "main": "dist/index.html",
   "scripts": {
     "test-x": "mocha",
-    "test": "mocha-webpack --webpack-config webpack.config-test.js \"test/**/*.js\"",
+    "test": "mocha-webpack --webpack-config webpack.config-test.js \"src/**/*.test.js\"",
     "build": "webpack"
   },
   "repository": {

@@ -1,4 +1,5 @@
 import {post} from './util/requests';
+import {getParamFromUrl, getParamFromUrlString} from './util/url';
 
 var authTabId = null;
 
@@ -50,23 +51,6 @@ function handleTabChange (tabId, changeInfo, tab) {
 function isAuthRedirect (changeInfo) {
   var url = 'http://omnibear.com/auth/success';
   return changeInfo.status === 'loading' && changeInfo.url && changeInfo.url.startsWith(url);
-}
-
-// TODO move to util
-function getParamFromUrl(paramName, url) {
-  var params = url.split('?')[1];
-  return getParamFromUrlString(paramName, params);
-}
-
-// TODO move to util
-function getParamFromUrlString(paramName, params) {
-  var matches = params.split('&').filter(param => param.startsWith(`${paramName}=`));
-  if (matches && matches.length) {
-    var value = matches[0].substr(paramName.length + 1);
-    return decodeURIComponent(value);
-  } else {
-    return null;
-  }
 }
 
 function fetchToken(code) {

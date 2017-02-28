@@ -1,6 +1,6 @@
 var assert = require('chai').assert;
 var jsdom = require('node-jsdom').jsdom;
-var parseSite = require('../src/parseSite');
+var parseSite = require('./parseSite');
 
 describe('parseSite', function () {
   describe('getLinkValue', function () {
