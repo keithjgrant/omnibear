@@ -9,7 +9,7 @@ function handleMessage(request, sender, sendResponse) {
       handleBeginAuth(request.payload);
       break;
     case 'focus-window':
-      updateFocusedWindow(sender.url, payload.selectedEntry);
+      updateFocusedWindow(sender.url, request.payload.selectedEntry);
       break;
     case 'select-entry':
       selectEntry(request.payload.url);
@@ -36,14 +36,17 @@ function updateFocusedWindow(url, selectedEntry) {
   } else {
     clearEntry();
   }
+  // console.log('ON PAGE: ', cleanUrl(url));
 }
 
 function selectEntry(url) {
-  localStorage.setItem('selectedEntry', cleanUrl(url));
+  localStorage.setItem('selectedEntry', url);
+  // console.log('selected: ', url);
 }
 
 function clearEntry() {
   localStorage.removeItem('selectedEntry');
+  // console.log('selected: ', null);
 }
 
 function handleTabChange (tabId, changeInfo, tab) {

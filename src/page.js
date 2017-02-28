@@ -65,12 +65,17 @@ import microformat from 'microformat-shiv';
   }
   chrome.runtime.onMessage.addListener(handleMessage);
 
-  window.addEventListener('focus', function(e) {
+  if (!document.hidden) {
+    sendFocusMessage();
+  }
+  window.addEventListener('focus', sendFocusMessage);
+
+  function sendFocusMessage() {
     chrome.runtime.sendMessage({
       action: 'focus-window',
       payload: {
         selectedEntry: currentItemUrl,
       },
     });
-  });
+  }
 }());
