@@ -26,9 +26,14 @@ export default class LoginForm extends Component {
             className="fields-inline__fill"
             value={this.state.domain}
             onKeyUp={this.handleChange}
+            disabled={this.state.isLoading}
             ref={(el) => this.input = el}
           />
-          <button type="submit" disabled={this.state.isLoading}>
+          <button
+            type="submit"
+            disabled={this.state.isLoading}
+            className={this.state.isLoading ? 'is-loading' : ''}
+          >
             Sign in
           </button>
         </div>

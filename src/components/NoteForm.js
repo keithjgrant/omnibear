@@ -37,6 +37,7 @@ export default class NoteForm extends Component {
       },
       hasSelectedEntry: !!selectedEntry,
       isDisabled: false,
+      isLoading: false,
     };
   }
 
@@ -62,6 +63,7 @@ export default class NoteForm extends Component {
             updateEntry={this.updateEntry}
             onSubmit={this.handleSubmit}
             isDisabled={this.state.isDisabled}
+            isLoading={this.state.isLoading}
             ref={(el) => this.form = el}
           />
           {
@@ -120,6 +122,7 @@ export default class NoteForm extends Component {
     this.setState({
       errorMessage: message,
       isDisabled: false,
+      isLoading: false,
     });
     setTimeout(() => {
       if (this.state.errorMessage === message) {
@@ -146,6 +149,7 @@ export default class NoteForm extends Component {
     const token = localStorage.getItem('token');
     this.setState({
       isDisabled: true,
+      isLoading: true,
     });
     return postFormData(endpoint, entry, token);
   }

@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/keithjgrant/omnibear/issues"
   },
-  "homepage": "https://github.com/keithjgrant/omnibear#readme",
+  "homepage": "http://omnibear.com",
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",

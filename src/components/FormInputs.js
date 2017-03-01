@@ -46,6 +46,7 @@ export default class FormInputs extends Component {
         <button
           type="submit"
           disabled={this.props.isDisabled || !this.props.entry.content}
+          className={this.props.isLoading ? 'is-loading' : ''}
         >Post</button>
       </form>
     );
