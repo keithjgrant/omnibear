@@ -31,7 +31,7 @@ export default class NoteForm extends Component {
     var messages = {};
     messages[NEW_NOTE] = 'New Note';
     messages[PAGE_REPLY] = 'Reply to current page';
-    messages[ITEM_REPLY] = 'Reply to selected item';
+    messages[ITEM_REPLY] = 'Reply to selected entry';
     return messages[this.props.postType];
   }
 

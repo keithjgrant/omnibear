@@ -89,11 +89,12 @@ form > * + * {
 }
 
 .button-link {
-  border: 0;
-  background-color: transparent;
-  color: var(--orange);
   display: inline;
+  border: 0;
   padding: 0;
+  background-color: transparent;
+  font-size: inherit;
+  color: var(--orange);
   cursor: pointer;
 }
 .button-small {
@@ -185,12 +186,27 @@ form > * + * {
   flex: 1;
 }
 
+.inline-links {
+  font-size: 0.8em;
+}
+.inline-links > * + * {
+  margin-left: 0.5em;
+}
+.inline-links > * + *::before {
+  content: "|";
+  margin-right: 0.5em;
+  color: var(--gray-30);
+}
+
 .metadata {
   font-size: 0.64em;
   font-weight: bold;
   opacity: 0.6;
 }
 
+.disabled {
+  color: var(--gray-80);
+}
 
 .hidden {
   display: none !important;

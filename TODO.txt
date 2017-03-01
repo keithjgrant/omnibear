@@ -1,8 +1,7 @@
 
-* track active tab url
-* handle navigation away from page in active tab
 * context menu behavior when logged out?
-
+* logout should not clear pageUrl or selectedEntry
+* reply to tweets
 
 localStorage: {
   pageUrl,

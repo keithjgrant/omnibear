@@ -1,21 +1,33 @@
 import { h, Component } from 'preact';
 import Header from './Header';
 import Message from './Message';
-import ChangeViewButton from './ChangeViewButton';
+import ChangeViewButtons from './ChangeViewButtons';
 import FormInputs from './FormInputs';
 import Footer from './Footer';
 import {postFormData} from '../util/requests';
-import {getCurrentTabUrl} from '../util/utils';
 import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY, MESSAGE_SUCCESS, MESSAGE_ERROR} from '../constants';
 
 
 export default class NoteForm extends Component {
   constructor(props) {
     super(props);
-    const entryUrl = localStorage.getItem('selectedEntry');
+    let entryUrl = null;
+    let postType;
+    const selectedEntry = localStorage.getItem('selectedEntry');
+    if (location.search.indexOf('reply=true') === -1) {
+      postType = NEW_NOTE;
+    } else {
+      if (selectedEntry) {
+        postType = ITEM_REPLY;
+        entryUrl = selectedEntry;
+      } else {
+        postType = PAGE_REPLY;
+        entryUrl = localStorage.getItem('pageUrl');
+      }
+    }
     this.state = {
-      postType: entryUrl ? ITEM_REPLY : NEW_NOTE,
-      url: entryUrl || null,
+      postType: postType,
+      url: entryUrl,
       userDomain: localStorage.getItem('domain'),
       entry: {
         'h': 'entry',
@@ -23,6 +35,7 @@ export default class NoteForm extends Component {
         'tags': [],
         'mp-slug': '',
       },
+      hasSelectedEntry: !!selectedEntry,
       isDisabled: false,
     };
   }
@@ -38,7 +51,11 @@ export default class NoteForm extends Component {
         />
         <div className="container">
           <div className="text-right">
-            <ChangeViewButton postType={this.state.postType} onChange={this.changeView} />
+            <ChangeViewButtons
+              postType={this.state.postType}
+              onChange={this.changeView}
+              hasSelectedEntry={this.state.hasSelectedEntry}
+            />
           </div>
           <FormInputs
             entry={this.state.entry}
@@ -133,21 +150,20 @@ export default class NoteForm extends Component {
     return postFormData(endpoint, entry, token);
   }
 
-  changeView = (newView) => {
-    if (newView == PAGE_REPLY) {
-      getCurrentTabUrl()
-      .then((url) => {
-        this.setState({
-          url: url,
-          postType: newView,
-        });
-      });
-    } else {
-      this.setState({
-        url: null,
-        postType: newView,
-      });
+  changeView = (postType) => {
+    let url;
+    switch (postType) {
+      case NEW_NOTE:
+        url = null;
+        break;
+      case PAGE_REPLY:
+        url = localStorage.getItem('pageUrl');
+        break;
+      case ITEM_REPLY:
+        url = localStorage.getItem('selectedEntry');
+        break;
     }
+    this.setState({url, postType});
     this.form.focus();
   }
 }

@@ -40,7 +40,8 @@ export default class App extends Component {
   }
 
   handleLogout = () => {
-    localStorage.clear();
+    const items = ['token', 'domain', 'authEndpoint', 'tokenEndpoint', 'micropubEndpoint'];
+    items.map((item) => localStorage.removeItem(item));
     this.setState({currentView: 'login'});
   }
 }

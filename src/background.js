@@ -1,7 +1,8 @@
 import {post} from './util/requests';
 import {getParamFromUrl, getParamFromUrlString, cleanUrl} from './util/url';
 
-var authTabId = null;
+let authTabId = null;
+let menuId;
 
 function handleMessage(request, sender, sendResponse) {
   switch (request.action) {
@@ -36,17 +37,14 @@ function updateFocusedWindow(url, selectedEntry) {
   } else {
     clearEntry();
   }
-  // console.log('ON PAGE: ', cleanUrl(url));
 }
 
 function selectEntry(url) {
   localStorage.setItem('selectedEntry', url);
-  // console.log('selected: ', url);
 }
 
 function clearEntry() {
   localStorage.removeItem('selectedEntry');
-  // console.log('selected: ', null);
 }
 
 function handleTabChange (tabId, changeInfo, tab) {
@@ -73,7 +71,7 @@ function fetchToken(code) {
     code: code,
     redirect_uri: 'http://omnibear.com/auth/success/',
     client_id: 'http://omnibear.com',
-    me: 'http://keithjgrant.com'
+    me: localStorage.getItem('domain'),
   };
   var tokenEndpoint = localStorage.getItem('tokenEndpoint');
   return post(tokenEndpoint, params);
@@ -81,20 +79,20 @@ function fetchToken(code) {
 
 chrome.runtime.onMessage.addListener(handleMessage);
 chrome.tabs.onUpdated.addListener(handleTabChange);
-chrome.contextMenus.create({
-  title: 'Reply to highlighted entry',
+menuId = chrome.contextMenus.create({
+  title: 'Reply to entry',
   contexts: ['page', 'selection'],
   onclick: function () {
-    window.open("index.html", "extension_popup", "width=450,height=500,status=no,scrollbars=yes,resizable=no");
+    window.open("index.html?reply=true", "extension_popup", "width=450,height=510,status=no,scrollbars=yes,resizable=no,top=80,left=2000");
   },
 });
 
-chrome.contextMenus.create({
-  title: 'Reply to link url',
-  contexts: ['link'],
-  onclick: function (context) {
-    chrome.runtime.sendMessage({ action: 'remove-entry-highlight' });
-    selectEntry(context.linkUrl);
-    window.open("index.html", "extension_popup", "width=450,height=500,status=no,scrollbars=yes,resizable=no");
-  },
-});
+// chrome.contextMenus.create({
+//   title: 'Reply to link url',
+//   contexts: ['link'],
+//   onclick: function (context) {
+//     chrome.runtime.sendMessage({ action: 'remove-entry-highlight' });
+//     selectEntry(context.linkUrl);
+//     window.open("index.html", "extension_popup", "width=450,height=500,status=no,scrollbars=yes,resizable=no");
+//   },
+// });
