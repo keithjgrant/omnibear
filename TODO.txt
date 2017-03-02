@@ -1,7 +1,5 @@
 
-* context menu behavior when logged out?
-* logout should not clear pageUrl or selectedEntry
-* reply to tweets
+* buttons hover & active states
 
 localStorage: {
   pageUrl,
