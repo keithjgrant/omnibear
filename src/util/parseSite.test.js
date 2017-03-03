@@ -1,6 +1,6 @@
-var assert = require('chai').assert;
-var jsdom = require('node-jsdom').jsdom;
-var parseSite = require('./parseSite');
+import {assert} from 'chai';
+import {jsdom} from 'jsdom';
+import parseSite from './parseSite';
 
 describe('parseSite', function () {
   describe('getLinkValue', function () {
@@ -13,7 +13,7 @@ describe('parseSite', function () {
     it('should return link href value', function () {
       var page = jsdom('<div><link rel="authorization_endpoint" href="http://example.com" /></div>');
       var value = parseSite.getLinkValue(page, 'authorization_endpoint');
-      assert.equal(value, 'http://example.com');
+      assert.equal(value, 'http://example.com/');
     });
   });
 });

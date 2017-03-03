@@ -1,3 +1,5 @@
+// TODO: replace this lib with a better mf parser, preferably
+// one that doesn't blow up while tests run in Node environment
 import microformat from 'microformat-shiv';
 
 const CLASS_NAME = '__omnibear-selected-item';
@@ -23,8 +25,6 @@ export function removeHighlight() {
 
 export function focusClickedEntry(e) {
   clearItem();
-  let element;
-  let url;
   let entry;
   if (document.location.hostname === 'twitter.com') {
     entry = findTweet(e.target);
@@ -34,7 +34,7 @@ export function focusClickedEntry(e) {
     entry = findHEntry(e.target);
   }
 
-  if (!entry.url) {
+  if (!entry) {
     return;
   }
   chrome.runtime.sendMessage({
@@ -46,30 +46,43 @@ export function focusClickedEntry(e) {
   currentItemUrl = entry.url;
 }
 
-function findTweet(el) {
-  while(!el.classList.contains('tweet') && el.tagName != 'BODY') {
+export function getAncestorNodeByClass(element, className) {
+  if (!Array.isArray(className)) {
+    className = [className];
+  }
+  return getAncestorNode(element, (el) => {
+    for (let cn of className) {
+      if (el.classList.contains(cn)) {
+        return true;
+      }
+    }
+    return false;
+  });
+}
+
+export function getAncestorNode(el, filter) {
+  while(!filter(el) && el.tagName != 'BODY') {
     el = el.parentElement;
   }
-
-  if (!el.classList.contains('tweet')) {
-    return {};
+  if (!filter(el)) {
+    // el is <body> (and doesn't match filter)
+    return null;
   }
+  return el;
+}
 
+function findTweet(el) {
+  const element = getAncestorNodeByClass(el, 'tweet');
+  if (!element) { return false; };
   const url = `https://twitter.com${el.getAttribute('data-permalink-path')}`;
-  return {
-    element: el,
-    url,
-  };
+  return { element, url };
 }
 
 function findFacebookPost(el) {
-  while(el.id.indexOf('hyperfeed_story_id_') !== 0 && el.tagName != 'BODY') {
-    el = el.parentElement;
-  }
-
-  if (el.id.indexOf('hyperfeed_story_id_') !== 0) {
-    return {};
-  }
+  const element = getAncestorNode(el, (e) => {
+    return e.id.startsWith('hyperfeed_story_id_');
+  });
+  if (!element) { return false; }
 
   let timestamp = el.getElementsByClassName('timestampContent')
   if (timestamp && timestamp[0]) {
@@ -91,14 +104,8 @@ function findFacebookPost(el) {
 }
 
 function findHEntry(el) {
-  while(!el.classList.contains('h-entry') && el.tagName != 'BODY') {
-    el = el.parentElement;
-  }
-
-  if (!el.classList.contains('h-entry')) {
-    return {};
-  }
-
+  const element = getAncestorNodeByClass(el, 'h-entry');
+  if (!element) { return false; }
   const mf = microformat.get({node: el});
   let url;
   if (mf.items.length && mf.items[0].properties && mf.items[0].properties.url) {

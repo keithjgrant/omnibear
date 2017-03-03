@@ -5,8 +5,6 @@
   "permissions": [
      "contextMenus",
      "http://omnibear.com/",
-     "http://foo.com/*/",
-     "https://foo.com/*/",
      "tabs"
   ],
   "browser_action": {
