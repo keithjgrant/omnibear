@@ -62,6 +62,21 @@ describe('page/dom', function () {
       const match = getAncestorNodeByClass(el, ['other', 'target']);
       assert.equal(match.id, 'the-container');
     });
+
+    it('should return body if it matches', function () {
+      const document = jsdom(`
+        <body class="target" id="the-container">
+          <div>
+            <div>
+              <button id="el">click</button>
+            </div>
+          </div>
+        </body>
+      `);
+      const el = document.getElementById('el');
+      // compare ids for equality check
+      assert.equal(getAncestorNodeByClass(el, 'target').id, 'the-container');
+    })
   });
 
   describe('getAncestorNode', function () {

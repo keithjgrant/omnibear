@@ -52,8 +52,9 @@ export default class LoginForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({isLoading: true});
-    fetchSiteMetadata(this.state.domain)
+    const domain = this.getNormalizedDomain();
+    this.setState({isLoading: true, domain});
+    fetchSiteMetadata(domain)
     .then((data) => {
       if (!data.authEndpoint || !data.tokenEndpoint || !data.micropub) {
         return this.setState({
@@ -78,6 +79,14 @@ export default class LoginForm extends Component {
         isLoading: false,
       });
     });
+  }
+
+  getNormalizedDomain() {
+    if (this.state.domain.startsWith('http://') || this.state.domain.startsWith('https://')) {
+      return this.state.domain;
+    } else {
+      return `http://${this.state.domain}`;
+    }
   }
 
   getFields(domain) {

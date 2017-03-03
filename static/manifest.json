@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Omnibear",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "permissions": [
      "contextMenus",
      "http://omnibear.com/",
@@ -23,6 +23,6 @@
   "icons": {
     "16": "logo-70.png",
     "48": "logo-70.png",
-    "128": "logo-190.png"
+    "128": "logo-128.png"
   }
 }

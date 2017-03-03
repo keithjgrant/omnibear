@@ -29,21 +29,6 @@ export function getParamString (payload) {
   return params.join('&');
 }
 
-// deprecated
-export function postMicropub (url, form, token) {
-  console.warn('Using deprecated function: requests.postMicropub');
-  return fetch(url, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-    body: new FormData(form)
-  })
-  .then(function (res) {
-    return res.text();
-  });
-}
-
 export function postFormData(url, payload, token) {
   return new Promise(function (resolve, reject) {
     fetch(url, {
