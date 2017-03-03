@@ -1,11 +1,8 @@
 import {assert} from 'chai';
 import {jsdom} from 'jsdom';
-// import {getAncestorNode, getAncestorNodeByClass} from './entry';
+import {getAncestorNode, getAncestorNodeByClass} from './dom';
 
-// NOTE:
-// Importing microformat-shiv in entry.js breaks in Node. That line
-// must be commented out in order to run these tests.
-describe.skip('entry', function () {
+describe('page/dom', function () {
   describe('getAncestorNodeByClass', function () {
     it('should find container node', function () {
       const document = jsdom(`

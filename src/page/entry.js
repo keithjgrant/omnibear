@@ -1,6 +1,8 @@
 // TODO: replace this lib with a better mf parser, preferably
 // one that doesn't blow up while tests run in Node environment
 import microformat from 'microformat-shiv';
+import {getAncestorNode, getAncestorNodeByClass} from './dom';
+
 
 const CLASS_NAME = '__omnibear-selected-item';
 let currentItem;
@@ -44,31 +46,6 @@ export function focusClickedEntry(e) {
   entry.element.classList.add(CLASS_NAME);
   currentItem = entry.element;
   currentItemUrl = entry.url;
-}
-
-export function getAncestorNodeByClass(element, className) {
-  if (!Array.isArray(className)) {
-    className = [className];
-  }
-  return getAncestorNode(element, (el) => {
-    for (let cn of className) {
-      if (el.classList.contains(cn)) {
-        return true;
-      }
-    }
-    return false;
-  });
-}
-
-export function getAncestorNode(el, filter) {
-  while(!filter(el) && el.tagName != 'BODY') {
-    el = el.parentElement;
-  }
-  if (!filter(el)) {
-    // el is <body> (and doesn't match filter)
-    return null;
-  }
-  return el;
 }
 
 function findTweet(el) {
