@@ -24,10 +24,19 @@ export function post (url, payload, body) {
 export function getParamString (payload) {
   var params = [];
   for (var prop in payload) {
-    params.push(`${prop}=${payload[prop]}`);
+    const value = payload[prop];
+    if (Array.isArray(value)) {
+      for (let val of value) {
+        params.push(`${prop}[]=${val}`);
+      }
+    } else {
+      params.push(`${prop}=${value}`);
+    }
   }
   return params.join('&');
 }
+
+// x-www-form-urlencoded example: https://hacks.mozilla.org/2015/03/this-api-is-so-fetching/
 
 export function postFormData(url, payload, token) {
   return new Promise(function (resolve, reject) {
@@ -42,6 +51,7 @@ export function postFormData(url, payload, token) {
       if (res.status < 200 || res.status >= 400) {
         return reject(res.status);
       }
+      console.log(res.headers.get('Location'));
       // TODO: get location/url of post & display somehow
       resolve(res.text());
     });

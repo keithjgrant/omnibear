@@ -51,7 +51,7 @@ export function focusClickedEntry(e) {
 function findTweet(el) {
   const element = getAncestorNodeByClass(el, 'tweet');
   if (!element) { return false; };
-  const url = `https://twitter.com${el.getAttribute('data-permalink-path')}`;
+  const url = `https://twitter.com${element.getAttribute('data-permalink-path')}`;
   return { element, url };
 }
 
