@@ -28,6 +28,8 @@ export function focusClickedEntry(e) {
   let entry;
   if (document.location.hostname === 'twitter.com') {
     entry = findTweet(e.target);
+  } else if (document.location.hostname === 'www.facebook.com') {
+    entry = findFacebookPost(e.target);
   } else {
     entry = findHEntry(e.target);
   }
@@ -58,6 +60,34 @@ function findTweet(el) {
     element: el,
     url,
   };
+}
+
+function findFacebookPost(el) {
+  while(el.id.indexOf('hyperfeed_story_id_') !== 0 && el.tagName != 'BODY') {
+    el = el.parentElement;
+  }
+
+  if (el.id.indexOf('hyperfeed_story_id_') !== 0) {
+    return {};
+  }
+
+  let timestamp = el.getElementsByClassName('timestampContent')
+  if (timestamp && timestamp[0]) {
+    timestamp = timestamp[0];
+    while(timestamp.tagName != 'A' && timestamp.tagName != 'BODY') {
+      timestamp = timestamp.parentElement;
+    }
+
+    const url = timestamp.href;
+    if (url) {
+      return {
+        element: el,
+        url: url,
+      }
+    }
+  }
+
+  return {};
 }
 
 function findHEntry(el) {
