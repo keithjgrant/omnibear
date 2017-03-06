@@ -2,6 +2,7 @@ import { h, Component } from 'preact';
 import LoginForm from './loginForm';
 import NoteForm from './NoteForm';
 import Message from './Message';
+import {logout} from '../util/utils';
 
 export default class App extends Component {
   constructor(props) {
@@ -40,8 +41,7 @@ export default class App extends Component {
   }
 
   handleLogout = () => {
-    const items = ['token', 'domain', 'authEndpoint', 'tokenEndpoint', 'micropubEndpoint'];
-    items.map((item) => localStorage.removeItem(item));
+    logout();
     this.setState({currentView: 'login'});
   }
 }

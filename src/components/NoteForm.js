@@ -115,7 +115,7 @@ export default class NoteForm extends Component {
     this.props.userFeedback(message, MESSAGE_SUCCESS);
     setTimeout(() => {
       window.close();
-    }, 4000);
+    }, 3000);
   }
 
   flashErrorMessage(message) {

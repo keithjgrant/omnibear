@@ -1,5 +1,6 @@
-import {post} from './util/requests';
+import {post, formEncodedToObject} from './util/requests';
 import {getParamFromUrl, getParamFromUrlString, cleanUrl} from './util/url';
+import {getAuthTab, logout} from './util/utils';
 
 let authTabId = null;
 let menuId;
@@ -54,10 +55,21 @@ function handleTabChange (tabId, changeInfo, tab) {
   var code = getParamFromUrl('code', changeInfo.url);
   fetchToken(code)
   .then(function (data) {
-    var token = getParamFromUrlString('access_token', data);
-    localStorage.setItem('token', token)
+    localStorage.setItem('token', data.token)
     chrome.tabs.remove(tab.id);
     authTabId = null;
+  })
+  .catch(function (err) {
+    getAuthTab()
+    .then((tab) => {
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'fetch-token-error',
+        payload: {
+          error: err.message,
+        },
+      });
+      logout();
+    });
   });
 }
 
@@ -74,7 +86,14 @@ function fetchToken(code) {
     me: localStorage.getItem('domain'),
   };
   var tokenEndpoint = localStorage.getItem('tokenEndpoint');
-  return post(tokenEndpoint, params);
+  return post(tokenEndpoint, params)
+  .then(function (response) {
+    const data = formEncodedToObject(response);
+    if (data.error) {
+      throw new Error(data.error_description || data.error);
+    }
+    return data;
+  });
 }
 
 chrome.runtime.onMessage.addListener(handleMessage);

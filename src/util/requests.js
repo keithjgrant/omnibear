@@ -1,7 +1,6 @@
 
-// deprecated
-export function post (url, payload, body) {
-  console.warn('Using deprecated function: requests.post');
+// TODO: refactor
+export function post (url, payload) {
   var params;
   if (typeof payload === 'string') {
     params = payload;
@@ -10,11 +9,6 @@ export function post (url, payload, body) {
   }
   return fetch(`${url}?${params}`, {
     method: 'POST',
-    headers: {
-       'Accept': 'application/json, text/plain, */*',
-       'Content-Type': 'application/json'
-   },
-    body: body ? JSON.stringify(body) : null
   })
   .then(function (res) {
     return res.text();
@@ -36,6 +30,28 @@ export function getParamString (payload) {
   return params.join('&');
 }
 
+export function formEncodedToObject(formString) {
+  const data = {};
+  const parts = formString.split('&');
+  parts.forEach((param, i) => {
+    const [key, val] = param.split('=');
+    const value = decodeURIParam(val);
+    if (key.endsWith('[]')) {
+      const k = key.substr(0, key.length-2);
+      data[k] = data[k] || [];
+      data[k].push(value);
+    } else {
+      data[key] = value;
+    }
+  });
+  return data;
+}
+
+function decodeURIParam(param) {
+  const str = param.replace(/\+/g, ' ');
+  return decodeURIComponent(str);
+}
+
 // x-www-form-urlencoded example: https://hacks.mozilla.org/2015/03/this-api-is-so-fetching/
 
 export function postFormData(url, payload, token) {
@@ -51,8 +67,8 @@ export function postFormData(url, payload, token) {
       if (res.status < 200 || res.status >= 400) {
         return reject(res.status);
       }
-      console.log(res.headers.get('Location'));
       // TODO: get location/url of post & display somehow
+      // res.headers.get('Location') -> null -- CORS blocking?
       resolve(res.text());
     });
   });

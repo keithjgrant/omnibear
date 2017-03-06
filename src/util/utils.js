@@ -9,3 +9,20 @@ export function openLink(e) {
 export function clone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
+
+export function getAuthTab() {
+  return new Promise(function(resolve, reject) {
+    chrome.tabs.query({url: 'http://omnibear.com/auth/success*'}, function(tabs) {
+      if (tabs.length) {
+        resolve(tabs[0]);
+      } else {
+        reject('Auth tab not found');
+      }
+  });
+});
+}
+
+export function logout() {
+  const items = ['token', 'domain', 'authEndpoint', 'tokenEndpoint', 'micropubEndpoint'];
+  items.map((item) => localStorage.removeItem(item));
+}

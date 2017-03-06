@@ -1,7 +1,13 @@
 import {assert} from 'chai';
 import fetchMock from 'fetch-mock';
 import FormData from 'form-data';
-import {getParamString, formDataFromObject, postFormData, fetching} from './requests';
+import {
+  getParamString,
+  formDataFromObject,
+  postFormData,
+  fetching,
+  formEncodedToObject,
+} from './requests';
 
 // polyfill FormData
 global.FormData = FormData;
@@ -81,6 +87,23 @@ describe('requests', function () {
       // });
 
       fetchMock.restore();
+    });
+  });
+
+  describe('formEncodedToObject', function () {
+    it('should convert string to object', function () {
+      const actual = formEncodedToObject('one=two&three=four');
+      assert.deepEqual(actual, {one: 'two', three: 'four'});
+    });
+
+    it('should pluses in string to spaces', function () {
+      const actual = formEncodedToObject('one=the+value+here&three=four');
+      assert.deepEqual(actual, {one: 'the value here', three: 'four'});
+    });
+
+    it('should convert repeated key to array', function () {
+      const actual = formEncodedToObject('foo[]=one&foo[]=two');
+      assert.deepEqual(actual, {foo: ['one', 'two']});
     });
   });
 
