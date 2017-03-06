@@ -1,6 +1,6 @@
 {
   "name": "omnibear",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A micropub Chrome extension",
   "main": "dist/index.html",
   "scripts": {
