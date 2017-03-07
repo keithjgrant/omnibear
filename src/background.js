@@ -55,7 +55,11 @@ function handleTabChange (tabId, changeInfo, tab) {
   var code = getParamFromUrl('code', changeInfo.url);
   fetchToken(code)
   .then(function (data) {
-    localStorage.setItem('token', data.token)
+    const token = data.access_token;
+    if (!token) {
+      throw new Error('Token not found in token endpoint response. Missing expected field \'access_token\'');
+    }
+    localStorage.setItem('token', token);
     chrome.tabs.remove(tab.id);
     authTabId = null;
   })
