@@ -49,6 +49,7 @@ export default class NoteForm extends Component {
           url={this.state.url}
           onLike={this.handleLike}
           onRepost={this.handleRepost}
+          isDisabled={this.state.isLoading}
         />
         <div className="container">
           <div className="text-right">

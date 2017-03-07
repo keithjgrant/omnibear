@@ -42,8 +42,14 @@ export default class NoteForm extends Component {
 
     return (
       <ul className="quick-actions">
-        <li><button onClick={this.props.onRepost}>repost</button></li>
-        <li><button onClick={this.props.onLike}>like</button></li>
+        <li><button
+          onClick={this.props.onRepost}
+          disabled={this.props.isDisabled}
+        >repost</button></li>
+        <li><button
+          onClick={this.props.onLike}
+          disabled={this.props.isDisabled}
+        >like</button></li>
       </ul>
     );
   }

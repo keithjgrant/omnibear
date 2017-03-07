@@ -63,6 +63,15 @@ input[type="submit"].is-loading::after {
   border-radius: 50%;
   animation: spin 500ms linear infinite;
 }
+button:hover {
+  box-shadow: inset 0 0 0.2em var(--yellow);
+}
+button:active {
+  border-color: var(--yellow);
+}
+button[disabled] {
+  box-shadow: none;
+}
 
 textarea,
 input[type=text] {
@@ -192,9 +201,14 @@ form > * + * {
   margin-left: 0.5em;
 }
 .quick-actions button {
-  /*border: 0;*/
   background: transparent;
   padding: 0 0.5em;
+}
+.quick-actions button:active {
+  text-shadow: 0px 0px 1px rgba(0,0,0,0.3);
+}
+.quick-actions button[disabled] {
+  color: var(--gray-60);
 }
 
 .fields-inline {
@@ -230,6 +244,7 @@ form > * + * {
 
 .disabled {
   color: var(--gray-80);
+  box-shadow: none;
 }
 
 .hidden {

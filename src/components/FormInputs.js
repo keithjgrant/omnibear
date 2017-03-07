@@ -16,6 +16,7 @@ export default class FormInputs extends Component {
             id="input-content"
             value={this.props.entry.content}
             onKeyup={this.updateField('content')}
+            onBlur={this.updateField('content')}
             rows="4"
             disabled={this.props.isDisabled}
             ref={(el) => {this.content = el;}}
@@ -58,7 +59,7 @@ export default class FormInputs extends Component {
 
   updateField(fieldName) {
     return (e) => {
-      e.preventDefault();
+      // e.preventDefault();
       var entry = clone(this.props.entry);
       entry[fieldName] = e.target.value;
       this.props.updateEntry(entry);
