@@ -61,7 +61,7 @@ function findFacebookPost(el) {
   });
   if (!element) { return false; }
 
-  let timestamp = el.getElementsByClassName('timestampContent')
+  let timestamp = element.getElementsByClassName('timestampContent')
   if (timestamp && timestamp[0]) {
     timestamp = timestamp[0];
     while(timestamp.tagName != 'A' && timestamp.tagName != 'BODY') {
@@ -70,10 +70,7 @@ function findFacebookPost(el) {
 
     const url = timestamp.href;
     if (url) {
-      return {
-        element: el,
-        url: url,
-      }
+      return { element, url };
     }
   }
 
@@ -89,10 +86,7 @@ function findHEntry(el) {
     url = mf.items[0].properties.url[0];
   }
 
-  return {
-    element: el,
-    url
-  };
+  return { element, url };
 }
 
 export function getCurrentItemUrl() {
