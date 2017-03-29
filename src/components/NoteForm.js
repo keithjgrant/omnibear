@@ -4,7 +4,7 @@ import Message from './Message';
 import ChangeViewButtons from './ChangeViewButtons';
 import FormInputs from './FormInputs';
 import Footer from './Footer';
-import {postFormData} from '../util/requests';
+import micropub from '../util/micropub';
 import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY, MESSAGE_SUCCESS, MESSAGE_ERROR} from '../constants';
 
 
@@ -146,13 +146,11 @@ export default class NoteForm extends Component {
   }
 
   postEntry(entry) {
-    const endpoint = localStorage.getItem('micropubEndpoint')
-    const token = localStorage.getItem('token');
     this.setState({
       isDisabled: true,
       isLoading: true,
     });
-    return postFormData(endpoint, entry, token);
+    return micropub.create(entry, 'form');
   }
 
   changeView = (postType) => {
