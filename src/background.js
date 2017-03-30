@@ -1,5 +1,5 @@
-import {post, formEncodedToObject} from './util/requests';
-import {getParamFromUrl, getParamFromUrlString, cleanUrl} from './util/url';
+import micropub from './util/micropub';
+import {getParamFromUrl, cleanUrl} from './util/url';
 import {getAuthTab, logout} from './util/utils';
 
 let authTabId = null;
@@ -53,9 +53,10 @@ function handleTabChange (tabId, changeInfo, tab) {
     return;
   }
   var code = getParamFromUrl('code', changeInfo.url);
-  fetchToken(code)
-  .then(function (data) {
-    const token = data.access_token;
+  micropub.options.me = localStorage.getItem('domain');
+  micropub.options.tokenEndpoint = localStorage.getItem('tokenEndpoint');
+  micropub.getToken(code)
+  .then(function (token) {
     if (!token) {
       throw new Error('Token not found in token endpoint response. Missing expected field \'access_token\'');
     }
@@ -69,7 +70,7 @@ function handleTabChange (tabId, changeInfo, tab) {
       chrome.tabs.sendMessage(tab.id, {
         action: 'fetch-token-error',
         payload: {
-          error: err.message,
+          error: err,
         },
       });
       logout();
@@ -80,24 +81,6 @@ function handleTabChange (tabId, changeInfo, tab) {
 function isAuthRedirect (changeInfo) {
   var url = 'http://omnibear.com/auth/success';
   return changeInfo.status === 'loading' && changeInfo.url && changeInfo.url.startsWith(url);
-}
-
-function fetchToken(code) {
-  var params = {
-    code: code,
-    redirect_uri: 'http://omnibear.com/auth/success/',
-    client_id: 'http://omnibear.com',
-    me: localStorage.getItem('domain'),
-  };
-  var tokenEndpoint = localStorage.getItem('tokenEndpoint');
-  return post(tokenEndpoint, params)
-  .then(function (response) {
-    const data = formEncodedToObject(response);
-    if (data.error) {
-      throw new Error(data.error_description || data.error);
-    }
-    return data;
-  });
 }
 
 chrome.runtime.onMessage.addListener(handleMessage);

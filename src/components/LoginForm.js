@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import Message from './Message';
 import { openLink } from '../util/utils';
-import { fetchSiteMetadata } from '../util/parseSite'
+import micropub from '../util/micropub';
 
 export default class LoginForm extends Component {
   componentDidMount() {
@@ -54,31 +54,31 @@ export default class LoginForm extends Component {
     e.preventDefault();
     const domain = this.getNormalizedDomain();
     this.setState({isLoading: true, domain});
-    fetchSiteMetadata(domain)
-    .then((data) => {
-      if (!data.authEndpoint || !data.tokenEndpoint || !data.micropub) {
+    micropub.options.me = domain;
+    micropub.getAuthUrl()
+      .then((url) => {
+        chrome.runtime.sendMessage({
+          action: 'begin-auth',
+          payload: {
+            authUrl: url,
+            domain: this.state.domain,
+            metadata: {
+              authEndpoint: micropub.options.authEndpoint,
+              tokenEndpoint: micropub.options.tokenEndpoint,
+              micropub: micropub.options.micropubEndpoint,
+            },
+          }
+        });
+      })
+      .catch((err) => {
         return this.setState({
           hasErrors: true,
           errorMessage: `Missing micropub data on ${this.state.domain}. Please ensure the following links are present: authorization_endpoint, token_endpoint, micropub`,
           isLoading: false,
         });
-      }
-      const url = `${data.authEndpoint}?${this.getFields(this.state.domain)}`
-      chrome.runtime.sendMessage({
-        action: 'begin-auth',
-        payload: {
-          authUrl: url,
-          domain: this.state.domain,
-          metadata: data,
-        }
       });
-    }).catch((err) => {
-      this.setState({
-        hasErrors: true,
-        errorMessage: `Error fetching page: ${this.state.domain}`,
-        isLoading: false,
-      });
-    });
+
+
   }
 
   getNormalizedDomain() {
