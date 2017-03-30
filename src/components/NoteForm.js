@@ -32,7 +32,7 @@ export default class NoteForm extends Component {
       entry: {
         'h': 'entry',
         'content': '',
-        'tags': [],
+        'category': [],
         'mp-slug': '',
       },
       hasSelectedEntry: !!selectedEntry,
