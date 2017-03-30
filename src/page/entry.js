@@ -74,7 +74,7 @@ function findFacebookPost(el) {
     }
   }
 
-  return {};
+  return false;
 }
 
 function findHEntry(el) {
@@ -84,6 +84,13 @@ function findHEntry(el) {
   let url;
   if (mf.items.length && mf.items[0].properties && mf.items[0].properties.url) {
     url = mf.items[0].properties.url[0];
+  }
+  if (!url) {
+    if (element.tagName === 'BODY') {
+      return false;
+    } else {
+      return findHEntry(element.parentElement, 'h-entry');
+    }
   }
 
   return { element, url };
