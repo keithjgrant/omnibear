@@ -23,13 +23,13 @@ export default class FormInputs extends Component {
           />
         </div>
         <div>
-          <label for="input-tags">Tags</label>
+          <label for="input-category">Tags (space separated)</label>
           <input
-            id="input-tags"
+            id="input-category"
             type="text"
-            placeholder="e.g. web, personal"
-            value={this.props.entry.tags.join(' ')}
-            onChange={this.updateFieldArray('tags')}
+            placeholder="e.g. web  personal"
+            value={this.props.entry.category.join(' ')}
+            onChange={this.updateFieldArray('category')}
             disabled={this.props.isDisabled}
           />
         </div>
