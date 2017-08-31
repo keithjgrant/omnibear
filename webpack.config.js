@@ -4,34 +4,39 @@ var copy = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    'index': './src/index.js',
-    'page': './src/page.js',
-    'background': './src/background.js'
+    index: './src/index.js',
+    page: './src/page.js',
+    background: './src/background.js',
   },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-    sourceMapFilename: '[name].js.map'
+    sourceMapFilename: '[name].js.map',
   },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      exclude: [/node_modules/],
-      loader: 'babel-loader'
-    }, {
-      test: /\.html$/,
-      loader: 'raw'
-    }]
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: [/node_modules/],
+        loader: 'babel-loader',
+      },
+      {
+        test: /\.html$/,
+        loader: 'raw',
+      },
+    ],
   },
-  devtool: 'source-map',
+  // devtool: 'source-map',
   plugins: [
-    new copy([{
-      from: 'static',
-      to: '.'
-    }]),
+    new copy([
+      {
+        from: 'static',
+        to: '.',
+      },
+    ]),
     new webpack.optimize.UglifyJsPlugin({
       output: {
-        comments: false
+        comments: false,
       },
       sourceMap: true,
       compress: {
@@ -44,8 +49,8 @@ module.exports = {
         evaluate: true,
         if_return: true,
         join_vars: true,
-        negate_iife: false
-      }
-    })
-  ]
-}
+        negate_iife: false,
+      },
+    }),
+  ],
+};
