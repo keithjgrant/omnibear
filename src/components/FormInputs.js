@@ -1,6 +1,5 @@
-import { h, Component } from 'preact';
+import {h, Component} from 'preact';
 import {clone} from '../util/utils';
-
 
 export default class FormInputs extends Component {
   componentDidMount() {
@@ -15,11 +14,13 @@ export default class FormInputs extends Component {
           <textarea
             id="input-content"
             value={this.props.entry.content}
-            onKeyup={this.updateField('content')}
+            onInput={this.updateField('content')}
             onBlur={this.updateField('content')}
             rows="4"
             disabled={this.props.isDisabled}
-            ref={(el) => {this.content = el;}}
+            ref={el => {
+              this.content = el;
+            }}
           />
         </div>
         <div>
@@ -48,35 +49,37 @@ export default class FormInputs extends Component {
           type="submit"
           disabled={this.props.isDisabled || !this.props.entry.content}
           className={this.props.isLoading ? 'is-loading' : ''}
-        >Post</button>
+        >
+          Post
+        </button>
       </form>
     );
   }
 
   focus = () => {
     this.content.focus();
-  }
+  };
 
   updateField(fieldName) {
-    return (e) => {
+    return e => {
       // e.preventDefault();
       var entry = clone(this.props.entry);
       entry[fieldName] = e.target.value;
       this.props.updateEntry(entry);
-    }
+    };
   }
 
   updateFieldArray(fieldName) {
-    return (e) => {
+    return e => {
       e.preventDefault();
       var entry = clone(this.props.entry);
       entry[fieldName] = e.target.value.trim().split(' ');
       this.props.updateEntry(entry);
-    }
+    };
   }
 
-  onSubmit = (e) => {
+  onSubmit = e => {
     e.preventDefault();
     this.props.onSubmit(this.props.entry);
-  }
+  };
 }

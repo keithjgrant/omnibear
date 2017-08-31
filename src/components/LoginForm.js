@@ -1,6 +1,6 @@
-import { h, Component } from 'preact';
+import {h, Component} from 'preact';
 import Message from './Message';
-import { openLink } from '../util/utils';
+import {openLink} from '../util/utils';
 import micropub from '../util/micropub';
 
 export default class LoginForm extends Component {
@@ -13,10 +13,13 @@ export default class LoginForm extends Component {
   render() {
     return (
       <form class="container" method="GET" onSubmit={this.handleSubmit}>
-        <p>To use Omnibear, sign in with your domain. Your website will need to
-        support{' '}
-        <a href="http://indieweb.org/micropub" onClick={openLink}>Micropub</a>
-        {' '}for creating new posts.</p>
+        <p>
+          To use Omnibear, sign in with your domain. Your website will need to support{' '}
+          <a href="http://indieweb.org/micropub" onClick={openLink}>
+            Micropub
+          </a>{' '}
+          for creating new posts.
+        </p>
 
         <div class="fields-inline">
           <input
@@ -25,9 +28,9 @@ export default class LoginForm extends Component {
             placeholder="https://example.com"
             className="fields-inline__fill"
             value={this.state.domain}
-            onKeyUp={this.handleChange}
+            onInput={this.handleChange}
             disabled={this.state.isLoading}
-            ref={(el) => this.input = el}
+            ref={el => (this.input = el)}
           />
           <button
             type="submit"
@@ -38,25 +41,30 @@ export default class LoginForm extends Component {
           </button>
         </div>
 
-        { this.state.hasErrors ? <Message type="error">{this.state.errorMessage || 'Error'}</Message> : null }
+        {this.state.hasErrors
+          ? <Message type="error">
+              {this.state.errorMessage || 'Error'}
+            </Message>
+          : null}
       </form>
     );
   }
 
-  handleChange = (e) => {
+  handleChange = e => {
     this.setState({
       domain: e.target.value,
       hasErrors: false,
     });
-  }
+  };
 
-  handleSubmit = (e) => {
+  handleSubmit = e => {
     e.preventDefault();
     const domain = this.getNormalizedDomain();
     this.setState({isLoading: true, domain});
     micropub.options.me = domain;
-    micropub.getAuthUrl()
-      .then((url) => {
+    micropub
+      .getAuthUrl()
+      .then(url => {
         chrome.runtime.sendMessage({
           action: 'begin-auth',
           payload: {
@@ -67,22 +75,24 @@ export default class LoginForm extends Component {
               tokenEndpoint: micropub.options.tokenEndpoint,
               micropub: micropub.options.micropubEndpoint,
             },
-          }
+          },
         });
       })
-      .catch((err) => {
+      .catch(err => {
         return this.setState({
           hasErrors: true,
-          errorMessage: `Missing micropub data on ${this.state.domain}. Please ensure the following links are present: authorization_endpoint, token_endpoint, micropub`,
+          errorMessage: `Missing micropub data on ${this.state
+            .domain}. Please ensure the following links are present: authorization_endpoint, token_endpoint, micropub`,
           isLoading: false,
         });
       });
-
-
-  }
+  };
 
   getNormalizedDomain() {
-    if (this.state.domain.startsWith('http://') || this.state.domain.startsWith('https://')) {
+    if (
+      this.state.domain.startsWith('http://') ||
+      this.state.domain.startsWith('https://')
+    ) {
       return this.state.domain;
     } else {
       return `http://${this.state.domain}`;
@@ -90,12 +100,12 @@ export default class LoginForm extends Component {
   }
 
   getFields(domain) {
-    return ([
+    return [
       'redirect_uri=http://omnibear.com/auth/success/',
       'client_id=http://omnibear.com',
       'response_type=code',
       'scope=create',
-      `me=${domain}`
-    ]).join('&');
+      `me=${domain}`,
+    ].join('&');
   }
 }

@@ -26,7 +26,7 @@ function handleBeginAuth(payload) {
   localStorage.setItem('authEndpoint', payload.metadata.authEndpoint);
   localStorage.setItem('tokenEndpoint', payload.metadata.tokenEndpoint);
   localStorage.setItem('micropubEndpoint', payload.metadata.micropub);
-  chrome.tabs.create({url: payload.authUrl}, (tab) => {
+  chrome.tabs.create({url: payload.authUrl}, tab => {
     authTabId = tab.id;
   });
 }
@@ -48,39 +48,43 @@ function clearEntry() {
   localStorage.removeItem('selectedEntry');
 }
 
-function handleTabChange (tabId, changeInfo, tab) {
+function handleTabChange(tabId, changeInfo, tab) {
   if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
     return;
   }
   var code = getParamFromUrl('code', changeInfo.url);
   micropub.options.me = localStorage.getItem('domain');
   micropub.options.tokenEndpoint = localStorage.getItem('tokenEndpoint');
-  micropub.getToken(code)
-  .then(function (token) {
-    if (!token) {
-      throw new Error('Token not found in token endpoint response. Missing expected field \'access_token\'');
-    }
-    localStorage.setItem('token', token);
-    chrome.tabs.remove(tab.id);
-    authTabId = null;
-  })
-  .catch(function (err) {
-    getAuthTab()
-    .then((tab) => {
-      chrome.tabs.sendMessage(tab.id, {
-        action: 'fetch-token-error',
-        payload: {
-          error: err,
-        },
+  micropub
+    .getToken(code)
+    .then(function(token) {
+      if (!token) {
+        throw new Error(
+          "Token not found in token endpoint response. Missing expected field 'access_token'"
+        );
+      }
+      localStorage.setItem('token', token);
+      chrome.tabs.remove(tab.id);
+      authTabId = null;
+    })
+    .catch(function(err) {
+      getAuthTab().then(tab => {
+        chrome.tabs.sendMessage(tab.id, {
+          action: 'fetch-token-error',
+          payload: {
+            error: err,
+          },
+        });
+        logout();
       });
-      logout();
     });
-  });
 }
 
-function isAuthRedirect (changeInfo) {
+function isAuthRedirect(changeInfo) {
   var url = 'http://omnibear.com/auth/success';
-  return changeInfo.status === 'loading' && changeInfo.url && changeInfo.url.startsWith(url);
+  return (
+    changeInfo.status === 'loading' && changeInfo.url && changeInfo.url.startsWith(url)
+  );
 }
 
 chrome.runtime.onMessage.addListener(handleMessage);
@@ -88,8 +92,24 @@ chrome.tabs.onUpdated.addListener(handleTabChange);
 menuId = chrome.contextMenus.create({
   title: 'Reply to entry',
   contexts: ['page', 'selection'],
-  onclick: function () {
-    window.open("index.html?reply=true", "extension_popup", "width=450,height=510,status=no,scrollbars=yes,resizable=no,top=80,left=2000");
+  onclick: function() {
+    if (typeof browser === 'undefined') {
+      // Chrome
+      window.open(
+        'index.html?reply=true',
+        'extension_popup',
+        'width=450,height=510,status=no,scrollbars=yes,resizable=no,top=80,left=2000'
+      );
+    } else {
+      // Firefox (and others?)
+      browser.windows.create({
+        url: 'index.html?reply=true',
+        width: 450,
+        height: 510,
+        type: 'panel',
+        left: 2000,
+      });
+    }
   },
 });
 
