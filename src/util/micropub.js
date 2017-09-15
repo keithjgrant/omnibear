@@ -1,8 +1,8 @@
 const Micropub = require('micropub-helper');
 
 export default new Micropub({
-  clientId: 'http://omnibear.com',
-  redirectUri: 'http://omnibear.com/auth/success/',
+  clientId: 'https://omnibear.com',
+  redirectUri: 'https://omnibear.com/auth/success/',
   state: 'very-secret-omnibear-state',
   me: localStorage.getItem('domain'),
   authEndpoint: localStorage.getItem('authEndpoint'),

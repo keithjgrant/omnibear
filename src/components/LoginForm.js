@@ -41,11 +41,9 @@ export default class LoginForm extends Component {
           </button>
         </div>
 
-        {this.state.hasErrors
-          ? <Message type="error">
-              {this.state.errorMessage || 'Error'}
-            </Message>
-          : null}
+        {this.state.hasErrors ? (
+          <Message type="error">{this.state.errorMessage || 'Error'}</Message>
+        ) : null}
       </form>
     );
   }
@@ -101,8 +99,8 @@ export default class LoginForm extends Component {
 
   getFields(domain) {
     return [
-      'redirect_uri=http://omnibear.com/auth/success/',
-      'client_id=http://omnibear.com',
+      'redirect_uri=https://omnibear.com/auth/success/',
+      'client_id=https://omnibear.com',
       'response_type=code',
       'scope=create',
       `me=${domain}`,

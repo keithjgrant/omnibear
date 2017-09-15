@@ -81,7 +81,7 @@ function handleTabChange(tabId, changeInfo, tab) {
 }
 
 function isAuthRedirect(changeInfo) {
-  var url = 'http://omnibear.com/auth/success';
+  var url = 'https://omnibear.com/auth/success';
   return (
     changeInfo.status === 'loading' && changeInfo.url && changeInfo.url.startsWith(url)
   );
