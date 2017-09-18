@@ -1,5 +1,5 @@
 import micropub from './util/micropub';
-import {getParamFromUrl, cleanUrl} from './util/url';
+import {getParamFromUrl, cleanUrl, getUrlOrigin} from './util/url';
 import {getAuthTab, logout} from './util/utils';
 
 let authTabId = null;
@@ -53,6 +53,22 @@ function handleTabChange(tabId, changeInfo, tab) {
     return;
   }
   var code = getParamFromUrl('code', changeInfo.url);
+  var meFromUrl = getParamFromUrl('me', changeInfo.url);
+  if (meFromUrl) {
+    var currentDomain = localStorage.getItem('domain');
+
+    if (getUrlOrigin(currentDomain) !== getUrlOrigin(meFromUrl)) {
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'fetch-token-error',
+        payload: {
+          error: new Error("'me' url domain doesn't match auth endpoint domain"),
+        },
+      });
+      logout();
+    }
+
+    localStorage.setItem('domain', meFromUrl);
+  }
   micropub.options.me = localStorage.getItem('domain');
   micropub.options.tokenEndpoint = localStorage.getItem('tokenEndpoint');
   micropub
