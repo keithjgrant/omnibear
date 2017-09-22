@@ -3,7 +3,6 @@
 import microformat from 'microformat-shiv';
 import {getAncestorNode, getAncestorNodeByClass} from './dom';
 
-
 const CLASS_NAME = '__omnibear-selected-item';
 let currentItem;
 let currentItemUrl;
@@ -41,7 +40,7 @@ export function focusClickedEntry(e) {
   }
   chrome.runtime.sendMessage({
     action: 'select-entry',
-    payload: { url: entry.url },
+    payload: {url: entry.url},
   });
   entry.element.classList.add(CLASS_NAME);
   currentItem = entry.element;
@@ -50,27 +49,31 @@ export function focusClickedEntry(e) {
 
 function findTweet(el) {
   const element = getAncestorNodeByClass(el, 'tweet');
-  if (!element) { return false; };
+  if (!element) {
+    return false;
+  }
   const url = `https://twitter.com${element.getAttribute('data-permalink-path')}`;
-  return { element, url };
+  return {element, url};
 }
 
 function findFacebookPost(el) {
-  const element = getAncestorNode(el, (e) => {
+  const element = getAncestorNode(el, e => {
     return e.id.startsWith('hyperfeed_story_id_');
   });
-  if (!element) { return false; }
+  if (!element) {
+    return false;
+  }
 
-  let timestamp = element.getElementsByClassName('timestampContent')
+  let timestamp = element.getElementsByClassName('timestampContent');
   if (timestamp && timestamp[0]) {
     timestamp = timestamp[0];
-    while(timestamp.tagName != 'A' && timestamp.tagName != 'BODY') {
+    while (timestamp.tagName != 'A' && timestamp.tagName != 'BODY') {
       timestamp = timestamp.parentElement;
     }
 
     const url = timestamp.href;
     if (url) {
-      return { element, url };
+      return {element, url};
     }
   }
 
@@ -79,8 +82,10 @@ function findFacebookPost(el) {
 
 function findHEntry(el) {
   const element = getAncestorNodeByClass(el, 'h-entry');
-  if (!element) { return false; }
-  const mf = microformat.get({node: el});
+  if (!element) {
+    return false;
+  }
+  const mf = microformat.get({node: element});
   let url;
   if (mf.items.length && mf.items[0].properties && mf.items[0].properties.url) {
     url = mf.items[0].properties.url[0];
@@ -93,7 +98,7 @@ function findHEntry(el) {
     }
   }
 
-  return { element, url };
+  return {element, url};
 }
 
 export function getCurrentItemUrl() {
