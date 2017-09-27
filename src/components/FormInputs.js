@@ -22,6 +22,7 @@ export default class FormInputs extends Component {
               this.content = el;
             }}
           />
+          <div class="input-extra">{this.props.entry.content.length}</div>
         </div>
         <div>
           <label for="input-category">Tags (space separated)</label>

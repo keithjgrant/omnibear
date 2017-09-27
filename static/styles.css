@@ -20,7 +20,9 @@
   box-sizing: border-box;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -35,7 +37,7 @@ body {
 }
 
 button,
-input[type="submit"] {
+input[type='submit'] {
   position: relative;
   padding: 0.3em 1em;
   font: inherit;
@@ -45,13 +47,13 @@ input[type="submit"] {
 }
 
 button.is-loading,
-input[type="submit"].is-loading {
+input[type='submit'].is-loading {
   color: transparent;
 }
 button.is-loading::after,
-input[type="submit"].is-loading::after {
+input[type='submit'].is-loading::after {
   position: absolute;
-  content: "";
+  content: '';
   top: 50%;
   left: 50%;
   height: 1.4em;
@@ -74,24 +76,30 @@ button[disabled] {
 }
 
 textarea,
-input[type=text] {
+input[type='text'] {
   width: 100%;
+  padding: 0.3em 0.5em;
   border: 1px solid var(--gray-50);
   font: inherit;
-  padding: 0.3em 0.5em;
 }
 
 label {
+  color: var(--gray-50);
   font-weight: 700;
   font-size: 0.8rem;
-  color: var(--gray-50);
+}
+
+.input-extra {
+  float: right;
+  color: var(--gray-60);
+  font-size: 0.8rem;
 }
 
 textarea:focus,
 button:focus,
-input[type=text]:focus {
+input[type='text']:focus {
   outline: none;
-  box-shadow: 0 0 5px var(--yellow)
+  box-shadow: 0 0 5px var(--yellow);
 }
 
 a {
@@ -205,7 +213,7 @@ form > * + * {
   padding: 0 0.5em;
 }
 .quick-actions button:active {
-  text-shadow: 0px 0px 1px rgba(0,0,0,0.3);
+  text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.3);
 }
 .quick-actions button[disabled] {
   color: var(--gray-60);
@@ -231,7 +239,7 @@ form > * + * {
   margin-left: 0.5em;
 }
 .inline-links > * + *::before {
-  content: "|";
+  content: '|';
   margin-right: 0.5em;
   color: var(--gray-30);
 }
@@ -261,7 +269,13 @@ form > * + * {
 }
 
 @keyframes spin {
-  0%   { transform: rotate(0deg); }
-  50%  { transform: rotate(180deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
