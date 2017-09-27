@@ -1,7 +1,11 @@
-import {clearItem, removeHighlight, focusClickedEntry, getCurrentItemUrl} from './page/entry';
+import {
+  clearItem,
+  removeHighlight,
+  focusClickedEntry,
+  getCurrentItemUrl,
+} from './page/entry';
 
-(function () {
-
+(function() {
   document.body.addEventListener('click', clearItem);
 
   document.body.addEventListener('contextmenu', focusClickedEntry);
@@ -28,15 +32,25 @@ import {clearItem, removeHighlight, focusClickedEntry, getCurrentItemUrl} from '
       return;
     }
 
-    const heading = document.querySelector('.main > h1');
-    const paragraph = document.querySelector('.main > p');
-    heading.innerHTML = 'Error fetching token from token endpoint';
-    paragraph.innerHTML = error;
+    // I am working on restructuring this page on omnibear.com, so I am
+    // making this compatible with both page layouts for now. The IDs
+    // below are the new layout; the querySelectors match the old layout.
+    let heading = document.getElementById('status-heading');
+    let paragraph = document.getElementById('status-paragraph');
+    if (!heading) {
+      heading = document.querySelector('.main > h1');
+    }
+    if (!paragraph) {
+      paragraph = document.querySelector('.main > p');
+    }
+
+    heading.textContent = 'Error fetching token from token endpoint';
+    paragraph.textContent = error;
   }
 
   function isAuthPage() {
     const l = document.location;
-    return (l.hostname === 'omnibear.com' && l.pathname === '/auth/success/');
+    return l.hostname === 'omnibear.com' && l.pathname === '/auth/success/';
   }
 
   function sendFocusMessage() {
@@ -47,4 +61,4 @@ import {clearItem, removeHighlight, focusClickedEntry, getCurrentItemUrl} from '
       },
     });
   }
-}());
+})();
