@@ -5,13 +5,16 @@
   "main": "dist/index.html",
   "scripts": {
     "test": "mocha-webpack --webpack-config webpack.config-test.js \"src/**/*.test.js\"",
-    "build": "webpack"
+    "watch": "webpack --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keithjgrant/omnibear.git"
   },
-  "keywords": ["micropub"],
+  "keywords": [
+    "micropub"
+  ],
   "author": "Keith J. Grant",
   "license": "ISC",
   "bugs": {
@@ -34,7 +37,8 @@
     "mocha": "^3.2.0",
     "mocha-webpack": "^0.7.0",
     "sinon": "^1.17.7",
-    "webpack": "^2.2.1",
+    "webpack": "^2.7.0",
+    "webpack-merge": "^4.1.0",
     "webpack-node-externals": "^1.5.4",
     "webpack-stream": "^3.2.0"
   },
