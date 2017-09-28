@@ -36,6 +36,16 @@ export function paramsToQueryString(params) {
   return `?${parts.join('&')}`;
 }
 
+export function getUrlOrigin(url) {
+  const parts = parseUri(url);
+  return [
+    parts.protocol,
+    '://',
+    parts.host,
+    parts.port ? `:${parts.port}` : '',
+  ].join('');
+}
+
 // strip hashes and utm_* query params
 export function cleanUrl(url) {
   const parts = parseUri(url);
