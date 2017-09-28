@@ -1,6 +1,6 @@
 # Omnibear
 
-For usage information, see http://omnibear.com (work in progress).
+For usage information, see https://omnibear.com.
 
 ## Development
 
@@ -16,3 +16,10 @@ To install in Chrome from the repository:
 * Navigate to chrome://extensions/
 * Check the “Developer mode” box
 * Click “Load unpacked extension” and select the `/dist` directory of the repository
+
+
+To install in Firefox from the repository:
+
+* Navigate to about:debugging
+* Click “Load Temporary Add-On”
+* Navigate to the `/dist` directory and select the `manifest.json` file
