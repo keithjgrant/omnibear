@@ -8,7 +8,7 @@ module.exports = merge(common, {
       output: {
         comments: false,
       },
-      sourceMap: true,
+      sourceMap: false,
       compress: {
         warnings: false,
         conditionals: true,
@@ -24,8 +24,8 @@ module.exports = merge(common, {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
+        NODE_ENV: JSON.stringify('production'),
+      },
     }),
   ],
 });
