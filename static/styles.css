@@ -141,6 +141,7 @@ form > * + * {
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding: 0.5em 0.5em 0.5em 1em;
   border: 1px solid currentcolor;
@@ -217,6 +218,33 @@ form > * + * {
 }
 .quick-actions button[disabled] {
   color: var(--gray-60);
+}
+
+.reacji-actions {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+.reacji-actions button {
+  background: transparent;
+  border: none;
+  line-height: 1em;
+  width: 2em;
+  height: 2em;
+  border-radius: 1em;
+  text-align: center;
+  padding: .5em;
+  cursor: pointer;
+}
+.reacji-actions button:hover,
+.reacji-actions button:active {
+  background: var(--yellow);
+}
+.reacji-actions button[disabled] {
+  filter: grayscale(100%);
 }
 
 .fields-inline {

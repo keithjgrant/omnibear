@@ -54,6 +54,7 @@ export default class NoteForm extends Component {
           url={this.state.url}
           onLike={this.handleLike}
           onRepost={this.handleRepost}
+          onReacji={this.handleReacji}
           isDisabled={this.state.isLoading}
         />
         <div className="container">
@@ -114,6 +115,25 @@ export default class NoteForm extends Component {
       .catch(err => {
         console.error(err);
         this.flashErrorMessage('Error reposting');
+      });
+  };
+
+  handleReacji = (emoji) => {
+    if (!this.state.url) {
+      return;
+    }
+    this.postEntry({
+      h: 'entry',
+      content: emoji,
+      'in-reply-to': this.state.url,
+    })
+      .then(location => {
+        const type = this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
+        this.flashSuccessMessage(`${type} reacted to successfully`, location);
+      })
+      .catch(err => {
+        console.error(err);
+        this.flashErrorMessage('Error reacting');
       });
   };
 
