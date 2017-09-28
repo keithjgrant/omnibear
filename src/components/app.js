@@ -1,4 +1,4 @@
-import { h, Component } from 'preact';
+import {h, Component} from 'preact';
 import LoginForm from './loginForm';
 import NoteForm from './NoteForm';
 import Message from './Message';
@@ -9,11 +9,11 @@ export default class App extends Component {
     super(props);
     if (this.isAuthenticated()) {
       this.setState({
-        currentView: 'new-note'
+        currentView: 'new-note',
       });
     } else {
       this.setState({
-        currentView: 'login'
+        currentView: 'login',
       });
     }
   }
@@ -23,9 +23,11 @@ export default class App extends Component {
       case 'login':
         return <LoginForm />;
       case 'feedback':
-        return <Message>{this.state.message}</Message>;
+        return <Message location={this.state.postLocation}>{this.state.message}</Message>;
       default:
-        return <NoteForm handleLogout={this.handleLogout} userFeedback={this.displayMessage}/>
+        return (
+          <NoteForm handleLogout={this.handleLogout} userFeedback={this.displayMessage} />
+        );
     }
   }
 
@@ -33,15 +35,16 @@ export default class App extends Component {
     return !!localStorage.getItem('token');
   }
 
-  displayMessage = (message) => {
+  displayMessage = (message, status, location) => {
     this.setState({
       currentView: 'feedback',
       message: message,
+      postLocation: typeof location === 'string' ? location : null,
     });
-  }
+  };
 
   handleLogout = () => {
     logout();
     this.setState({currentView: 'login'});
-  }
+  };
 }

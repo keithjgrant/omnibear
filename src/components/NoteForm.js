@@ -1,12 +1,17 @@
-import { h, Component } from 'preact';
+import {h, Component} from 'preact';
 import Header from './Header';
 import Message from './Message';
 import ChangeViewButtons from './ChangeViewButtons';
 import FormInputs from './FormInputs';
 import Footer from './Footer';
 import micropub from '../util/micropub';
-import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY, MESSAGE_SUCCESS, MESSAGE_ERROR} from '../constants';
-
+import {
+  NEW_NOTE,
+  PAGE_REPLY,
+  ITEM_REPLY,
+  MESSAGE_SUCCESS,
+  MESSAGE_ERROR,
+} from '../constants';
 
 export default class NoteForm extends Component {
   constructor(props) {
@@ -30,9 +35,9 @@ export default class NoteForm extends Component {
       url: entryUrl,
       userDomain: localStorage.getItem('domain'),
       entry: {
-        'h': 'entry',
-        'content': '',
-        'category': [],
+        h: 'entry',
+        content: '',
+        category: [],
         'mp-slug': '',
       },
       hasSelectedEntry: !!selectedEntry,
@@ -65,13 +70,11 @@ export default class NoteForm extends Component {
             onSubmit={this.handleSubmit}
             isDisabled={this.state.isDisabled}
             isLoading={this.state.isLoading}
-            ref={(el) => this.form = el}
+            ref={el => (this.form = el)}
           />
-          {
-            this.state.errorMessage
-            ? <Message type={MESSAGE_ERROR}>{this.state.errorMessage}</Message>
-            : null
-          }
+          {this.state.errorMessage ? (
+            <Message type={MESSAGE_ERROR}>{this.state.errorMessage}</Message>
+          ) : null}
         </div>
         <Footer domain={this.state.userDomain} onLogout={this.props.handleLogout} />
       </div>
@@ -79,41 +82,47 @@ export default class NoteForm extends Component {
   }
 
   handleLike = () => {
-    if (!this.state.url) { return; }
+    if (!this.state.url) {
+      return;
+    }
     this.postEntry({
-      'h': 'entry',
+      h: 'entry',
       'like-of': this.state.url,
     })
-    .then(() => {
-      const type = (this.state.postType === ITEM_REPLY) ? 'Item' : 'Page';
-      this.flashSuccessMessage(`${type} liked successfully`);
-    }).catch((err) => {
-      console.error(err);
-      this.flashErrorMessage('Error posting like');
-    });
-  }
+      .then(location => {
+        const type = this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
+        this.flashSuccessMessage(`${type} liked successfully`, location);
+      })
+      .catch(err => {
+        console.error(err);
+        this.flashErrorMessage('Error posting like');
+      });
+  };
 
   handleRepost = () => {
-    if (!this.state.url) { return; }
+    if (!this.state.url) {
+      return;
+    }
     this.postEntry({
-      'h': 'entry',
+      h: 'entry',
       'repost-of': this.state.url,
     })
-    .then(() => {
-      const type = (this.state.postType === ITEM_REPLY) ? 'Item' : 'Page';
-      this.flashSuccessMessage(`${type} reposted successfully`);
-    }).catch((err) => {
-      console.error(err);
-      this.flashErrorMessage('Error reposting');
-    });
-  }
+      .then(location => {
+        const type = this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
+        this.flashSuccessMessage(`${type} reposted successfully`, location);
+      })
+      .catch(err => {
+        console.error(err);
+        this.flashErrorMessage('Error reposting');
+      });
+  };
 
-  updateEntry = (newEntry) => {
+  updateEntry = newEntry => {
     this.setState({entry: newEntry});
-  }
+  };
 
-  flashSuccessMessage(message) {
-    this.props.userFeedback(message, MESSAGE_SUCCESS);
+  flashSuccessMessage(message, location) {
+    this.props.userFeedback(message, MESSAGE_SUCCESS, location);
     setTimeout(() => {
       window.close();
     }, 3000);
@@ -132,18 +141,19 @@ export default class NoteForm extends Component {
     }, 4000);
   }
 
-  handleSubmit = (entry) => {
+  handleSubmit = entry => {
     if (this.state.postType !== NEW_NOTE) {
       entry['in-reply-to'] = this.state.url;
     }
     this.postEntry(entry)
-    .then(() => {
-      const type = (this.state.postType === NEW_NOTE) ? 'Note' : 'Reply';
-      this.flashSuccessMessage(`${type} posted successfully`);
-    }).catch((err) => {
-      this.flashErrorMessage('Error posting Note');
-    });
-  }
+      .then(location => {
+        const type = this.state.postType === NEW_NOTE ? 'Note' : 'Reply';
+        this.flashSuccessMessage(`${type} posted successfully`, location);
+      })
+      .catch(err => {
+        this.flashErrorMessage('Error posting Note');
+      });
+  };
 
   postEntry(entry) {
     this.setState({
@@ -153,7 +163,7 @@ export default class NoteForm extends Component {
     return micropub.create(entry, 'form');
   }
 
-  changeView = (postType) => {
+  changeView = postType => {
     let url;
     switch (postType) {
       case NEW_NOTE:
@@ -168,5 +178,5 @@ export default class NoteForm extends Component {
     }
     this.setState({url, postType});
     this.form.focus();
-  }
+  };
 }
