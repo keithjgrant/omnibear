@@ -4,7 +4,14 @@
   "version": "0.6.0",
   "permissions": ["contextMenus", "http://omnibear.com/", "<all_urls>", "tabs"],
   "browser_action": {
-    "default_popup": "index.html"
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "icon-16.png",
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "64": "icon-64.png",
+      "128": "icon-128.png"
+    }
   },
   "background": {
     "scripts": ["background.js"]
@@ -17,8 +24,10 @@
     }
   ],
   "icons": {
-    "16": "logo-16.png",
-    "48": "logo-48.png",
-    "128": "logo-128.png"
+    "16": "icon-16.png",
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "64": "icon-64.png",
+    "128": "icon-128.png"
   }
 }
