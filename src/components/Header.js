@@ -15,6 +15,7 @@ export default class NoteForm extends Component {
           }
         </div>
         {this.renderQuickActions()}
+        {this.renderReacji()}
       </header>
     );
   }
@@ -50,6 +51,25 @@ export default class NoteForm extends Component {
           onClick={this.props.onLike}
           disabled={this.props.isDisabled}
         >like</button></li>
+      </ul>
+    );
+  }
+    
+  renderReacji() {
+    if (!this.props.url) {
+      return null;
+    }
+
+    const supportedEmoji = [0x1F44D, 0x1F44E, 0x1F389, 0x2764, 0x1F606, 0x1F62E, 0x1F622, 0x1F620];
+
+    return (
+      <ul className="reacji-actions">
+        {supportedEmoji.map(emoji => (
+          <li><button
+            onClick={() => this.props.onReacji(String.fromCodePoint(emoji))}
+            disabled={this.props.isDisabled}
+          >{String.fromCodePoint(emoji)}</button></li>
+        ))}
       </ul>
     );
   }
