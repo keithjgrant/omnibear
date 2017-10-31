@@ -1,4 +1,4 @@
-const Micropub = require('micropub-helper');
+import Micropub from 'micropub-helper';
 
 export default new Micropub({
   clientId: 'https://omnibear.com',
