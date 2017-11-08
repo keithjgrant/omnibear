@@ -1,5 +1,5 @@
 import {h, Component} from 'preact';
-import LoginForm from './loginForm';
+import LoginForm from './LoginForm';
 import NoteForm from './NoteForm';
 import Message from './Message';
 import {logout} from '../util/utils';
