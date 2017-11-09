@@ -1,10 +1,11 @@
 {
   "name": "omnibear",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "A micropub Chrome extension",
   "main": "dist/index.html",
   "scripts": {
-    "test": "mocha-webpack --webpack-config webpack.config-test.js \"src/**/*.test.js\"",
+    "test":
+      "mocha-webpack --webpack-config webpack.config-test.js \"src/**/*.test.js\"",
     "watch": "webpack --config webpack.dev.js --watch",
     "build": "webpack --config webpack.prod.js"
   },

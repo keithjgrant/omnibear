@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Omnibear",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "permissions": ["contextMenus", "http://omnibear.com/", "<all_urls>", "tabs"],
   "browser_action": {
     "default_popup": "index.html",
