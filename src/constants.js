@@ -5,3 +5,5 @@ export const ITEM_REPLY = 'item-reply';
 
 export const MESSAGE_SUCCESS = 'success';
 export const MESSAGE_ERROR = 'error';
+
+export const DEFAULT_REACJI = ['👍', '👎', '🎉', '😆', '😢', '😠'];

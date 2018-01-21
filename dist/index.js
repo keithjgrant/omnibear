@@ -880,6 +880,8 @@ var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';
 var MESSAGE_SUCCESS = exports.MESSAGE_SUCCESS = 'success';
 var MESSAGE_ERROR = exports.MESSAGE_ERROR = 'error';
 
+var DEFAULT_REACJI = exports.DEFAULT_REACJI = ['👍', '👎', '🎉', '😆', '😢', '😠'];
+
 /***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -3117,6 +3119,8 @@ var _ReacjiSettings = __webpack_require__(35);
 
 var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
 
+var _constants = __webpack_require__(5);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -3148,7 +3152,7 @@ var SettingsForm = function (_Component) {
     } else {
       _this.setState({
         defaultToCurrentPage: false,
-        reacji: [0x1F44D, 0x1F44E, 0x1F389, 0x2764, 0x1F606, 0x1F62E, 0x1F622, 0x1F620],
+        reacji: _constants.DEFAULT_REACJI,
         slug: 'mp-slug',
         me: localStorage.getItem('domain'),
         micropubEndpoint: localStorage.getItem('micropubEndpoint'),
@@ -3216,7 +3220,7 @@ var SettingsForm = function (_Component) {
               (0, _preact.h)('input', { type: 'checkbox', checked: defaultToCurrentPage, onChange: this.updateBoolean('defaultToCurrentPage') }),
               'Always open in \u201CReply to current page\u201D mode'
             ),
-            (0, _preact.h)(_ReacjiSettings2.default, { onChange: this.update('reacji') }),
+            (0, _preact.h)(_ReacjiSettings2.default, { reacji: reacji, onChange: this.set('reacji') }),
             (0, _preact.h)(
               'div',
               { 'class': 'form-buttons' },
@@ -3234,6 +3238,30 @@ var SettingsForm = function (_Component) {
                 },
                 'Cancel'
               )
+            ),
+            (0, _preact.h)(
+              'fieldset',
+              null,
+              (0, _preact.h)(
+                'legend',
+                null,
+                'Authentication details'
+              ),
+              (0, _preact.h)(
+                'div',
+                { 'class': 'settings-form__description' },
+                'These values are set automatically upon logging in.'
+              ),
+              (0, _preact.h)(
+                'div',
+                null,
+                (0, _preact.h)(
+                  'label',
+                  { htmlFor: 'me' },
+                  'Me (domain name)'
+                ),
+                (0, _preact.h)('input', { id: 'me', type: 'text', value: me, onChange: this.update('me') })
+              )
             )
           )
         )
@@ -3245,16 +3273,26 @@ var SettingsForm = function (_Component) {
       var _this2 = this;
 
       return function (e) {
-        _this2.setState(_defineProperty({}, fieldName, e.target.value));
+        _this2.set(fieldName)(e.target.value);
+      };
+    }
+  }, {
+    key: 'set',
+    value: function set(fieldName) {
+      var _this3 = this;
+
+      return function (value) {
+        console.log(value);
+        _this3.setState(_defineProperty({}, fieldName, value));
       };
     }
   }, {
     key: 'updateBoolean',
     value: function updateBoolean(fieldName) {
-      var _this3 = this;
+      var _this4 = this;
 
       return function (e) {
-        _this3.setState(_defineProperty({}, fieldName, e.target.checked));
+        _this4.setState(_defineProperty({}, fieldName, e.target.checked));
       };
     }
   }]);
@@ -3288,15 +3326,94 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ReacjiSettings = function (_Component) {
   _inherits(ReacjiSettings, _Component);
 
-  function ReacjiSettings() {
+  function ReacjiSettings(props) {
     _classCallCheck(this, ReacjiSettings);
 
-    return _possibleConstructorReturn(this, (ReacjiSettings.__proto__ || Object.getPrototypeOf(ReacjiSettings)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (ReacjiSettings.__proto__ || Object.getPrototypeOf(ReacjiSettings)).call(this, props));
+
+    _this.renderReacji = function (char, i) {
+      return (0, _preact.h)(
+        'div',
+        { className: 'reacji-tag', key: char },
+        char,
+        (0, _preact.h)(
+          'button',
+          { type: 'button', onClick: _this.deleteReacji(i) },
+          '\xD7'
+        )
+      );
+    };
+
+    _this.update = function (e) {
+      _this.setState({ value: e.target.value });
+    };
+
+    _this.addReacji = function () {
+      var value = _this.state.value;
+      var reacji = _this.props.reacji;
+
+      if (value && reacji.indexOf(value) === -1) {
+        reacji.push(value);
+        _this.props.onChange(reacji);
+        _this.setState({ value: '' });
+      }
+    };
+
+    _this.setState({
+      value: ''
+    });
+    return _this;
   }
 
   _createClass(ReacjiSettings, [{
     key: 'render',
-    value: function render() {}
+    value: function render() {
+      var reacji = this.props.reacji;
+
+      return (0, _preact.h)(
+        'div',
+        null,
+        (0, _preact.h)(
+          'label',
+          null,
+          'Quick replies (\u201CReacji\u201D)'
+        ),
+        (0, _preact.h)(
+          'div',
+          null,
+          reacji.map(this.renderReacji)
+        ),
+        (0, _preact.h)(
+          'div',
+          { 'class': 'input-inline' },
+          (0, _preact.h)('input', {
+            type: 'text',
+            value: this.state.value,
+            onChange: this.update
+          }),
+          (0, _preact.h)(
+            'button',
+            {
+              type: 'button',
+              onClick: this.addReacji
+            },
+            'Add'
+          )
+        )
+      );
+    }
+  }, {
+    key: 'deleteReacji',
+    value: function deleteReacji(index) {
+      var _this2 = this;
+
+      return function () {
+        var reacji = _this2.props.reacji;
+
+        reacji.splice(index, 1);
+        _this2.props.onChange(reacji);
+      };
+    }
   }]);
 
   return ReacjiSettings;

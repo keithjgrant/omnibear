@@ -123,7 +123,8 @@ a:active {
 form {
   margin-bottom: 1em;
 }
-form > * + * {
+form > * + *,
+fieldset > * + * {
   margin-top: 1em;
 }
 
@@ -283,6 +284,13 @@ form > * + * {
   color: var(--gray-30);
 }
 
+.input-inline {
+  display: flex;
+}
+.input-inline > * + * {
+  margin-left: 0.2em;
+}
+
 .settings-form__description {
   margin: 0.5em 0 2em;
   padding-left: 1em;
@@ -294,6 +302,19 @@ form > * + * {
 }
 .form-buttons > button + button {
   margin-left: 1em;
+}
+
+.reacji-tag {
+  display: inline-block;
+}
+.reacji-tag > button {
+  margin-left: 0.2em;
+  padding: 0.2em;
+  border: 0;
+  color: var(--red);
+}
+.reacji-tag + .reacji-tag {
+  margin-left: 0.8em;
 }
 
 .metadata {

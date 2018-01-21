@@ -1,5 +1,6 @@
 import {h, Component} from 'preact';
 import ReacjiSettings from './ReacjiSettings';
+import {DEFAULT_REACJI} from '../../constants';
 
 export default class SettingsForm extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ export default class SettingsForm extends Component {
     } else {
       this.setState({
         defaultToCurrentPage: false,
-        reacji: [0x1F44D, 0x1F44E, 0x1F389, 0x2764, 0x1F606, 0x1F62E, 0x1F622, 0x1F620],
+        reacji: DEFAULT_REACJI,
         slug: 'mp-slug',
         me: localStorage.getItem('domain'),
         micropubEndpoint: localStorage.getItem('micropubEndpoint'),
@@ -39,7 +40,7 @@ export default class SettingsForm extends Component {
               Always open in “Reply to current page” mode
             </label>
 
-            <ReacjiSettings onChange={this.update('reacji')}/>
+            <ReacjiSettings reacji={reacji} onChange={this.set('reacji')}/>
 
             <div class="form-buttons">
               <button type="submit">Save</button>
@@ -49,6 +50,18 @@ export default class SettingsForm extends Component {
                 onClick={this.props.onClose}
               >Cancel</button>
             </div>
+
+            <fieldset>
+              <legend>Authentication details</legend>
+              <div class="settings-form__description">
+                These values are set automatically upon logging in.
+              </div>
+
+              <div>
+                <label htmlFor="me">Me (domain name)</label>
+                <input id="me" type="text" value={me} onChange={this.update('me')}/>
+              </div>
+            </fieldset>
           </form>
         </div>
       </div>
@@ -57,8 +70,15 @@ export default class SettingsForm extends Component {
 
   update(fieldName) {
     return (e) => {
+      this.set(fieldName)(e.target.value);
+    }
+  }
+
+  set(fieldName) {
+    return (value) => {
+      console.log(value)
       this.setState({
-        [fieldName]: e.target.value
+        [fieldName]: value,
       });
     }
   }
