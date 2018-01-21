@@ -77,7 +77,8 @@ export default class NoteForm extends Component {
             <Message type={MESSAGE_ERROR}>{this.state.errorMessage}</Message>
           ) : null}
         </div>
-        <Footer domain={this.state.userDomain} onLogout={this.props.handleLogout} />
+        <Footer domain={this.state.userDomain}
+          onSettings={this.props.handleSettings} onLogout={this.props.handleLogout} />
       </div>
     );
   }

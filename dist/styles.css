@@ -87,6 +87,11 @@ label {
   color: var(--gray-50);
   font-weight: 700;
   font-size: 0.8rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 }
 
 .input-extra {
@@ -199,6 +204,12 @@ form > * + * {
   text-align: center;
   font-size: 0.8em;
 }
+.footer > button:first-of-type {
+  margin-left: auto;
+}
+.footer > button + button {
+  margin-left: 1em;
+}
 
 .quick-actions {
   list-style: none;
@@ -270,6 +281,19 @@ form > * + * {
   content: '|';
   margin-right: 0.5em;
   color: var(--gray-30);
+}
+
+.settings-form__description {
+  margin: 0.5em 0 2em;
+  padding-left: 1em;
+  font-size: 0.8rem;
+}
+
+.form-buttons {
+  margin-top: 1rem;
+}
+.form-buttons > button + button {
+  margin-left: 1em;
 }
 
 .metadata {

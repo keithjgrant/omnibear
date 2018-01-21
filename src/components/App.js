@@ -2,11 +2,32 @@ import {h, Component} from 'preact';
 import LoginForm from './LoginForm';
 import NoteForm from './NoteForm';
 import Message from './Message';
+import SettingsForm from './settings/SettingsForm';
 import {logout} from '../util/utils';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
+    this.setDefaultView();
+  }
+
+  render() {
+    switch (this.state.currentView) {
+      case 'login':
+        return <LoginForm handleSettings={this.handleSettings} />;
+      case 'feedback':
+        return <Message location={this.state.postLocation}>{this.state.message}</Message>;
+      case 'settings':
+        return <SettingsForm onClose={this.setDefaultView} />;
+      default:
+        return (
+          <NoteForm handleLogout={this.handleLogout}
+            handleSettings={this.handleSettings} userFeedback={this.displayMessage} />
+        );
+    }
+  }
+
+  setDefaultView = () => {
     if (this.isAuthenticated()) {
       this.setState({
         currentView: 'new-note',
@@ -15,19 +36,6 @@ export default class App extends Component {
       this.setState({
         currentView: 'login',
       });
-    }
-  }
-
-  render() {
-    switch (this.state.currentView) {
-      case 'login':
-        return <LoginForm />;
-      case 'feedback':
-        return <Message location={this.state.postLocation}>{this.state.message}</Message>;
-      default:
-        return (
-          <NoteForm handleLogout={this.handleLogout} userFeedback={this.displayMessage} />
-        );
     }
   }
 
@@ -42,6 +50,11 @@ export default class App extends Component {
       postLocation: typeof location === 'string' ? location : null,
     });
   };
+
+  handleSettings = () => {
+    this.setState({currentView: 'settings'});
+  }
+
 
   handleLogout = () => {
     logout();

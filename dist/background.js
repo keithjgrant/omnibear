@@ -1,1 +1,1667 @@
-(function(t){function e(o){if(r[o])return r[o].exports;var n=r[o]={i:o,l:!1,exports:{}};return t[o].call(n.exports,n,n.exports,e),n.l=!0,n.exports}var r={};e.m=t,e.c=r,e.i=function(t){return t},e.d=function(t,r,o){e.o(t,r)||Object.defineProperty(t,r,{configurable:!1,enumerable:!0,get:o})},e.n=function(t){var r=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(r,"a",r),r},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="",e(e.s=19)})([,function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.openLink=function(t){t.preventDefault(),t.target.href&&chrome.tabs.create({url:t.target.href})},e.clone=function(t){return JSON.parse(JSON.stringify(t))},e.getAuthTab=function(){return new Promise(function(t,e){chrome.tabs.query({url:"https://omnibear.com/auth/success*"},function(r){r.length?t(r[0]):e("Auth tab not found")})})},e.logout=function(){["token","domain","authEndpoint","tokenEndpoint","micropubEndpoint"].map(function(t){return localStorage.removeItem(t)})}},function(t,e,r){"use strict";var o=String.prototype.replace,n=/%20/g;t.exports={default:"RFC3986",formatters:{RFC1738:function(t){return o.call(t,n,"+")},RFC3986:function(t){return t}},RFC1738:"RFC1738",RFC3986:"RFC3986"}},function(t,e,r){"use strict";var o=Object.prototype.hasOwnProperty,n=function(){for(var t=[],e=0;e<256;++e)t.push("%"+((e<16?"0":"")+e.toString(16)).toUpperCase());return t}();e.arrayToObject=function(t,e){for(var r=e&&e.plainObjects?Object.create(null):{},o=0;o<t.length;++o)void 0!==t[o]&&(r[o]=t[o]);return r},e.merge=function(t,r,n){if(!r)return t;if("object"!=typeof r){if(Array.isArray(t))t.push(r);else{if("object"!=typeof t)return[t,r];(n.plainObjects||n.allowPrototypes||!o.call(Object.prototype,r))&&(t[r]=!0)}return t}if("object"!=typeof t)return[t].concat(r);var i=t;return Array.isArray(t)&&!Array.isArray(r)&&(i=e.arrayToObject(t,n)),Array.isArray(t)&&Array.isArray(r)?(r.forEach(function(r,i){o.call(t,i)?t[i]&&"object"==typeof t[i]?t[i]=e.merge(t[i],r,n):t.push(r):t[i]=r}),t):Object.keys(r).reduce(function(t,i){var s=r[i];return o.call(t,i)?t[i]=e.merge(t[i],s,n):t[i]=s,t},i)},e.assign=function(t,e){return Object.keys(e).reduce(function(t,r){return t[r]=e[r],t},t)},e.decode=function(t){try{return decodeURIComponent(t.replace(/\+/g," "))}catch(e){return t}},e.encode=function(t){if(0===t.length)return t;for(var e="string"==typeof t?t:String(t),r="",o=0;o<e.length;++o){var i=e.charCodeAt(o);45===i||46===i||95===i||126===i||i>=48&&i<=57||i>=65&&i<=90||i>=97&&i<=122?r+=e.charAt(o):i<128?r+=n[i]:i<2048?r+=n[192|i>>6]+n[128|63&i]:i<55296||i>=57344?r+=n[224|i>>12]+n[128|i>>6&63]+n[128|63&i]:(o+=1,i=65536+((1023&i)<<10|1023&e.charCodeAt(o)),r+=n[240|i>>18]+n[128|i>>12&63]+n[128|i>>6&63]+n[128|63&i])}return r},e.compact=function(t){for(var e=[{obj:{o:t},prop:"o"}],r=[],o=0;o<e.length;++o)for(var n=e[o],i=n.obj[n.prop],s=Object.keys(i),a=0;a<s.length;++a){var c=s[a],u=i[c];"object"==typeof u&&null!==u&&-1===r.indexOf(u)&&(e.push({obj:i,prop:c}),r.push(u))}return function(t){for(var e;t.length;){var r=t.pop();if(e=r.obj[r.prop],Array.isArray(e)){for(var o=[],n=0;n<e.length;++n)void 0!==e[n]&&o.push(e[n]);r.obj[r.prop]=o}}return e}(e)},e.isRegExp=function(t){return"[object RegExp]"===Object.prototype.toString.call(t)},e.isBuffer=function(t){return null!==t&&void 0!==t&&!!(t.constructor&&t.constructor.isBuffer&&t.constructor.isBuffer(t))}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=function(t){return t&&t.__esModule?t:{default:t}}(r(14));e.default=new o.default({clientId:"https://omnibear.com",redirectUri:"https://omnibear.com/auth/success/",state:"very-secret-omnibear-state",me:localStorage.getItem("domain"),authEndpoint:localStorage.getItem("authEndpoint"),tokenEndpoint:localStorage.getItem("tokenEndpoint"),micropubEndpoint:localStorage.getItem("micropubEndpoint"),token:localStorage.getItem("token")})},,,function(t,e,r){"use strict";var o=r(9),n=r(8),i=r(2);t.exports={formats:i,parse:n,stringify:o}},function(t,e,r){"use strict";var o=r(3),n=Object.prototype.hasOwnProperty,i={allowDots:!1,allowPrototypes:!1,arrayLimit:20,decoder:o.decode,delimiter:"&",depth:5,parameterLimit:1e3,plainObjects:!1,strictNullHandling:!1};t.exports=function(t,e){var r=e?o.assign({},e):{};if(null!==r.decoder&&void 0!==r.decoder&&"function"!=typeof r.decoder)throw new TypeError("Decoder has to be a function.");if(r.ignoreQueryPrefix=!0===r.ignoreQueryPrefix,r.delimiter="string"==typeof r.delimiter||o.isRegExp(r.delimiter)?r.delimiter:i.delimiter,r.depth="number"==typeof r.depth?r.depth:i.depth,r.arrayLimit="number"==typeof r.arrayLimit?r.arrayLimit:i.arrayLimit,r.parseArrays=!1!==r.parseArrays,r.decoder="function"==typeof r.decoder?r.decoder:i.decoder,r.allowDots="boolean"==typeof r.allowDots?r.allowDots:i.allowDots,r.plainObjects="boolean"==typeof r.plainObjects?r.plainObjects:i.plainObjects,r.allowPrototypes="boolean"==typeof r.allowPrototypes?r.allowPrototypes:i.allowPrototypes,r.parameterLimit="number"==typeof r.parameterLimit?r.parameterLimit:i.parameterLimit,r.strictNullHandling="boolean"==typeof r.strictNullHandling?r.strictNullHandling:i.strictNullHandling,""===t||null===t||void 0===t)return r.plainObjects?Object.create(null):{};for(var s="string"==typeof t?function(t,e){for(var r={},o=e.ignoreQueryPrefix?t.replace(/^\?/,""):t,s=e.parameterLimit===1/0?void 0:e.parameterLimit,a=o.split(e.delimiter,s),c=0;c<a.length;++c){var u,l,p=a[c],d=p.indexOf("]="),f=-1===d?p.indexOf("="):d+1;-1===f?(u=e.decoder(p,i.decoder),l=e.strictNullHandling?null:""):(u=e.decoder(p.slice(0,f),i.decoder),l=e.decoder(p.slice(f+1),i.decoder)),n.call(r,u)?r[u]=[].concat(r[u]).concat(l):r[u]=l}return r}(t,r):t,a=r.plainObjects?Object.create(null):{},c=Object.keys(s),u=0;u<c.length;++u){var l=c[u],p=function(t,e,r){if(t){var o=r.allowDots?t.replace(/\.([^.[]+)/g,"[$1]"):t,i=/(\[[^[\]]*])/g,s=/(\[[^[\]]*])/.exec(o),a=s?o.slice(0,s.index):o,c=[];if(a){if(!r.plainObjects&&n.call(Object.prototype,a)&&!r.allowPrototypes)return;c.push(a)}for(var u=0;null!==(s=i.exec(o))&&u<r.depth;){if(u+=1,!r.plainObjects&&n.call(Object.prototype,s[1].slice(1,-1))&&!r.allowPrototypes)return;c.push(s[1])}return s&&c.push("["+o.slice(s.index)+"]"),function(t,e,r){for(var o=e,n=t.length-1;n>=0;--n){var i,s=t[n];if("[]"===s)i=(i=[]).concat(o);else{i=r.plainObjects?Object.create(null):{};var a="["===s.charAt(0)&&"]"===s.charAt(s.length-1)?s.slice(1,-1):s,c=parseInt(a,10);!isNaN(c)&&s!==a&&String(c)===a&&c>=0&&r.parseArrays&&c<=r.arrayLimit?(i=[])[c]=o:i[a]=o}o=i}return o}(c,e,r)}}(l,s[l],r);a=o.merge(a,p,r)}return o.compact(a)}},function(t,e,r){"use strict";var o=r(3),n=r(2),i={brackets:function(t){return t+"[]"},indices:function(t,e){return t+"["+e+"]"},repeat:function(t){return t}},s=Date.prototype.toISOString,a={delimiter:"&",encode:!0,encoder:o.encode,encodeValuesOnly:!1,serializeDate:function(t){return s.call(t)},skipNulls:!1,strictNullHandling:!1};t.exports=function(t,e){var r=t,s=e?o.assign({},e):{};if(null!==s.encoder&&void 0!==s.encoder&&"function"!=typeof s.encoder)throw new TypeError("Encoder has to be a function.");var c=void 0===s.delimiter?a.delimiter:s.delimiter,u="boolean"==typeof s.strictNullHandling?s.strictNullHandling:a.strictNullHandling,l="boolean"==typeof s.skipNulls?s.skipNulls:a.skipNulls,p="boolean"==typeof s.encode?s.encode:a.encode,d="function"==typeof s.encoder?s.encoder:a.encoder,f="function"==typeof s.sort?s.sort:null,h=void 0!==s.allowDots&&s.allowDots,m="function"==typeof s.serializeDate?s.serializeDate:a.serializeDate,g="boolean"==typeof s.encodeValuesOnly?s.encodeValuesOnly:a.encodeValuesOnly;if(void 0===s.format)s.format=n.default;else if(!Object.prototype.hasOwnProperty.call(n.formatters,s.format))throw new TypeError("Unknown format option provided.");var y,b,v=n.formatters[s.format];"function"==typeof s.filter?r=(b=s.filter)("",r):Array.isArray(s.filter)&&(y=b=s.filter);var w=[];if("object"!=typeof r||null===r)return"";var k;k=s.arrayFormat in i?s.arrayFormat:"indices"in s?s.indices?"indices":"repeat":"indices";var j=i[k];y||(y=Object.keys(r)),f&&y.sort(f);for(var O=0;O<y.length;++O){var E=y[O];l&&null===r[E]||(w=w.concat(function t(e,r,n,i,s,c,u,l,p,d,f,h){var m=e;if("function"==typeof u)m=u(r,m);else if(m instanceof Date)m=d(m);else if(null===m){if(i)return c&&!h?c(r,a.encoder):r;m=""}if("string"==typeof m||"number"==typeof m||"boolean"==typeof m||o.isBuffer(m))return c?[f(h?r:c(r,a.encoder))+"="+f(c(m,a.encoder))]:[f(r)+"="+f(String(m))];var g=[];if(void 0===m)return g;var y;if(Array.isArray(u))y=u;else{var b=Object.keys(m);y=l?b.sort(l):b}for(var v=0;v<y.length;++v){var w=y[v];s&&null===m[w]||(g=Array.isArray(m)?g.concat(t(m[w],n(r,w),n,i,s,c,u,l,p,d,f,h)):g.concat(t(m[w],r+(p?"."+w:"["+w+"]"),n,i,s,c,u,l,p,d,f,h)))}return g}(r[E],E,j,u,l,p?d:null,b,f,h,m,v,g)))}var A=w.join(c),x=!0===s.addQueryPrefix?"?":"";return A.length>0?x+A:""}},function(t,e,r){"use strict";var o=r(7);r.n(o);r.o(o,"parse")&&r.d(e,"a",function(){return o.parse}),r.o(o,"stringify")&&r.d(e,"c",function(){return o.stringify});var n=r(13);r.d(e,"b",function(){return n.a});var i=r(12);r.d(e,"d",function(){return i.a});var s=r(11);r.d(e,"e",function(){return s.a})},function(t,e,r){"use strict";e.a=function(t,e){const r=-1==t.indexOf("?")?"?":"&";let o=[];for(var n in e)Array.isArray(e[n])?e[n].forEach(t=>{o.push(n+"[]="+encodeURIComponent(t))}):o.push(n+"="+encodeURIComponent(e[n]));return t+r+o.join("&")}},function(t,e,r){"use strict";function o(t,e=new FormData,r=!1){return Object.keys(t).forEach(n=>{const i=t[n];r&&(n=r+"["+n+"]"),Array.isArray(i)?e=o(i,e,n):e.append(n,i)}),e}e.a=o},function(t,e,r){"use strict";e.a=function(t,e){let r={},o=e;const n=(new DOMParser).parseFromString(t,"text/html"),i=n.querySelector("base[href]"),s=n.querySelectorAll("[rel][href]");if(i){const t=i.getAttribute("href"),e=new URL(t,e);o=e.toString()}return s.length&&s.forEach(t=>{const e=t.getAttribute("rel").toLowerCase().split("\\s+"),n=t.getAttribute("href");e.length&&null!==n&&e.forEach(t=>{r[t]||(r[t]=[]);const e=new URL(n,o).toString();-1===r[t].indexOf(e)&&r[t].push(e)})}),r}},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),function(t){var o=r(10);const n=o.a,i=o.b,s=o.c,a=o.d,c=o.e;o.FormData&&!t.FormData&&(t.FormData=o.FormData),o.DOMParser&&!t.DOMParser&&(t.DOMParser=o.DOMParser),o.URL&&!t.URL&&(t.URL=o.URL);const u={me:"",scope:"post create delete update",token:"",authEndpoint:"",tokenEndpoint:"",micropubEndpoint:""},l=(t,e=null,r=null)=>({message:t,status:e,error:r});class p{constructor(t={}){this.options=Object.assign(u,t),this.create=this.create.bind(this),this.update=this.update.bind(this),this.delete=this.delete.bind(this),this.undelete=this.undelete.bind(this),this.postMicropub=this.postMicropub.bind(this),this.checkRequiredOptions=this.checkRequiredOptions.bind(this),this.getAuthUrl=this.getAuthUrl.bind(this),this.getEndpointsFromUrl=this.getEndpointsFromUrl.bind(this)}checkRequiredOptions(t){let e=[],r=!0;for(var o=0;o<t.length;o++){const n=t[o];this.options[n]||(r=!1,e.push(n))}return{pass:r,missing:e}}getEndpointsFromUrl(t){return new Promise((e,r)=>{let o={micropub:null,authorization_endpoint:null,token_endpoint:null},n=t;fetch(t).then(t=>{if(!t.ok)return r(l("Error getting page",t.status));n=t.url;const e=t.headers.get("link");if(e){e.split(",").forEach(t=>{Object.keys(o).forEach(e=>{const r=t.match(/rel=("([^"]*)"|([^,"<]+))/);if(r&&r[1]&&r[1].indexOf(e)>=0){const r=t.match(/[^<>|\s]+/g);r&&r[0]&&(o[e]=r[0])}})})}return t.text()}).then(s=>{const a=i(s,n);return this.options.me=t,a&&Object.keys(o).forEach(t=>{a[t]&&a[t][0]&&(o[t]=a[t][0])}),o.micropub&&o.authorization_endpoint&&o.token_endpoint?(this.options.micropubEndpoint=o.micropub,this.options.tokenEndpoint=o.token_endpoint,this.options.authEndpoint=o.authorization_endpoint,e({auth:this.options.authEndpoint,token:this.options.tokenEndpoint,micropub:this.options.micropubEndpoint})):r(l("Error getting microformats data"))}).catch(t=>r(l("Error fetching url",null,t)))})}getToken(t){return new Promise((e,r)=>{const o=this.checkRequiredOptions(["me","state","scope","clientId","redirectUri","tokenEndpoint"]);if(!o.pass)return r(l("Missing required options: "+o.missing.join(", ")));const i={grant_type:"authorization_code",state:this.options.state,me:this.options.me,code:t,scope:this.options.scope,state:this.options.state,client_id:this.options.clientId,redirect_uri:this.options.redirectUri},a={method:"POST",body:s(i),headers:new Headers({"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8",Accept:"application/json, application/x-www-form-urlencoded"})};fetch(this.options.tokenEndpoint,a).then(t=>{if(!t.ok)return r(l("Error getting token",t.status));const e=t.headers.get("Content-Type");return e&&0===e.indexOf("application/json")?t.json():t.text()}).then(t=>("string"==typeof t&&(t=n(t)),t.error_description?r(l(t.error_description)):t.error?r(l(t.error)):t.me&&t.scope&&t.access_token?t.me&&t.me.replace(/\/+$/,"")!==this.options.me.replace(/\/+$/,"")?r(l("The me values did not match")):(this.options.token=t.access_token,void e(t.access_token)):r(l("The token endpoint did not return the expected parameters")))).catch(t=>r(l("Error requesting token endpoint",null,t)))})}getAuthUrl(){return new Promise((t,e)=>{let r=this.checkRequiredOptions(["me","state"]);if(!r.pass)return e(l("Missing required options: "+r.missing.join(", ")));this.getEndpointsFromUrl(this.options.me).then(()=>{let r=this.checkRequiredOptions(["me","state","scope","clientId","redirectUri"]);if(!r.pass)return e(l("Missing required options: "+r.missing.join(", ")));const o={me:this.options.me,client_id:this.options.clientId,redirect_uri:this.options.redirectUri,response_type:"code",scope:this.options.scope,state:this.options.state};t(this.options.authEndpoint+"?"+s(o))}).catch(t=>e(l("Error getting auth url",null,t)))})}verifyToken(){return new Promise((t,e)=>{const r=this.checkRequiredOptions(["token","micropubEndpoint"]);if(!r.pass)return e(l("Missing required options: "+r.missing.join(", ")));const o={method:"GET",headers:new Headers({Authorization:"Bearer "+this.options.token})};fetch(this.options.micropubEndpoint,o).then(r=>r.ok?t(!0):e(l("Error verifying token",r.status))).catch(t=>e(l("Error verifying token",null,t)))})}create(t,e="json"){return this.postMicropub(t,e)}update(t,e){return this.postMicropub(Object.assign({action:"update",url:t},e))}delete(t){return this.postMicropub({action:"delete",url:t})}undelete(t){return this.postMicropub({action:"undelete",url:t})}postMicropub(t,e="json"){return new Promise((r,o)=>{const i=this.checkRequiredOptions(["token","micropubEndpoint"]);if(!i.pass)return o(l("Missing required options: "+i.missing.join(", ")));let c={method:"POST"};"json"==e?(c.body=JSON.stringify(t),c.headers=new Headers({Authorization:"Bearer "+this.options.token,"Content-Type":"application/json",Accept:"application/json, application/x-www-form-urlencoded"})):"form"==e?(c.body=s(t),c.headers=new Headers({Authorization:"Bearer "+this.options.token,"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8",Accept:"application/json, application/x-www-form-urlencoded"})):"multipart"==e&&(c.body=a(t),c.headers=new Headers({Authorization:"Bearer "+this.options.token,"Content-Type":void 0,Accept:"application/json, application/x-www-form-urlencoded"})),fetch(this.options.micropubEndpoint,c).then(t=>{if(!t.ok)return o(l("Error with micropub request",t.status));const e=t.headers.get("Location")||t.headers.get("location");if(e)return r(e);const n=t.headers.get("Content-Type");return n&&0===n.indexOf("application/json")?t.json():t.text()}).then(t=>("string"==typeof t&&(t=n(t)),t.error_description?o(l(t.error_description)):t.error?o(l(t.error)):r(t))).catch(t=>o(l("Error sending request",null,t)))})}postMedia(t){return new Promise((e,r)=>{const o=this.checkRequiredOptions(["token","mediaEndpoint"]);if(!o.pass)return r(l("Missing required options: "+o.missing.join(", ")));let n={method:"POST",body:a({file:t}),headers:new Headers({Authorization:"Bearer "+this.options.token,"Content-Type":void 0,Accept:"*/*"})};fetch(this.options.mediaEndpoint,n).then(t=>{if(201!==t.status)return r(l("Error creating media",t.status));const o=t.headers.get("Location")||t.headers.get("location");return o?e(o):r(l("Media endpoint did not return a location",t.status))}).catch(t=>r(l("Error sending request")))})}query(t){return new Promise((e,r)=>{const o=this.checkRequiredOptions(["token","micropubEndpoint"]);if(!o.pass)return r(l("Missing required options: "+o.missing.join(", ")));const n=c(this.options.micropubEndpoint,{q:t}),i={method:"GET",headers:new Headers({Authorization:"Bearer "+this.options.token,"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8",Accept:"application/json"})};fetch(n,i).then(e=>e.ok?e.json():r(l("Error getting "+t,e.status))).then(t=>e(t)).catch(e=>r(l("Error getting "+t,null,e)))})}querySource(t,e=[]){return new Promise((r,o)=>{const n=this.checkRequiredOptions(["token","micropubEndpoint"]);if(!n.pass)return o(l("Missing required options: "+n.missing.join(", ")));t=c(this.options.micropubEndpoint,{q:"source",url:t,properties:e});const i={method:"GET",headers:new Headers({Authorization:"Bearer "+this.options.token,"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8",Accept:"application/json"})};fetch(t,i).then(t=>t.ok?t.json():o(l("Error getting source",t.status))).then(t=>r(t)).catch(t=>o(l("Error getting source",null,t)))})}}e.default=p}.call(e,r(15))},function(t,e){var r;r=function(){return this}();try{r=r||Function("return this")()||(0,eval)("this")}catch(t){"object"==typeof window&&(r=window)}t.exports=r},,,function(t,e,r){"use strict";function o(t,e){var r=e.split("&").filter(function(e){return e.startsWith(t+"=")});if(r&&r.length){var o=r[0].substr(t.length+1);return decodeURIComponent(o)}return null}function n(t){var e={};for(var r in t)r.startsWith("utm_")||(e[r]=t[r]);return e}function i(t){var e=[];for(var r in t)e.push(r+"="+t[r]);return e.length?"?"+e.join("&"):""}Object.defineProperty(e,"__esModule",{value:!0}),e.getParamFromUrl=function(t,e){return o(t,e.split("?")[1])},e.getParamFromUrlString=o,e.cleanParams=n,e.paramsToQueryString=i,e.getUrlOrigin=function(t){var e=(0,s.default)(t);return[e.protocol,"://",e.host,e.port?":"+e.port:""].join("")},e.cleanUrl=function(t){var e=(0,s.default)(t);return[e.protocol,"://",e.host,e.port?":"+e.port:"",e.path,i(n(e.queryKey))].join("")};var s=function(t){return t&&t.__esModule?t:{default:t}}(r(31))},function(t,e,r){"use strict";function o(t){localStorage.setItem("selectedEntry",t)}function n(){localStorage.removeItem("selectedEntry")}var i=function(t){return t&&t.__esModule?t:{default:t}}(r(4)),s=r(18),a=r(1),c=null;chrome.runtime.onMessage.addListener(function(t,e,r){switch(t.action){case"begin-auth":(function(t){localStorage.setItem("domain",t.domain),localStorage.setItem("authEndpoint",t.metadata.authEndpoint),localStorage.setItem("tokenEndpoint",t.metadata.tokenEndpoint),localStorage.setItem("micropubEndpoint",t.metadata.micropub),chrome.tabs.create({url:t.authUrl},function(t){c=t.id})})(t.payload);break;case"focus-window":(function(t,e){localStorage.setItem("pageUrl",(0,s.cleanUrl)(t)),e?o(e):n()})(e.url,t.payload.selectedEntry);break;case"select-entry":o(t.payload.url);break;case"clear-entry":n()}}),chrome.tabs.onUpdated.addListener(function(t,e,r){if(t===c&&function(t){return t.url&&t.url.startsWith("https://omnibear.com/auth/success")}(e)){var o=(0,s.getParamFromUrl)("code",e.url),n=(0,s.getParamFromUrl)("me",e.url);if(n){var u=localStorage.getItem("domain");(0,s.getUrlOrigin)(u)!==(0,s.getUrlOrigin)(n)&&(chrome.tabs.sendMessage(r.id,{action:"fetch-token-error",payload:{error:new Error("'me' url domain doesn't match auth endpoint domain")}}),(0,a.logout)()),localStorage.setItem("domain",n)}i.default.options.me=localStorage.getItem("domain"),i.default.options.tokenEndpoint=localStorage.getItem("tokenEndpoint"),i.default.getToken(o).then(function(t){if(!t)throw new Error("Token not found in token endpoint response. Missing expected field 'access_token'");localStorage.setItem("token",t),chrome.tabs.remove(r.id),c=null}).catch(function(t){(0,a.getAuthTab)().then(function(e){chrome.tabs.sendMessage(e.id,{action:"fetch-token-error",payload:{error:t}}),(0,a.logout)()})})}}),chrome.contextMenus.create({title:"Reply to entry",contexts:["page","selection"],onclick:function(){"undefined"==typeof browser?window.open("index.html?reply=true","extension_popup","width=450,height=510,status=no,scrollbars=yes,resizable=no,top=80,left=2000"):browser.windows.create({url:"index.html?reply=true",width:450,height:510,type:"panel",left:2e3})}})},,,,,,,,,,,,function(t,e,r){"use strict";t.exports=function(t,e){e=e||{};for(var r={key:["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],q:{name:"queryKey",parser:/(?:^|&)([^&=]*)=?([^&]*)/g},parser:{strict:/^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,loose:/^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/}},o=r.parser[e.strictMode?"strict":"loose"].exec(t),n={},i=14;i--;)n[r.key[i]]=o[i]||"";return n[r.q.name]={},n[r.key[12]].replace(r.q.parser,function(t,e,o){e&&(n[r.q.name][e]=o)}),n}}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */,
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.openLink = openLink;
+exports.clone = clone;
+exports.getAuthTab = getAuthTab;
+exports.logout = logout;
+function openLink(e) {
+  e.preventDefault();
+  if (e.target.href) {
+    chrome.tabs.create({ url: e.target.href });
+  }
+}
+
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function getAuthTab() {
+  return new Promise(function (resolve, reject) {
+    chrome.tabs.query({ url: 'https://omnibear.com/auth/success*' }, function (tabs) {
+      if (tabs.length) {
+        resolve(tabs[0]);
+      } else {
+        reject('Auth tab not found');
+      }
+    });
+  });
+}
+
+function logout() {
+  var items = ['token', 'domain', 'authEndpoint', 'tokenEndpoint', 'micropubEndpoint'];
+  items.map(function (item) {
+    return localStorage.removeItem(item);
+  });
+}
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var replace = String.prototype.replace;
+var percentTwenties = /%20/g;
+
+module.exports = {
+    'default': 'RFC3986',
+    formatters: {
+        RFC1738: function (value) {
+            return replace.call(value, percentTwenties, '+');
+        },
+        RFC3986: function (value) {
+            return value;
+        }
+    },
+    RFC1738: 'RFC1738',
+    RFC3986: 'RFC3986'
+};
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var has = Object.prototype.hasOwnProperty;
+
+var hexTable = (function () {
+    var array = [];
+    for (var i = 0; i < 256; ++i) {
+        array.push('%' + ((i < 16 ? '0' : '') + i.toString(16)).toUpperCase());
+    }
+
+    return array;
+}());
+
+var compactQueue = function compactQueue(queue) {
+    var obj;
+
+    while (queue.length) {
+        var item = queue.pop();
+        obj = item.obj[item.prop];
+
+        if (Array.isArray(obj)) {
+            var compacted = [];
+
+            for (var j = 0; j < obj.length; ++j) {
+                if (typeof obj[j] !== 'undefined') {
+                    compacted.push(obj[j]);
+                }
+            }
+
+            item.obj[item.prop] = compacted;
+        }
+    }
+
+    return obj;
+};
+
+exports.arrayToObject = function arrayToObject(source, options) {
+    var obj = options && options.plainObjects ? Object.create(null) : {};
+    for (var i = 0; i < source.length; ++i) {
+        if (typeof source[i] !== 'undefined') {
+            obj[i] = source[i];
+        }
+    }
+
+    return obj;
+};
+
+exports.merge = function merge(target, source, options) {
+    if (!source) {
+        return target;
+    }
+
+    if (typeof source !== 'object') {
+        if (Array.isArray(target)) {
+            target.push(source);
+        } else if (typeof target === 'object') {
+            if (options.plainObjects || options.allowPrototypes || !has.call(Object.prototype, source)) {
+                target[source] = true;
+            }
+        } else {
+            return [target, source];
+        }
+
+        return target;
+    }
+
+    if (typeof target !== 'object') {
+        return [target].concat(source);
+    }
+
+    var mergeTarget = target;
+    if (Array.isArray(target) && !Array.isArray(source)) {
+        mergeTarget = exports.arrayToObject(target, options);
+    }
+
+    if (Array.isArray(target) && Array.isArray(source)) {
+        source.forEach(function (item, i) {
+            if (has.call(target, i)) {
+                if (target[i] && typeof target[i] === 'object') {
+                    target[i] = exports.merge(target[i], item, options);
+                } else {
+                    target.push(item);
+                }
+            } else {
+                target[i] = item;
+            }
+        });
+        return target;
+    }
+
+    return Object.keys(source).reduce(function (acc, key) {
+        var value = source[key];
+
+        if (has.call(acc, key)) {
+            acc[key] = exports.merge(acc[key], value, options);
+        } else {
+            acc[key] = value;
+        }
+        return acc;
+    }, mergeTarget);
+};
+
+exports.assign = function assignSingleSource(target, source) {
+    return Object.keys(source).reduce(function (acc, key) {
+        acc[key] = source[key];
+        return acc;
+    }, target);
+};
+
+exports.decode = function (str) {
+    try {
+        return decodeURIComponent(str.replace(/\+/g, ' '));
+    } catch (e) {
+        return str;
+    }
+};
+
+exports.encode = function encode(str) {
+    // This code was originally written by Brian White (mscdex) for the io.js core querystring library.
+    // It has been adapted here for stricter adherence to RFC 3986
+    if (str.length === 0) {
+        return str;
+    }
+
+    var string = typeof str === 'string' ? str : String(str);
+
+    var out = '';
+    for (var i = 0; i < string.length; ++i) {
+        var c = string.charCodeAt(i);
+
+        if (
+            c === 0x2D // -
+            || c === 0x2E // .
+            || c === 0x5F // _
+            || c === 0x7E // ~
+            || (c >= 0x30 && c <= 0x39) // 0-9
+            || (c >= 0x41 && c <= 0x5A) // a-z
+            || (c >= 0x61 && c <= 0x7A) // A-Z
+        ) {
+            out += string.charAt(i);
+            continue;
+        }
+
+        if (c < 0x80) {
+            out = out + hexTable[c];
+            continue;
+        }
+
+        if (c < 0x800) {
+            out = out + (hexTable[0xC0 | (c >> 6)] + hexTable[0x80 | (c & 0x3F)]);
+            continue;
+        }
+
+        if (c < 0xD800 || c >= 0xE000) {
+            out = out + (hexTable[0xE0 | (c >> 12)] + hexTable[0x80 | ((c >> 6) & 0x3F)] + hexTable[0x80 | (c & 0x3F)]);
+            continue;
+        }
+
+        i += 1;
+        c = 0x10000 + (((c & 0x3FF) << 10) | (string.charCodeAt(i) & 0x3FF));
+        out += hexTable[0xF0 | (c >> 18)]
+            + hexTable[0x80 | ((c >> 12) & 0x3F)]
+            + hexTable[0x80 | ((c >> 6) & 0x3F)]
+            + hexTable[0x80 | (c & 0x3F)];
+    }
+
+    return out;
+};
+
+exports.compact = function compact(value) {
+    var queue = [{ obj: { o: value }, prop: 'o' }];
+    var refs = [];
+
+    for (var i = 0; i < queue.length; ++i) {
+        var item = queue[i];
+        var obj = item.obj[item.prop];
+
+        var keys = Object.keys(obj);
+        for (var j = 0; j < keys.length; ++j) {
+            var key = keys[j];
+            var val = obj[key];
+            if (typeof val === 'object' && val !== null && refs.indexOf(val) === -1) {
+                queue.push({ obj: obj, prop: key });
+                refs.push(val);
+            }
+        }
+    }
+
+    return compactQueue(queue);
+};
+
+exports.isRegExp = function isRegExp(obj) {
+    return Object.prototype.toString.call(obj) === '[object RegExp]';
+};
+
+exports.isBuffer = function isBuffer(obj) {
+    if (obj === null || typeof obj === 'undefined') {
+        return false;
+    }
+
+    return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
+};
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _micropubHelper = __webpack_require__(14);
+
+var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = new _micropubHelper2.default({
+  clientId: 'https://omnibear.com',
+  redirectUri: 'https://omnibear.com/auth/success/',
+  state: 'very-secret-omnibear-state',
+  me: localStorage.getItem('domain'),
+  authEndpoint: localStorage.getItem('authEndpoint'),
+  tokenEndpoint: localStorage.getItem('tokenEndpoint'),
+  micropubEndpoint: localStorage.getItem('micropubEndpoint'),
+  token: localStorage.getItem('token')
+});
+
+/***/ }),
+/* 5 */,
+/* 6 */,
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var stringify = __webpack_require__(9);
+var parse = __webpack_require__(8);
+var formats = __webpack_require__(2);
+
+module.exports = {
+    formats: formats,
+    parse: parse,
+    stringify: stringify
+};
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(3);
+
+var has = Object.prototype.hasOwnProperty;
+
+var defaults = {
+    allowDots: false,
+    allowPrototypes: false,
+    arrayLimit: 20,
+    decoder: utils.decode,
+    delimiter: '&',
+    depth: 5,
+    parameterLimit: 1000,
+    plainObjects: false,
+    strictNullHandling: false
+};
+
+var parseValues = function parseQueryStringValues(str, options) {
+    var obj = {};
+    var cleanStr = options.ignoreQueryPrefix ? str.replace(/^\?/, '') : str;
+    var limit = options.parameterLimit === Infinity ? undefined : options.parameterLimit;
+    var parts = cleanStr.split(options.delimiter, limit);
+
+    for (var i = 0; i < parts.length; ++i) {
+        var part = parts[i];
+
+        var bracketEqualsPos = part.indexOf(']=');
+        var pos = bracketEqualsPos === -1 ? part.indexOf('=') : bracketEqualsPos + 1;
+
+        var key, val;
+        if (pos === -1) {
+            key = options.decoder(part, defaults.decoder);
+            val = options.strictNullHandling ? null : '';
+        } else {
+            key = options.decoder(part.slice(0, pos), defaults.decoder);
+            val = options.decoder(part.slice(pos + 1), defaults.decoder);
+        }
+        if (has.call(obj, key)) {
+            obj[key] = [].concat(obj[key]).concat(val);
+        } else {
+            obj[key] = val;
+        }
+    }
+
+    return obj;
+};
+
+var parseObject = function (chain, val, options) {
+    var leaf = val;
+
+    for (var i = chain.length - 1; i >= 0; --i) {
+        var obj;
+        var root = chain[i];
+
+        if (root === '[]') {
+            obj = [];
+            obj = obj.concat(leaf);
+        } else {
+            obj = options.plainObjects ? Object.create(null) : {};
+            var cleanRoot = root.charAt(0) === '[' && root.charAt(root.length - 1) === ']' ? root.slice(1, -1) : root;
+            var index = parseInt(cleanRoot, 10);
+            if (
+                !isNaN(index)
+                && root !== cleanRoot
+                && String(index) === cleanRoot
+                && index >= 0
+                && (options.parseArrays && index <= options.arrayLimit)
+            ) {
+                obj = [];
+                obj[index] = leaf;
+            } else {
+                obj[cleanRoot] = leaf;
+            }
+        }
+
+        leaf = obj;
+    }
+
+    return leaf;
+};
+
+var parseKeys = function parseQueryStringKeys(givenKey, val, options) {
+    if (!givenKey) {
+        return;
+    }
+
+    // Transform dot notation to bracket notation
+    var key = options.allowDots ? givenKey.replace(/\.([^.[]+)/g, '[$1]') : givenKey;
+
+    // The regex chunks
+
+    var brackets = /(\[[^[\]]*])/;
+    var child = /(\[[^[\]]*])/g;
+
+    // Get the parent
+
+    var segment = brackets.exec(key);
+    var parent = segment ? key.slice(0, segment.index) : key;
+
+    // Stash the parent if it exists
+
+    var keys = [];
+    if (parent) {
+        // If we aren't using plain objects, optionally prefix keys
+        // that would overwrite object prototype properties
+        if (!options.plainObjects && has.call(Object.prototype, parent)) {
+            if (!options.allowPrototypes) {
+                return;
+            }
+        }
+
+        keys.push(parent);
+    }
+
+    // Loop through children appending to the array until we hit depth
+
+    var i = 0;
+    while ((segment = child.exec(key)) !== null && i < options.depth) {
+        i += 1;
+        if (!options.plainObjects && has.call(Object.prototype, segment[1].slice(1, -1))) {
+            if (!options.allowPrototypes) {
+                return;
+            }
+        }
+        keys.push(segment[1]);
+    }
+
+    // If there's a remainder, just add whatever is left
+
+    if (segment) {
+        keys.push('[' + key.slice(segment.index) + ']');
+    }
+
+    return parseObject(keys, val, options);
+};
+
+module.exports = function (str, opts) {
+    var options = opts ? utils.assign({}, opts) : {};
+
+    if (options.decoder !== null && options.decoder !== undefined && typeof options.decoder !== 'function') {
+        throw new TypeError('Decoder has to be a function.');
+    }
+
+    options.ignoreQueryPrefix = options.ignoreQueryPrefix === true;
+    options.delimiter = typeof options.delimiter === 'string' || utils.isRegExp(options.delimiter) ? options.delimiter : defaults.delimiter;
+    options.depth = typeof options.depth === 'number' ? options.depth : defaults.depth;
+    options.arrayLimit = typeof options.arrayLimit === 'number' ? options.arrayLimit : defaults.arrayLimit;
+    options.parseArrays = options.parseArrays !== false;
+    options.decoder = typeof options.decoder === 'function' ? options.decoder : defaults.decoder;
+    options.allowDots = typeof options.allowDots === 'boolean' ? options.allowDots : defaults.allowDots;
+    options.plainObjects = typeof options.plainObjects === 'boolean' ? options.plainObjects : defaults.plainObjects;
+    options.allowPrototypes = typeof options.allowPrototypes === 'boolean' ? options.allowPrototypes : defaults.allowPrototypes;
+    options.parameterLimit = typeof options.parameterLimit === 'number' ? options.parameterLimit : defaults.parameterLimit;
+    options.strictNullHandling = typeof options.strictNullHandling === 'boolean' ? options.strictNullHandling : defaults.strictNullHandling;
+
+    if (str === '' || str === null || typeof str === 'undefined') {
+        return options.plainObjects ? Object.create(null) : {};
+    }
+
+    var tempObj = typeof str === 'string' ? parseValues(str, options) : str;
+    var obj = options.plainObjects ? Object.create(null) : {};
+
+    // Iterate over the keys and setup the new object
+
+    var keys = Object.keys(tempObj);
+    for (var i = 0; i < keys.length; ++i) {
+        var key = keys[i];
+        var newObj = parseKeys(key, tempObj[key], options);
+        obj = utils.merge(obj, newObj, options);
+    }
+
+    return utils.compact(obj);
+};
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(3);
+var formats = __webpack_require__(2);
+
+var arrayPrefixGenerators = {
+    brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
+        return prefix + '[]';
+    },
+    indices: function indices(prefix, key) { // eslint-disable-line func-name-matching
+        return prefix + '[' + key + ']';
+    },
+    repeat: function repeat(prefix) { // eslint-disable-line func-name-matching
+        return prefix;
+    }
+};
+
+var toISO = Date.prototype.toISOString;
+
+var defaults = {
+    delimiter: '&',
+    encode: true,
+    encoder: utils.encode,
+    encodeValuesOnly: false,
+    serializeDate: function serializeDate(date) { // eslint-disable-line func-name-matching
+        return toISO.call(date);
+    },
+    skipNulls: false,
+    strictNullHandling: false
+};
+
+var stringify = function stringify( // eslint-disable-line func-name-matching
+    object,
+    prefix,
+    generateArrayPrefix,
+    strictNullHandling,
+    skipNulls,
+    encoder,
+    filter,
+    sort,
+    allowDots,
+    serializeDate,
+    formatter,
+    encodeValuesOnly
+) {
+    var obj = object;
+    if (typeof filter === 'function') {
+        obj = filter(prefix, obj);
+    } else if (obj instanceof Date) {
+        obj = serializeDate(obj);
+    } else if (obj === null) {
+        if (strictNullHandling) {
+            return encoder && !encodeValuesOnly ? encoder(prefix, defaults.encoder) : prefix;
+        }
+
+        obj = '';
+    }
+
+    if (typeof obj === 'string' || typeof obj === 'number' || typeof obj === 'boolean' || utils.isBuffer(obj)) {
+        if (encoder) {
+            var keyValue = encodeValuesOnly ? prefix : encoder(prefix, defaults.encoder);
+            return [formatter(keyValue) + '=' + formatter(encoder(obj, defaults.encoder))];
+        }
+        return [formatter(prefix) + '=' + formatter(String(obj))];
+    }
+
+    var values = [];
+
+    if (typeof obj === 'undefined') {
+        return values;
+    }
+
+    var objKeys;
+    if (Array.isArray(filter)) {
+        objKeys = filter;
+    } else {
+        var keys = Object.keys(obj);
+        objKeys = sort ? keys.sort(sort) : keys;
+    }
+
+    for (var i = 0; i < objKeys.length; ++i) {
+        var key = objKeys[i];
+
+        if (skipNulls && obj[key] === null) {
+            continue;
+        }
+
+        if (Array.isArray(obj)) {
+            values = values.concat(stringify(
+                obj[key],
+                generateArrayPrefix(prefix, key),
+                generateArrayPrefix,
+                strictNullHandling,
+                skipNulls,
+                encoder,
+                filter,
+                sort,
+                allowDots,
+                serializeDate,
+                formatter,
+                encodeValuesOnly
+            ));
+        } else {
+            values = values.concat(stringify(
+                obj[key],
+                prefix + (allowDots ? '.' + key : '[' + key + ']'),
+                generateArrayPrefix,
+                strictNullHandling,
+                skipNulls,
+                encoder,
+                filter,
+                sort,
+                allowDots,
+                serializeDate,
+                formatter,
+                encodeValuesOnly
+            ));
+        }
+    }
+
+    return values;
+};
+
+module.exports = function (object, opts) {
+    var obj = object;
+    var options = opts ? utils.assign({}, opts) : {};
+
+    if (options.encoder !== null && options.encoder !== undefined && typeof options.encoder !== 'function') {
+        throw new TypeError('Encoder has to be a function.');
+    }
+
+    var delimiter = typeof options.delimiter === 'undefined' ? defaults.delimiter : options.delimiter;
+    var strictNullHandling = typeof options.strictNullHandling === 'boolean' ? options.strictNullHandling : defaults.strictNullHandling;
+    var skipNulls = typeof options.skipNulls === 'boolean' ? options.skipNulls : defaults.skipNulls;
+    var encode = typeof options.encode === 'boolean' ? options.encode : defaults.encode;
+    var encoder = typeof options.encoder === 'function' ? options.encoder : defaults.encoder;
+    var sort = typeof options.sort === 'function' ? options.sort : null;
+    var allowDots = typeof options.allowDots === 'undefined' ? false : options.allowDots;
+    var serializeDate = typeof options.serializeDate === 'function' ? options.serializeDate : defaults.serializeDate;
+    var encodeValuesOnly = typeof options.encodeValuesOnly === 'boolean' ? options.encodeValuesOnly : defaults.encodeValuesOnly;
+    if (typeof options.format === 'undefined') {
+        options.format = formats['default'];
+    } else if (!Object.prototype.hasOwnProperty.call(formats.formatters, options.format)) {
+        throw new TypeError('Unknown format option provided.');
+    }
+    var formatter = formats.formatters[options.format];
+    var objKeys;
+    var filter;
+
+    if (typeof options.filter === 'function') {
+        filter = options.filter;
+        obj = filter('', obj);
+    } else if (Array.isArray(options.filter)) {
+        filter = options.filter;
+        objKeys = filter;
+    }
+
+    var keys = [];
+
+    if (typeof obj !== 'object' || obj === null) {
+        return '';
+    }
+
+    var arrayFormat;
+    if (options.arrayFormat in arrayPrefixGenerators) {
+        arrayFormat = options.arrayFormat;
+    } else if ('indices' in options) {
+        arrayFormat = options.indices ? 'indices' : 'repeat';
+    } else {
+        arrayFormat = 'indices';
+    }
+
+    var generateArrayPrefix = arrayPrefixGenerators[arrayFormat];
+
+    if (!objKeys) {
+        objKeys = Object.keys(obj);
+    }
+
+    if (sort) {
+        objKeys.sort(sort);
+    }
+
+    for (var i = 0; i < objKeys.length; ++i) {
+        var key = objKeys[i];
+
+        if (skipNulls && obj[key] === null) {
+            continue;
+        }
+
+        keys = keys.concat(stringify(
+            obj[key],
+            key,
+            generateArrayPrefix,
+            strictNullHandling,
+            skipNulls,
+            encode ? encoder : null,
+            filter,
+            sort,
+            allowDots,
+            serializeDate,
+            formatter,
+            encodeValuesOnly
+        ));
+    }
+
+    var joined = keys.join(delimiter);
+    var prefix = options.addQueryPrefix === true ? '?' : '';
+
+    return joined.length > 0 ? prefix + joined : '';
+};
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_qs__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_qs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_qs__);
+/* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0_qs__, "parse")) __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_qs__["parse"]; });
+/* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0_qs__, "stringify")) __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0_qs__["stringify"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_rel_scraper__ = __webpack_require__(13);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__lib_rel_scraper__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_object_to_form_data__ = __webpack_require__(12);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_2__lib_object_to_form_data__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_append_query_string__ = __webpack_require__(11);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_3__lib_append_query_string__["a"]; });
+
+
+
+
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = appendQueryString;
+function appendQueryString(url, queryVars) {
+  const firstSeperator = (url.indexOf('?') == -1 ? '?' : '&');
+  let queryStringParts = [];
+  for(var key in queryVars) {
+    if (Array.isArray(queryVars[key])) {
+      queryVars[key].forEach((val) => {
+        queryStringParts.push(key + '[]=' + encodeURIComponent(val));
+      });
+    } else {
+      queryStringParts.push(key + '=' + encodeURIComponent(queryVars[key]));
+    }
+  }
+  const queryString = queryStringParts.join('&');
+  return url + firstSeperator + queryString;
+}
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = objectToFormData;
+// const FormData = require('form-data');
+
+function objectToFormData(object, formData = new FormData(), name = false) {
+  Object.keys(object).forEach((key) => {
+    const data = object[key];
+    if (name) {
+      key = name + '[' + key + ']'
+    }
+    if (Array.isArray(data)) {
+      formData = objectToFormData(data, formData, key)
+    } else {
+      formData.append(key, data);
+    }
+  });
+  return formData;
+}
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function (htmlString, url) {
+  let rels = {};
+  let baseUrl = url;
+
+  const doc = new DOMParser().parseFromString(htmlString, 'text/html');
+  const baseEl = doc.querySelector('base[href]');
+  const relEls = doc.querySelectorAll('[rel][href]');
+
+  if (baseEl) {
+    const value = baseEl.getAttribute('href');
+    const urlObj = new URL(value, url);
+    baseUrl = urlObj.toString();
+  }
+
+  if (relEls.length) {
+    relEls.forEach((relEl) => {
+      const names = relEl.getAttribute('rel').toLowerCase().split("\\s+");
+      const value = relEl.getAttribute('href');
+      if (names.length && value !== null) {
+        names.forEach((name) => {
+          if (!rels[name]) {
+            rels[name] = [];
+          }
+          const url = new URL(value, baseUrl).toString();
+          if (rels[name].indexOf(url) === -1) {
+            rels[name].push(url);
+          }
+        });
+      }
+    });
+  }
+
+  return rels;
+});
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dependencies__ = __webpack_require__(10);
+
+
+
+const qsParse = __WEBPACK_IMPORTED_MODULE_0__dependencies__["a" /* qsParse */];
+const relScraper = __WEBPACK_IMPORTED_MODULE_0__dependencies__["b" /* relScraper */];
+const qsStringify = __WEBPACK_IMPORTED_MODULE_0__dependencies__["c" /* qsStringify */];
+const objectToFormData = __WEBPACK_IMPORTED_MODULE_0__dependencies__["d" /* objectToFormData */];
+const appendQueryString = __WEBPACK_IMPORTED_MODULE_0__dependencies__["e" /* appendQueryString */];
+if (__WEBPACK_IMPORTED_MODULE_0__dependencies__["FormData"] && !global.FormData) {
+  global.FormData = __WEBPACK_IMPORTED_MODULE_0__dependencies__["FormData"];
+}
+if (__WEBPACK_IMPORTED_MODULE_0__dependencies__["DOMParser"] && !global.DOMParser) {
+  global.DOMParser = __WEBPACK_IMPORTED_MODULE_0__dependencies__["DOMParser"];
+}
+if (__WEBPACK_IMPORTED_MODULE_0__dependencies__["URL"] && !global.URL) {
+  global.URL = __WEBPACK_IMPORTED_MODULE_0__dependencies__["URL"];
+}
+
+const defaultSettings = {
+  me: '',
+  scope: 'post create delete update',
+  token: '',
+  authEndpoint: '',
+  tokenEndpoint: '',
+  micropubEndpoint: '',
+};
+
+const micropubError = (message, status = null, error = null) => {
+  return {
+    message: message,
+    status: status,
+    error: error,
+  };
+};
+
+class Micropub {
+  constructor(userSettings = {}) {
+    this.options = Object.assign({}, defaultSettings, userSettings);
+
+    // Bind all the things
+    this.create = this.create.bind(this);
+    this.update = this.update.bind(this);
+    this.delete = this.delete.bind(this);
+    this.undelete = this.undelete.bind(this);
+    this.postMicropub = this.postMicropub.bind(this);
+    this.checkRequiredOptions = this.checkRequiredOptions.bind(this);
+    this.getAuthUrl = this.getAuthUrl.bind(this);
+    this.getEndpointsFromUrl = this.getEndpointsFromUrl.bind(this);
+  }
+
+  /**
+   * Checks to see if the given options are set
+   * @param  {array} requirements An array of option keys to check
+   * @return {object}             An object with boolean pass property and array missing property listing missing options
+   */
+  checkRequiredOptions(requirements) {
+    let missing = [];
+    let pass = true;
+    for (var i = 0; i < requirements.length; i++) {
+      const optionName = requirements[i];
+      const option = this.options[optionName];
+      if (!option) {
+        pass = false;
+        missing.push(optionName);
+      }
+    }
+    return {
+      pass: pass,
+      missing: missing,
+    }
+  }
+
+  /**
+   * Get the various endpoints needed from the given url
+   * @param  {string} url The url to scrape
+   * @return {Promise}    Passes an object of endpoints on success: auth, token and micropub
+   */
+  getEndpointsFromUrl(url) {
+    return new Promise((fulfill, reject) => {
+      let endpoints = {
+        micropub: null,
+        authorization_endpoint: null,
+        token_endpoint: null,
+      };
+      // Get the base url from the given url
+      let baseUrl = url;
+      // Fetch the given url
+      fetch(url)
+        .then((res) => {
+          if (!res.ok) {
+            return reject(micropubError('Error getting page', res.status));
+          }
+          baseUrl = res.url;
+
+          // Check for endpoints in headers
+          const linkHeaders = res.headers.get('link');
+          if (linkHeaders) {
+            const links = linkHeaders.split(',');
+            links.forEach((link) => {
+              Object.keys(endpoints).forEach((key) => {
+                const rel = link.match(/rel=("([^"]*)"|([^,"<]+))/)
+                if (rel && rel[1] && rel[1].indexOf(key) >= 0) {
+                  const linkValues = link.match(/[^<>|\s]+/g);
+                  if (linkValues && linkValues[0]) {
+                    endpoints[key] = linkValues[0];
+                  }
+                }
+              });
+            });
+          }
+
+          return res.text()
+        })
+        .then((html) => {
+          // Get rel links
+          const rels = relScraper(html, baseUrl);
+
+          // Save necessary endpoints.
+          this.options.me = url;
+          if (rels) {
+            Object.keys(endpoints).forEach((key) => {
+              if (rels[key] && rels[key][0]) {
+                endpoints[key] = rels[key][0];
+              }
+            });
+          }
+
+          if (endpoints.micropub && endpoints.authorization_endpoint && endpoints.token_endpoint) {
+            this.options.micropubEndpoint = endpoints.micropub;
+            this.options.tokenEndpoint = endpoints.token_endpoint;
+            this.options.authEndpoint = endpoints.authorization_endpoint;
+            return fulfill({
+              auth: this.options.authEndpoint,
+              token: this.options.tokenEndpoint,
+              micropub: this.options.micropubEndpoint,
+            });
+          }
+
+          return reject(micropubError('Error getting microformats data'));
+        })
+        .catch((err) => reject(micropubError('Error fetching url', null, err)));
+    });
+  }
+
+  getToken(code) {
+    return new Promise((fulfill, reject) => {
+      const requirements = this.checkRequiredOptions(['me', 'state', 'scope', 'clientId', 'redirectUri', 'tokenEndpoint']);
+      if (!requirements.pass) {
+        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+      }
+
+      const data = {
+        grant_type: 'authorization_code',
+        state: this.options.state,
+        me: this.options.me,
+        code: code,
+        scope: this.options.scope,
+        state: this.options.state,
+        client_id: this.options.clientId,
+        redirect_uri: this.options.redirectUri,
+      };
+
+      const request = {
+        method: 'POST',
+        body: qsStringify(data),
+        headers: new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Accept': 'application/json, application/x-www-form-urlencoded',
+        }),
+        // mode: 'cors',
+      };
+      // This could maybe use the postMicropub method
+      fetch(this.options.tokenEndpoint, request)
+        .then((res) => {
+          if (!res.ok) {
+            return reject(micropubError('Error getting token', res.status));
+          }
+          const contentType = res.headers.get('Content-Type');
+          if (contentType && contentType.indexOf('application/json') === 0) {
+            return res.json()
+          } else {
+            return res.text();
+          }
+        })
+        .then((result) => {
+          // Parse the response from the indieauth server
+          if (typeof result === 'string') {
+            result = qsParse(result);
+          }
+          if (result.error_description) {
+            return reject(micropubError(result.error_description));
+          } else if (result.error) {
+            return reject(micropubError(result.error));
+          }
+          if (!result.me || !result.scope || !result.access_token) {
+            return reject(micropubError('The token endpoint did not return the expected parameters'));
+          }
+          // Check me is the same (removing any trailing slashes)
+          if (result.me && result.me.replace(/\/+$/, '') !== this.options.me.replace(/\/+$/, '')) {
+            return reject(micropubError('The me values did not match'));
+          }
+          // Check scope matches (not reliable)
+          // console.log(result.scope);
+          // console.log(this.options.scope);
+          // if (result.scope && result.scope !== this.options.scope) {
+          //   reject('The scope values did not match');
+          // }
+          // Successfully got the token
+          this.options.token = result.access_token;
+          fulfill(result.access_token);
+        })
+        .catch((err) => reject(micropubError('Error requesting token endpoint', null, err)));
+    });
+  }
+
+  /**
+   * Get the authentication url based on the set options
+   * @return {string|boolean} The authentication url or false on missing options
+   */
+  getAuthUrl() {
+    return new Promise((fulfill, reject) => {
+      let requirements = this.checkRequiredOptions(['me', 'state']);
+      if (!requirements.pass) {
+        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+      }
+      this.getEndpointsFromUrl(this.options.me)
+        .then(() => {
+          let requirements = this.checkRequiredOptions(['me', 'state', 'scope', 'clientId', 'redirectUri']);
+          if (!requirements.pass) {
+            return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+          }
+          const authParams = {
+            me: this.options.me,
+            client_id: this.options.clientId,
+            redirect_uri: this.options.redirectUri,
+            response_type: 'code',
+            scope: this.options.scope,
+            state: this.options.state,
+          };
+
+          fulfill(this.options.authEndpoint + '?' + qsStringify(authParams));
+        })
+        .catch((err) => reject(micropubError('Error getting auth url', null, err)));
+    });
+  }
+
+  verifyToken() {
+    return new Promise((fulfill, reject) => {
+      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      if (!requirements.pass) {
+        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+      }
+
+      const request = {
+        method: 'GET',
+        headers: new Headers({
+          'Authorization': 'Bearer ' + this.options.token,
+        }),
+      };
+
+      fetch(this.options.micropubEndpoint, request)
+        .then((res) => {
+          if (res.ok) {
+            return fulfill(true);
+          } else {
+            return reject(micropubError('Error verifying token', res.status));
+          }
+        })
+        .catch((err) => reject(micropubError('Error verifying token', null, err)));
+    });
+  }
+
+  create(post, type = 'json') {
+    return this.postMicropub(post, type);
+  }
+
+  update(url, update) {
+    return this.postMicropub(Object.assign({
+      action: 'update',
+      url: url,
+    }, update));
+  }
+
+  delete(url) {
+    return this.postMicropub({
+      action: 'delete',
+      url: url,
+    })
+  }
+
+  undelete(url) {
+    return this.postMicropub({
+      action: 'undelete',
+      url: url,
+    })
+  }
+
+  postMicropub(object, type = 'json') {
+    return new Promise((fulfill, reject) => {
+      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      if (!requirements.pass) {
+        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+      }
+
+      let request = {
+        method: 'POST',
+      };
+
+      if (type == 'json') {
+        request.body = JSON.stringify(object);
+        request.headers = new Headers({
+          'Authorization': 'Bearer ' + this.options.token,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json, application/x-www-form-urlencoded',
+        });
+      } else if (type == 'form') {
+        request.body = qsStringify(object);
+        request.headers = new Headers({
+          'Authorization': 'Bearer ' + this.options.token,
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Accept': 'application/json, application/x-www-form-urlencoded',
+        });
+      } else if (type == 'multipart') {
+        request.body = objectToFormData(object);
+        request.headers = new Headers({
+          'Authorization': 'Bearer ' + this.options.token,
+          'Content-Type': undefined,
+          'Accept': 'application/json, application/x-www-form-urlencoded',
+        });
+      }
+
+      fetch(this.options.micropubEndpoint, request)
+        .then((res) => {
+          if (!res.ok) {
+            return reject(micropubError('Error with micropub request', res.status));
+          }
+          const location = res.headers.get('Location') || res.headers.get('location');
+          if (location) {
+            return fulfill(location);
+          }
+          const contentType = res.headers.get('Content-Type');
+          if (contentType && contentType.indexOf('application/json') === 0) {
+            return res.json()
+          } else {
+            return res.text();
+          }
+        })
+        .then((result) => {
+          if (typeof result === 'string') {
+            result = qsParse(result);
+          }
+          if (result.error_description) {
+            return reject(micropubError(result.error_description));
+          } else if (result.error) {
+            return reject(micropubError(result.error));
+          } else {
+            return fulfill(result);
+          }
+        })
+        .catch((err) => reject(micropubError('Error sending request', null, err)));
+    });
+  }
+
+  postMedia(file) {
+    return new Promise((fulfill, reject) => {
+      const requirements = this.checkRequiredOptions(['token', 'mediaEndpoint']);
+      if (!requirements.pass) {
+        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+      }
+
+      let request = {
+        method: 'POST',
+        body: objectToFormData({file: file}),
+        headers: new Headers({
+          'Authorization': 'Bearer ' + this.options.token,
+          'Content-Type': undefined,
+          'Accept': '*/*',
+        }),
+      };
+
+      fetch(this.options.mediaEndpoint, request)
+        .then((res) => {
+          if (res.status !== 201) {
+            return reject(micropubError('Error creating media', res.status));
+          }
+          const location = res.headers.get('Location') || res.headers.get('location');
+          if (location) {
+            return fulfill(location);
+          } else {
+            return reject(micropubError('Media endpoint did not return a location', res.status));
+          }
+        })
+        .catch((err) => reject(micropubError('Error sending request')));
+    });
+  }
+
+  query(type) {
+    return new Promise((fulfill, reject) => {
+      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      if (!requirements.pass) {
+        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+      }
+
+      const url = appendQueryString(this.options.micropubEndpoint, {q: type});
+
+      const request = {
+        method: 'GET',
+        headers: new Headers({
+          'Authorization': 'Bearer ' + this.options.token,
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Accept': 'application/json',
+        }),
+        // mode: 'cors',
+      };
+
+      fetch(url, request)
+        .then((res) => {
+          if (!res.ok) {
+            return reject(micropubError('Error getting ' + type, res.status));
+          }
+          return res.json()
+        })
+        .then((json) => fulfill(json))
+        .catch((err) => reject(micropubError('Error getting ' + type, null, err)));
+    });
+  }
+
+  querySource(url, properties = []) {
+    return new Promise((fulfill, reject) => {
+      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      if (!requirements.pass) {
+        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+      }
+
+      url = appendQueryString(this.options.micropubEndpoint, {q: 'source', url: url, properties: properties});
+
+      const request = {
+        method: 'GET',
+        headers: new Headers({
+          'Authorization': 'Bearer ' + this.options.token,
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Accept': 'application/json',
+        }),
+        // mode: 'cors',
+      };
+
+      fetch(url, request)
+        .then((res) => {
+          if (!res.ok) {
+            return reject(micropubError('Error getting source', res.status));
+          }
+          return res.json()
+        })
+        .then((json) => fulfill(json))
+        .catch((err) => reject(micropubError('Error getting source', null, err)));
+    });
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Micropub);
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(15)))
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 16 */,
+/* 17 */,
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getParamFromUrl = getParamFromUrl;
+exports.getParamFromUrlString = getParamFromUrlString;
+exports.cleanParams = cleanParams;
+exports.paramsToQueryString = paramsToQueryString;
+exports.getUrlOrigin = getUrlOrigin;
+exports.cleanUrl = cleanUrl;
+
+var _parseUri = __webpack_require__(31);
+
+var _parseUri2 = _interopRequireDefault(_parseUri);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getParamFromUrl(paramName, url) {
+  var params = url.split('?')[1];
+  return getParamFromUrlString(paramName, params);
+}
+
+function getParamFromUrlString(paramName, params) {
+  var matches = params.split('&').filter(function (param) {
+    return param.startsWith(paramName + '=');
+  });
+  if (matches && matches.length) {
+    var value = matches[0].substr(paramName.length + 1);
+    return decodeURIComponent(value);
+  } else {
+    return null;
+  }
+}
+
+function cleanParams(params) {
+  var clean = {};
+  for (var i in params) {
+    if (!i.startsWith('utm_')) {
+      clean[i] = params[i];
+    }
+  }
+  return clean;
+}
+
+function paramsToQueryString(params) {
+  var parts = [];
+  for (var i in params) {
+    parts.push(i + '=' + params[i]);
+  }
+  if (!parts.length) {
+    return '';
+  }
+  return '?' + parts.join('&');
+}
+
+function getUrlOrigin(url) {
+  var parts = (0, _parseUri2.default)(url);
+  return [parts.protocol, '://', parts.host, parts.port ? ':' + parts.port : ''].join('');
+}
+
+// strip hashes and utm_* query params
+function cleanUrl(url) {
+  var parts = (0, _parseUri2.default)(url);
+  var base = [parts.protocol, '://', parts.host, parts.port ? ':' + parts.port : '', parts.path, paramsToQueryString(cleanParams(parts.queryKey))].join('');
+  return base;
+}
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _micropub = __webpack_require__(4);
+
+var _micropub2 = _interopRequireDefault(_micropub);
+
+var _url = __webpack_require__(18);
+
+var _utils = __webpack_require__(1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var authTabId = null;
+var menuId = void 0;
+
+function handleMessage(request, sender, sendResponse) {
+  switch (request.action) {
+    case 'begin-auth':
+      handleBeginAuth(request.payload);
+      break;
+    case 'focus-window':
+      updateFocusedWindow(sender.url, request.payload.selectedEntry);
+      break;
+    case 'select-entry':
+      selectEntry(request.payload.url);
+      break;
+    case 'clear-entry':
+      clearEntry();
+  }
+}
+
+function handleBeginAuth(payload) {
+  localStorage.setItem('domain', payload.domain);
+  localStorage.setItem('authEndpoint', payload.metadata.authEndpoint);
+  localStorage.setItem('tokenEndpoint', payload.metadata.tokenEndpoint);
+  localStorage.setItem('micropubEndpoint', payload.metadata.micropub);
+  chrome.tabs.create({ url: payload.authUrl }, function (tab) {
+    authTabId = tab.id;
+  });
+}
+
+function updateFocusedWindow(url, selectedEntry) {
+  localStorage.setItem('pageUrl', (0, _url.cleanUrl)(url));
+  if (selectedEntry) {
+    selectEntry(selectedEntry);
+  } else {
+    clearEntry();
+  }
+}
+
+function selectEntry(url) {
+  localStorage.setItem('selectedEntry', url);
+}
+
+function clearEntry() {
+  localStorage.removeItem('selectedEntry');
+}
+
+function handleTabChange(tabId, changeInfo, tab) {
+  if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
+    return;
+  }
+  var code = (0, _url.getParamFromUrl)('code', changeInfo.url);
+  var meFromUrl = (0, _url.getParamFromUrl)('me', changeInfo.url);
+  if (meFromUrl) {
+    var currentDomain = localStorage.getItem('domain');
+
+    if ((0, _url.getUrlOrigin)(currentDomain) !== (0, _url.getUrlOrigin)(meFromUrl)) {
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'fetch-token-error',
+        payload: {
+          error: new Error("'me' url domain doesn't match auth endpoint domain")
+        }
+      });
+      (0, _utils.logout)();
+    }
+
+    localStorage.setItem('domain', meFromUrl);
+  }
+  _micropub2.default.options.me = localStorage.getItem('domain');
+  _micropub2.default.options.tokenEndpoint = localStorage.getItem('tokenEndpoint');
+  _micropub2.default.getToken(code).then(function (token) {
+    if (!token) {
+      throw new Error("Token not found in token endpoint response. Missing expected field 'access_token'");
+    }
+    localStorage.setItem('token', token);
+    chrome.tabs.remove(tab.id);
+    authTabId = null;
+  }).catch(function (err) {
+    (0, _utils.getAuthTab)().then(function (tab) {
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'fetch-token-error',
+        payload: {
+          error: err
+        }
+      });
+      (0, _utils.logout)();
+    });
+  });
+}
+
+function isAuthRedirect(changeInfo) {
+  var url = 'https://omnibear.com/auth/success';
+  return changeInfo.url && changeInfo.url.startsWith(url);
+}
+
+chrome.runtime.onMessage.addListener(handleMessage);
+chrome.tabs.onUpdated.addListener(handleTabChange);
+menuId = chrome.contextMenus.create({
+  title: 'Reply to entry',
+  contexts: ['page', 'selection'],
+  onclick: function onclick() {
+    if (typeof browser === 'undefined') {
+      // Chrome
+      window.open('index.html?reply=true', 'extension_popup', 'width=450,height=510,status=no,scrollbars=yes,resizable=no,top=80,left=2000');
+    } else {
+      // Firefox (and others?)
+      browser.windows.create({
+        url: 'index.html?reply=true',
+        width: 450,
+        height: 510,
+        type: 'panel',
+        left: 2000
+      });
+    }
+  }
+});
+
+// chrome.contextMenus.create({
+//   title: 'Reply to link url',
+//   contexts: ['link'],
+//   onclick: function (context) {
+//     chrome.runtime.sendMessage({ action: 'remove-entry-highlight' });
+//     selectEntry(context.linkUrl);
+//     window.open("index.html", "extension_popup", "width=450,height=500,status=no,scrollbars=yes,resizable=no");
+//   },
+// });
+
+/***/ }),
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function parseURI (str, opts) {
+  opts = opts || {}
+
+  var o = {
+    key: ['source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'anchor'],
+    q: {
+      name: 'queryKey',
+      parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+    },
+    parser: {
+      strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+      loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+    }
+  }
+
+  var m = o.parser[opts.strictMode ? 'strict' : 'loose'].exec(str)
+  var uri = {}
+  var i = 14
+
+  while (i--) uri[o.key[i]] = m[i] || ''
+
+  uri[o.q.name] = {}
+  uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
+    if ($1) uri[o.q.name][$1] = $2
+  })
+
+  return uri
+}
+
+
+/***/ })
+/******/ ]);
+//# sourceMappingURL=background.js.map
