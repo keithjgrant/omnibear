@@ -60,7 +60,6 @@ export default class NoteForm extends Component {
       return null;
     }
 
-    // const supportedEmoji = [0x1F44D, 0x1F44E, 0x1F389, 0x2764, 0x1F606, 0x1F62E, 0x1F622, 0x1F620];
     const {settings} = this.props;
     let reacji;
     if (settings && settings.reacji) {

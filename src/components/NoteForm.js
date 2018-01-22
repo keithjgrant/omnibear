@@ -73,6 +73,7 @@ export default class NoteForm extends Component {
           </div>
           <FormInputs
             entry={this.state.entry}
+            settings={this.state.settings}
             updateEntry={this.updateEntry}
             onSubmit={this.handleSubmit}
             isDisabled={this.state.isDisabled}

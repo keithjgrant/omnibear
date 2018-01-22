@@ -84,6 +84,7 @@ input[type='text'] {
 }
 
 label {
+  display: block;
   color: var(--gray-50);
   font-weight: 700;
   font-size: 0.8rem;

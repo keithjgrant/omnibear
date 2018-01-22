@@ -81,6 +81,7 @@ exports.openLink = openLink;
 exports.clone = clone;
 exports.getAuthTab = getAuthTab;
 exports.logout = logout;
+exports.generateSlug = generateSlug;
 function openLink(e) {
   e.preventDefault();
   if (e.target.href) {
@@ -109,6 +110,22 @@ function logout() {
   items.map(function (item) {
     return localStorage.removeItem(item);
   });
+}
+
+var NON_ALPHANUM = /[^A-Za-z0-9\-]/g;
+var FROM = 'áäâàãåčçćďéěëèêẽĕȇęėíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;';
+var TO = 'aaaaaacccdeeeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------';
+
+function generateSlug(content) {
+  var formatted = content.toLocaleLowerCase().trim();
+  formatted = formatted.replace(/\s/g, '-');
+  for (var i = 0, l = FROM.length; i < l; i++) {
+    formatted = formatted.replace(new RegExp(FROM.charAt(i), 'g'), TO.charAt(i));
+  }
+  formatted = formatted.replace(NON_ALPHANUM, '');
+  formatted = formatted.replace(/\-\-+/g, '-');
+  var parts = formatted.split('-');
+  return parts.splice(0, 6).join('-');
 }
 
 /***/ }),

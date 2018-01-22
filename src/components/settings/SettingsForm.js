@@ -11,6 +11,7 @@ export default class SettingsForm extends Component {
         defaultToCurrentPage: false,
         reacji: DEFAULT_REACJI,
         slug: 'mp-slug',
+        autoSlug: false,
       };
     }
     settings.me = localStorage.getItem('domain');
@@ -25,6 +26,7 @@ export default class SettingsForm extends Component {
       defaultToCurrentPage,
       reacji,
       slug,
+      autoSlug,
       me,
       micropubEndpoint,
       token,
@@ -42,6 +44,15 @@ export default class SettingsForm extends Component {
                 onChange={this.updateBoolean('defaultToCurrentPage')}
               />
               Always open in “Reply to current page” mode
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                checked={autoSlug}
+                onChange={this.updateBoolean('autoSlug')}
+              />
+              Automatically generate slug from post content
             </label>
 
             <ReacjiSettings reacji={reacji} onChange={this.set('reacji')} />
@@ -163,6 +174,7 @@ export default class SettingsForm extends Component {
       defaultToCurrentPage,
       reacji,
       slug,
+      autoSlug,
       me,
       token,
       micropubEndpoint,
@@ -173,11 +185,18 @@ export default class SettingsForm extends Component {
         defaultToCurrentPage,
         reacji,
         slug,
+        autoSlug,
       })
     );
-    localStorage.setItem('domain', me);
-    localStorage.setItem('token', token);
-    localStorage.setItem('micropubEndpoint', micropubEndpoint);
+    if (me) {
+      localStorage.setItem('domain', me);
+    }
+    if (token) {
+      localStorage.setItem('token', token);
+    }
+    if (micropubEndpoint) {
+      localStorage.setItem('micropubEndpoint', micropubEndpoint);
+    }
     this.props.onClose();
   };
 }

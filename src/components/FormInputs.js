@@ -1,7 +1,15 @@
 import {h, Component} from 'preact';
 import {clone} from '../util/utils';
+import {generateSlug} from '../util/utils';
 
 export default class FormInputs extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isSlugEdited: false,
+    };
+  }
+
   componentDidMount() {
     setTimeout(this.focus, 150);
   }
@@ -14,8 +22,8 @@ export default class FormInputs extends Component {
           <textarea
             id="input-content"
             value={this.props.entry.content}
-            onInput={this.updateField('content')}
-            onBlur={this.updateField('content')}
+            onInput={this.updateContent}
+            onBlur={this.updateContent}
             rows="4"
             disabled={this.props.isDisabled}
             ref={el => {
@@ -42,7 +50,7 @@ export default class FormInputs extends Component {
             type="text"
             name="mp-slug"
             value={this.props.entry['mp-slug']}
-            onChange={this.updateField('mp-slug')}
+            onInput={this.updateSlug}
             disabled={this.props.isDisabled}
           />
         </div>
@@ -61,14 +69,26 @@ export default class FormInputs extends Component {
     this.content.focus();
   };
 
-  updateField(fieldName) {
-    return e => {
-      // e.preventDefault();
-      var entry = clone(this.props.entry);
-      entry[fieldName] = e.target.value;
-      this.props.updateEntry(entry);
-    };
-  }
+  updateSlug = e => {
+    const slug = e.target.value.trim();
+    var entry = clone(this.props.entry);
+    entry['mp-slug'] = slug;
+    console.log(slug);
+    this.props.updateEntry(entry);
+    this.setState({
+      isSlugEdited: slug !== '',
+    });
+  };
+
+  updateContent = e => {
+    const content = e.target.value;
+    var entry = clone(this.props.entry);
+    entry.content = content;
+    if (this.shouldAutoSlug()) {
+      entry['mp-slug'] = generateSlug(content);
+    }
+    this.props.updateEntry(entry);
+  };
 
   updateFieldArray(fieldName) {
     return e => {
@@ -77,6 +97,16 @@ export default class FormInputs extends Component {
       entry[fieldName] = e.target.value.trim().split(' ');
       this.props.updateEntry(entry);
     };
+  }
+
+  shouldAutoSlug() {
+    if (this.state.isSlugEdited) {
+      return false;
+    }
+    if (this.props.settings && this.props.settings.autoSlug) {
+      return true;
+    }
+    return false;
   }
 
   onSubmit = e => {

@@ -571,6 +571,7 @@ exports.openLink = openLink;
 exports.clone = clone;
 exports.getAuthTab = getAuthTab;
 exports.logout = logout;
+exports.generateSlug = generateSlug;
 function openLink(e) {
   e.preventDefault();
   if (e.target.href) {
@@ -599,6 +600,22 @@ function logout() {
   items.map(function (item) {
     return localStorage.removeItem(item);
   });
+}
+
+var NON_ALPHANUM = /[^A-Za-z0-9\-]/g;
+var FROM = 'áäâàãåčçćďéěëèêẽĕȇęėíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;';
+var TO = 'aaaaaacccdeeeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------';
+
+function generateSlug(content) {
+  var formatted = content.toLocaleLowerCase().trim();
+  formatted = formatted.replace(/\s/g, '-');
+  for (var i = 0, l = FROM.length; i < l; i++) {
+    formatted = formatted.replace(new RegExp(FROM.charAt(i), 'g'), TO.charAt(i));
+  }
+  formatted = formatted.replace(NON_ALPHANUM, '');
+  formatted = formatted.replace(/\-\-+/g, '-');
+  var parts = formatted.split('-');
+  return parts.splice(0, 6).join('-');
 }
 
 /***/ }),
@@ -2313,23 +2330,45 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var FormInputs = function (_Component) {
   _inherits(FormInputs, _Component);
 
-  function FormInputs() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
+  function FormInputs(props) {
     _classCallCheck(this, FormInputs);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this = _possibleConstructorReturn(this, (FormInputs.__proto__ || Object.getPrototypeOf(FormInputs)).call(this, props));
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FormInputs.__proto__ || Object.getPrototypeOf(FormInputs)).call.apply(_ref, [this].concat(args))), _this), _this.focus = function () {
+    _this.focus = function () {
       _this.content.focus();
-    }, _this.onSubmit = function (e) {
+    };
+
+    _this.updateSlug = function (e) {
+      var slug = e.target.value.trim();
+      var entry = (0, _utils.clone)(_this.props.entry);
+      entry['mp-slug'] = slug;
+      console.log(slug);
+      _this.props.updateEntry(entry);
+      _this.setState({
+        isSlugEdited: slug !== ''
+      });
+    };
+
+    _this.updateContent = function (e) {
+      var content = e.target.value;
+      var entry = (0, _utils.clone)(_this.props.entry);
+      entry.content = content;
+      if (_this.shouldAutoSlug()) {
+        entry['mp-slug'] = (0, _utils.generateSlug)(content);
+      }
+      _this.props.updateEntry(entry);
+    };
+
+    _this.onSubmit = function (e) {
       e.preventDefault();
       _this.props.onSubmit(_this.props.entry);
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    };
+
+    _this.state = {
+      isSlugEdited: false
+    };
+    return _this;
   }
 
   _createClass(FormInputs, [{
@@ -2356,8 +2395,8 @@ var FormInputs = function (_Component) {
           (0, _preact.h)('textarea', {
             id: 'input-content',
             value: this.props.entry.content,
-            onInput: this.updateField('content'),
-            onBlur: this.updateField('content'),
+            onInput: this.updateContent,
+            onBlur: this.updateContent,
             rows: '4',
             disabled: this.props.isDisabled,
             ref: function ref(el) {
@@ -2400,7 +2439,7 @@ var FormInputs = function (_Component) {
             type: 'text',
             name: 'mp-slug',
             value: this.props.entry['mp-slug'],
-            onChange: this.updateField('mp-slug'),
+            onInput: this.updateSlug,
             disabled: this.props.isDisabled
           })
         ),
@@ -2416,28 +2455,27 @@ var FormInputs = function (_Component) {
       );
     }
   }, {
-    key: 'updateField',
-    value: function updateField(fieldName) {
+    key: 'updateFieldArray',
+    value: function updateFieldArray(fieldName) {
       var _this3 = this;
 
       return function (e) {
-        // e.preventDefault();
+        e.preventDefault();
         var entry = (0, _utils.clone)(_this3.props.entry);
-        entry[fieldName] = e.target.value;
+        entry[fieldName] = e.target.value.trim().split(' ');
         _this3.props.updateEntry(entry);
       };
     }
   }, {
-    key: 'updateFieldArray',
-    value: function updateFieldArray(fieldName) {
-      var _this4 = this;
-
-      return function (e) {
-        e.preventDefault();
-        var entry = (0, _utils.clone)(_this4.props.entry);
-        entry[fieldName] = e.target.value.trim().split(' ');
-        _this4.props.updateEntry(entry);
-      };
+    key: 'shouldAutoSlug',
+    value: function shouldAutoSlug() {
+      if (this.state.isSlugEdited) {
+        return false;
+      }
+      if (this.props.settings && this.props.settings.autoSlug) {
+        return true;
+      }
+      return false;
     }
   }]);
 
@@ -2558,7 +2596,6 @@ var NoteForm = function (_Component) {
         return null;
       }
 
-      // const supportedEmoji = [0x1F44D, 0x1F44E, 0x1F389, 0x2764, 0x1F606, 0x1F62E, 0x1F622, 0x1F620];
       var settings = this.props.settings;
 
       var reacji = void 0;
@@ -2951,6 +2988,7 @@ var NoteForm = function (_Component) {
           ),
           (0, _preact.h)(_FormInputs2.default, {
             entry: this.state.entry,
+            settings: this.state.settings,
             updateEntry: this.updateEntry,
             onSubmit: this.handleSubmit,
             isDisabled: this.state.isDisabled,
@@ -3273,6 +3311,7 @@ var SettingsForm = function (_Component) {
           defaultToCurrentPage = _this$state.defaultToCurrentPage,
           reacji = _this$state.reacji,
           slug = _this$state.slug,
+          autoSlug = _this$state.autoSlug,
           me = _this$state.me,
           token = _this$state.token,
           micropubEndpoint = _this$state.micropubEndpoint;
@@ -3280,11 +3319,18 @@ var SettingsForm = function (_Component) {
       localStorage.setItem('settings', JSON.stringify({
         defaultToCurrentPage: defaultToCurrentPage,
         reacji: reacji,
-        slug: slug
+        slug: slug,
+        autoSlug: autoSlug
       }));
-      localStorage.setItem('domain', me);
-      localStorage.setItem('token', token);
-      localStorage.setItem('micropubEndpoint', micropubEndpoint);
+      if (me) {
+        localStorage.setItem('domain', me);
+      }
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+      if (micropubEndpoint) {
+        localStorage.setItem('micropubEndpoint', micropubEndpoint);
+      }
       _this.props.onClose();
     };
 
@@ -3293,7 +3339,8 @@ var SettingsForm = function (_Component) {
       settings = {
         defaultToCurrentPage: false,
         reacji: _constants.DEFAULT_REACJI,
-        slug: 'mp-slug'
+        slug: 'mp-slug',
+        autoSlug: false
       };
     }
     settings.me = localStorage.getItem('domain');
@@ -3311,6 +3358,7 @@ var SettingsForm = function (_Component) {
           defaultToCurrentPage = _state.defaultToCurrentPage,
           reacji = _state.reacji,
           slug = _state.slug,
+          autoSlug = _state.autoSlug,
           me = _state.me,
           micropubEndpoint = _state.micropubEndpoint,
           token = _state.token,
@@ -3339,6 +3387,16 @@ var SettingsForm = function (_Component) {
                 onChange: this.updateBoolean('defaultToCurrentPage')
               }),
               'Always open in \u201CReply to current page\u201D mode'
+            ),
+            (0, _preact.h)(
+              'label',
+              null,
+              (0, _preact.h)('input', {
+                type: 'checkbox',
+                checked: autoSlug,
+                onChange: this.updateBoolean('autoSlug')
+              }),
+              'Automatically generate slug from post content'
             ),
             (0, _preact.h)(_ReacjiSettings2.default, { reacji: reacji, onChange: this.set('reacji') }),
             (0, _preact.h)(
