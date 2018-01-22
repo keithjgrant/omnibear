@@ -5,42 +5,113 @@ import {DEFAULT_REACJI} from '../../constants';
 export default class SettingsForm extends Component {
   constructor(props) {
     super(props);
-    const settings = JSON.parse(localStorage.getItem('settings'));
-    if (settings) {
-      this.setState(settings);
-    } else {
-      this.setState({
+    let settings = JSON.parse(localStorage.getItem('settings'));
+    if (!settings) {
+      settings = {
         defaultToCurrentPage: false,
         reacji: DEFAULT_REACJI,
         slug: 'mp-slug',
-        me: localStorage.getItem('domain'),
-        micropubEndpoint: localStorage.getItem('micropubEndpoint'),
-        token: localStorage.getItem('token')
-      });
+      };
     }
+    settings.me = localStorage.getItem('domain');
+    settings.micropubEndpoint = localStorage.getItem('micropubEndpoint');
+    settings.token = localStorage.getItem('token');
+    settings.showAuthenticationDetails = false;
+    this.setState(settings);
   }
 
   render() {
-    const {defaultToCurrentPage, reacji, slug, me, micropubEndpoint, token} = this.state;
+    const {
+      defaultToCurrentPage,
+      reacji,
+      slug,
+      me,
+      micropubEndpoint,
+      token,
+      showAuthenticationDetails,
+    } = this.state;
     return (
       <div>
         <div class="header header--item">Settings</div>
         <div class="container">
           <form class="settings-form" onSubmit={this.save}>
-            <div>
-              <label htmlFor="slug">Slug</label>
-              <input id="slug" type="text" value={slug} onChange={this.update('slug')}/>
-              <div class="settings-form__description">
-                Choose the name of the field that the slug will be sent in. This should be <code>mp-slug</code> unless your endpoint is using a custom property or the deprecated <code>slug</code> property.
-              </div>
-            </div>
-
             <label>
-              <input type="checkbox" checked={defaultToCurrentPage} onChange={this.updateBoolean('defaultToCurrentPage')}/>
+              <input
+                type="checkbox"
+                checked={defaultToCurrentPage}
+                onChange={this.updateBoolean('defaultToCurrentPage')}
+              />
               Always open in “Reply to current page” mode
             </label>
 
-            <ReacjiSettings reacji={reacji} onChange={this.set('reacji')}/>
+            <ReacjiSettings reacji={reacji} onChange={this.set('reacji')} />
+
+            <div>
+              <label htmlFor="slug">Slug</label>
+              <input
+                id="slug"
+                type="text"
+                value={slug}
+                onChange={this.update('slug')}
+              />
+              <div class="settings-form__description">
+                Choose the name of the field that the slug will be sent in. This
+                should be <code>mp-slug</code> unless your endpoint is using a
+                custom property or the deprecated <code>slug</code> property.
+              </div>
+            </div>
+
+            <fieldset>
+              <legend>Authentication details (advanced)</legend>
+              <div class="settings-form__description">
+                These values are set automatically upon logging in. Only edit
+                them if you are having trouble authenticating and wish to do so
+                manually.
+              </div>
+
+              {showAuthenticationDetails ? (
+                [
+                  <div>
+                    <label htmlFor="me">Me (domain name)</label>
+                    <input
+                      id="me"
+                      type="text"
+                      value={me}
+                      onChange={this.update('me')}
+                      placeholder="https://example.com"
+                    />
+                  </div>,
+                  <div>
+                    <label htmlFor="mp-endpoint">Micropub endpoint</label>
+                    <input
+                      id="mp-endpoint"
+                      type="text"
+                      value={micropubEndpoint}
+                      onChange={this.update('micropubEndpoint')}
+                      placeholder="https://example.com/micropub"
+                    />
+                  </div>,
+                  <div>
+                    <label htmlFor="token">Token</label>
+                    <input
+                      id="token"
+                      type="text"
+                      value={token}
+                      onChange={this.update('token')}
+                    />
+                  </div>,
+                ]
+              ) : (
+                <div class="text-right">
+                  <button
+                    type="button"
+                    onClick={this.showAuthenticationDetails}
+                  >
+                    Show
+                  </button>
+                </div>
+              )}
+            </fieldset>
 
             <div class="form-buttons">
               <button type="submit">Save</button>
@@ -48,53 +119,65 @@ export default class SettingsForm extends Component {
                 type="button"
                 className="button-link"
                 onClick={this.props.onClose}
-              >Cancel</button>
+              >
+                Cancel
+              </button>
             </div>
-
-            <fieldset>
-              <legend>Authentication details</legend>
-              <div class="settings-form__description">
-                These values are set automatically upon logging in.
-              </div>
-
-              <div>
-                <label htmlFor="me">Me (domain name)</label>
-                <input id="me" type="text" value={me} onChange={this.update('me')}/>
-              </div>
-            </fieldset>
           </form>
         </div>
       </div>
     );
   }
 
+  showAuthenticationDetails = () => {
+    this.setState({
+      showAuthenticationDetails: true,
+    });
+  };
+
   update(fieldName) {
-    return (e) => {
+    return e => {
       this.set(fieldName)(e.target.value);
-    }
+    };
   }
 
   set(fieldName) {
-    return (value) => {
-      console.log(value)
+    return value => {
       this.setState({
         [fieldName]: value,
       });
-    }
+    };
   }
 
   updateBoolean(fieldName) {
-    return (e) => {
+    return e => {
       this.setState({
         [fieldName]: e.target.checked,
-      })
-    }
+      });
+    };
   }
 
-  save = (e) => {
+  save = e => {
     e.preventDefault();
-    console.log('saving')
-    localStorage.setItem('settings', JSON.stringify(this.state));
+    const {
+      defaultToCurrentPage,
+      reacji,
+      slug,
+      me,
+      token,
+      micropubEndpoint,
+    } = this.state;
+    localStorage.setItem(
+      'settings',
+      JSON.stringify({
+        defaultToCurrentPage,
+        reacji,
+        slug,
+      })
+    );
+    localStorage.setItem('domain', me);
+    localStorage.setItem('token', token);
+    localStorage.setItem('micropubEndpoint', micropubEndpoint);
     this.props.onClose();
-  }
+  };
 }

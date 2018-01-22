@@ -19,7 +19,11 @@ export default class NoteForm extends Component {
     let entryUrl = null;
     let postType;
     const selectedEntry = localStorage.getItem('selectedEntry');
-    if (location.search.indexOf('reply=true') === -1) {
+    const settings = JSON.parse(localStorage.getItem('settings')) || {};
+    if (
+      location.search.indexOf('reply=true') === -1 &&
+      !settings.defaultToCurrentPage
+    ) {
       postType = NEW_NOTE;
     } else {
       if (selectedEntry) {
@@ -38,11 +42,12 @@ export default class NoteForm extends Component {
         h: 'entry',
         content: '',
         category: [],
-        'slug': '',
+        'mp-slug': '',
       },
       hasSelectedEntry: !!selectedEntry,
       isDisabled: false,
       isLoading: false,
+      settings: settings,
     };
   }
 
@@ -56,6 +61,7 @@ export default class NoteForm extends Component {
           onRepost={this.handleRepost}
           onReacji={this.handleReacji}
           isDisabled={this.state.isLoading}
+          settings={this.state.settings}
         />
         <div className="container">
           <div className="text-right">
@@ -77,8 +83,11 @@ export default class NoteForm extends Component {
             <Message type={MESSAGE_ERROR}>{this.state.errorMessage}</Message>
           ) : null}
         </div>
-        <Footer domain={this.state.userDomain}
-          onSettings={this.props.handleSettings} onLogout={this.props.handleLogout} />
+        <Footer
+          domain={this.state.userDomain}
+          onSettings={this.props.handleSettings}
+          onLogout={this.props.handleLogout}
+        />
       </div>
     );
   }
@@ -119,7 +128,7 @@ export default class NoteForm extends Component {
       });
   };
 
-  handleReacji = (emoji) => {
+  handleReacji = emoji => {
     if (!this.state.url) {
       return;
     }
@@ -177,10 +186,15 @@ export default class NoteForm extends Component {
   };
 
   postEntry(entry) {
+    const slugName = this.state.settings.slug;
     this.setState({
       isDisabled: true,
       isLoading: true,
     });
+    if (slugName) {
+      entry[slugName] = entry['mp-slug'];
+      delete entry['mp-slug'];
+    }
     return micropub.create(entry, 'form');
   }
 

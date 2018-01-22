@@ -248,7 +248,7 @@ fieldset > * + * {
   height: 2em;
   border-radius: 1em;
   text-align: center;
-  padding: .5em;
+  padding: 0.5em;
   cursor: pointer;
 }
 .reacji-actions button:hover,
@@ -295,6 +295,9 @@ fieldset > * + * {
   margin: 0.5em 0 2em;
   padding-left: 1em;
   font-size: 0.8rem;
+}
+legend + .settings-form__description {
+  margin-bottom: 1em;
 }
 
 .form-buttons {

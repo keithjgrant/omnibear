@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 29);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -608,6 +608,25 @@ function logout() {
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var NEW_NOTE = exports.NEW_NOTE = 'new-note';
+var PAGE_REPLY = exports.PAGE_REPLY = 'page-reply';
+var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';
+
+var MESSAGE_SUCCESS = exports.MESSAGE_SUCCESS = 'success';
+var MESSAGE_ERROR = exports.MESSAGE_ERROR = 'error';
+
+var DEFAULT_REACJI = exports.DEFAULT_REACJI = ['👍', '👎', '🎉', '😆', '😢', '😠'];
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var replace = String.prototype.replace;
 var percentTwenties = /%20/g;
 
@@ -627,7 +646,7 @@ module.exports = {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -836,7 +855,7 @@ exports.isBuffer = function isBuffer(obj) {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -864,25 +883,6 @@ exports.default = new _micropubHelper2.default({
 });
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var NEW_NOTE = exports.NEW_NOTE = 'new-note';
-var PAGE_REPLY = exports.PAGE_REPLY = 'page-reply';
-var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';
-
-var MESSAGE_SUCCESS = exports.MESSAGE_SUCCESS = 'success';
-var MESSAGE_ERROR = exports.MESSAGE_ERROR = 'error';
-
-var DEFAULT_REACJI = exports.DEFAULT_REACJI = ['👍', '👎', '🎉', '😆', '😢', '😠'];
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -897,7 +897,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _constants = __webpack_require__(5);
+var _constants = __webpack_require__(2);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -960,7 +960,7 @@ exports.default = Message;
 
 var stringify = __webpack_require__(9);
 var parse = __webpack_require__(8);
-var formats = __webpack_require__(2);
+var formats = __webpack_require__(3);
 
 module.exports = {
     formats: formats,
@@ -976,7 +976,7 @@ module.exports = {
 "use strict";
 
 
-var utils = __webpack_require__(3);
+var utils = __webpack_require__(4);
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -1157,8 +1157,8 @@ module.exports = function (str, opts) {
 "use strict";
 
 
-var utils = __webpack_require__(3);
-var formats = __webpack_require__(2);
+var utils = __webpack_require__(4);
+var formats = __webpack_require__(3);
 
 var arrayPrefixGenerators = {
     brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
@@ -1450,8 +1450,8 @@ function objectToFormData(object, formData = new FormData(), name = false) {
 
   if (baseEl) {
     const value = baseEl.getAttribute('href');
-    const urlObj = new URL(value, url);
-    baseUrl = urlObj.toString();
+    const url = new URL(value, url);
+    baseUrl = url.toString();
   }
 
   if (relEls.length) {
@@ -1519,7 +1519,7 @@ const micropubError = (message, status = null, error = null) => {
 
 class Micropub {
   constructor(userSettings = {}) {
-    this.options = Object.assign({}, defaultSettings, userSettings);
+    this.options = Object.assign(defaultSettings, userSettings);
 
     // Bind all the things
     this.create = this.create.bind(this);
@@ -1987,6 +1987,79 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Footer = function (_Component) {
+  _inherits(Footer, _Component);
+
+  function Footer() {
+    _classCallCheck(this, Footer);
+
+    return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));
+  }
+
+  _createClass(Footer, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "footer",
+        { className: "footer" },
+        this.props.domain ? (0, _preact.h)(
+          "div",
+          { className: "footer__message" },
+          "Authenticated to ",
+          (0, _preact.h)(
+            "strong",
+            null,
+            this.props.domain
+          )
+        ) : null,
+        this.props.onSettings ? (0, _preact.h)(
+          "button",
+          {
+            className: "button-link",
+            type: "button",
+            onClick: this.props.onSettings
+          },
+          "Settings"
+        ) : null,
+        this.props.onLogout ? (0, _preact.h)(
+          "button",
+          {
+            className: "button-link",
+            type: "button",
+            onClick: this.props.onLogout
+          },
+          "Logout"
+        ) : null
+      );
+    }
+  }]);
+
+  return Footer;
+}(_preact.Component);
+
+exports.default = Footer;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
 var _LoginForm = __webpack_require__(25);
 
 var _LoginForm2 = _interopRequireDefault(_LoginForm);
@@ -1999,7 +2072,7 @@ var _Message = __webpack_require__(6);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _SettingsForm = __webpack_require__(34);
+var _SettingsForm = __webpack_require__(28);
 
 var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
 
@@ -2069,14 +2142,17 @@ var App = function (_Component) {
         case 'settings':
           return (0, _preact.h)(_SettingsForm2.default, { onClose: this.setDefaultView });
         default:
-          return (0, _preact.h)(_NoteForm2.default, { handleLogout: this.handleLogout,
-            handleSettings: this.handleSettings, userFeedback: this.displayMessage });
+          return (0, _preact.h)(_NoteForm2.default, {
+            handleLogout: this.handleLogout,
+            handleSettings: this.handleSettings,
+            userFeedback: this.displayMessage
+          });
       }
     }
   }, {
     key: 'isAuthenticated',
     value: function isAuthenticated() {
-      return !!localStorage.getItem('token');
+      return !!localStorage.getItem('token') && !!localStorage.getItem('micropubEndpoint');
     }
   }]);
 
@@ -2086,10 +2162,10 @@ var App = function (_Component) {
 exports.default = App;
 
 /***/ }),
-/* 17 */,
 /* 18 */,
 /* 19 */,
-/* 20 */
+/* 20 */,
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2107,7 +2183,7 @@ var _LinkButton = __webpack_require__(24);
 
 var _LinkButton2 = _interopRequireDefault(_LinkButton);
 
-var _constants = __webpack_require__(5);
+var _constants = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2210,79 +2286,6 @@ var ChangeViewButtons = function (_Component) {
 }(_preact.Component);
 
 exports.default = ChangeViewButtons;
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Footer = function (_Component) {
-  _inherits(Footer, _Component);
-
-  function Footer() {
-    _classCallCheck(this, Footer);
-
-    return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));
-  }
-
-  _createClass(Footer, [{
-    key: "render",
-    value: function render() {
-      return (0, _preact.h)(
-        "footer",
-        { className: "footer" },
-        (0, _preact.h)(
-          "div",
-          { className: "footer__message" },
-          "Authenticated to ",
-          (0, _preact.h)(
-            "strong",
-            null,
-            this.props.domain
-          )
-        ),
-        (0, _preact.h)(
-          "button",
-          {
-            className: "button-link",
-            type: "button",
-            onClick: this.props.onSettings
-          },
-          "Settings"
-        ),
-        (0, _preact.h)(
-          "button",
-          {
-            className: "button-link",
-            type: "button",
-            onClick: this.props.onLogout
-          },
-          "Logout"
-        )
-      );
-    }
-  }]);
-
-  return Footer;
-}(_preact.Component);
-
-exports.default = Footer;
 
 /***/ }),
 /* 22 */
@@ -2395,9 +2398,9 @@ var FormInputs = function (_Component) {
           (0, _preact.h)('input', {
             id: 'input-slug',
             type: 'text',
-            name: 'slug',
-            value: this.props.entry['slug'],
-            onChange: this.updateField('slug'),
+            name: 'mp-slug',
+            value: this.props.entry['mp-slug'],
+            onChange: this.updateField('mp-slug'),
             disabled: this.props.isDisabled
           })
         ),
@@ -2458,7 +2461,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _constants = __webpack_require__(5);
+var _constants = __webpack_require__(2);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2540,10 +2543,7 @@ var NoteForm = function (_Component) {
           null,
           (0, _preact.h)(
             'button',
-            {
-              onClick: this.props.onLike,
-              disabled: this.props.isDisabled
-            },
+            { onClick: this.props.onLike, disabled: this.props.isDisabled },
             'like'
           )
         )
@@ -2558,12 +2558,20 @@ var NoteForm = function (_Component) {
         return null;
       }
 
-      var supportedEmoji = [0x1F44D, 0x1F44E, 0x1F389, 0x2764, 0x1F606, 0x1F62E, 0x1F622, 0x1F620];
+      // const supportedEmoji = [0x1F44D, 0x1F44E, 0x1F389, 0x2764, 0x1F606, 0x1F62E, 0x1F622, 0x1F620];
+      var settings = this.props.settings;
+
+      var reacji = void 0;
+      if (settings && settings.reacji) {
+        reacji = settings.reacji;
+      } else {
+        reacji = _constants.DEFAULT_REACJI;
+      }
 
       return (0, _preact.h)(
         'ul',
         { className: 'reacji-actions' },
-        supportedEmoji.map(function (emoji) {
+        reacji.map(function (emoji) {
           return (0, _preact.h)(
             'li',
             null,
@@ -2571,11 +2579,11 @@ var NoteForm = function (_Component) {
               'button',
               {
                 onClick: function onClick() {
-                  return _this2.props.onReacji(String.fromCodePoint(emoji));
+                  return _this2.props.onReacji(emoji);
                 },
                 disabled: _this2.props.isDisabled
               },
-              String.fromCodePoint(emoji)
+              emoji
             )
           );
         })
@@ -2667,9 +2675,13 @@ var _Message = __webpack_require__(6);
 
 var _Message2 = _interopRequireDefault(_Message);
 
+var _Footer = __webpack_require__(16);
+
+var _Footer2 = _interopRequireDefault(_Footer);
+
 var _utils = __webpack_require__(1);
 
-var _micropub = __webpack_require__(4);
+var _micropub = __webpack_require__(5);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
@@ -2743,51 +2755,56 @@ var LoginForm = function (_Component) {
       var _this3 = this;
 
       return (0, _preact.h)(
-        'form',
-        { 'class': 'container', method: 'GET', onSubmit: this.handleSubmit },
+        'div',
+        null,
         (0, _preact.h)(
-          'p',
-          null,
-          'To use Omnibear, sign in with your domain. Your website will need to support',
-          ' ',
+          'form',
+          { 'class': 'container', method: 'GET', onSubmit: this.handleSubmit },
           (0, _preact.h)(
-            'a',
-            { href: 'http://indieweb.org/micropub', onClick: _utils.openLink },
-            'Micropub'
+            'p',
+            null,
+            'To use Omnibear, sign in with your domain. Your website will need to support',
+            ' ',
+            (0, _preact.h)(
+              'a',
+              { href: 'http://indieweb.org/micropub', onClick: _utils.openLink },
+              'Micropub'
+            ),
+            ' ',
+            'for creating new posts.'
           ),
-          ' ',
-          'for creating new posts.'
-        ),
-        (0, _preact.h)(
-          'div',
-          { 'class': 'fields-inline' },
-          (0, _preact.h)('input', {
-            type: 'text',
-            name: 'me',
-            placeholder: 'https://example.com',
-            className: 'fields-inline__fill',
-            value: this.state.domain,
-            onInput: this.handleChange,
-            disabled: this.state.isLoading,
-            ref: function ref(el) {
-              return _this3.input = el;
-            }
-          }),
           (0, _preact.h)(
-            'button',
-            {
-              type: 'submit',
+            'div',
+            { 'class': 'fields-inline' },
+            (0, _preact.h)('input', {
+              type: 'text',
+              name: 'me',
+              placeholder: 'https://example.com',
+              className: 'fields-inline__fill',
+              value: this.state.domain,
+              onInput: this.handleChange,
               disabled: this.state.isLoading,
-              className: this.state.isLoading ? 'is-loading' : ''
-            },
-            'Sign in'
-          )
+              ref: function ref(el) {
+                return _this3.input = el;
+              }
+            }),
+            (0, _preact.h)(
+              'button',
+              {
+                type: 'submit',
+                disabled: this.state.isLoading,
+                className: this.state.isLoading ? 'is-loading' : ''
+              },
+              'Sign in'
+            )
+          ),
+          this.state.hasErrors ? (0, _preact.h)(
+            _Message2.default,
+            { type: 'error' },
+            this.state.errorMessage || 'Error'
+          ) : null
         ),
-        this.state.hasErrors ? (0, _preact.h)(
-          _Message2.default,
-          { type: 'error' },
-          this.state.errorMessage || 'Error'
-        ) : null
+        (0, _preact.h)(_Footer2.default, { onSettings: this.props.handleSettings })
       );
     }
   }, {
@@ -2834,7 +2851,7 @@ var _Message = __webpack_require__(6);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _ChangeViewButtons = __webpack_require__(20);
+var _ChangeViewButtons = __webpack_require__(21);
 
 var _ChangeViewButtons2 = _interopRequireDefault(_ChangeViewButtons);
 
@@ -2842,15 +2859,15 @@ var _FormInputs = __webpack_require__(22);
 
 var _FormInputs2 = _interopRequireDefault(_FormInputs);
 
-var _Footer = __webpack_require__(21);
+var _Footer = __webpack_require__(16);
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
-var _micropub = __webpack_require__(4);
+var _micropub = __webpack_require__(5);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
-var _constants = __webpack_require__(5);
+var _constants = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2873,7 +2890,8 @@ var NoteForm = function (_Component) {
     var entryUrl = null;
     var postType = void 0;
     var selectedEntry = localStorage.getItem('selectedEntry');
-    if (location.search.indexOf('reply=true') === -1) {
+    var settings = JSON.parse(localStorage.getItem('settings')) || {};
+    if (location.search.indexOf('reply=true') === -1 && !settings.defaultToCurrentPage) {
       postType = _constants.NEW_NOTE;
     } else {
       if (selectedEntry) {
@@ -2892,11 +2910,12 @@ var NoteForm = function (_Component) {
         h: 'entry',
         content: '',
         category: [],
-        'slug': ''
+        'mp-slug': ''
       },
       hasSelectedEntry: !!selectedEntry,
       isDisabled: false,
-      isLoading: false
+      isLoading: false,
+      settings: settings
     };
     return _this;
   }
@@ -2915,7 +2934,8 @@ var NoteForm = function (_Component) {
           onLike: this.handleLike,
           onRepost: this.handleRepost,
           onReacji: this.handleReacji,
-          isDisabled: this.state.isLoading
+          isDisabled: this.state.isLoading,
+          settings: this.state.settings
         }),
         (0, _preact.h)(
           'div',
@@ -2945,8 +2965,11 @@ var NoteForm = function (_Component) {
             this.state.errorMessage
           ) : null
         ),
-        (0, _preact.h)(_Footer2.default, { domain: this.state.userDomain,
-          onSettings: this.props.handleSettings, onLogout: this.props.handleLogout })
+        (0, _preact.h)(_Footer2.default, {
+          domain: this.state.userDomain,
+          onSettings: this.props.handleSettings,
+          onLogout: this.props.handleLogout
+        })
       );
     }
   }, {
@@ -2976,10 +2999,15 @@ var NoteForm = function (_Component) {
   }, {
     key: 'postEntry',
     value: function postEntry(entry) {
+      var slugName = this.state.settings.slug;
       this.setState({
         isDisabled: true,
         isLoading: true
       });
+      if (slugName) {
+        entry[slugName] = entry['mp-slug'];
+        delete entry['mp-slug'];
+      }
       return _micropub2.default.create(entry, 'form');
     }
   }]);
@@ -3077,233 +3105,6 @@ exports.default = NoteForm;
 
 /***/ }),
 /* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _preact = __webpack_require__(0);
-
-var _App = __webpack_require__(16);
-
-var _App2 = _interopRequireDefault(_App);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-document.addEventListener('DOMContentLoaded', function () {
-  (0, _preact.render)((0, _preact.h)(_App2.default, null), document.body);
-});
-
-/***/ }),
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(0);
-
-var _ReacjiSettings = __webpack_require__(35);
-
-var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
-
-var _constants = __webpack_require__(5);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var SettingsForm = function (_Component) {
-  _inherits(SettingsForm, _Component);
-
-  function SettingsForm(props) {
-    _classCallCheck(this, SettingsForm);
-
-    var _this = _possibleConstructorReturn(this, (SettingsForm.__proto__ || Object.getPrototypeOf(SettingsForm)).call(this, props));
-
-    _this.save = function (e) {
-      e.preventDefault();
-      console.log('saving');
-      localStorage.setItem('settings', JSON.stringify(_this.state));
-      _this.props.onClose();
-    };
-
-    var settings = JSON.parse(localStorage.getItem('settings'));
-    if (settings) {
-      _this.setState(settings);
-    } else {
-      _this.setState({
-        defaultToCurrentPage: false,
-        reacji: _constants.DEFAULT_REACJI,
-        slug: 'mp-slug',
-        me: localStorage.getItem('domain'),
-        micropubEndpoint: localStorage.getItem('micropubEndpoint'),
-        token: localStorage.getItem('token')
-      });
-    }
-    return _this;
-  }
-
-  _createClass(SettingsForm, [{
-    key: 'render',
-    value: function render() {
-      var _state = this.state,
-          defaultToCurrentPage = _state.defaultToCurrentPage,
-          reacji = _state.reacji,
-          slug = _state.slug,
-          me = _state.me,
-          micropubEndpoint = _state.micropubEndpoint,
-          token = _state.token;
-
-      return (0, _preact.h)(
-        'div',
-        null,
-        (0, _preact.h)(
-          'div',
-          { 'class': 'header header--item' },
-          'Settings'
-        ),
-        (0, _preact.h)(
-          'div',
-          { 'class': 'container' },
-          (0, _preact.h)(
-            'form',
-            { 'class': 'settings-form', onSubmit: this.save },
-            (0, _preact.h)(
-              'div',
-              null,
-              (0, _preact.h)(
-                'label',
-                { htmlFor: 'slug' },
-                'Slug'
-              ),
-              (0, _preact.h)('input', { id: 'slug', type: 'text', value: slug, onChange: this.update('slug') }),
-              (0, _preact.h)(
-                'div',
-                { 'class': 'settings-form__description' },
-                'Choose the name of the field that the slug will be sent in. This should be ',
-                (0, _preact.h)(
-                  'code',
-                  null,
-                  'mp-slug'
-                ),
-                ' unless your endpoint is using a custom property or the deprecated ',
-                (0, _preact.h)(
-                  'code',
-                  null,
-                  'slug'
-                ),
-                ' property.'
-              )
-            ),
-            (0, _preact.h)(
-              'label',
-              null,
-              (0, _preact.h)('input', { type: 'checkbox', checked: defaultToCurrentPage, onChange: this.updateBoolean('defaultToCurrentPage') }),
-              'Always open in \u201CReply to current page\u201D mode'
-            ),
-            (0, _preact.h)(_ReacjiSettings2.default, { reacji: reacji, onChange: this.set('reacji') }),
-            (0, _preact.h)(
-              'div',
-              { 'class': 'form-buttons' },
-              (0, _preact.h)(
-                'button',
-                { type: 'submit' },
-                'Save'
-              ),
-              (0, _preact.h)(
-                'button',
-                {
-                  type: 'button',
-                  className: 'button-link',
-                  onClick: this.props.onClose
-                },
-                'Cancel'
-              )
-            ),
-            (0, _preact.h)(
-              'fieldset',
-              null,
-              (0, _preact.h)(
-                'legend',
-                null,
-                'Authentication details'
-              ),
-              (0, _preact.h)(
-                'div',
-                { 'class': 'settings-form__description' },
-                'These values are set automatically upon logging in.'
-              ),
-              (0, _preact.h)(
-                'div',
-                null,
-                (0, _preact.h)(
-                  'label',
-                  { htmlFor: 'me' },
-                  'Me (domain name)'
-                ),
-                (0, _preact.h)('input', { id: 'me', type: 'text', value: me, onChange: this.update('me') })
-              )
-            )
-          )
-        )
-      );
-    }
-  }, {
-    key: 'update',
-    value: function update(fieldName) {
-      var _this2 = this;
-
-      return function (e) {
-        _this2.set(fieldName)(e.target.value);
-      };
-    }
-  }, {
-    key: 'set',
-    value: function set(fieldName) {
-      var _this3 = this;
-
-      return function (value) {
-        console.log(value);
-        _this3.setState(_defineProperty({}, fieldName, value));
-      };
-    }
-  }, {
-    key: 'updateBoolean',
-    value: function updateBoolean(fieldName) {
-      var _this4 = this;
-
-      return function (e) {
-        _this4.setState(_defineProperty({}, fieldName, e.target.checked));
-      };
-    }
-  }]);
-
-  return SettingsForm;
-}(_preact.Component);
-
-exports.default = SettingsForm;
-
-/***/ }),
-/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3420,6 +3221,302 @@ var ReacjiSettings = function (_Component) {
 }(_preact.Component);
 
 exports.default = ReacjiSettings;
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+var _ReacjiSettings = __webpack_require__(27);
+
+var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
+
+var _constants = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SettingsForm = function (_Component) {
+  _inherits(SettingsForm, _Component);
+
+  function SettingsForm(props) {
+    _classCallCheck(this, SettingsForm);
+
+    var _this = _possibleConstructorReturn(this, (SettingsForm.__proto__ || Object.getPrototypeOf(SettingsForm)).call(this, props));
+
+    _this.showAuthenticationDetails = function () {
+      _this.setState({
+        showAuthenticationDetails: true
+      });
+    };
+
+    _this.save = function (e) {
+      e.preventDefault();
+      var _this$state = _this.state,
+          defaultToCurrentPage = _this$state.defaultToCurrentPage,
+          reacji = _this$state.reacji,
+          slug = _this$state.slug,
+          me = _this$state.me,
+          token = _this$state.token,
+          micropubEndpoint = _this$state.micropubEndpoint;
+
+      localStorage.setItem('settings', JSON.stringify({
+        defaultToCurrentPage: defaultToCurrentPage,
+        reacji: reacji,
+        slug: slug
+      }));
+      localStorage.setItem('domain', me);
+      localStorage.setItem('token', token);
+      localStorage.setItem('micropubEndpoint', micropubEndpoint);
+      _this.props.onClose();
+    };
+
+    var settings = JSON.parse(localStorage.getItem('settings'));
+    if (!settings) {
+      settings = {
+        defaultToCurrentPage: false,
+        reacji: _constants.DEFAULT_REACJI,
+        slug: 'mp-slug'
+      };
+    }
+    settings.me = localStorage.getItem('domain');
+    settings.micropubEndpoint = localStorage.getItem('micropubEndpoint');
+    settings.token = localStorage.getItem('token');
+    settings.showAuthenticationDetails = false;
+    _this.setState(settings);
+    return _this;
+  }
+
+  _createClass(SettingsForm, [{
+    key: 'render',
+    value: function render() {
+      var _state = this.state,
+          defaultToCurrentPage = _state.defaultToCurrentPage,
+          reacji = _state.reacji,
+          slug = _state.slug,
+          me = _state.me,
+          micropubEndpoint = _state.micropubEndpoint,
+          token = _state.token,
+          showAuthenticationDetails = _state.showAuthenticationDetails;
+
+      return (0, _preact.h)(
+        'div',
+        null,
+        (0, _preact.h)(
+          'div',
+          { 'class': 'header header--item' },
+          'Settings'
+        ),
+        (0, _preact.h)(
+          'div',
+          { 'class': 'container' },
+          (0, _preact.h)(
+            'form',
+            { 'class': 'settings-form', onSubmit: this.save },
+            (0, _preact.h)(
+              'label',
+              null,
+              (0, _preact.h)('input', {
+                type: 'checkbox',
+                checked: defaultToCurrentPage,
+                onChange: this.updateBoolean('defaultToCurrentPage')
+              }),
+              'Always open in \u201CReply to current page\u201D mode'
+            ),
+            (0, _preact.h)(_ReacjiSettings2.default, { reacji: reacji, onChange: this.set('reacji') }),
+            (0, _preact.h)(
+              'div',
+              null,
+              (0, _preact.h)(
+                'label',
+                { htmlFor: 'slug' },
+                'Slug'
+              ),
+              (0, _preact.h)('input', {
+                id: 'slug',
+                type: 'text',
+                value: slug,
+                onChange: this.update('slug')
+              }),
+              (0, _preact.h)(
+                'div',
+                { 'class': 'settings-form__description' },
+                'Choose the name of the field that the slug will be sent in. This should be ',
+                (0, _preact.h)(
+                  'code',
+                  null,
+                  'mp-slug'
+                ),
+                ' unless your endpoint is using a custom property or the deprecated ',
+                (0, _preact.h)(
+                  'code',
+                  null,
+                  'slug'
+                ),
+                ' property.'
+              )
+            ),
+            (0, _preact.h)(
+              'fieldset',
+              null,
+              (0, _preact.h)(
+                'legend',
+                null,
+                'Authentication details (advanced)'
+              ),
+              (0, _preact.h)(
+                'div',
+                { 'class': 'settings-form__description' },
+                'These values are set automatically upon logging in. Only edit them if you are having trouble authenticating and wish to do so manually.'
+              ),
+              showAuthenticationDetails ? [(0, _preact.h)(
+                'div',
+                null,
+                (0, _preact.h)(
+                  'label',
+                  { htmlFor: 'me' },
+                  'Me (domain name)'
+                ),
+                (0, _preact.h)('input', {
+                  id: 'me',
+                  type: 'text',
+                  value: me,
+                  onChange: this.update('me'),
+                  placeholder: 'https://example.com'
+                })
+              ), (0, _preact.h)(
+                'div',
+                null,
+                (0, _preact.h)(
+                  'label',
+                  { htmlFor: 'mp-endpoint' },
+                  'Micropub endpoint'
+                ),
+                (0, _preact.h)('input', {
+                  id: 'mp-endpoint',
+                  type: 'text',
+                  value: micropubEndpoint,
+                  onChange: this.update('micropubEndpoint'),
+                  placeholder: 'https://example.com/micropub'
+                })
+              ), (0, _preact.h)(
+                'div',
+                null,
+                (0, _preact.h)(
+                  'label',
+                  { htmlFor: 'token' },
+                  'Token'
+                ),
+                (0, _preact.h)('input', {
+                  id: 'token',
+                  type: 'text',
+                  value: token,
+                  onChange: this.update('token')
+                })
+              )] : (0, _preact.h)(
+                'div',
+                { 'class': 'text-right' },
+                (0, _preact.h)(
+                  'button',
+                  {
+                    type: 'button',
+                    onClick: this.showAuthenticationDetails
+                  },
+                  'Show'
+                )
+              )
+            ),
+            (0, _preact.h)(
+              'div',
+              { 'class': 'form-buttons' },
+              (0, _preact.h)(
+                'button',
+                { type: 'submit' },
+                'Save'
+              ),
+              (0, _preact.h)(
+                'button',
+                {
+                  type: 'button',
+                  className: 'button-link',
+                  onClick: this.props.onClose
+                },
+                'Cancel'
+              )
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'update',
+    value: function update(fieldName) {
+      var _this2 = this;
+
+      return function (e) {
+        _this2.set(fieldName)(e.target.value);
+      };
+    }
+  }, {
+    key: 'set',
+    value: function set(fieldName) {
+      var _this3 = this;
+
+      return function (value) {
+        _this3.setState(_defineProperty({}, fieldName, value));
+      };
+    }
+  }, {
+    key: 'updateBoolean',
+    value: function updateBoolean(fieldName) {
+      var _this4 = this;
+
+      return function (e) {
+        _this4.setState(_defineProperty({}, fieldName, e.target.checked));
+      };
+    }
+  }]);
+
+  return SettingsForm;
+}(_preact.Component);
+
+exports.default = SettingsForm;
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _preact = __webpack_require__(0);
+
+var _App = __webpack_require__(17);
+
+var _App2 = _interopRequireDefault(_App);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+document.addEventListener('DOMContentLoaded', function () {
+  (0, _preact.render)((0, _preact.h)(_App2.default, null), document.body);
+});
 
 /***/ })
 /******/ ]);

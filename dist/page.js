@@ -63,12 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 28);
+/******/ 	return __webpack_require__(__webpack_require__.s = 30);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 17:
+/***/ 18:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -82,11 +82,11 @@ exports.removeHighlight = removeHighlight;
 exports.focusClickedEntry = focusClickedEntry;
 exports.getCurrentItemUrl = getCurrentItemUrl;
 
-var _microformatShiv = __webpack_require__(30);
+var _microformatShiv = __webpack_require__(32);
 
 var _microformatShiv2 = _interopRequireDefault(_microformatShiv);
 
-var _dom = __webpack_require__(29);
+var _dom = __webpack_require__(31);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -196,13 +196,13 @@ function getCurrentItemUrl() {
 
 /***/ }),
 
-/***/ 28:
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _entry = __webpack_require__(17);
+var _entry = __webpack_require__(18);
 
 (function () {
   document.body.addEventListener('click', _entry.clearItem);
@@ -264,7 +264,7 @@ var _entry = __webpack_require__(17);
 
 /***/ }),
 
-/***/ 29:
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -324,7 +324,7 @@ function getAncestorNode(el, filter) {
 
 /***/ }),
 
-/***/ 30:
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*

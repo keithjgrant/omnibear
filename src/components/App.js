@@ -16,13 +16,20 @@ export default class App extends Component {
       case 'login':
         return <LoginForm handleSettings={this.handleSettings} />;
       case 'feedback':
-        return <Message location={this.state.postLocation}>{this.state.message}</Message>;
+        return (
+          <Message location={this.state.postLocation}>
+            {this.state.message}
+          </Message>
+        );
       case 'settings':
         return <SettingsForm onClose={this.setDefaultView} />;
       default:
         return (
-          <NoteForm handleLogout={this.handleLogout}
-            handleSettings={this.handleSettings} userFeedback={this.displayMessage} />
+          <NoteForm
+            handleLogout={this.handleLogout}
+            handleSettings={this.handleSettings}
+            userFeedback={this.displayMessage}
+          />
         );
     }
   }
@@ -37,10 +44,13 @@ export default class App extends Component {
         currentView: 'login',
       });
     }
-  }
+  };
 
   isAuthenticated() {
-    return !!localStorage.getItem('token');
+    return (
+      !!localStorage.getItem('token') &&
+      !!localStorage.getItem('micropubEndpoint')
+    );
   }
 
   displayMessage = (message, status, location) => {
@@ -53,8 +63,7 @@ export default class App extends Component {
 
   handleSettings = () => {
     this.setState({currentView: 'settings'});
-  }
-
+  };
 
   handleLogout = () => {
     logout();

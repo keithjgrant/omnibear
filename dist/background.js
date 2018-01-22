@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -112,7 +112,8 @@ function logout() {
 }
 
 /***/ }),
-/* 2 */
+/* 2 */,
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -137,7 +138,7 @@ module.exports = {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -346,7 +347,7 @@ exports.isBuffer = function isBuffer(obj) {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -374,7 +375,6 @@ exports.default = new _micropubHelper2.default({
 });
 
 /***/ }),
-/* 5 */,
 /* 6 */,
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -384,7 +384,7 @@ exports.default = new _micropubHelper2.default({
 
 var stringify = __webpack_require__(9);
 var parse = __webpack_require__(8);
-var formats = __webpack_require__(2);
+var formats = __webpack_require__(3);
 
 module.exports = {
     formats: formats,
@@ -400,7 +400,7 @@ module.exports = {
 "use strict";
 
 
-var utils = __webpack_require__(3);
+var utils = __webpack_require__(4);
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -581,8 +581,8 @@ module.exports = function (str, opts) {
 "use strict";
 
 
-var utils = __webpack_require__(3);
-var formats = __webpack_require__(2);
+var utils = __webpack_require__(4);
+var formats = __webpack_require__(3);
 
 var arrayPrefixGenerators = {
     brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
@@ -874,8 +874,8 @@ function objectToFormData(object, formData = new FormData(), name = false) {
 
   if (baseEl) {
     const value = baseEl.getAttribute('href');
-    const urlObj = new URL(value, url);
-    baseUrl = urlObj.toString();
+    const url = new URL(value, url);
+    baseUrl = url.toString();
   }
 
   if (relEls.length) {
@@ -943,7 +943,7 @@ const micropubError = (message, status = null, error = null) => {
 
 class Micropub {
   constructor(userSettings = {}) {
-    this.options = Object.assign({}, defaultSettings, userSettings);
+    this.options = Object.assign(defaultSettings, userSettings);
 
     // Bind all the things
     this.create = this.create.bind(this);
@@ -1399,7 +1399,8 @@ module.exports = g;
 /***/ }),
 /* 16 */,
 /* 17 */,
-/* 18 */
+/* 18 */,
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1415,7 +1416,7 @@ exports.paramsToQueryString = paramsToQueryString;
 exports.getUrlOrigin = getUrlOrigin;
 exports.cleanUrl = cleanUrl;
 
-var _parseUri = __webpack_require__(31);
+var _parseUri = __webpack_require__(33);
 
 var _parseUri2 = _interopRequireDefault(_parseUri);
 
@@ -1472,17 +1473,17 @@ function cleanUrl(url) {
 }
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _micropub = __webpack_require__(4);
+var _micropub = __webpack_require__(5);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
-var _url = __webpack_require__(18);
+var _url = __webpack_require__(19);
 
 var _utils = __webpack_require__(1);
 
@@ -1615,7 +1616,6 @@ menuId = chrome.contextMenus.create({
 // });
 
 /***/ }),
-/* 20 */,
 /* 21 */,
 /* 22 */,
 /* 23 */,
@@ -1626,7 +1626,9 @@ menuId = chrome.contextMenus.create({
 /* 28 */,
 /* 29 */,
 /* 30 */,
-/* 31 */
+/* 31 */,
+/* 32 */,
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

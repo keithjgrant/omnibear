@@ -1,6 +1,5 @@
-import { h, Component } from 'preact';
-import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY} from '../constants';
-
+import {h, Component} from 'preact';
+import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY, DEFAULT_REACJI} from '../constants';
 
 export default class NoteForm extends Component {
   render() {
@@ -8,11 +7,7 @@ export default class NoteForm extends Component {
       <header className={this.getClass()}>
         <div>
           {this.getMessage()}
-          {
-            this.props.url
-            ? <div class="metadata">{this.props.url}</div>
-            : null
-          }
+          {this.props.url ? <div class="metadata">{this.props.url}</div> : null}
         </div>
         {this.renderQuickActions()}
         {this.renderReacji()}
@@ -43,32 +38,48 @@ export default class NoteForm extends Component {
 
     return (
       <ul className="quick-actions">
-        <li><button
-          onClick={this.props.onRepost}
-          disabled={this.props.isDisabled}
-        >repost</button></li>
-        <li><button
-          onClick={this.props.onLike}
-          disabled={this.props.isDisabled}
-        >like</button></li>
+        <li>
+          <button
+            onClick={this.props.onRepost}
+            disabled={this.props.isDisabled}
+          >
+            repost
+          </button>
+        </li>
+        <li>
+          <button onClick={this.props.onLike} disabled={this.props.isDisabled}>
+            like
+          </button>
+        </li>
       </ul>
     );
   }
-    
+
   renderReacji() {
     if (!this.props.url) {
       return null;
     }
 
-    const supportedEmoji = [0x1F44D, 0x1F44E, 0x1F389, 0x2764, 0x1F606, 0x1F62E, 0x1F622, 0x1F620];
+    // const supportedEmoji = [0x1F44D, 0x1F44E, 0x1F389, 0x2764, 0x1F606, 0x1F62E, 0x1F622, 0x1F620];
+    const {settings} = this.props;
+    let reacji;
+    if (settings && settings.reacji) {
+      reacji = settings.reacji;
+    } else {
+      reacji = DEFAULT_REACJI;
+    }
 
     return (
       <ul className="reacji-actions">
-        {supportedEmoji.map(emoji => (
-          <li><button
-            onClick={() => this.props.onReacji(String.fromCodePoint(emoji))}
-            disabled={this.props.isDisabled}
-          >{String.fromCodePoint(emoji)}</button></li>
+        {reacji.map(emoji => (
+          <li>
+            <button
+              onClick={() => this.props.onReacji(emoji)}
+              disabled={this.props.isDisabled}
+            >
+              {emoji}
+            </button>
+          </li>
         ))}
       </ul>
     );

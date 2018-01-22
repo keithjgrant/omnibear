@@ -1,5 +1,6 @@
 import {h, Component} from 'preact';
 import Message from './Message';
+import Footer from './Footer';
 import {openLink} from '../util/utils';
 import micropub from '../util/micropub';
 
@@ -12,39 +13,43 @@ export default class LoginForm extends Component {
 
   render() {
     return (
-      <form class="container" method="GET" onSubmit={this.handleSubmit}>
-        <p>
-          To use Omnibear, sign in with your domain. Your website will need to support{' '}
-          <a href="http://indieweb.org/micropub" onClick={openLink}>
-            Micropub
-          </a>{' '}
-          for creating new posts.
-        </p>
+      <div>
+        <form class="container" method="GET" onSubmit={this.handleSubmit}>
+          <p>
+            To use Omnibear, sign in with your domain. Your website will need to
+            support{' '}
+            <a href="http://indieweb.org/micropub" onClick={openLink}>
+              Micropub
+            </a>{' '}
+            for creating new posts.
+          </p>
 
-        <div class="fields-inline">
-          <input
-            type="text"
-            name="me"
-            placeholder="https://example.com"
-            className="fields-inline__fill"
-            value={this.state.domain}
-            onInput={this.handleChange}
-            disabled={this.state.isLoading}
-            ref={el => (this.input = el)}
-          />
-          <button
-            type="submit"
-            disabled={this.state.isLoading}
-            className={this.state.isLoading ? 'is-loading' : ''}
-          >
-            Sign in
-          </button>
-        </div>
+          <div class="fields-inline">
+            <input
+              type="text"
+              name="me"
+              placeholder="https://example.com"
+              className="fields-inline__fill"
+              value={this.state.domain}
+              onInput={this.handleChange}
+              disabled={this.state.isLoading}
+              ref={el => (this.input = el)}
+            />
+            <button
+              type="submit"
+              disabled={this.state.isLoading}
+              className={this.state.isLoading ? 'is-loading' : ''}
+            >
+              Sign in
+            </button>
+          </div>
 
-        {this.state.hasErrors ? (
-          <Message type="error">{this.state.errorMessage || 'Error'}</Message>
-        ) : null}
-      </form>
+          {this.state.hasErrors ? (
+            <Message type="error">{this.state.errorMessage || 'Error'}</Message>
+          ) : null}
+        </form>
+        <Footer onSettings={this.props.handleSettings} />
+      </div>
     );
   }
 
@@ -79,8 +84,9 @@ export default class LoginForm extends Component {
       .catch(err => {
         return this.setState({
           hasErrors: true,
-          errorMessage: `Missing micropub data on ${this.state
-            .domain}. Please ensure the following links are present: authorization_endpoint, token_endpoint, micropub`,
+          errorMessage: `Missing micropub data on ${
+            this.state.domain
+          }. Please ensure the following links are present: authorization_endpoint, token_endpoint, micropub`,
           isLoading: false,
         });
       });

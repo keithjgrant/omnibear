@@ -40,9 +40,9 @@ export default class FormInputs extends Component {
           <input
             id="input-slug"
             type="text"
-            name="slug"
-            value={this.props.entry['slug']}
-            onChange={this.updateField('slug')}
+            name="mp-slug"
+            value={this.props.entry['mp-slug']}
+            onChange={this.updateField('mp-slug')}
             disabled={this.props.isDisabled}
           />
         </div>
