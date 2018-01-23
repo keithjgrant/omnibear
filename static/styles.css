@@ -20,6 +20,25 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/fonts/lato-regular.woff2);
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: url(/fonts/lato-bold.woff2);
+}
+@font-face {
+  font-family: 'Jaldi';
+  font-style: normal;
+  font-weight: 600;
+  src: url(/fonts/jaldi-bold.woff2);
+}
+
 *,
 *::before,
 *::after {
@@ -30,10 +49,11 @@ body {
   width: 450px;
   margin: 0;
   font-size: 1rem;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family: Lato, sans-serif;
   line-height: 1.5;
-  font-weight: 200;
+  font-weight: 400;
   letter-spacing: 0.01em;
+  color: var(--gray-30);
 }
 
 button,
@@ -41,6 +61,7 @@ input[type='submit'] {
   position: relative;
   padding: 0.3em 1em;
   font: inherit;
+  color: inherit;
   border-radius: 0;
   border: 1px solid var(--gray-60);
   background-color: white;
@@ -290,6 +311,43 @@ fieldset > * + * {
 }
 .input-inline > * + * {
   margin-left: 0.2em;
+}
+
+.tabs {
+  display: flex;
+  margin: 0.2em 0.2em 0;
+}
+.tab {
+  flex: 1 1 0;
+  padding: 0.4em 0.6em;
+  border: 1px solid var(--yellow);
+  color: var(--gray-40);
+  background-color: var(--yellow-light);
+  font-family: Jaldi;
+  font-weight: 700;
+  line-height: 1.1;
+  transition: color 0.2s linear;
+}
+.tab.is-active {
+  flex-grow: 2;
+  color: var(--gray-30);
+  border-color: var(--orange);
+  border-bottom-color: transparent;
+  background-color: white;
+}
+.tab[disabled] {
+  color: var(--yellow);
+  background-color: var(--yellow-light);
+  opacity: 0.8;
+}
+.tab + .tab {
+  margin-left: 0.1em;
+}
+.tab:hover {
+  box-shadow: none;
+}
+.tab:hover:not(.is-active):not([disabled]) {
+  color: var(--gray-20);
 }
 
 .settings-form__description {

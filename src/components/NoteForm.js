@@ -1,7 +1,7 @@
 import {h, Component} from 'preact';
 import Header from './Header';
 import Message from './Message';
-import ChangeViewButtons from './ChangeViewButtons';
+import ChangeViewTabs from './ChangeViewTabs';
 import FormInputs from './FormInputs';
 import Footer from './Footer';
 import micropub from '../util/micropub';
@@ -54,7 +54,12 @@ export default class NoteForm extends Component {
   render() {
     return (
       <div>
-        <Header
+        <ChangeViewTabs
+          postType={this.state.postType}
+          onChange={this.changeView}
+          hasSelectedEntry={this.state.hasSelectedEntry}
+        />
+        {/* <Header
           postType={this.state.postType}
           url={this.state.url}
           onLike={this.handleLike}
@@ -62,14 +67,9 @@ export default class NoteForm extends Component {
           onReacji={this.handleReacji}
           isDisabled={this.state.isLoading}
           settings={this.state.settings}
-        />
+        /> */}
         <div className="container">
           <div className="text-right">
-            <ChangeViewButtons
-              postType={this.state.postType}
-              onChange={this.changeView}
-              hasSelectedEntry={this.state.hasSelectedEntry}
-            />
           </div>
           <FormInputs
             entry={this.state.entry}

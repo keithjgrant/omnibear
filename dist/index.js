@@ -1467,8 +1467,8 @@ function objectToFormData(object, formData = new FormData(), name = false) {
 
   if (baseEl) {
     const value = baseEl.getAttribute('href');
-    const url = new URL(value, url);
-    baseUrl = url.toString();
+    const urlObj = new URL(value, url);
+    baseUrl = urlObj.toString();
   }
 
   if (relEls.length) {
@@ -1536,7 +1536,7 @@ const micropubError = (message, status = null, error = null) => {
 
 class Micropub {
   constructor(userSettings = {}) {
-    this.options = Object.assign(defaultSettings, userSettings);
+    this.options = Object.assign({}, defaultSettings, userSettings);
 
     // Bind all the things
     this.create = this.create.bind(this);
@@ -2182,129 +2182,7 @@ exports.default = App;
 /* 18 */,
 /* 19 */,
 /* 20 */,
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(0);
-
-var _LinkButton = __webpack_require__(24);
-
-var _LinkButton2 = _interopRequireDefault(_LinkButton);
-
-var _constants = __webpack_require__(2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ChangeViewButtons = function (_Component) {
-  _inherits(ChangeViewButtons, _Component);
-
-  function ChangeViewButtons() {
-    _classCallCheck(this, ChangeViewButtons);
-
-    return _possibleConstructorReturn(this, (ChangeViewButtons.__proto__ || Object.getPrototypeOf(ChangeViewButtons)).apply(this, arguments));
-  }
-
-  _createClass(ChangeViewButtons, [{
-    key: 'render',
-    value: function render() {
-      var postType = this.props.postType;
-      return (0, _preact.h)(
-        'div',
-        { className: 'inline-links' },
-        this.renderNewNote(),
-        this.renderPageReply(),
-        this.renderItemReply()
-      );
-    }
-  }, {
-    key: 'renderNewNote',
-    value: function renderNewNote() {
-      if (this.props.postType === _constants.NEW_NOTE) {
-        return (0, _preact.h)(
-          'span',
-          null,
-          'New note'
-        );
-      } else {
-        return (0, _preact.h)(
-          _LinkButton2.default,
-          { onClick: this.switchTo(_constants.NEW_NOTE) },
-          'New note'
-        );
-      }
-    }
-  }, {
-    key: 'renderPageReply',
-    value: function renderPageReply() {
-      if (this.props.postType === _constants.PAGE_REPLY) {
-        return (0, _preact.h)(
-          'span',
-          null,
-          'Current page'
-        );
-      } else {
-        return (0, _preact.h)(
-          _LinkButton2.default,
-          { onClick: this.switchTo(_constants.PAGE_REPLY) },
-          'Current page'
-        );
-      }
-    }
-  }, {
-    key: 'renderItemReply',
-    value: function renderItemReply() {
-      if (!this.props.hasSelectedEntry) {
-        return (0, _preact.h)(
-          'span',
-          { className: 'disabled' },
-          'Selected entry'
-        );
-      } else if (this.props.postType === _constants.ITEM_REPLY) {
-        return (0, _preact.h)(
-          'span',
-          null,
-          'Selected entry'
-        );
-      } else {
-        return (0, _preact.h)(
-          _LinkButton2.default,
-          { onClick: this.switchTo(_constants.ITEM_REPLY) },
-          'Selected entry'
-        );
-      }
-    }
-  }, {
-    key: 'switchTo',
-    value: function switchTo(postType) {
-      var _this2 = this;
-
-      return function () {
-        _this2.props.onChange(postType);
-      };
-    }
-  }]);
-
-  return ChangeViewButtons;
-}(_preact.Component);
-
-exports.default = ChangeViewButtons;
-
-/***/ }),
+/* 21 */,
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2634,66 +2512,7 @@ var NoteForm = function (_Component) {
 exports.default = NoteForm;
 
 /***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var LinkButton = function (_Component) {
-  _inherits(LinkButton, _Component);
-
-  function LinkButton() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, LinkButton);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = LinkButton.__proto__ || Object.getPrototypeOf(LinkButton)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (e) {
-      e.preventDefault();
-      _this.props.onClick();
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
-
-  _createClass(LinkButton, [{
-    key: "render",
-    value: function render() {
-      return (0, _preact.h)(
-        "button",
-        {
-          className: "button-link",
-          onClick: this.handleClick
-        },
-        this.props.children
-      );
-    }
-  }]);
-
-  return LinkButton;
-}(_preact.Component);
-
-exports.default = LinkButton;
-
-/***/ }),
+/* 24 */,
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2888,9 +2707,9 @@ var _Message = __webpack_require__(6);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _ChangeViewButtons = __webpack_require__(21);
+var _ChangeViewTabs = __webpack_require__(34);
 
-var _ChangeViewButtons2 = _interopRequireDefault(_ChangeViewButtons);
+var _ChangeViewTabs2 = _interopRequireDefault(_ChangeViewTabs);
 
 var _FormInputs = __webpack_require__(22);
 
@@ -2965,27 +2784,15 @@ var NoteForm = function (_Component) {
       return (0, _preact.h)(
         'div',
         null,
-        (0, _preact.h)(_Header2.default, {
+        (0, _preact.h)(_ChangeViewTabs2.default, {
           postType: this.state.postType,
-          url: this.state.url,
-          onLike: this.handleLike,
-          onRepost: this.handleRepost,
-          onReacji: this.handleReacji,
-          isDisabled: this.state.isLoading,
-          settings: this.state.settings
+          onChange: this.changeView,
+          hasSelectedEntry: this.state.hasSelectedEntry
         }),
         (0, _preact.h)(
           'div',
           { className: 'container' },
-          (0, _preact.h)(
-            'div',
-            { className: 'text-right' },
-            (0, _preact.h)(_ChangeViewButtons2.default, {
-              postType: this.state.postType,
-              onChange: this.changeView,
-              hasSelectedEntry: this.state.hasSelectedEntry
-            })
-          ),
+          (0, _preact.h)('div', { className: 'text-right' }),
           (0, _preact.h)(_FormInputs2.default, {
             entry: this.state.entry,
             settings: this.state.settings,
@@ -3575,6 +3382,182 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener('DOMContentLoaded', function () {
   (0, _preact.render)((0, _preact.h)(_App2.default, null), document.body);
 });
+
+/***/ }),
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+var _Tab = __webpack_require__(35);
+
+var _Tab2 = _interopRequireDefault(_Tab);
+
+var _constants = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ChangeViewTabs = function (_Component) {
+  _inherits(ChangeViewTabs, _Component);
+
+  function ChangeViewTabs() {
+    _classCallCheck(this, ChangeViewTabs);
+
+    return _possibleConstructorReturn(this, (ChangeViewTabs.__proto__ || Object.getPrototypeOf(ChangeViewTabs)).apply(this, arguments));
+  }
+
+  _createClass(ChangeViewTabs, [{
+    key: 'render',
+    value: function render() {
+      var postType = this.props.postType;
+      return (0, _preact.h)(
+        'div',
+        { className: 'tabs' },
+        this.renderNewNote(),
+        this.renderPageReply(),
+        this.renderItemReply()
+      );
+    }
+  }, {
+    key: 'renderNewNote',
+    value: function renderNewNote() {
+      return (0, _preact.h)(
+        _Tab2.default,
+        {
+          isActive: this.props.postType === _constants.NEW_NOTE,
+          onClick: this.switchTo(_constants.NEW_NOTE)
+        },
+        'New note'
+      );
+    }
+  }, {
+    key: 'renderPageReply',
+    value: function renderPageReply() {
+      return (0, _preact.h)(
+        _Tab2.default,
+        {
+          isActive: this.props.postType === _constants.PAGE_REPLY,
+          onClick: this.switchTo(_constants.PAGE_REPLY)
+        },
+        'Current page'
+      );
+    }
+  }, {
+    key: 'renderItemReply',
+    value: function renderItemReply() {
+      return (0, _preact.h)(
+        _Tab2.default,
+        {
+          isActive: this.props.postType === _constants.ITEM_REPLY,
+          isDisabled: !this.props.hasSelectedEntry,
+          onClick: this.switchTo(_constants.ITEM_REPLY) },
+        'Selected entry'
+      );
+    }
+  }, {
+    key: 'switchTo',
+    value: function switchTo(postType) {
+      var _this2 = this;
+
+      return function () {
+        _this2.props.onChange(postType);
+      };
+    }
+  }]);
+
+  return ChangeViewTabs;
+}(_preact.Component);
+
+exports.default = ChangeViewTabs;
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Tab = function (_Component) {
+  _inherits(Tab, _Component);
+
+  function Tab() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, Tab);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Tab.__proto__ || Object.getPrototypeOf(Tab)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (e) {
+      e.preventDefault();
+      _this.props.onClick();
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(Tab, [{
+    key: 'render',
+    value: function render() {
+      return (0, _preact.h)(
+        'button',
+        {
+          className: this.getClass(),
+          disabled: this.props.isDisabled,
+          onClick: this.handleClick
+        },
+        this.props.children
+      );
+    }
+  }, {
+    key: 'getClass',
+    value: function getClass() {
+      if (this.props.isActive) {
+        return 'tab is-active';
+      } else {
+        return 'tab';
+      }
+    }
+  }]);
+
+  return Tab;
+}(_preact.Component);
+
+exports.default = Tab;
 
 /***/ })
 /******/ ]);

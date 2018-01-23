@@ -891,8 +891,8 @@ function objectToFormData(object, formData = new FormData(), name = false) {
 
   if (baseEl) {
     const value = baseEl.getAttribute('href');
-    const url = new URL(value, url);
-    baseUrl = url.toString();
+    const urlObj = new URL(value, url);
+    baseUrl = urlObj.toString();
   }
 
   if (relEls.length) {
@@ -960,7 +960,7 @@ const micropubError = (message, status = null, error = null) => {
 
 class Micropub {
   constructor(userSettings = {}) {
-    this.options = Object.assign(defaultSettings, userSettings);
+    this.options = Object.assign({}, defaultSettings, userSettings);
 
     // Bind all the things
     this.create = this.create.bind(this);
