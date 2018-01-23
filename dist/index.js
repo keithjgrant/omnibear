@@ -1467,8 +1467,8 @@ function objectToFormData(object, formData = new FormData(), name = false) {
 
   if (baseEl) {
     const value = baseEl.getAttribute('href');
-    const urlObj = new URL(value, url);
-    baseUrl = urlObj.toString();
+    const url = new URL(value, url);
+    baseUrl = url.toString();
   }
 
   if (relEls.length) {
@@ -1536,7 +1536,7 @@ const micropubError = (message, status = null, error = null) => {
 
 class Micropub {
   constructor(userSettings = {}) {
-    this.options = Object.assign({}, defaultSettings, userSettings);
+    this.options = Object.assign(defaultSettings, userSettings);
 
     // Bind all the things
     this.create = this.create.bind(this);
@@ -2077,11 +2077,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _LoginForm = __webpack_require__(25);
+var _LoginForm = __webpack_require__(24);
 
 var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
-var _NoteForm = __webpack_require__(26);
+var _NoteForm = __webpack_require__(25);
 
 var _NoteForm2 = _interopRequireDefault(_NoteForm);
 
@@ -2182,7 +2182,108 @@ exports.default = App;
 /* 18 */,
 /* 19 */,
 /* 20 */,
-/* 21 */,
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+var _Tab = __webpack_require__(26);
+
+var _Tab2 = _interopRequireDefault(_Tab);
+
+var _constants = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ChangeViewTabs = function (_Component) {
+  _inherits(ChangeViewTabs, _Component);
+
+  function ChangeViewTabs() {
+    _classCallCheck(this, ChangeViewTabs);
+
+    return _possibleConstructorReturn(this, (ChangeViewTabs.__proto__ || Object.getPrototypeOf(ChangeViewTabs)).apply(this, arguments));
+  }
+
+  _createClass(ChangeViewTabs, [{
+    key: 'render',
+    value: function render() {
+      var postType = this.props.postType;
+      return (0, _preact.h)(
+        'div',
+        { className: 'tabs' },
+        this.renderNewNote(),
+        this.renderPageReply(),
+        this.renderItemReply()
+      );
+    }
+  }, {
+    key: 'renderNewNote',
+    value: function renderNewNote() {
+      return (0, _preact.h)(
+        _Tab2.default,
+        {
+          isActive: this.props.postType === _constants.NEW_NOTE,
+          onClick: this.switchTo(_constants.NEW_NOTE)
+        },
+        'New note'
+      );
+    }
+  }, {
+    key: 'renderPageReply',
+    value: function renderPageReply() {
+      return (0, _preact.h)(
+        _Tab2.default,
+        {
+          isActive: this.props.postType === _constants.PAGE_REPLY,
+          onClick: this.switchTo(_constants.PAGE_REPLY)
+        },
+        'Current page'
+      );
+    }
+  }, {
+    key: 'renderItemReply',
+    value: function renderItemReply() {
+      return (0, _preact.h)(
+        _Tab2.default,
+        {
+          isActive: this.props.postType === _constants.ITEM_REPLY,
+          isDisabled: !this.props.hasSelectedEntry,
+          onClick: this.switchTo(_constants.ITEM_REPLY) },
+        'Selected entry'
+      );
+    }
+  }, {
+    key: 'switchTo',
+    value: function switchTo(postType) {
+      var _this2 = this;
+
+      return function () {
+        _this2.props.onChange(postType);
+      };
+    }
+  }]);
+
+  return ChangeViewTabs;
+}(_preact.Component);
+
+exports.default = ChangeViewTabs;
+
+/***/ }),
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2198,6 +2299,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _preact = __webpack_require__(0);
 
 var _utils = __webpack_require__(1);
+
+var _constants = __webpack_require__(2);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2259,6 +2362,8 @@ var FormInputs = function (_Component) {
     value: function render() {
       var _this2 = this;
 
+      var postType = this.props.postType;
+
       return (0, _preact.h)(
         'form',
         { onSubmit: this.onSubmit },
@@ -2268,7 +2373,7 @@ var FormInputs = function (_Component) {
           (0, _preact.h)(
             'label',
             { 'for': 'input-content' },
-            'Content'
+            postType === _constants.NEW_NOTE ? 'Content' : 'Reply'
           ),
           (0, _preact.h)('textarea', {
             id: 'input-content',
@@ -2326,7 +2431,7 @@ var FormInputs = function (_Component) {
           {
             type: 'submit',
             disabled: this.props.isDisabled || !this.props.entry.content,
-            className: this.props.isLoading ? 'is-loading' : ''
+            className: this.props.isLoading ? 'button is-loading' : 'button'
           },
           'Post'
         )
@@ -2363,157 +2468,8 @@ var FormInputs = function (_Component) {
 exports.default = FormInputs;
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(0);
-
-var _constants = __webpack_require__(2);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var NoteForm = function (_Component) {
-  _inherits(NoteForm, _Component);
-
-  function NoteForm() {
-    _classCallCheck(this, NoteForm);
-
-    return _possibleConstructorReturn(this, (NoteForm.__proto__ || Object.getPrototypeOf(NoteForm)).apply(this, arguments));
-  }
-
-  _createClass(NoteForm, [{
-    key: 'render',
-    value: function render() {
-      return (0, _preact.h)(
-        'header',
-        { className: this.getClass() },
-        (0, _preact.h)(
-          'div',
-          null,
-          this.getMessage(),
-          this.props.url ? (0, _preact.h)(
-            'div',
-            { 'class': 'metadata' },
-            this.props.url
-          ) : null
-        ),
-        this.renderQuickActions(),
-        this.renderReacji()
-      );
-    }
-  }, {
-    key: 'getClass',
-    value: function getClass() {
-      var classNames = {};
-      classNames[_constants.NEW_NOTE] = 'header header--new';
-      classNames[_constants.PAGE_REPLY] = 'header header--page';
-      classNames[_constants.ITEM_REPLY] = 'header header--item';
-      return classNames[this.props.postType];
-    }
-  }, {
-    key: 'getMessage',
-    value: function getMessage() {
-      var messages = {};
-      messages[_constants.NEW_NOTE] = 'New Note';
-      messages[_constants.PAGE_REPLY] = 'Reply to current page';
-      messages[_constants.ITEM_REPLY] = 'Reply to selected entry';
-      return messages[this.props.postType];
-    }
-  }, {
-    key: 'renderQuickActions',
-    value: function renderQuickActions() {
-      if (!this.props.url) {
-        return null;
-      }
-
-      return (0, _preact.h)(
-        'ul',
-        { className: 'quick-actions' },
-        (0, _preact.h)(
-          'li',
-          null,
-          (0, _preact.h)(
-            'button',
-            {
-              onClick: this.props.onRepost,
-              disabled: this.props.isDisabled
-            },
-            'repost'
-          )
-        ),
-        (0, _preact.h)(
-          'li',
-          null,
-          (0, _preact.h)(
-            'button',
-            { onClick: this.props.onLike, disabled: this.props.isDisabled },
-            'like'
-          )
-        )
-      );
-    }
-  }, {
-    key: 'renderReacji',
-    value: function renderReacji() {
-      var _this2 = this;
-
-      if (!this.props.url) {
-        return null;
-      }
-
-      var settings = this.props.settings;
-
-      var reacji = void 0;
-      if (settings && settings.reacji) {
-        reacji = settings.reacji;
-      } else {
-        reacji = _constants.DEFAULT_REACJI;
-      }
-
-      return (0, _preact.h)(
-        'ul',
-        { className: 'reacji-actions' },
-        reacji.map(function (emoji) {
-          return (0, _preact.h)(
-            'li',
-            null,
-            (0, _preact.h)(
-              'button',
-              {
-                onClick: function onClick() {
-                  return _this2.props.onReacji(emoji);
-                },
-                disabled: _this2.props.isDisabled
-              },
-              emoji
-            )
-          );
-        })
-      );
-    }
-  }]);
-
-  return NoteForm;
-}(_preact.Component);
-
-exports.default = NoteForm;
-
-/***/ }),
-/* 24 */,
-/* 25 */
+/* 23 */,
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2685,7 +2641,7 @@ var LoginForm = function (_Component) {
 exports.default = LoginForm;
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2699,15 +2655,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _Header = __webpack_require__(23);
+var _QuickActions = __webpack_require__(34);
 
-var _Header2 = _interopRequireDefault(_Header);
+var _QuickActions2 = _interopRequireDefault(_QuickActions);
 
 var _Message = __webpack_require__(6);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _ChangeViewTabs = __webpack_require__(34);
+var _ChangeViewTabs = __webpack_require__(21);
 
 var _ChangeViewTabs2 = _interopRequireDefault(_ChangeViewTabs);
 
@@ -2781,39 +2737,63 @@ var NoteForm = function (_Component) {
     value: function render() {
       var _this2 = this;
 
+      var _state = this.state,
+          postType = _state.postType,
+          url = _state.url,
+          isDisabled = _state.isDisabled,
+          isLoading = _state.isLoading,
+          settings = _state.settings,
+          userDomain = _state.userDomain,
+          entry = _state.entry,
+          hasSelectedEntry = _state.hasSelectedEntry,
+          errorMessage = _state.errorMessage;
+      var _props = this.props,
+          handleSettings = _props.handleSettings,
+          handleLogout = _props.handleLogout;
+
       return (0, _preact.h)(
         'div',
         null,
         (0, _preact.h)(_ChangeViewTabs2.default, {
-          postType: this.state.postType,
+          postType: postType,
           onChange: this.changeView,
-          hasSelectedEntry: this.state.hasSelectedEntry
+          hasSelectedEntry: hasSelectedEntry
+        }),
+        (0, _preact.h)(_QuickActions2.default, {
+          postType: postType,
+          url: url,
+          onLike: this.handleLike,
+          onRepost: this.handleRepost,
+          onReacji: this.handleReacji,
+          isDisabled: isLoading,
+          settings: settings
         }),
         (0, _preact.h)(
           'div',
           { className: 'container' },
           (0, _preact.h)('div', { className: 'text-right' }),
           (0, _preact.h)(_FormInputs2.default, {
-            entry: this.state.entry,
-            settings: this.state.settings,
+            postType: postType,
+            entry: entry,
+            settings: settings,
             updateEntry: this.updateEntry,
             onSubmit: this.handleSubmit,
-            isDisabled: this.state.isDisabled,
-            isLoading: this.state.isLoading,
+            isDisabled: isDisabled,
+            isLoading: isLoading,
             ref: function ref(el) {
               return _this2.form = el;
             }
           }),
-          this.state.errorMessage ? (0, _preact.h)(
+          errorMessage ? (0, _preact.h)(
             _Message2.default,
             { type: _constants.MESSAGE_ERROR },
-            this.state.errorMessage
+            errorMessage
           ) : null
         ),
         (0, _preact.h)(_Footer2.default, {
-          domain: this.state.userDomain,
-          onSettings: this.props.handleSettings,
-          onLogout: this.props.handleLogout
+          domain: userDomain,
+          onSettings: handleSettings,
+          onLogout: handleLogout
         })
       );
     }
@@ -2949,6 +2929,76 @@ var _initialiseProps = function _initialiseProps() {
 exports.default = NoteForm;
 
 /***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Tab = function (_Component) {
+  _inherits(Tab, _Component);
+
+  function Tab() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, Tab);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Tab.__proto__ || Object.getPrototypeOf(Tab)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (e) {
+      e.preventDefault();
+      _this.props.onClick();
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(Tab, [{
+    key: 'render',
+    value: function render() {
+      return (0, _preact.h)(
+        'button',
+        {
+          className: this.getClass(),
+          disabled: this.props.isDisabled,
+          onClick: this.handleClick
+        },
+        this.props.children
+      );
+    }
+  }, {
+    key: 'getClass',
+    value: function getClass() {
+      if (this.props.isActive) {
+        return 'tab is-active';
+      } else {
+        return 'tab';
+      }
+    }
+  }]);
+
+  return Tab;
+}(_preact.Component);
+
+exports.default = Tab;
+
+/***/ }),
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3026,23 +3076,16 @@ var ReacjiSettings = function (_Component) {
         ),
         (0, _preact.h)(
           'div',
-          null,
+          { className: 'reacji-row' },
           reacji.map(this.renderReacji)
         ),
         (0, _preact.h)(
           'div',
           { 'class': 'input-inline' },
-          (0, _preact.h)('input', {
-            type: 'text',
-            value: this.state.value,
-            onChange: this.update
-          }),
+          (0, _preact.h)('input', { type: 'text', value: this.state.value, onChange: this.update }),
           (0, _preact.h)(
             'button',
-            {
-              type: 'button',
-              onClick: this.addReacji
-            },
+            { type: 'button', onClick: this.addReacji },
             'Add'
           )
         )
@@ -3175,8 +3218,8 @@ var SettingsForm = function (_Component) {
         'div',
         null,
         (0, _preact.h)(
-          'div',
-          { 'class': 'header header--item' },
+          'h1',
+          { 'class': 'section-heading' },
           'Settings'
         ),
         (0, _preact.h)(
@@ -3313,7 +3356,7 @@ var SettingsForm = function (_Component) {
               { 'class': 'form-buttons' },
               (0, _preact.h)(
                 'button',
-                { type: 'submit' },
+                { type: 'submit', className: 'button' },
                 'Save'
               ),
               (0, _preact.h)(
@@ -3402,11 +3445,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _Tab = __webpack_require__(35);
-
-var _Tab2 = _interopRequireDefault(_Tab);
-
 var _constants = __webpack_require__(2);
+
+var _HeartSvg = __webpack_require__(35);
+
+var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
+
+var _RepostSvg = __webpack_require__(36);
+
+var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3416,78 +3463,111 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ChangeViewTabs = function (_Component) {
-  _inherits(ChangeViewTabs, _Component);
+var QuickActions = function (_Component) {
+  _inherits(QuickActions, _Component);
 
-  function ChangeViewTabs() {
-    _classCallCheck(this, ChangeViewTabs);
+  function QuickActions() {
+    var _ref;
 
-    return _possibleConstructorReturn(this, (ChangeViewTabs.__proto__ || Object.getPrototypeOf(ChangeViewTabs)).apply(this, arguments));
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, QuickActions);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = QuickActions.__proto__ || Object.getPrototypeOf(QuickActions)).call.apply(_ref, [this].concat(args))), _this), _this.renderReacji = function (content, i) {
+      return (0, _preact.h)(
+        'li',
+        { key: content },
+        (0, _preact.h)(
+          'button',
+          {
+            onClick: function onClick() {
+              return _this.props.onReacji(content);
+            },
+            disabled: _this.props.isDisabled
+          },
+          content
+        )
+      );
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
-  _createClass(ChangeViewTabs, [{
+  _createClass(QuickActions, [{
     key: 'render',
     value: function render() {
-      var postType = this.props.postType;
+      if (this.props.postType === _constants.NEW_NOTE || !this.props.url) {
+        return null;
+      }
       return (0, _preact.h)(
         'div',
-        { className: 'tabs' },
-        this.renderNewNote(),
-        this.renderPageReply(),
-        this.renderItemReply()
+        null,
+        (0, _preact.h)(
+          'div',
+          { className: 'info-banner' },
+          this.props.url
+        ),
+        (0, _preact.h)(
+          'div',
+          { className: 'container' },
+          (0, _preact.h)(
+            'h2',
+            { className: 'minor-heading' },
+            'Quick Actions'
+          ),
+          this.renderQuickActions()
+        )
       );
     }
   }, {
-    key: 'renderNewNote',
-    value: function renderNewNote() {
-      return (0, _preact.h)(
-        _Tab2.default,
-        {
-          isActive: this.props.postType === _constants.NEW_NOTE,
-          onClick: this.switchTo(_constants.NEW_NOTE)
-        },
-        'New note'
-      );
-    }
-  }, {
-    key: 'renderPageReply',
-    value: function renderPageReply() {
-      return (0, _preact.h)(
-        _Tab2.default,
-        {
-          isActive: this.props.postType === _constants.PAGE_REPLY,
-          onClick: this.switchTo(_constants.PAGE_REPLY)
-        },
-        'Current page'
-      );
-    }
-  }, {
-    key: 'renderItemReply',
-    value: function renderItemReply() {
-      return (0, _preact.h)(
-        _Tab2.default,
-        {
-          isActive: this.props.postType === _constants.ITEM_REPLY,
-          isDisabled: !this.props.hasSelectedEntry,
-          onClick: this.switchTo(_constants.ITEM_REPLY) },
-        'Selected entry'
-      );
-    }
-  }, {
-    key: 'switchTo',
-    value: function switchTo(postType) {
-      var _this2 = this;
+    key: 'renderQuickActions',
+    value: function renderQuickActions() {
+      var settings = this.props.settings;
 
-      return function () {
-        _this2.props.onChange(postType);
-      };
+      var reacji = void 0;
+      if (settings && settings.reacji) {
+        reacji = settings.reacji;
+      } else {
+        reacji = _constants.DEFAULT_REACJI;
+      }
+
+      return (0, _preact.h)(
+        'ul',
+        { className: 'quick-actions' },
+        (0, _preact.h)(
+          'li',
+          null,
+          (0, _preact.h)(
+            'button',
+            {
+              onClick: this.props.onRepost,
+              disabled: this.props.isDisabled
+            },
+            (0, _preact.h)(_RepostSvg2.default, null),
+            ' repost'
+          )
+        ),
+        (0, _preact.h)(
+          'li',
+          null,
+          (0, _preact.h)(
+            'button',
+            { onClick: this.props.onLike, disabled: this.props.isDisabled },
+            (0, _preact.h)(_HeartSvg2.default, null),
+            ' like'
+          )
+        ),
+        reacji.map(this.renderReacji)
+      );
     }
   }]);
 
-  return ChangeViewTabs;
+  return QuickActions;
 }(_preact.Component);
 
-exports.default = ChangeViewTabs;
+exports.default = QuickActions;
 
 /***/ }),
 /* 35 */
@@ -3510,54 +3590,91 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Tab = function (_Component) {
-  _inherits(Tab, _Component);
+var HeartSVG = function (_Component) {
+  _inherits(HeartSVG, _Component);
 
-  function Tab() {
-    var _ref;
+  function HeartSVG() {
+    _classCallCheck(this, HeartSVG);
 
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, Tab);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Tab.__proto__ || Object.getPrototypeOf(Tab)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (e) {
-      e.preventDefault();
-      _this.props.onClick();
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    return _possibleConstructorReturn(this, (HeartSVG.__proto__ || Object.getPrototypeOf(HeartSVG)).apply(this, arguments));
   }
 
-  _createClass(Tab, [{
-    key: 'render',
+  _createClass(HeartSVG, [{
+    key: "render",
     value: function render() {
       return (0, _preact.h)(
-        'button',
-        {
-          className: this.getClass(),
-          disabled: this.props.isDisabled,
-          onClick: this.handleClick
-        },
-        this.props.children
+        "svg",
+        { className: "svg-heart", viewBox: "-5 0 110 125" },
+        (0, _preact.h)(
+          "desc",
+          null,
+          "heart"
+        ),
+        (0, _preact.h)("path", {
+          d: "M49.99,96.266c4.246-2.908,50.016-34.809,50.016-63.154c0-17.711-10.822-29.378-26.424-29.378  c-14.357,0-22.389,13.18-23.582,15.29c-1.194-2.109-9.225-15.29-23.582-15.29c-15.603,0-26.425,11.667-26.425,29.378  c0,28.345,45.724,60.246,49.97,63.154H49.99z",
+          fill: "transparent",
+          stroke: "var(--red)",
+          "stroke-width": "10"
+        })
       );
-    }
-  }, {
-    key: 'getClass',
-    value: function getClass() {
-      if (this.props.isActive) {
-        return 'tab is-active';
-      } else {
-        return 'tab';
-      }
     }
   }]);
 
-  return Tab;
+  return HeartSVG;
 }(_preact.Component);
 
-exports.default = Tab;
+exports.default = HeartSVG;
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var RepostSvg = function (_Component) {
+  _inherits(RepostSvg, _Component);
+
+  function RepostSvg() {
+    _classCallCheck(this, RepostSvg);
+
+    return _possibleConstructorReturn(this, (RepostSvg.__proto__ || Object.getPrototypeOf(RepostSvg)).apply(this, arguments));
+  }
+
+  _createClass(RepostSvg, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "svg",
+        { className: "svg-repost", viewBox: "395 52 390 210" },
+        (0, _preact.h)("path", {
+          d: " M 570 220 L 490 220 L 490 160 L 520 160 C 530.71 160 540 151.53 540 140 C 540 132.5 536.09 127.66 530 120 L 490 71.88 C 483.90999999999997 64.69 478.13 60 470 60 C 461.87 60 456.09000000000003 64.69 450 71.88 L 410 120 C 403.91 127.66 400 132.5 400 140 C 400 151.53 409.29 160 420 160 L 450 160 L 450 240 C 450 251.04 458.96 260 470 260 L 570 260 C 581.04 260 590 251.04 590 240 C 590 228.96 581.04 220 570 220 Z  M 760 160 L 730 160 L 730 80 C 730 68.96 721.04 60 710 60 L 610 60 C 598.96 60 590 68.96 590 80 C 590 91.03999999999999 598.96 100 610 100 L 690 100 L 690 160 L 660 160 C 649.29 160 640 168.47000000000003 640 180 C 640 187.5 643.91 192.34000000000003 650 200 L 690 248.13 C 696.09 255.31 701.88 260 710 260 C 718.12 260 723.91 255.31 730 248.12 L 770 200 C 776.09 192.34000000000003 780 187.5 780 180 C 780 168.47000000000003 770.71 160 760 160 Z ",
+          fill: "transparent",
+          stroke: "var(--green)",
+          "stroke-width": "15"
+        })
+      );
+    }
+  }]);
+
+  return RepostSvg;
+}(_preact.Component);
+
+exports.default = RepostSvg;
 
 /***/ })
 /******/ ]);

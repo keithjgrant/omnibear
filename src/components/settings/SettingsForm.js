@@ -34,7 +34,7 @@ export default class SettingsForm extends Component {
     } = this.state;
     return (
       <div>
-        <div class="header header--item">Settings</div>
+        <h1 class="section-heading">Settings</h1>
         <div class="container">
           <form class="settings-form" onSubmit={this.save}>
             <label>
@@ -125,7 +125,9 @@ export default class SettingsForm extends Component {
             </fieldset>
 
             <div class="form-buttons">
-              <button type="submit">Save</button>
+              <button type="submit" className="button">
+                Save
+              </button>
               <button
                 type="button"
                 className="button-link"

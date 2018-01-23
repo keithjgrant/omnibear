@@ -1,6 +1,7 @@
 import {h, Component} from 'preact';
 import {clone} from '../util/utils';
 import {generateSlug} from '../util/utils';
+import {NEW_NOTE} from '../constants';
 
 export default class FormInputs extends Component {
   constructor(props) {
@@ -15,10 +16,13 @@ export default class FormInputs extends Component {
   }
 
   render() {
+    const {postType} = this.props;
     return (
       <form onSubmit={this.onSubmit}>
         <div>
-          <label for="input-content">Content</label>
+          <label for="input-content">
+            {postType === NEW_NOTE ? 'Content' : 'Reply'}
+          </label>
           <textarea
             id="input-content"
             value={this.props.entry.content}
@@ -57,7 +61,7 @@ export default class FormInputs extends Component {
         <button
           type="submit"
           disabled={this.props.isDisabled || !this.props.entry.content}
-          className={this.props.isLoading ? 'is-loading' : ''}
+          className={this.props.isLoading ? 'button is-loading' : 'button'}
         >
           Post
         </button>

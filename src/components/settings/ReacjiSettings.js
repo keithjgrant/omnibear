@@ -13,41 +13,38 @@ export default class ReacjiSettings extends Component {
     return (
       <div>
         <label>Quick replies (“Reacji”)</label>
-        <div>{reacji.map(this.renderReacji)}</div>
+        <div className="reacji-row">{reacji.map(this.renderReacji)}</div>
         <div class="input-inline">
-          <input
-            type="text"
-            value={this.state.value}
-            onChange={this.update}
-          />
-          <button
-            type="button"
-            onClick={this.addReacji}
-          >Add</button>
+          <input type="text" value={this.state.value} onChange={this.update} />
+          <button type="button" onClick={this.addReacji}>
+            Add
+          </button>
         </div>
       </div>
-    )
+    );
   }
 
   renderReacji = (char, i) => {
     return (
       <div className="reacji-tag" key={char}>
         {char}
-        <button type="button" onClick={this.deleteReacji(i)}>×</button>
+        <button type="button" onClick={this.deleteReacji(i)}>
+          ×
+        </button>
       </div>
-    )
-  }
+    );
+  };
 
-  update = (e) => {
+  update = e => {
     this.setState({value: e.target.value});
-  }
+  };
 
   deleteReacji(index) {
     return () => {
       const {reacji} = this.props;
       reacji.splice(index, 1);
       this.props.onChange(reacji);
-    }
+    };
   }
 
   addReacji = () => {
@@ -58,5 +55,5 @@ export default class ReacjiSettings extends Component {
       this.props.onChange(reacji);
       this.setState({value: ''});
     }
-  }
+  };
 }

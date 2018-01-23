@@ -1,5 +1,5 @@
 import {h, Component} from 'preact';
-import Header from './Header';
+import QuickActions from './QuickActions';
 import Message from './Message';
 import ChangeViewTabs from './ChangeViewTabs';
 import FormInputs from './FormInputs';
@@ -52,42 +52,54 @@ export default class NoteForm extends Component {
   }
 
   render() {
+    const {
+      postType,
+      url,
+      isDisabled,
+      isLoading,
+      settings,
+      userDomain,
+      entry,
+      hasSelectedEntry,
+      errorMessage,
+    } = this.state;
+    const {handleSettings, handleLogout} = this.props;
     return (
       <div>
         <ChangeViewTabs
-          postType={this.state.postType}
+          postType={postType}
           onChange={this.changeView}
-          hasSelectedEntry={this.state.hasSelectedEntry}
+          hasSelectedEntry={hasSelectedEntry}
         />
-        {/* <Header
-          postType={this.state.postType}
-          url={this.state.url}
+        <QuickActions
+          postType={postType}
+          url={url}
           onLike={this.handleLike}
           onRepost={this.handleRepost}
           onReacji={this.handleReacji}
-          isDisabled={this.state.isLoading}
-          settings={this.state.settings}
-        /> */}
+          isDisabled={isLoading}
+          settings={settings}
+        />
         <div className="container">
-          <div className="text-right">
-          </div>
+          <div className="text-right" />
           <FormInputs
-            entry={this.state.entry}
-            settings={this.state.settings}
+            postType={postType}
+            entry={entry}
+            settings={settings}
             updateEntry={this.updateEntry}
             onSubmit={this.handleSubmit}
-            isDisabled={this.state.isDisabled}
-            isLoading={this.state.isLoading}
+            isDisabled={isDisabled}
+            isLoading={isLoading}
             ref={el => (this.form = el)}
           />
-          {this.state.errorMessage ? (
-            <Message type={MESSAGE_ERROR}>{this.state.errorMessage}</Message>
+          {errorMessage ? (
+            <Message type={MESSAGE_ERROR}>{errorMessage}</Message>
           ) : null}
         </div>
         <Footer
-          domain={this.state.userDomain}
-          onSettings={this.props.handleSettings}
-          onLogout={this.props.handleLogout}
+          domain={userDomain}
+          onSettings={handleSettings}
+          onLogout={handleLogout}
         />
       </div>
     );

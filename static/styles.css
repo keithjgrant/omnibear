@@ -58,49 +58,17 @@ body {
 
 button,
 input[type='submit'] {
-  position: relative;
-  padding: 0.3em 1em;
   font: inherit;
   color: inherit;
-  border-radius: 0;
-  border: 1px solid var(--gray-60);
-  background-color: white;
-}
-
-button.is-loading,
-input[type='submit'].is-loading {
-  color: transparent;
-}
-button.is-loading::after,
-input[type='submit'].is-loading::after {
-  position: absolute;
-  content: '';
-  top: 50%;
-  left: 50%;
-  height: 1.4em;
-  width: 1.4em;
-  margin-top: -0.7em;
-  margin-left: -0.7em;
-  border: 2px solid transparent;
-  border-top-color: var(--yellow);
-  border-radius: 50%;
-  animation: spin 500ms linear infinite;
-}
-button:hover {
-  box-shadow: inset 0 0 0.2em var(--yellow);
-}
-button:active {
-  border-color: var(--yellow);
-}
-button[disabled] {
-  box-shadow: none;
 }
 
 textarea,
 input[type='text'] {
+  display: block;
   width: 100%;
   padding: 0.3em 0.5em;
-  border: 1px solid var(--gray-50);
+  border: 1px solid var(--gray-40);
+  border-radius: 0.3em;
   font: inherit;
 }
 
@@ -114,6 +82,15 @@ label {
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+}
+
+.svg-heart {
+  height: 1em;
+  vertical-align: -0.2em;
+}
+.svg-repost {
+  height: 0.8em;
+  vertical-align: 0;
 }
 
 .input-extra {
@@ -154,6 +131,37 @@ fieldset > * + * {
   padding: 0.5em 1em;
 }
 
+.button {
+  position: relative;
+  padding: 0.5em 1em;
+  border: 0;
+  border-radius: 0.2em;
+  color: white;
+  background-color: var(--yellow);
+  outline: none;
+}
+.button:hover {
+  opacity: 0.8;
+  box-shadow: 0 0 0.2em rgba(0, 0, 0, 0.7);
+}
+.button.is-loading {
+  color: transparent;
+}
+.button.is-loading::after {
+  position: absolute;
+  content: '';
+  top: 50%;
+  left: 50%;
+  height: 1.4em;
+  width: 1.4em;
+  margin-top: -0.7em;
+  margin-left: -0.7em;
+  border: 2px solid transparent;
+  border-top-color: var(--yellow);
+  border-radius: 50%;
+  animation: spin 500ms linear infinite;
+}
+
 .button-link {
   display: inline;
   border: 0;
@@ -163,40 +171,28 @@ fieldset > * + * {
   color: var(--orange);
   cursor: pointer;
 }
+.button-link:hover {
+  box-shadow: none;
+  text-decoration: underline;
+}
 .button-small {
   font-size: 0.8em;
 }
 
-.header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 0.5em 0.5em 0.5em 1em;
-  border: 1px solid currentcolor;
+.section-heading {
+  margin: 0 1.4rem 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--gray-60);
+  font-size: 1.4rem;
+  font-family: Jaldi, sans-serif;
+  font-weight: bold;
 }
-.header > :first-child {
-  max-width: 70%;
-}
-.header button {
-  border-color: currentColor;
-}
-.header--new {
-  color: var(--yellow);
-  background-color: var(--yellow-light);
-}
-.header--page {
-  color: var(--yellow);
-  background-color: var(--yellow-light);
-}
-.header--page button {
-  color: var(--orange);
-}
-.header--item {
-  color: var(--yellow-light);
-  background-color: var(--yellow);
-}
-.header--item button {
-  color: var(--yellow-light);
+.minor-heading {
+  margin: 0.2rem 0;
+  font-size: 1rem;
+  font-family: Jaldi, sans-serif;
+  font-weight: bold;
+  text-align: right;
 }
 
 .message {
@@ -214,6 +210,15 @@ fieldset > * + * {
 }
 .message--warning {
   color: var(--orange);
+}
+
+.info-banner {
+  margin: 0.5rem 0.2rem 0;
+  padding: 0.2em 0.5em;
+  border: 1px solid var(--yellow);
+  font-size: 0.8rem;
+  color: var(--gray-40);
+  background-color: var(--yellow-light);
 }
 
 .footer {
@@ -235,17 +240,24 @@ fieldset > * + * {
 }
 
 .quick-actions {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
   display: flex;
+  flex-wrap: wrap;
+  margin: 0 -0.25em;
+  padding: 0 0 0.5em;
+  border-bottom: 1px solid var(--gray-80);
+  list-style: none;
 }
-.quick-actions > li + li {
-  margin-left: 0.5em;
+.quick-actions > li {
+  margin: 0.25em;
 }
 .quick-actions button {
-  background: transparent;
   padding: 0 0.5em;
+  background: transparent;
+  border: 1px solid var(--yellow);
+  border-radius: 0.3em;
+}
+.quick-actions button:hover {
+  background-color: var(--yellow-light);
 }
 .quick-actions button:active {
   text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.3);
@@ -315,10 +327,13 @@ fieldset > * + * {
 
 .tabs {
   display: flex;
-  margin: 0.2em 0.2em 0;
+  margin: 0.2em 0 0;
+  padding: 0 0.2em;
+  border-bottom: 1px solid var(--yellow);
 }
 .tab {
   flex: 1 1 0;
+  margin-bottom: -1px;
   padding: 0.4em 0.6em;
   border: 1px solid var(--yellow);
   color: var(--gray-40);
@@ -326,7 +341,7 @@ fieldset > * + * {
   font-family: Jaldi;
   font-weight: 700;
   line-height: 1.1;
-  transition: color 0.2s linear;
+  transition: flex-grow 0.2s ease-out, border-radius 0.2s linear;
 }
 .tab.is-active {
   flex-grow: 2;
@@ -334,10 +349,11 @@ fieldset > * + * {
   border-color: var(--orange);
   border-bottom-color: transparent;
   background-color: white;
+  border-top-right-radius: 1em;
 }
 .tab[disabled] {
-  color: var(--yellow);
-  background-color: var(--yellow-light);
+  color: var(--gray-60);
+  background-color: var(--gray-90);
   opacity: 0.8;
 }
 .tab + .tab {
@@ -347,7 +363,7 @@ fieldset > * + * {
   box-shadow: none;
 }
 .tab:hover:not(.is-active):not([disabled]) {
-  color: var(--gray-20);
+  text-decoration: underline;
 }
 
 .settings-form__description {
@@ -366,17 +382,27 @@ legend + .settings-form__description {
   margin-left: 1em;
 }
 
+.reacji-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -0.2em;
+}
+
 .reacji-tag {
   display: inline-block;
+  margin: 0 0.2em 0.2em;
+  border: 1px solid var(--gray-60);
+  border-radius: 0.3em;
 }
 .reacji-tag > button {
   margin-left: 0.2em;
   padding: 0.2em;
   border: 0;
   color: var(--red);
+  background-color: transparent;
 }
-.reacji-tag + .reacji-tag {
-  margin-left: 0.8em;
+.reacji-tag > button:hover {
+  box-shadow: 0 0 0.2em var(--red);
 }
 
 .metadata {
