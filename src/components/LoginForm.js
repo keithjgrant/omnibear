@@ -38,7 +38,7 @@ export default class LoginForm extends Component {
             <button
               type="submit"
               disabled={this.state.isLoading}
-              className={this.state.isLoading ? 'is-loading' : ''}
+              className={this.state.isLoading ? 'button is-loading' : 'button'}
             >
               Sign in
             </button>
@@ -82,6 +82,7 @@ export default class LoginForm extends Component {
         });
       })
       .catch(err => {
+        console.log(err.message);
         return this.setState({
           hasErrors: true,
           errorMessage: `Missing micropub data on ${

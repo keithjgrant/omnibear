@@ -15,6 +15,10 @@ export default class FormInputs extends Component {
     setTimeout(this.focus, 150);
   }
 
+  componentDidUpdate() {
+    this.saveDraft();
+  }
+
   render() {
     const {postType} = this.props;
     return (
@@ -77,7 +81,6 @@ export default class FormInputs extends Component {
     const slug = e.target.value.trim();
     var entry = clone(this.props.entry);
     entry['mp-slug'] = slug;
-    console.log(slug);
     this.props.updateEntry(entry);
     this.setState({
       isSlugEdited: slug !== '',
@@ -116,5 +119,22 @@ export default class FormInputs extends Component {
   onSubmit = e => {
     e.preventDefault();
     this.props.onSubmit(this.props.entry);
+    this.deleteDraft();
   };
+
+  saveDraft = () => {
+    const {entry} = this.props;
+    localStorage.setItem(
+      'draft',
+      JSON.stringify({
+        content: entry.content,
+        category: entry.category,
+        'mp-slug': entry['mp-slug'],
+      })
+    );
+  };
+
+  deleteDraft() {
+    localStorage.removeItem('draft');
+  }
 }

@@ -34,15 +34,16 @@ export default class NoteForm extends Component {
         entryUrl = localStorage.getItem('pageUrl');
       }
     }
+    const draft = JSON.parse(localStorage.getItem('draft')) || {};
     this.state = {
       postType: postType,
       url: entryUrl,
       userDomain: localStorage.getItem('domain'),
       entry: {
         h: 'entry',
-        content: '',
-        category: [],
-        'mp-slug': '',
+        content: draft.content || '',
+        category: draft.category || [],
+        'mp-slug': draft['mp-slug'] || '',
       },
       hasSelectedEntry: !!selectedEntry,
       isDisabled: false,

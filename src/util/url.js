@@ -6,7 +6,9 @@ export function getParamFromUrl(paramName, url) {
 }
 
 export function getParamFromUrlString(paramName, params) {
-  var matches = params.split('&').filter(param => param.startsWith(`${paramName}=`));
+  var matches = params
+    .split('&')
+    .filter(param => param.startsWith(`${paramName}=`));
   if (matches && matches.length) {
     var value = matches[0].substr(paramName.length + 1);
     return decodeURIComponent(value);
@@ -55,7 +57,7 @@ export function cleanUrl(url) {
     parts.host,
     parts.port ? `:${parts.port}` : '',
     parts.path,
-    paramsToQueryString(cleanParams(parts.queryKey))
+    paramsToQueryString(cleanParams(parts.queryKey)),
   ].join('');
   return base;
 }

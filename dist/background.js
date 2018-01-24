@@ -68,7 +68,8 @@
 /************************************************************************/
 /******/ ([
 /* 0 */,
-/* 1 */
+/* 1 */,
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -129,7 +130,6 @@ function generateSlug(content) {
 }
 
 /***/ }),
-/* 2 */,
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -992,7 +992,7 @@ class Micropub {
     return {
       pass: pass,
       missing: missing,
-    }
+    };
   }
 
   /**
@@ -1011,7 +1011,7 @@ class Micropub {
       let baseUrl = url;
       // Fetch the given url
       fetch(url)
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
             return reject(micropubError('Error getting page', res.status));
           }
@@ -1021,9 +1021,9 @@ class Micropub {
           const linkHeaders = res.headers.get('link');
           if (linkHeaders) {
             const links = linkHeaders.split(',');
-            links.forEach((link) => {
-              Object.keys(endpoints).forEach((key) => {
-                const rel = link.match(/rel=("([^"]*)"|([^,"<]+))/)
+            links.forEach(link => {
+              Object.keys(endpoints).forEach(key => {
+                const rel = link.match(/rel=("([^"]*)"|([^,"<]+))/);
                 if (rel && rel[1] && rel[1].indexOf(key) >= 0) {
                   const linkValues = link.match(/[^<>|\s]+/g);
                   if (linkValues && linkValues[0]) {
@@ -1034,23 +1034,27 @@ class Micropub {
             });
           }
 
-          return res.text()
+          return res.text();
         })
-        .then((html) => {
+        .then(html => {
           // Get rel links
           const rels = relScraper(html, baseUrl);
 
           // Save necessary endpoints.
           this.options.me = url;
           if (rels) {
-            Object.keys(endpoints).forEach((key) => {
+            Object.keys(endpoints).forEach(key => {
               if (rels[key] && rels[key][0]) {
                 endpoints[key] = rels[key][0];
               }
             });
           }
 
-          if (endpoints.micropub && endpoints.authorization_endpoint && endpoints.token_endpoint) {
+          if (
+            endpoints.micropub &&
+            endpoints.authorization_endpoint &&
+            endpoints.token_endpoint
+          ) {
             this.options.micropubEndpoint = endpoints.micropub;
             this.options.tokenEndpoint = endpoints.token_endpoint;
             this.options.authEndpoint = endpoints.authorization_endpoint;
@@ -1063,15 +1067,26 @@ class Micropub {
 
           return reject(micropubError('Error getting microformats data'));
         })
-        .catch((err) => reject(micropubError('Error fetching url', null, err)));
+        .catch(err => reject(micropubError('Error fetching url', null, err)));
     });
   }
 
   getToken(code) {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['me', 'state', 'scope', 'clientId', 'redirectUri', 'tokenEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'me',
+        'state',
+        'scope',
+        'clientId',
+        'redirectUri',
+        'tokenEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
       const data = {
@@ -1090,24 +1105,24 @@ class Micropub {
         body: qsStringify(data),
         headers: new Headers({
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          'Accept': 'application/json, application/x-www-form-urlencoded',
+          Accept: 'application/json, application/x-www-form-urlencoded',
         }),
         // mode: 'cors',
       };
       // This could maybe use the postMicropub method
       fetch(this.options.tokenEndpoint, request)
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
             return reject(micropubError('Error getting token', res.status));
           }
           const contentType = res.headers.get('Content-Type');
           if (contentType && contentType.indexOf('application/json') === 0) {
-            return res.json()
+            return res.json();
           } else {
             return res.text();
           }
         })
-        .then((result) => {
+        .then(result => {
           // Parse the response from the indieauth server
           if (typeof result === 'string') {
             result = qsParse(result);
@@ -1118,10 +1133,18 @@ class Micropub {
             return reject(micropubError(result.error));
           }
           if (!result.me || !result.scope || !result.access_token) {
-            return reject(micropubError('The token endpoint did not return the expected parameters'));
+            return reject(
+              micropubError(
+                'The token endpoint did not return the expected parameters'
+              )
+            );
           }
           // Check me is the same (removing any trailing slashes)
-          if (result.me && result.me.replace(/\/+$/, '') !== this.options.me.replace(/\/+$/, '')) {
+          if (
+            result.me &&
+            result.me.replace(/\/+$/, '') !==
+              this.options.me.replace(/\/+$/, '')
+          ) {
             return reject(micropubError('The me values did not match'));
           }
           // Check scope matches (not reliable)
@@ -1134,7 +1157,9 @@ class Micropub {
           this.options.token = result.access_token;
           fulfill(result.access_token);
         })
-        .catch((err) => reject(micropubError('Error requesting token endpoint', null, err)));
+        .catch(err =>
+          reject(micropubError('Error requesting token endpoint', null, err))
+        );
     });
   }
 
@@ -1146,13 +1171,27 @@ class Micropub {
     return new Promise((fulfill, reject) => {
       let requirements = this.checkRequiredOptions(['me', 'state']);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
       this.getEndpointsFromUrl(this.options.me)
         .then(() => {
-          let requirements = this.checkRequiredOptions(['me', 'state', 'scope', 'clientId', 'redirectUri']);
+          let requirements = this.checkRequiredOptions([
+            'me',
+            'state',
+            'scope',
+            'clientId',
+            'redirectUri',
+          ]);
           if (!requirements.pass) {
-            return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+            return reject(
+              micropubError(
+                'Missing required options: ' + requirements.missing.join(', ')
+              )
+            );
           }
           const authParams = {
             me: this.options.me,
@@ -1165,33 +1204,44 @@ class Micropub {
 
           fulfill(this.options.authEndpoint + '?' + qsStringify(authParams));
         })
-        .catch((err) => reject(micropubError('Error getting auth url', null, err)));
+        .catch(err =>
+          reject(micropubError('Error getting auth url', null, err))
+        );
     });
   }
 
   verifyToken() {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'token',
+        'micropubEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
       const request = {
         method: 'GET',
         headers: new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
         }),
       };
 
       fetch(this.options.micropubEndpoint, request)
-        .then((res) => {
+        .then(res => {
           if (res.ok) {
             return fulfill(true);
           } else {
             return reject(micropubError('Error verifying token', res.status));
           }
         })
-        .catch((err) => reject(micropubError('Error verifying token', null, err)));
+        .catch(err =>
+          reject(micropubError('Error verifying token', null, err))
+        );
     });
   }
 
@@ -1200,31 +1250,43 @@ class Micropub {
   }
 
   update(url, update) {
-    return this.postMicropub(Object.assign({
-      action: 'update',
-      url: url,
-    }, update));
+    return this.postMicropub(
+      Object.assign(
+        {
+          action: 'update',
+          url: url,
+        },
+        update
+      )
+    );
   }
 
   delete(url) {
     return this.postMicropub({
       action: 'delete',
       url: url,
-    })
+    });
   }
 
   undelete(url) {
     return this.postMicropub({
       action: 'undelete',
       url: url,
-    })
+    });
   }
 
   postMicropub(object, type = 'json') {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'token',
+        'micropubEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
       let request = {
@@ -1234,43 +1296,46 @@ class Micropub {
       if (type == 'json') {
         request.body = JSON.stringify(object);
         request.headers = new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': 'application/json',
-          'Accept': 'application/json, application/x-www-form-urlencoded',
+          Accept: 'application/json, application/x-www-form-urlencoded',
         });
       } else if (type == 'form') {
         request.body = qsStringify(object);
         request.headers = new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          'Accept': 'application/json, application/x-www-form-urlencoded',
+          Accept: 'application/json, application/x-www-form-urlencoded',
         });
       } else if (type == 'multipart') {
         request.body = objectToFormData(object);
         request.headers = new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': undefined,
-          'Accept': 'application/json, application/x-www-form-urlencoded',
+          Accept: 'application/json, application/x-www-form-urlencoded',
         });
       }
 
       fetch(this.options.micropubEndpoint, request)
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
-            return reject(micropubError('Error with micropub request', res.status));
+            return reject(
+              micropubError('Error with micropub request', res.status)
+            );
           }
-          const location = res.headers.get('Location') || res.headers.get('location');
+          const location =
+            res.headers.get('Location') || res.headers.get('location');
           if (location) {
             return fulfill(location);
           }
           const contentType = res.headers.get('Content-Type');
           if (contentType && contentType.indexOf('application/json') === 0) {
-            return res.json()
+            return res.json();
           } else {
             return res.text();
           }
         })
-        .then((result) => {
+        .then(result => {
           if (typeof result === 'string') {
             result = qsParse(result);
           }
@@ -1282,48 +1347,70 @@ class Micropub {
             return fulfill(result);
           }
         })
-        .catch((err) => reject(micropubError('Error sending request', null, err)));
+        .catch(err =>
+          reject(micropubError('Error sending request', null, err))
+        );
     });
   }
 
   postMedia(file) {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['token', 'mediaEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'token',
+        'mediaEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
       let request = {
         method: 'POST',
         body: objectToFormData({file: file}),
         headers: new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': undefined,
-          'Accept': '*/*',
+          Accept: '*/*',
         }),
       };
 
       fetch(this.options.mediaEndpoint, request)
-        .then((res) => {
+        .then(res => {
           if (res.status !== 201) {
             return reject(micropubError('Error creating media', res.status));
           }
-          const location = res.headers.get('Location') || res.headers.get('location');
+          const location =
+            res.headers.get('Location') || res.headers.get('location');
           if (location) {
             return fulfill(location);
           } else {
-            return reject(micropubError('Media endpoint did not return a location', res.status));
+            return reject(
+              micropubError(
+                'Media endpoint did not return a location',
+                res.status
+              )
+            );
           }
         })
-        .catch((err) => reject(micropubError('Error sending request')));
+        .catch(err => reject(micropubError('Error sending request')));
     });
   }
 
   query(type) {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'token',
+        'micropubEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
       const url = appendQueryString(this.options.micropubEndpoint, {q: type});
@@ -1331,53 +1418,66 @@ class Micropub {
       const request = {
         method: 'GET',
         headers: new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         }),
         // mode: 'cors',
       };
 
       fetch(url, request)
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
             return reject(micropubError('Error getting ' + type, res.status));
           }
-          return res.json()
+          return res.json();
         })
-        .then((json) => fulfill(json))
-        .catch((err) => reject(micropubError('Error getting ' + type, null, err)));
+        .then(json => fulfill(json))
+        .catch(err =>
+          reject(micropubError('Error getting ' + type, null, err))
+        );
     });
   }
 
   querySource(url, properties = []) {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'token',
+        'micropubEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
-      url = appendQueryString(this.options.micropubEndpoint, {q: 'source', url: url, properties: properties});
+      url = appendQueryString(this.options.micropubEndpoint, {
+        q: 'source',
+        url: url,
+        properties: properties,
+      });
 
       const request = {
         method: 'GET',
         headers: new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         }),
         // mode: 'cors',
       };
 
       fetch(url, request)
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
             return reject(micropubError('Error getting source', res.status));
           }
-          return res.json()
+          return res.json();
         })
-        .then((json) => fulfill(json))
-        .catch((err) => reject(micropubError('Error getting source', null, err)));
+        .then(json => fulfill(json))
+        .catch(err => reject(micropubError('Error getting source', null, err)));
     });
   }
 }
@@ -1433,7 +1533,7 @@ exports.paramsToQueryString = paramsToQueryString;
 exports.getUrlOrigin = getUrlOrigin;
 exports.cleanUrl = cleanUrl;
 
-var _parseUri = __webpack_require__(33);
+var _parseUri = __webpack_require__(35);
 
 var _parseUri2 = _interopRequireDefault(_parseUri);
 
@@ -1502,7 +1602,7 @@ var _micropub2 = _interopRequireDefault(_micropub);
 
 var _url = __webpack_require__(19);
 
-var _utils = __webpack_require__(1);
+var _utils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1614,7 +1714,7 @@ menuId = chrome.contextMenus.create({
       browser.windows.create({
         url: 'index.html?reply=true',
         width: 450,
-        height: 510,
+        height: 580,
         type: 'panel',
         left: 2000
       });
@@ -1645,7 +1745,9 @@ menuId = chrome.contextMenus.create({
 /* 30 */,
 /* 31 */,
 /* 32 */,
-/* 33 */
+/* 33 */,
+/* 34 */,
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

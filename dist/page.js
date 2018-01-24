@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 30);
+/******/ 	return __webpack_require__(__webpack_require__.s = 32);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -82,11 +82,11 @@ exports.removeHighlight = removeHighlight;
 exports.focusClickedEntry = focusClickedEntry;
 exports.getCurrentItemUrl = getCurrentItemUrl;
 
-var _microformatShiv = __webpack_require__(32);
+var _microformatShiv = __webpack_require__(34);
 
 var _microformatShiv2 = _interopRequireDefault(_microformatShiv);
 
-var _dom = __webpack_require__(31);
+var _dom = __webpack_require__(33);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -124,6 +124,7 @@ function focusClickedEntry(e) {
     entry = findHEntry(e.target);
   }
 
+  console.log(entry);
   if (!entry) {
     return;
   }
@@ -186,7 +187,9 @@ function findHEntry(el) {
       return findHEntry(element.parentElement, 'h-entry');
     }
   }
-
+  if (typeof url !== 'string') {
+    return false;
+  }
   return { element: element, url: url };
 }
 
@@ -196,7 +199,7 @@ function getCurrentItemUrl() {
 
 /***/ }),
 
-/***/ 30:
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -244,7 +247,7 @@ var _entry = __webpack_require__(18);
     }
 
     heading.textContent = 'Error fetching token from token endpoint';
-    paragraph.textContent = error;
+    paragraph.textContent = error.message;
   }
 
   function isAuthPage() {
@@ -264,7 +267,7 @@ var _entry = __webpack_require__(18);
 
 /***/ }),
 
-/***/ 31:
+/***/ 33:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -324,7 +327,7 @@ function getAncestorNode(el, filter) {
 
 /***/ }),
 
-/***/ 32:
+/***/ 34:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*

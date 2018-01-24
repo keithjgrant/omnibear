@@ -45,7 +45,7 @@ import {
     }
 
     heading.textContent = 'Error fetching token from token endpoint';
-    paragraph.textContent = error;
+    paragraph.textContent = error.message;
   }
 
   function isAuthPage() {

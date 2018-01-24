@@ -61,7 +61,9 @@ function handleTabChange(tabId, changeInfo, tab) {
       chrome.tabs.sendMessage(tab.id, {
         action: 'fetch-token-error',
         payload: {
-          error: new Error("'me' url domain doesn't match auth endpoint domain"),
+          error: new Error(
+            "'me' url domain doesn't match auth endpoint domain"
+          ),
         },
       });
       logout();
@@ -119,7 +121,7 @@ menuId = chrome.contextMenus.create({
       browser.windows.create({
         url: 'index.html?reply=true',
         width: 450,
-        height: 510,
+        height: 580,
         type: 'panel',
         left: 2000,
       });

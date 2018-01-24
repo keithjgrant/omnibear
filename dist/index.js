@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 29);
+/******/ 	return __webpack_require__(__webpack_require__.s = 31);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -567,6 +567,25 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var NEW_NOTE = exports.NEW_NOTE = 'new-note';
+var PAGE_REPLY = exports.PAGE_REPLY = 'page-reply';
+var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';
+
+var MESSAGE_SUCCESS = exports.MESSAGE_SUCCESS = 'success';
+var MESSAGE_ERROR = exports.MESSAGE_ERROR = 'error';
+
+var DEFAULT_REACJI = exports.DEFAULT_REACJI = ['👍', '👎', '🎉', '😆', '😢', '😠'];
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.openLink = openLink;
 exports.clone = clone;
 exports.getAuthTab = getAuthTab;
@@ -617,25 +636,6 @@ function generateSlug(content) {
   var parts = formatted.split('-');
   return parts.splice(0, 6).join('-');
 }
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var NEW_NOTE = exports.NEW_NOTE = 'new-note';
-var PAGE_REPLY = exports.PAGE_REPLY = 'page-reply';
-var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';
-
-var MESSAGE_SUCCESS = exports.MESSAGE_SUCCESS = 'success';
-var MESSAGE_ERROR = exports.MESSAGE_ERROR = 'error';
-
-var DEFAULT_REACJI = exports.DEFAULT_REACJI = ['👍', '👎', '🎉', '😆', '😢', '😠'];
 
 /***/ }),
 /* 3 */
@@ -914,7 +914,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _constants = __webpack_require__(2);
+var _constants = __webpack_require__(1);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -1568,7 +1568,7 @@ class Micropub {
     return {
       pass: pass,
       missing: missing,
-    }
+    };
   }
 
   /**
@@ -1587,7 +1587,7 @@ class Micropub {
       let baseUrl = url;
       // Fetch the given url
       fetch(url)
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
             return reject(micropubError('Error getting page', res.status));
           }
@@ -1597,9 +1597,9 @@ class Micropub {
           const linkHeaders = res.headers.get('link');
           if (linkHeaders) {
             const links = linkHeaders.split(',');
-            links.forEach((link) => {
-              Object.keys(endpoints).forEach((key) => {
-                const rel = link.match(/rel=("([^"]*)"|([^,"<]+))/)
+            links.forEach(link => {
+              Object.keys(endpoints).forEach(key => {
+                const rel = link.match(/rel=("([^"]*)"|([^,"<]+))/);
                 if (rel && rel[1] && rel[1].indexOf(key) >= 0) {
                   const linkValues = link.match(/[^<>|\s]+/g);
                   if (linkValues && linkValues[0]) {
@@ -1610,23 +1610,27 @@ class Micropub {
             });
           }
 
-          return res.text()
+          return res.text();
         })
-        .then((html) => {
+        .then(html => {
           // Get rel links
           const rels = relScraper(html, baseUrl);
 
           // Save necessary endpoints.
           this.options.me = url;
           if (rels) {
-            Object.keys(endpoints).forEach((key) => {
+            Object.keys(endpoints).forEach(key => {
               if (rels[key] && rels[key][0]) {
                 endpoints[key] = rels[key][0];
               }
             });
           }
 
-          if (endpoints.micropub && endpoints.authorization_endpoint && endpoints.token_endpoint) {
+          if (
+            endpoints.micropub &&
+            endpoints.authorization_endpoint &&
+            endpoints.token_endpoint
+          ) {
             this.options.micropubEndpoint = endpoints.micropub;
             this.options.tokenEndpoint = endpoints.token_endpoint;
             this.options.authEndpoint = endpoints.authorization_endpoint;
@@ -1639,15 +1643,26 @@ class Micropub {
 
           return reject(micropubError('Error getting microformats data'));
         })
-        .catch((err) => reject(micropubError('Error fetching url', null, err)));
+        .catch(err => reject(micropubError('Error fetching url', null, err)));
     });
   }
 
   getToken(code) {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['me', 'state', 'scope', 'clientId', 'redirectUri', 'tokenEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'me',
+        'state',
+        'scope',
+        'clientId',
+        'redirectUri',
+        'tokenEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
       const data = {
@@ -1666,24 +1681,24 @@ class Micropub {
         body: qsStringify(data),
         headers: new Headers({
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          'Accept': 'application/json, application/x-www-form-urlencoded',
+          Accept: 'application/json, application/x-www-form-urlencoded',
         }),
         // mode: 'cors',
       };
       // This could maybe use the postMicropub method
       fetch(this.options.tokenEndpoint, request)
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
             return reject(micropubError('Error getting token', res.status));
           }
           const contentType = res.headers.get('Content-Type');
           if (contentType && contentType.indexOf('application/json') === 0) {
-            return res.json()
+            return res.json();
           } else {
             return res.text();
           }
         })
-        .then((result) => {
+        .then(result => {
           // Parse the response from the indieauth server
           if (typeof result === 'string') {
             result = qsParse(result);
@@ -1694,10 +1709,18 @@ class Micropub {
             return reject(micropubError(result.error));
           }
           if (!result.me || !result.scope || !result.access_token) {
-            return reject(micropubError('The token endpoint did not return the expected parameters'));
+            return reject(
+              micropubError(
+                'The token endpoint did not return the expected parameters'
+              )
+            );
           }
           // Check me is the same (removing any trailing slashes)
-          if (result.me && result.me.replace(/\/+$/, '') !== this.options.me.replace(/\/+$/, '')) {
+          if (
+            result.me &&
+            result.me.replace(/\/+$/, '') !==
+              this.options.me.replace(/\/+$/, '')
+          ) {
             return reject(micropubError('The me values did not match'));
           }
           // Check scope matches (not reliable)
@@ -1710,7 +1733,9 @@ class Micropub {
           this.options.token = result.access_token;
           fulfill(result.access_token);
         })
-        .catch((err) => reject(micropubError('Error requesting token endpoint', null, err)));
+        .catch(err =>
+          reject(micropubError('Error requesting token endpoint', null, err))
+        );
     });
   }
 
@@ -1722,13 +1747,27 @@ class Micropub {
     return new Promise((fulfill, reject) => {
       let requirements = this.checkRequiredOptions(['me', 'state']);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
       this.getEndpointsFromUrl(this.options.me)
         .then(() => {
-          let requirements = this.checkRequiredOptions(['me', 'state', 'scope', 'clientId', 'redirectUri']);
+          let requirements = this.checkRequiredOptions([
+            'me',
+            'state',
+            'scope',
+            'clientId',
+            'redirectUri',
+          ]);
           if (!requirements.pass) {
-            return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+            return reject(
+              micropubError(
+                'Missing required options: ' + requirements.missing.join(', ')
+              )
+            );
           }
           const authParams = {
             me: this.options.me,
@@ -1741,33 +1780,44 @@ class Micropub {
 
           fulfill(this.options.authEndpoint + '?' + qsStringify(authParams));
         })
-        .catch((err) => reject(micropubError('Error getting auth url', null, err)));
+        .catch(err =>
+          reject(micropubError('Error getting auth url', null, err))
+        );
     });
   }
 
   verifyToken() {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'token',
+        'micropubEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
       const request = {
         method: 'GET',
         headers: new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
         }),
       };
 
       fetch(this.options.micropubEndpoint, request)
-        .then((res) => {
+        .then(res => {
           if (res.ok) {
             return fulfill(true);
           } else {
             return reject(micropubError('Error verifying token', res.status));
           }
         })
-        .catch((err) => reject(micropubError('Error verifying token', null, err)));
+        .catch(err =>
+          reject(micropubError('Error verifying token', null, err))
+        );
     });
   }
 
@@ -1776,31 +1826,43 @@ class Micropub {
   }
 
   update(url, update) {
-    return this.postMicropub(Object.assign({
-      action: 'update',
-      url: url,
-    }, update));
+    return this.postMicropub(
+      Object.assign(
+        {
+          action: 'update',
+          url: url,
+        },
+        update
+      )
+    );
   }
 
   delete(url) {
     return this.postMicropub({
       action: 'delete',
       url: url,
-    })
+    });
   }
 
   undelete(url) {
     return this.postMicropub({
       action: 'undelete',
       url: url,
-    })
+    });
   }
 
   postMicropub(object, type = 'json') {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'token',
+        'micropubEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
       let request = {
@@ -1810,43 +1872,46 @@ class Micropub {
       if (type == 'json') {
         request.body = JSON.stringify(object);
         request.headers = new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': 'application/json',
-          'Accept': 'application/json, application/x-www-form-urlencoded',
+          Accept: 'application/json, application/x-www-form-urlencoded',
         });
       } else if (type == 'form') {
         request.body = qsStringify(object);
         request.headers = new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          'Accept': 'application/json, application/x-www-form-urlencoded',
+          Accept: 'application/json, application/x-www-form-urlencoded',
         });
       } else if (type == 'multipart') {
         request.body = objectToFormData(object);
         request.headers = new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': undefined,
-          'Accept': 'application/json, application/x-www-form-urlencoded',
+          Accept: 'application/json, application/x-www-form-urlencoded',
         });
       }
 
       fetch(this.options.micropubEndpoint, request)
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
-            return reject(micropubError('Error with micropub request', res.status));
+            return reject(
+              micropubError('Error with micropub request', res.status)
+            );
           }
-          const location = res.headers.get('Location') || res.headers.get('location');
+          const location =
+            res.headers.get('Location') || res.headers.get('location');
           if (location) {
             return fulfill(location);
           }
           const contentType = res.headers.get('Content-Type');
           if (contentType && contentType.indexOf('application/json') === 0) {
-            return res.json()
+            return res.json();
           } else {
             return res.text();
           }
         })
-        .then((result) => {
+        .then(result => {
           if (typeof result === 'string') {
             result = qsParse(result);
           }
@@ -1858,48 +1923,70 @@ class Micropub {
             return fulfill(result);
           }
         })
-        .catch((err) => reject(micropubError('Error sending request', null, err)));
+        .catch(err =>
+          reject(micropubError('Error sending request', null, err))
+        );
     });
   }
 
   postMedia(file) {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['token', 'mediaEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'token',
+        'mediaEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
       let request = {
         method: 'POST',
         body: objectToFormData({file: file}),
         headers: new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': undefined,
-          'Accept': '*/*',
+          Accept: '*/*',
         }),
       };
 
       fetch(this.options.mediaEndpoint, request)
-        .then((res) => {
+        .then(res => {
           if (res.status !== 201) {
             return reject(micropubError('Error creating media', res.status));
           }
-          const location = res.headers.get('Location') || res.headers.get('location');
+          const location =
+            res.headers.get('Location') || res.headers.get('location');
           if (location) {
             return fulfill(location);
           } else {
-            return reject(micropubError('Media endpoint did not return a location', res.status));
+            return reject(
+              micropubError(
+                'Media endpoint did not return a location',
+                res.status
+              )
+            );
           }
         })
-        .catch((err) => reject(micropubError('Error sending request')));
+        .catch(err => reject(micropubError('Error sending request')));
     });
   }
 
   query(type) {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'token',
+        'micropubEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
       const url = appendQueryString(this.options.micropubEndpoint, {q: type});
@@ -1907,53 +1994,66 @@ class Micropub {
       const request = {
         method: 'GET',
         headers: new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         }),
         // mode: 'cors',
       };
 
       fetch(url, request)
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
             return reject(micropubError('Error getting ' + type, res.status));
           }
-          return res.json()
+          return res.json();
         })
-        .then((json) => fulfill(json))
-        .catch((err) => reject(micropubError('Error getting ' + type, null, err)));
+        .then(json => fulfill(json))
+        .catch(err =>
+          reject(micropubError('Error getting ' + type, null, err))
+        );
     });
   }
 
   querySource(url, properties = []) {
     return new Promise((fulfill, reject) => {
-      const requirements = this.checkRequiredOptions(['token', 'micropubEndpoint']);
+      const requirements = this.checkRequiredOptions([
+        'token',
+        'micropubEndpoint',
+      ]);
       if (!requirements.pass) {
-        return reject(micropubError('Missing required options: ' + requirements.missing.join(', ')));
+        return reject(
+          micropubError(
+            'Missing required options: ' + requirements.missing.join(', ')
+          )
+        );
       }
 
-      url = appendQueryString(this.options.micropubEndpoint, {q: 'source', url: url, properties: properties});
+      url = appendQueryString(this.options.micropubEndpoint, {
+        q: 'source',
+        url: url,
+        properties: properties,
+      });
 
       const request = {
         method: 'GET',
         headers: new Headers({
-          'Authorization': 'Bearer ' + this.options.token,
+          Authorization: 'Bearer ' + this.options.token,
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         }),
         // mode: 'cors',
       };
 
       fetch(url, request)
-        .then((res) => {
+        .then(res => {
           if (!res.ok) {
             return reject(micropubError('Error getting source', res.status));
           }
-          return res.json()
+          return res.json();
         })
-        .then((json) => fulfill(json))
-        .catch((err) => reject(micropubError('Error getting source', null, err)));
+        .then(json => fulfill(json))
+        .catch(err => reject(micropubError('Error getting source', null, err)));
     });
   }
 }
@@ -2077,11 +2177,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _LoginForm = __webpack_require__(24);
+var _LoginForm = __webpack_require__(23);
 
 var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
-var _NoteForm = __webpack_require__(25);
+var _NoteForm = __webpack_require__(24);
 
 var _NoteForm2 = _interopRequireDefault(_NoteForm);
 
@@ -2093,7 +2193,7 @@ var _SettingsForm = __webpack_require__(28);
 
 var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
 
-var _utils = __webpack_require__(1);
+var _utils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2200,7 +2300,7 @@ var _Tab = __webpack_require__(26);
 
 var _Tab2 = _interopRequireDefault(_Tab);
 
-var _constants = __webpack_require__(2);
+var _constants = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2298,9 +2398,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _utils = __webpack_require__(1);
+var _utils = __webpack_require__(2);
 
-var _constants = __webpack_require__(2);
+var _constants = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2324,7 +2424,6 @@ var FormInputs = function (_Component) {
       var slug = e.target.value.trim();
       var entry = (0, _utils.clone)(_this.props.entry);
       entry['mp-slug'] = slug;
-      console.log(slug);
       _this.props.updateEntry(entry);
       _this.setState({
         isSlugEdited: slug !== ''
@@ -2344,6 +2443,17 @@ var FormInputs = function (_Component) {
     _this.onSubmit = function (e) {
       e.preventDefault();
       _this.props.onSubmit(_this.props.entry);
+      _this.deleteDraft();
+    };
+
+    _this.saveDraft = function () {
+      var entry = _this.props.entry;
+
+      localStorage.setItem('draft', JSON.stringify({
+        content: entry.content,
+        category: entry.category,
+        'mp-slug': entry['mp-slug']
+      }));
     };
 
     _this.state = {
@@ -2356,6 +2466,11 @@ var FormInputs = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       setTimeout(this.focus, 150);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.saveDraft();
     }
   }, {
     key: 'render',
@@ -2460,6 +2575,11 @@ var FormInputs = function (_Component) {
       }
       return false;
     }
+  }, {
+    key: 'deleteDraft',
+    value: function deleteDraft() {
+      localStorage.removeItem('draft');
+    }
   }]);
 
   return FormInputs;
@@ -2468,8 +2588,7 @@ var FormInputs = function (_Component) {
 exports.default = FormInputs;
 
 /***/ }),
-/* 23 */,
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2491,7 +2610,7 @@ var _Footer = __webpack_require__(16);
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
-var _utils = __webpack_require__(1);
+var _utils = __webpack_require__(2);
 
 var _micropub = __webpack_require__(5);
 
@@ -2543,6 +2662,7 @@ var LoginForm = function (_Component) {
           }
         });
       }).catch(function (err) {
+        console.log(err.message);
         return _this.setState({
           hasErrors: true,
           errorMessage: 'Missing micropub data on ' + _this.state.domain + '. Please ensure the following links are present: authorization_endpoint, token_endpoint, micropub',
@@ -2605,7 +2725,7 @@ var LoginForm = function (_Component) {
               {
                 type: 'submit',
                 disabled: this.state.isLoading,
-                className: this.state.isLoading ? 'is-loading' : ''
+                className: this.state.isLoading ? 'button is-loading' : 'button'
               },
               'Sign in'
             )
@@ -2641,7 +2761,7 @@ var LoginForm = function (_Component) {
 exports.default = LoginForm;
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2655,7 +2775,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _QuickActions = __webpack_require__(34);
+var _QuickActions = __webpack_require__(25);
 
 var _QuickActions2 = _interopRequireDefault(_QuickActions);
 
@@ -2679,7 +2799,7 @@ var _micropub = __webpack_require__(5);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
-var _constants = __webpack_require__(2);
+var _constants = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2714,15 +2834,16 @@ var NoteForm = function (_Component) {
         entryUrl = localStorage.getItem('pageUrl');
       }
     }
+    var draft = JSON.parse(localStorage.getItem('draft')) || {};
     _this.state = {
       postType: postType,
       url: entryUrl,
       userDomain: localStorage.getItem('domain'),
       entry: {
         h: 'entry',
-        content: '',
-        category: [],
-        'mp-slug': ''
+        content: draft.content || '',
+        category: draft.category || [],
+        'mp-slug': draft['mp-slug'] || ''
       },
       hasSelectedEntry: !!selectedEntry,
       isDisabled: false,
@@ -2929,6 +3050,145 @@ var _initialiseProps = function _initialiseProps() {
 exports.default = NoteForm;
 
 /***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+var _constants = __webpack_require__(1);
+
+var _HeartSvg = __webpack_require__(29);
+
+var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
+
+var _RepostSvg = __webpack_require__(30);
+
+var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var QuickActions = function (_Component) {
+  _inherits(QuickActions, _Component);
+
+  function QuickActions() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, QuickActions);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = QuickActions.__proto__ || Object.getPrototypeOf(QuickActions)).call.apply(_ref, [this].concat(args))), _this), _this.renderReacji = function (content, i) {
+      return (0, _preact.h)(
+        'li',
+        { key: content },
+        (0, _preact.h)(
+          'button',
+          {
+            onClick: function onClick() {
+              return _this.props.onReacji(content);
+            },
+            disabled: _this.props.isDisabled
+          },
+          content
+        )
+      );
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(QuickActions, [{
+    key: 'render',
+    value: function render() {
+      if (this.props.postType === _constants.NEW_NOTE || !this.props.url) {
+        return null;
+      }
+      return (0, _preact.h)(
+        'div',
+        null,
+        (0, _preact.h)(
+          'div',
+          { className: 'info-banner' },
+          this.props.url
+        ),
+        (0, _preact.h)(
+          'div',
+          { className: 'container' },
+          (0, _preact.h)(
+            'h2',
+            { className: 'minor-heading' },
+            'Quick Actions'
+          ),
+          this.renderQuickActions()
+        )
+      );
+    }
+  }, {
+    key: 'renderQuickActions',
+    value: function renderQuickActions() {
+      var settings = this.props.settings;
+
+      var reacji = void 0;
+      if (settings && settings.reacji) {
+        reacji = settings.reacji;
+      } else {
+        reacji = _constants.DEFAULT_REACJI;
+      }
+
+      return (0, _preact.h)(
+        'ul',
+        { className: 'quick-actions' },
+        (0, _preact.h)(
+          'li',
+          null,
+          (0, _preact.h)(
+            'button',
+            {
+              onClick: this.props.onRepost,
+              disabled: this.props.isDisabled
+            },
+            (0, _preact.h)(_RepostSvg2.default, null),
+            ' repost'
+          )
+        ),
+        (0, _preact.h)(
+          'li',
+          null,
+          (0, _preact.h)(
+            'button',
+            { onClick: this.props.onLike, disabled: this.props.isDisabled },
+            (0, _preact.h)(_HeartSvg2.default, null),
+            ' like'
+          )
+        ),
+        reacji.map(this.renderReacji)
+      );
+    }
+  }]);
+
+  return QuickActions;
+}(_preact.Component);
+
+exports.default = QuickActions;
+
+/***/ }),
 /* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3129,7 +3389,7 @@ var _ReacjiSettings = __webpack_require__(27);
 
 var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
 
-var _constants = __webpack_require__(2);
+var _constants = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3414,168 +3674,6 @@ exports.default = SettingsForm;
 "use strict";
 
 
-var _preact = __webpack_require__(0);
-
-var _App = __webpack_require__(17);
-
-var _App2 = _interopRequireDefault(_App);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-document.addEventListener('DOMContentLoaded', function () {
-  (0, _preact.render)((0, _preact.h)(_App2.default, null), document.body);
-});
-
-/***/ }),
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(0);
-
-var _constants = __webpack_require__(2);
-
-var _HeartSvg = __webpack_require__(35);
-
-var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
-
-var _RepostSvg = __webpack_require__(36);
-
-var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var QuickActions = function (_Component) {
-  _inherits(QuickActions, _Component);
-
-  function QuickActions() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, QuickActions);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = QuickActions.__proto__ || Object.getPrototypeOf(QuickActions)).call.apply(_ref, [this].concat(args))), _this), _this.renderReacji = function (content, i) {
-      return (0, _preact.h)(
-        'li',
-        { key: content },
-        (0, _preact.h)(
-          'button',
-          {
-            onClick: function onClick() {
-              return _this.props.onReacji(content);
-            },
-            disabled: _this.props.isDisabled
-          },
-          content
-        )
-      );
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
-
-  _createClass(QuickActions, [{
-    key: 'render',
-    value: function render() {
-      if (this.props.postType === _constants.NEW_NOTE || !this.props.url) {
-        return null;
-      }
-      return (0, _preact.h)(
-        'div',
-        null,
-        (0, _preact.h)(
-          'div',
-          { className: 'info-banner' },
-          this.props.url
-        ),
-        (0, _preact.h)(
-          'div',
-          { className: 'container' },
-          (0, _preact.h)(
-            'h2',
-            { className: 'minor-heading' },
-            'Quick Actions'
-          ),
-          this.renderQuickActions()
-        )
-      );
-    }
-  }, {
-    key: 'renderQuickActions',
-    value: function renderQuickActions() {
-      var settings = this.props.settings;
-
-      var reacji = void 0;
-      if (settings && settings.reacji) {
-        reacji = settings.reacji;
-      } else {
-        reacji = _constants.DEFAULT_REACJI;
-      }
-
-      return (0, _preact.h)(
-        'ul',
-        { className: 'quick-actions' },
-        (0, _preact.h)(
-          'li',
-          null,
-          (0, _preact.h)(
-            'button',
-            {
-              onClick: this.props.onRepost,
-              disabled: this.props.isDisabled
-            },
-            (0, _preact.h)(_RepostSvg2.default, null),
-            ' repost'
-          )
-        ),
-        (0, _preact.h)(
-          'li',
-          null,
-          (0, _preact.h)(
-            'button',
-            { onClick: this.props.onLike, disabled: this.props.isDisabled },
-            (0, _preact.h)(_HeartSvg2.default, null),
-            ' like'
-          )
-        ),
-        reacji.map(this.renderReacji)
-      );
-    }
-  }]);
-
-  return QuickActions;
-}(_preact.Component);
-
-exports.default = QuickActions;
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -3626,7 +3724,7 @@ var HeartSVG = function (_Component) {
 exports.default = HeartSVG;
 
 /***/ }),
-/* 36 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3660,12 +3758,12 @@ var RepostSvg = function (_Component) {
     value: function render() {
       return (0, _preact.h)(
         "svg",
-        { className: "svg-repost", viewBox: "395 52 390 210" },
+        { className: "svg-repost", viewBox: "390 45 396 225" },
         (0, _preact.h)("path", {
           d: " M 570 220 L 490 220 L 490 160 L 520 160 C 530.71 160 540 151.53 540 140 C 540 132.5 536.09 127.66 530 120 L 490 71.88 C 483.90999999999997 64.69 478.13 60 470 60 C 461.87 60 456.09000000000003 64.69 450 71.88 L 410 120 C 403.91 127.66 400 132.5 400 140 C 400 151.53 409.29 160 420 160 L 450 160 L 450 240 C 450 251.04 458.96 260 470 260 L 570 260 C 581.04 260 590 251.04 590 240 C 590 228.96 581.04 220 570 220 Z  M 760 160 L 730 160 L 730 80 C 730 68.96 721.04 60 710 60 L 610 60 C 598.96 60 590 68.96 590 80 C 590 91.03999999999999 598.96 100 610 100 L 690 100 L 690 160 L 660 160 C 649.29 160 640 168.47000000000003 640 180 C 640 187.5 643.91 192.34000000000003 650 200 L 690 248.13 C 696.09 255.31 701.88 260 710 260 C 718.12 260 723.91 255.31 730 248.12 L 770 200 C 776.09 192.34000000000003 780 187.5 780 180 C 780 168.47000000000003 770.71 160 760 160 Z ",
           fill: "transparent",
           stroke: "var(--green)",
-          "stroke-width": "15"
+          "stroke-width": "20"
         })
       );
     }
@@ -3675,6 +3773,25 @@ var RepostSvg = function (_Component) {
 }(_preact.Component);
 
 exports.default = RepostSvg;
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _preact = __webpack_require__(0);
+
+var _App = __webpack_require__(17);
+
+var _App2 = _interopRequireDefault(_App);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+document.addEventListener('DOMContentLoaded', function () {
+  (0, _preact.render)((0, _preact.h)(_App2.default, null), document.body);
+});
 
 /***/ })
 /******/ ]);

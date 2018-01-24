@@ -1,9 +1,8 @@
-
 export function getAncestorNodeByClass(element, className) {
   if (!Array.isArray(className)) {
     className = [className];
   }
-  return getAncestorNode(element, (el) => {
+  return getAncestorNode(element, el => {
     for (let cn of className) {
       if (el.classList.contains(cn)) {
         return true;
@@ -14,7 +13,7 @@ export function getAncestorNodeByClass(element, className) {
 }
 
 export function getAncestorNode(el, filter) {
-  while(!filter(el) && el.tagName != 'BODY') {
+  while (!filter(el) && el.tagName != 'BODY') {
     el = el.parentElement;
   }
   if (!filter(el)) {
