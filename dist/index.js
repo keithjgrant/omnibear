@@ -2822,7 +2822,9 @@ var NoteForm = function (_Component) {
     var entryUrl = null;
     var postType = void 0;
     var selectedEntry = localStorage.getItem('selectedEntry');
-    var settings = JSON.parse(localStorage.getItem('settings')) || {};
+    var settings = JSON.parse(localStorage.getItem('settings')) || {
+      closeAfterPosting: true
+    };
     if (location.search.indexOf('reply=true') === -1 && !settings.defaultToCurrentPage) {
       postType = _constants.NEW_NOTE;
     } else {
@@ -2922,9 +2924,11 @@ var NoteForm = function (_Component) {
     key: 'flashSuccessMessage',
     value: function flashSuccessMessage(message, location) {
       this.props.userFeedback(message, _constants.MESSAGE_SUCCESS, location);
-      setTimeout(function () {
-        window.close();
-      }, 3000);
+      if (this.state.settings.closeAfterPosting) {
+        setTimeout(function () {
+          window.close();
+        }, 3000);
+      }
     }
   }, {
     key: 'flashErrorMessage',
@@ -3025,7 +3029,12 @@ var _initialiseProps = function _initialiseProps() {
       var type = _this4.state.postType === _constants.NEW_NOTE ? 'Note' : 'Reply';
       _this4.flashSuccessMessage(type + ' posted successfully', location);
     }).catch(function (err) {
-      _this4.flashErrorMessage('Error posting Note');
+      console.error(err);
+      if (err.status >= 400 && err.status < 500) {
+        _this4.flashErrorMessage('Error contacting micropub endpoint. Try logging out and back in.');
+      } else {
+        _this4.flashErrorMessage('Error posting Note');
+      }
     });
   };
 
@@ -3419,18 +3428,20 @@ var SettingsForm = function (_Component) {
       e.preventDefault();
       var _this$state = _this.state,
           defaultToCurrentPage = _this$state.defaultToCurrentPage,
+          autoSlug = _this$state.autoSlug,
+          closeAfterPosting = _this$state.closeAfterPosting,
           reacji = _this$state.reacji,
           slug = _this$state.slug,
-          autoSlug = _this$state.autoSlug,
           me = _this$state.me,
           token = _this$state.token,
           micropubEndpoint = _this$state.micropubEndpoint;
 
       localStorage.setItem('settings', JSON.stringify({
         defaultToCurrentPage: defaultToCurrentPage,
+        autoSlug: autoSlug,
+        closeAfterPosting: closeAfterPosting,
         reacji: reacji,
-        slug: slug,
-        autoSlug: autoSlug
+        slug: slug
       }));
       if (me) {
         localStorage.setItem('domain', me);
@@ -3448,9 +3459,10 @@ var SettingsForm = function (_Component) {
     if (!settings) {
       settings = {
         defaultToCurrentPage: false,
+        autoSlug: false,
+        closeAfterPosting: true,
         reacji: _constants.DEFAULT_REACJI,
-        slug: 'mp-slug',
-        autoSlug: false
+        slug: 'mp-slug'
       };
     }
     settings.me = localStorage.getItem('domain');
@@ -3466,9 +3478,10 @@ var SettingsForm = function (_Component) {
     value: function render() {
       var _state = this.state,
           defaultToCurrentPage = _state.defaultToCurrentPage,
+          autoSlug = _state.autoSlug,
+          closeAfterPosting = _state.closeAfterPosting,
           reacji = _state.reacji,
           slug = _state.slug,
-          autoSlug = _state.autoSlug,
           me = _state.me,
           micropubEndpoint = _state.micropubEndpoint,
           token = _state.token,
@@ -3507,6 +3520,16 @@ var SettingsForm = function (_Component) {
                 onChange: this.updateBoolean('autoSlug')
               }),
               'Automatically generate slug from post content'
+            ),
+            (0, _preact.h)(
+              'label',
+              null,
+              (0, _preact.h)('input', {
+                type: 'checkbox',
+                checked: closeAfterPosting,
+                onChange: this.updateBoolean('closeAfterPosting')
+              }),
+              'Close Omnibear window after posting'
             ),
             (0, _preact.h)(_ReacjiSettings2.default, { reacji: reacji, onChange: this.set('reacji') }),
             (0, _preact.h)(

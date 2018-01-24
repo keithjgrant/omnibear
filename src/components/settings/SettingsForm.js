@@ -9,9 +9,10 @@ export default class SettingsForm extends Component {
     if (!settings) {
       settings = {
         defaultToCurrentPage: false,
+        autoSlug: false,
+        closeAfterPosting: true,
         reacji: DEFAULT_REACJI,
         slug: 'mp-slug',
-        autoSlug: false,
       };
     }
     settings.me = localStorage.getItem('domain');
@@ -24,9 +25,10 @@ export default class SettingsForm extends Component {
   render() {
     const {
       defaultToCurrentPage,
+      autoSlug,
+      closeAfterPosting,
       reacji,
       slug,
-      autoSlug,
       me,
       micropubEndpoint,
       token,
@@ -53,6 +55,15 @@ export default class SettingsForm extends Component {
                 onChange={this.updateBoolean('autoSlug')}
               />
               Automatically generate slug from post content
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                checked={closeAfterPosting}
+                onChange={this.updateBoolean('closeAfterPosting')}
+              />
+              Close Omnibear window after posting
             </label>
 
             <ReacjiSettings reacji={reacji} onChange={this.set('reacji')} />
@@ -174,9 +185,10 @@ export default class SettingsForm extends Component {
     e.preventDefault();
     const {
       defaultToCurrentPage,
+      autoSlug,
+      closeAfterPosting,
       reacji,
       slug,
-      autoSlug,
       me,
       token,
       micropubEndpoint,
@@ -185,9 +197,10 @@ export default class SettingsForm extends Component {
       'settings',
       JSON.stringify({
         defaultToCurrentPage,
+        autoSlug,
+        closeAfterPosting,
         reacji,
         slug,
-        autoSlug,
       })
     );
     if (me) {

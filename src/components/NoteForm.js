@@ -19,7 +19,9 @@ export default class NoteForm extends Component {
     let entryUrl = null;
     let postType;
     const selectedEntry = localStorage.getItem('selectedEntry');
-    const settings = JSON.parse(localStorage.getItem('settings')) || {};
+    const settings = JSON.parse(localStorage.getItem('settings')) || {
+      closeAfterPosting: true,
+    };
     if (
       location.search.indexOf('reply=true') === -1 &&
       !settings.defaultToCurrentPage
@@ -167,9 +169,11 @@ export default class NoteForm extends Component {
 
   flashSuccessMessage(message, location) {
     this.props.userFeedback(message, MESSAGE_SUCCESS, location);
-    setTimeout(() => {
-      window.close();
-    }, 3000);
+    if (this.state.settings.closeAfterPosting) {
+      setTimeout(() => {
+        window.close();
+      }, 3000);
+    }
   }
 
   flashErrorMessage(message) {
@@ -195,7 +199,14 @@ export default class NoteForm extends Component {
         this.flashSuccessMessage(`${type} posted successfully`, location);
       })
       .catch(err => {
-        this.flashErrorMessage('Error posting Note');
+        console.error(err);
+        if (err.status >= 400 && err.status < 500) {
+          this.flashErrorMessage(
+            'Error contacting micropub endpoint. Try logging out and back in.'
+          );
+        } else {
+          this.flashErrorMessage('Error posting Note');
+        }
       });
   };
 
