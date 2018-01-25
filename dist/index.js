@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 31);
+/******/ 	return __webpack_require__(__webpack_require__.s = 32);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -586,6 +586,34 @@ var DEFAULT_REACJI = exports.DEFAULT_REACJI = ['👍', '👎', '🎉', '😆', '
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _micropubHelper = __webpack_require__(14);
+
+var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = new _micropubHelper2.default({
+  clientId: 'https://omnibear.com',
+  redirectUri: 'https://omnibear.com/auth/success/',
+  state: 'very-secret-omnibear-state',
+  me: localStorage.getItem('domain'),
+  authEndpoint: localStorage.getItem('authEndpoint'),
+  tokenEndpoint: localStorage.getItem('tokenEndpoint'),
+  micropubEndpoint: localStorage.getItem('micropubEndpoint'),
+  token: localStorage.getItem('token')
+});
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.openLink = openLink;
 exports.clone = clone;
 exports.getAuthTab = getAuthTab;
@@ -638,7 +666,7 @@ function generateSlug(content) {
 }
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -663,7 +691,7 @@ module.exports = {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -872,34 +900,6 @@ exports.isBuffer = function isBuffer(obj) {
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _micropubHelper = __webpack_require__(14);
-
-var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = new _micropubHelper2.default({
-  clientId: 'https://omnibear.com',
-  redirectUri: 'https://omnibear.com/auth/success/',
-  state: 'very-secret-omnibear-state',
-  me: localStorage.getItem('domain'),
-  authEndpoint: localStorage.getItem('authEndpoint'),
-  tokenEndpoint: localStorage.getItem('tokenEndpoint'),
-  micropubEndpoint: localStorage.getItem('micropubEndpoint'),
-  token: localStorage.getItem('token')
-});
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -977,7 +977,7 @@ exports.default = Message;
 
 var stringify = __webpack_require__(9);
 var parse = __webpack_require__(8);
-var formats = __webpack_require__(3);
+var formats = __webpack_require__(4);
 
 module.exports = {
     formats: formats,
@@ -993,7 +993,7 @@ module.exports = {
 "use strict";
 
 
-var utils = __webpack_require__(4);
+var utils = __webpack_require__(5);
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -1174,8 +1174,8 @@ module.exports = function (str, opts) {
 "use strict";
 
 
-var utils = __webpack_require__(4);
-var formats = __webpack_require__(3);
+var utils = __webpack_require__(5);
+var formats = __webpack_require__(4);
 
 var arrayPrefixGenerators = {
     brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
@@ -2172,16 +2172,79 @@ exports.default = Footer;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getSettings = getSettings;
+exports.saveSettings = saveSettings;
+exports.saveAuthenticationDetails = saveAuthenticationDetails;
+
+var _micropub = __webpack_require__(2);
+
+var _micropub2 = _interopRequireDefault(_micropub);
+
+var _constants = __webpack_require__(1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var KEYS = ['defaultToCurrentPage', 'autoSlug', 'closeAfterPosting', 'reacji', 'slug'];
+
+var DEFAULT_SETTINGS = {
+  defaultToCurrentPage: false,
+  autoSlug: false,
+  closeAfterPosting: true,
+  reacji: _constants.DEFAULT_REACJI,
+  slug: 'mp-slug'
+};
+
+function getSettings() {
+  var settings = JSON.parse(localStorage.getItem('settings'));
+  if (settings) {
+    return settings;
+  }
+  return DEFAULT_SETTINGS;
+}
+
+function saveSettings(settings) {
+  var clean = {};
+  KEYS.forEach(function (key) {
+    clean[key] = settings[key];
+  });
+  localStorage.setItem('settings', JSON.stringify(clean));
+}
+
+function saveAuthenticationDetails(domain, token, micropubEndpoint) {
+  if (domain) {
+    localStorage.setItem('domain', domain);
+    _micropub2.default.options.me = domain;
+  }
+  if (token) {
+    localStorage.setItem('token', token);
+    _micropub2.default.options.token = token;
+  }
+  if (micropubEndpoint) {
+    localStorage.setItem('micropubEndpoint', micropubEndpoint);
+    _micropub2.default.options.micropubEndpoint = micropubEndpoint;
+  }
+}
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _preact = __webpack_require__(0);
 
-var _LoginForm = __webpack_require__(23);
+var _LoginForm = __webpack_require__(24);
 
 var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
-var _NoteForm = __webpack_require__(24);
+var _NoteForm = __webpack_require__(25);
 
 var _NoteForm2 = _interopRequireDefault(_NoteForm);
 
@@ -2189,11 +2252,11 @@ var _Message = __webpack_require__(6);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _SettingsForm = __webpack_require__(28);
+var _SettingsForm = __webpack_require__(29);
 
 var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
 
-var _utils = __webpack_require__(2);
+var _utils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2279,10 +2342,10 @@ var App = function (_Component) {
 exports.default = App;
 
 /***/ }),
-/* 18 */,
 /* 19 */,
 /* 20 */,
-/* 21 */
+/* 21 */,
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2296,7 +2359,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _Tab = __webpack_require__(26);
+var _Tab = __webpack_require__(27);
 
 var _Tab2 = _interopRequireDefault(_Tab);
 
@@ -2384,7 +2447,7 @@ var ChangeViewTabs = function (_Component) {
 exports.default = ChangeViewTabs;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2398,7 +2461,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _utils = __webpack_require__(2);
+var _utils = __webpack_require__(3);
 
 var _constants = __webpack_require__(1);
 
@@ -2588,7 +2651,7 @@ var FormInputs = function (_Component) {
 exports.default = FormInputs;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2610,9 +2673,9 @@ var _Footer = __webpack_require__(16);
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
-var _utils = __webpack_require__(2);
+var _utils = __webpack_require__(3);
 
-var _micropub = __webpack_require__(5);
+var _micropub = __webpack_require__(2);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
@@ -2761,7 +2824,7 @@ var LoginForm = function (_Component) {
 exports.default = LoginForm;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2775,7 +2838,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _QuickActions = __webpack_require__(25);
+var _QuickActions = __webpack_require__(26);
 
 var _QuickActions2 = _interopRequireDefault(_QuickActions);
 
@@ -2783,11 +2846,11 @@ var _Message = __webpack_require__(6);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _ChangeViewTabs = __webpack_require__(21);
+var _ChangeViewTabs = __webpack_require__(22);
 
 var _ChangeViewTabs2 = _interopRequireDefault(_ChangeViewTabs);
 
-var _FormInputs = __webpack_require__(22);
+var _FormInputs = __webpack_require__(23);
 
 var _FormInputs2 = _interopRequireDefault(_FormInputs);
 
@@ -2795,11 +2858,13 @@ var _Footer = __webpack_require__(16);
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
-var _micropub = __webpack_require__(5);
+var _micropub = __webpack_require__(2);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
 var _constants = __webpack_require__(1);
+
+var _settings = __webpack_require__(17);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2817,29 +2882,99 @@ var NoteForm = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (NoteForm.__proto__ || Object.getPrototypeOf(NoteForm)).call(this, props));
 
-    _initialiseProps.call(_this);
-
-    var entryUrl = null;
-    var postType = void 0;
-    var selectedEntry = localStorage.getItem('selectedEntry');
-    var settings = JSON.parse(localStorage.getItem('settings')) || {
-      closeAfterPosting: true
-    };
-    if (location.search.indexOf('reply=true') === -1 && !settings.defaultToCurrentPage) {
-      postType = _constants.NEW_NOTE;
-    } else {
-      if (selectedEntry) {
-        postType = _constants.ITEM_REPLY;
-        entryUrl = selectedEntry;
-      } else {
-        postType = _constants.PAGE_REPLY;
-        entryUrl = localStorage.getItem('pageUrl');
+    _this.handleLike = function () {
+      if (!_this.state.url) {
+        return;
       }
-    }
+      _this.postEntry({
+        h: 'entry',
+        'like-of': _this.state.url
+      }).then(function (location) {
+        var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
+        _this.flashSuccessMessage(type + ' liked successfully', location);
+      }).catch(function (err) {
+        console.error(err);
+        _this.flashErrorMessage('Error posting like');
+      });
+    };
+
+    _this.handleRepost = function () {
+      if (!_this.state.url) {
+        return;
+      }
+      _this.postEntry({
+        h: 'entry',
+        'repost-of': _this.state.url
+      }).then(function (location) {
+        var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
+        _this.flashSuccessMessage(type + ' reposted successfully', location);
+      }).catch(function (err) {
+        console.error(err);
+        _this.flashErrorMessage('Error reposting');
+      });
+    };
+
+    _this.handleReacji = function (emoji) {
+      if (!_this.state.url) {
+        return;
+      }
+      _this.postEntry({
+        h: 'entry',
+        content: emoji,
+        'in-reply-to': _this.state.url
+      }).then(function (location) {
+        var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
+        _this.flashSuccessMessage(type + ' reacted to successfully', location);
+      }).catch(function (err) {
+        console.error(err);
+        _this.flashErrorMessage('Error reacting');
+      });
+    };
+
+    _this.updateEntry = function (newEntry) {
+      _this.setState({ entry: newEntry });
+    };
+
+    _this.handleSubmit = function (entry) {
+      if (_this.state.postType !== _constants.NEW_NOTE) {
+        entry['in-reply-to'] = _this.state.url;
+      }
+      _this.postEntry(entry).then(function (location) {
+        var type = _this.state.postType === _constants.NEW_NOTE ? 'Note' : 'Reply';
+        _this.flashSuccessMessage(type + ' posted successfully', location);
+      }).catch(function (err) {
+        console.error(err);
+        if (err.status >= 400 && err.status < 500) {
+          _this.flashErrorMessage('Error authenticating to micropub endpoint. Try logging out and back in.');
+        } else {
+          _this.flashErrorMessage('Error posting Note');
+        }
+      });
+    };
+
+    _this.changeView = function (postType) {
+      var url = void 0;
+      switch (postType) {
+        case _constants.NEW_NOTE:
+          url = null;
+          break;
+        case _constants.PAGE_REPLY:
+          url = localStorage.getItem('pageUrl');
+          break;
+        case _constants.ITEM_REPLY:
+          url = localStorage.getItem('selectedEntry');
+          break;
+      }
+      _this.setState({ url: url, postType: postType });
+      _this.form.focus();
+    };
+
+    var selectedEntry = localStorage.getItem('selectedEntry');
+    var settings = (0, _settings.getSettings)();
     var draft = JSON.parse(localStorage.getItem('draft')) || {};
     _this.state = {
-      postType: postType,
-      url: entryUrl,
+      postType: _this.getPostType(settings),
+      url: _this.getEntryUrl(),
       userDomain: localStorage.getItem('domain'),
       entry: {
         h: 'entry',
@@ -2856,6 +2991,29 @@ var NoteForm = function (_Component) {
   }
 
   _createClass(NoteForm, [{
+    key: 'getPostType',
+    value: function getPostType(settings) {
+      var selectedEntry = localStorage.getItem('selectedEntry');
+      if (location.search.indexOf('reply=true') === -1 && !settings.defaultToCurrentPage) {
+        return _constants.NEW_NOTE;
+      }
+      if (selectedEntry) {
+        return _constants.ITEM_REPLY;
+      } else {
+        return _constants.PAGE_REPLY;
+      }
+    }
+  }, {
+    key: 'getEntryUrl',
+    value: function getEntryUrl() {
+      var selectedEntry = localStorage.getItem('selectedEntry');
+      if (selectedEntry) {
+        return selectedEntry;
+      } else {
+        return localStorage.getItem('pageUrl');
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -2894,7 +3052,6 @@ var NoteForm = function (_Component) {
         (0, _preact.h)(
           'div',
           { className: 'container' },
-          (0, _preact.h)('div', { className: 'text-right' }),
           (0, _preact.h)(_FormInputs2.default, {
             postType: postType,
             entry: entry,
@@ -2965,101 +3122,10 @@ var NoteForm = function (_Component) {
   return NoteForm;
 }(_preact.Component);
 
-var _initialiseProps = function _initialiseProps() {
-  var _this4 = this;
-
-  this.handleLike = function () {
-    if (!_this4.state.url) {
-      return;
-    }
-    _this4.postEntry({
-      h: 'entry',
-      'like-of': _this4.state.url
-    }).then(function (location) {
-      var type = _this4.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
-      _this4.flashSuccessMessage(type + ' liked successfully', location);
-    }).catch(function (err) {
-      console.error(err);
-      _this4.flashErrorMessage('Error posting like');
-    });
-  };
-
-  this.handleRepost = function () {
-    if (!_this4.state.url) {
-      return;
-    }
-    _this4.postEntry({
-      h: 'entry',
-      'repost-of': _this4.state.url
-    }).then(function (location) {
-      var type = _this4.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
-      _this4.flashSuccessMessage(type + ' reposted successfully', location);
-    }).catch(function (err) {
-      console.error(err);
-      _this4.flashErrorMessage('Error reposting');
-    });
-  };
-
-  this.handleReacji = function (emoji) {
-    if (!_this4.state.url) {
-      return;
-    }
-    _this4.postEntry({
-      h: 'entry',
-      content: emoji,
-      'in-reply-to': _this4.state.url
-    }).then(function (location) {
-      var type = _this4.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
-      _this4.flashSuccessMessage(type + ' reacted to successfully', location);
-    }).catch(function (err) {
-      console.error(err);
-      _this4.flashErrorMessage('Error reacting');
-    });
-  };
-
-  this.updateEntry = function (newEntry) {
-    _this4.setState({ entry: newEntry });
-  };
-
-  this.handleSubmit = function (entry) {
-    if (_this4.state.postType !== _constants.NEW_NOTE) {
-      entry['in-reply-to'] = _this4.state.url;
-    }
-    _this4.postEntry(entry).then(function (location) {
-      var type = _this4.state.postType === _constants.NEW_NOTE ? 'Note' : 'Reply';
-      _this4.flashSuccessMessage(type + ' posted successfully', location);
-    }).catch(function (err) {
-      console.error(err);
-      if (err.status >= 400 && err.status < 500) {
-        _this4.flashErrorMessage('Error contacting micropub endpoint. Try logging out and back in.');
-      } else {
-        _this4.flashErrorMessage('Error posting Note');
-      }
-    });
-  };
-
-  this.changeView = function (postType) {
-    var url = void 0;
-    switch (postType) {
-      case _constants.NEW_NOTE:
-        url = null;
-        break;
-      case _constants.PAGE_REPLY:
-        url = localStorage.getItem('pageUrl');
-        break;
-      case _constants.ITEM_REPLY:
-        url = localStorage.getItem('selectedEntry');
-        break;
-    }
-    _this4.setState({ url: url, postType: postType });
-    _this4.form.focus();
-  };
-};
-
 exports.default = NoteForm;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3075,11 +3141,11 @@ var _preact = __webpack_require__(0);
 
 var _constants = __webpack_require__(1);
 
-var _HeartSvg = __webpack_require__(29);
+var _HeartSvg = __webpack_require__(30);
 
 var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
 
-var _RepostSvg = __webpack_require__(30);
+var _RepostSvg = __webpack_require__(31);
 
 var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
 
@@ -3198,7 +3264,7 @@ var QuickActions = function (_Component) {
 exports.default = QuickActions;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3268,7 +3334,7 @@ var Tab = function (_Component) {
 exports.default = Tab;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3380,7 +3446,7 @@ var ReacjiSettings = function (_Component) {
 exports.default = ReacjiSettings;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3394,11 +3460,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _ReacjiSettings = __webpack_require__(27);
+var _ReacjiSettings = __webpack_require__(28);
 
 var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
 
+var _AuthenticationFields = __webpack_require__(37);
+
+var _AuthenticationFields2 = _interopRequireDefault(_AuthenticationFields);
+
 var _constants = __webpack_require__(1);
+
+var _settings = __webpack_require__(17);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3418,10 +3490,10 @@ var SettingsForm = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (SettingsForm.__proto__ || Object.getPrototypeOf(SettingsForm)).call(this, props));
 
-    _this.showAuthenticationDetails = function () {
-      _this.setState({
-        showAuthenticationDetails: true
-      });
+    _this.set = function (fieldName) {
+      return function (value) {
+        _this.setState(_defineProperty({}, fieldName, value));
+      };
     };
 
     _this.save = function (e) {
@@ -3436,35 +3508,18 @@ var SettingsForm = function (_Component) {
           token = _this$state.token,
           micropubEndpoint = _this$state.micropubEndpoint;
 
-      localStorage.setItem('settings', JSON.stringify({
+      (0, _settings.saveSettings)({
         defaultToCurrentPage: defaultToCurrentPage,
         autoSlug: autoSlug,
         closeAfterPosting: closeAfterPosting,
         reacji: reacji,
         slug: slug
-      }));
-      if (me) {
-        localStorage.setItem('domain', me);
-      }
-      if (token) {
-        localStorage.setItem('token', token);
-      }
-      if (micropubEndpoint) {
-        localStorage.setItem('micropubEndpoint', micropubEndpoint);
-      }
+      });
+      (0, _settings.saveAuthenticationDetails)(me, token, micropubEndpoint);
       _this.props.onClose();
     };
 
-    var settings = JSON.parse(localStorage.getItem('settings'));
-    if (!settings) {
-      settings = {
-        defaultToCurrentPage: false,
-        autoSlug: false,
-        closeAfterPosting: true,
-        reacji: _constants.DEFAULT_REACJI,
-        slug: 'mp-slug'
-      };
-    }
+    var settings = (0, _settings.getSettings)();
     settings.me = localStorage.getItem('domain');
     settings.micropubEndpoint = localStorage.getItem('micropubEndpoint');
     settings.token = localStorage.getItem('token');
@@ -3564,76 +3619,12 @@ var SettingsForm = function (_Component) {
                 ' property.'
               )
             ),
-            (0, _preact.h)(
-              'fieldset',
-              null,
-              (0, _preact.h)(
-                'legend',
-                null,
-                'Authentication details (advanced)'
-              ),
-              (0, _preact.h)(
-                'div',
-                { 'class': 'settings-form__description' },
-                'These values are set automatically upon logging in. Only edit them if you are having trouble authenticating and wish to do so manually.'
-              ),
-              showAuthenticationDetails ? [(0, _preact.h)(
-                'div',
-                null,
-                (0, _preact.h)(
-                  'label',
-                  { htmlFor: 'me' },
-                  'Me (domain name)'
-                ),
-                (0, _preact.h)('input', {
-                  id: 'me',
-                  type: 'text',
-                  value: me,
-                  onChange: this.update('me'),
-                  placeholder: 'https://example.com'
-                })
-              ), (0, _preact.h)(
-                'div',
-                null,
-                (0, _preact.h)(
-                  'label',
-                  { htmlFor: 'mp-endpoint' },
-                  'Micropub endpoint'
-                ),
-                (0, _preact.h)('input', {
-                  id: 'mp-endpoint',
-                  type: 'text',
-                  value: micropubEndpoint,
-                  onChange: this.update('micropubEndpoint'),
-                  placeholder: 'https://example.com/micropub'
-                })
-              ), (0, _preact.h)(
-                'div',
-                null,
-                (0, _preact.h)(
-                  'label',
-                  { htmlFor: 'token' },
-                  'Token'
-                ),
-                (0, _preact.h)('input', {
-                  id: 'token',
-                  type: 'text',
-                  value: token,
-                  onChange: this.update('token')
-                })
-              )] : (0, _preact.h)(
-                'div',
-                { 'class': 'text-right' },
-                (0, _preact.h)(
-                  'button',
-                  {
-                    type: 'button',
-                    onClick: this.showAuthenticationDetails
-                  },
-                  'Show'
-                )
-              )
-            ),
+            (0, _preact.h)(_AuthenticationFields2.default, {
+              me: me,
+              micropubEndpoint: micropubEndpoint,
+              token: token,
+              onChange: this.set
+            }),
             (0, _preact.h)(
               'div',
               { 'class': 'form-buttons' },
@@ -3666,21 +3657,12 @@ var SettingsForm = function (_Component) {
       };
     }
   }, {
-    key: 'set',
-    value: function set(fieldName) {
-      var _this3 = this;
-
-      return function (value) {
-        _this3.setState(_defineProperty({}, fieldName, value));
-      };
-    }
-  }, {
     key: 'updateBoolean',
     value: function updateBoolean(fieldName) {
-      var _this4 = this;
+      var _this3 = this;
 
       return function (e) {
-        _this4.setState(_defineProperty({}, fieldName, e.target.checked));
+        _this3.setState(_defineProperty({}, fieldName, e.target.checked));
       };
     }
   }]);
@@ -3691,7 +3673,7 @@ var SettingsForm = function (_Component) {
 exports.default = SettingsForm;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3747,7 +3729,7 @@ var HeartSVG = function (_Component) {
 exports.default = HeartSVG;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3798,7 +3780,7 @@ var RepostSvg = function (_Component) {
 exports.default = RepostSvg;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3806,7 +3788,7 @@ exports.default = RepostSvg;
 
 var _preact = __webpack_require__(0);
 
-var _App = __webpack_require__(17);
+var _App = __webpack_require__(18);
 
 var _App2 = _interopRequireDefault(_App);
 
@@ -3815,6 +3797,138 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener('DOMContentLoaded', function () {
   (0, _preact.render)((0, _preact.h)(_App2.default, null), document.body);
 });
+
+/***/ }),
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AuthenticationFields = function (_Component) {
+  _inherits(AuthenticationFields, _Component);
+
+  function AuthenticationFields(props) {
+    _classCallCheck(this, AuthenticationFields);
+
+    var _this = _possibleConstructorReturn(this, (AuthenticationFields.__proto__ || Object.getPrototypeOf(AuthenticationFields)).call(this, props));
+
+    _this.showAuthenticationDetails = function () {
+      _this.setState({
+        showFields: true
+      });
+    };
+
+    _this.state = {
+      showFields: false
+    };
+    return _this;
+  }
+
+  _createClass(AuthenticationFields, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "fieldset",
+        null,
+        (0, _preact.h)(
+          "legend",
+          null,
+          "Authentication details (advanced)"
+        ),
+        (0, _preact.h)(
+          "div",
+          { "class": "settings-form__description" },
+          "These values are set automatically upon logging in. Only edit them if you are having trouble authenticating and wish to do so manually."
+        ),
+        this.state.showFields ? [(0, _preact.h)(
+          "div",
+          null,
+          (0, _preact.h)(
+            "label",
+            { htmlFor: "me" },
+            "Me (domain name)"
+          ),
+          (0, _preact.h)("input", {
+            id: "me",
+            type: "text",
+            value: this.props.me,
+            onChange: this.update('me'),
+            placeholder: "https://example.com"
+          })
+        ), (0, _preact.h)(
+          "div",
+          null,
+          (0, _preact.h)(
+            "label",
+            { htmlFor: "mp-endpoint" },
+            "Micropub endpoint"
+          ),
+          (0, _preact.h)("input", {
+            id: "mp-endpoint",
+            type: "text",
+            value: this.props.micropubEndpoint,
+            onChange: this.update('micropubEndpoint'),
+            placeholder: "https://example.com/micropub"
+          })
+        ), (0, _preact.h)(
+          "div",
+          null,
+          (0, _preact.h)(
+            "label",
+            { htmlFor: "token" },
+            "Token"
+          ),
+          (0, _preact.h)("input", {
+            id: "token",
+            type: "text",
+            value: this.props.token,
+            onChange: this.update('token')
+          })
+        )] : (0, _preact.h)(
+          "div",
+          { "class": "text-right" },
+          (0, _preact.h)(
+            "button",
+            { type: "button", onClick: this.showAuthenticationDetails },
+            "Show"
+          )
+        )
+      );
+    }
+  }, {
+    key: "update",
+    value: function update(fieldName) {
+      var _this2 = this;
+
+      return function (e) {
+        _this2.props.onChange(fieldName)(e.target.value);
+      };
+    }
+  }]);
+
+  return AuthenticationFields;
+}(_preact.Component);
+
+exports.default = AuthenticationFields;
 
 /***/ })
 /******/ ]);

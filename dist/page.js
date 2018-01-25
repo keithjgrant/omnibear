@@ -63,12 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 32);
+/******/ 	return __webpack_require__(__webpack_require__.s = 33);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -82,11 +82,11 @@ exports.removeHighlight = removeHighlight;
 exports.focusClickedEntry = focusClickedEntry;
 exports.getCurrentItemUrl = getCurrentItemUrl;
 
-var _microformatShiv = __webpack_require__(34);
+var _microformatShiv = __webpack_require__(35);
 
 var _microformatShiv2 = _interopRequireDefault(_microformatShiv);
 
-var _dom = __webpack_require__(33);
+var _dom = __webpack_require__(34);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -124,7 +124,6 @@ function focusClickedEntry(e) {
     entry = findHEntry(e.target);
   }
 
-  console.log(entry);
   if (!entry) {
     return;
   }
@@ -199,13 +198,13 @@ function getCurrentItemUrl() {
 
 /***/ }),
 
-/***/ 32:
+/***/ 33:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _entry = __webpack_require__(18);
+var _entry = __webpack_require__(19);
 
 (function () {
   document.body.addEventListener('click', _entry.clearItem);
@@ -217,9 +216,6 @@ var _entry = __webpack_require__(18);
       case 'fetch-token-error':
         handleTokenError(request.payload.error);
         break;
-      // case 'remove-entry-highlight':
-      //   removeHighlight();
-      //   break;
     }
   }
   chrome.runtime.onMessage.addListener(handleMessage);
@@ -234,18 +230,8 @@ var _entry = __webpack_require__(18);
       return;
     }
 
-    // I am working on restructuring this page on omnibear.com, so I am
-    // making this compatible with both page layouts for now. The IDs
-    // below are the new layout; the querySelectors match the old layout.
     var heading = document.getElementById('status-heading');
     var paragraph = document.getElementById('status-paragraph');
-    if (!heading) {
-      heading = document.querySelector('.main > h1');
-    }
-    if (!paragraph) {
-      paragraph = document.querySelector('.main > p');
-    }
-
     heading.textContent = 'Error fetching token from token endpoint';
     paragraph.textContent = error.message;
   }
@@ -267,7 +253,7 @@ var _entry = __webpack_require__(18);
 
 /***/ }),
 
-/***/ 33:
+/***/ 34:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -327,7 +313,7 @@ function getAncestorNode(el, filter) {
 
 /***/ }),
 
-/***/ 34:
+/***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*

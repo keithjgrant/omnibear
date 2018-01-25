@@ -60,6 +60,12 @@ button,
 input[type='submit'] {
   font: inherit;
   color: inherit;
+  border: 1px solid var(--gray-40);
+  border-radius: 0.3em;
+}
+button:hover,
+input[type='submit']:hover {
+  box-shadow: 0.05em 0.2em 0.2em rgba(0, 0, 0, 0.2);
 }
 
 textarea,
@@ -135,14 +141,13 @@ fieldset > * + * {
   position: relative;
   padding: 0.5em 1em;
   border: 0;
-  border-radius: 0.2em;
   color: white;
   background-color: var(--yellow);
   outline: none;
 }
 .button:hover {
-  opacity: 0.8;
-  box-shadow: 0 0 0.2em rgba(0, 0, 0, 0.7);
+  opacity: 0.9;
+  box-shadow: 0.05em 0.2em 0.2em rgba(0, 0, 0, 0.3);
 }
 .button.is-loading {
   color: transparent;
@@ -336,6 +341,7 @@ fieldset > * + * {
   margin-bottom: -1px;
   padding: 0.4em 0.6em;
   border: 1px solid var(--yellow);
+  border-radius: 0;
   color: var(--gray-40);
   background-color: var(--yellow-light);
   font-family: Jaldi;

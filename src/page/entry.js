@@ -35,7 +35,6 @@ export function focusClickedEntry(e) {
     entry = findHEntry(e.target);
   }
 
-  console.log(entry);
   if (!entry) {
     return;
   }

@@ -1,20 +1,17 @@
 import {h, Component} from 'preact';
 import ReacjiSettings from './ReacjiSettings';
+import AuthenticationFields from './AuthenticationFields';
 import {DEFAULT_REACJI} from '../../constants';
+import {
+  getSettings,
+  saveSettings,
+  saveAuthenticationDetails,
+} from '../../util/settings';
 
 export default class SettingsForm extends Component {
   constructor(props) {
     super(props);
-    let settings = JSON.parse(localStorage.getItem('settings'));
-    if (!settings) {
-      settings = {
-        defaultToCurrentPage: false,
-        autoSlug: false,
-        closeAfterPosting: true,
-        reacji: DEFAULT_REACJI,
-        slug: 'mp-slug',
-      };
-    }
+    const settings = getSettings();
     settings.me = localStorage.getItem('domain');
     settings.micropubEndpoint = localStorage.getItem('micropubEndpoint');
     settings.token = localStorage.getItem('token');
@@ -83,57 +80,12 @@ export default class SettingsForm extends Component {
               </div>
             </div>
 
-            <fieldset>
-              <legend>Authentication details (advanced)</legend>
-              <div class="settings-form__description">
-                These values are set automatically upon logging in. Only edit
-                them if you are having trouble authenticating and wish to do so
-                manually.
-              </div>
-
-              {showAuthenticationDetails ? (
-                [
-                  <div>
-                    <label htmlFor="me">Me (domain name)</label>
-                    <input
-                      id="me"
-                      type="text"
-                      value={me}
-                      onChange={this.update('me')}
-                      placeholder="https://example.com"
-                    />
-                  </div>,
-                  <div>
-                    <label htmlFor="mp-endpoint">Micropub endpoint</label>
-                    <input
-                      id="mp-endpoint"
-                      type="text"
-                      value={micropubEndpoint}
-                      onChange={this.update('micropubEndpoint')}
-                      placeholder="https://example.com/micropub"
-                    />
-                  </div>,
-                  <div>
-                    <label htmlFor="token">Token</label>
-                    <input
-                      id="token"
-                      type="text"
-                      value={token}
-                      onChange={this.update('token')}
-                    />
-                  </div>,
-                ]
-              ) : (
-                <div class="text-right">
-                  <button
-                    type="button"
-                    onClick={this.showAuthenticationDetails}
-                  >
-                    Show
-                  </button>
-                </div>
-              )}
-            </fieldset>
+            <AuthenticationFields
+              me={me}
+              micropubEndpoint={micropubEndpoint}
+              token={token}
+              onChange={this.set}
+            />
 
             <div class="form-buttons">
               <button type="submit" className="button">
@@ -153,25 +105,19 @@ export default class SettingsForm extends Component {
     );
   }
 
-  showAuthenticationDetails = () => {
-    this.setState({
-      showAuthenticationDetails: true,
-    });
-  };
-
   update(fieldName) {
     return e => {
       this.set(fieldName)(e.target.value);
     };
   }
 
-  set(fieldName) {
+  set = fieldName => {
     return value => {
       this.setState({
         [fieldName]: value,
       });
     };
-  }
+  };
 
   updateBoolean(fieldName) {
     return e => {
@@ -193,25 +139,14 @@ export default class SettingsForm extends Component {
       token,
       micropubEndpoint,
     } = this.state;
-    localStorage.setItem(
-      'settings',
-      JSON.stringify({
-        defaultToCurrentPage,
-        autoSlug,
-        closeAfterPosting,
-        reacji,
-        slug,
-      })
-    );
-    if (me) {
-      localStorage.setItem('domain', me);
-    }
-    if (token) {
-      localStorage.setItem('token', token);
-    }
-    if (micropubEndpoint) {
-      localStorage.setItem('micropubEndpoint', micropubEndpoint);
-    }
+    saveSettings({
+      defaultToCurrentPage,
+      autoSlug,
+      closeAfterPosting,
+      reacji,
+      slug,
+    });
+    saveAuthenticationDetails(me, token, micropubEndpoint);
     this.props.onClose();
   };
 }

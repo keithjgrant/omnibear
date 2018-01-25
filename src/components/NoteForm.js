@@ -12,34 +12,17 @@ import {
   MESSAGE_SUCCESS,
   MESSAGE_ERROR,
 } from '../constants';
+import {getSettings} from '../util/settings';
 
 export default class NoteForm extends Component {
   constructor(props) {
     super(props);
-    let entryUrl = null;
-    let postType;
     const selectedEntry = localStorage.getItem('selectedEntry');
-    const settings = JSON.parse(localStorage.getItem('settings')) || {
-      closeAfterPosting: true,
-    };
-    if (
-      location.search.indexOf('reply=true') === -1 &&
-      !settings.defaultToCurrentPage
-    ) {
-      postType = NEW_NOTE;
-    } else {
-      if (selectedEntry) {
-        postType = ITEM_REPLY;
-        entryUrl = selectedEntry;
-      } else {
-        postType = PAGE_REPLY;
-        entryUrl = localStorage.getItem('pageUrl');
-      }
-    }
+    const settings = getSettings();
     const draft = JSON.parse(localStorage.getItem('draft')) || {};
     this.state = {
-      postType: postType,
-      url: entryUrl,
+      postType: this.getPostType(settings),
+      url: this.getEntryUrl(),
       userDomain: localStorage.getItem('domain'),
       entry: {
         h: 'entry',
@@ -52,6 +35,30 @@ export default class NoteForm extends Component {
       isLoading: false,
       settings: settings,
     };
+  }
+
+  getPostType(settings) {
+    const selectedEntry = localStorage.getItem('selectedEntry');
+    if (
+      location.search.indexOf('reply=true') === -1 &&
+      !settings.defaultToCurrentPage
+    ) {
+      return NEW_NOTE;
+    }
+    if (selectedEntry) {
+      return ITEM_REPLY;
+    } else {
+      return PAGE_REPLY;
+    }
+  }
+
+  getEntryUrl() {
+    const selectedEntry = localStorage.getItem('selectedEntry');
+    if (selectedEntry) {
+      return selectedEntry;
+    } else {
+      return localStorage.getItem('pageUrl');
+    }
   }
 
   render() {
@@ -84,7 +91,6 @@ export default class NoteForm extends Component {
           settings={settings}
         />
         <div className="container">
-          <div className="text-right" />
           <FormInputs
             postType={postType}
             entry={entry}
@@ -202,7 +208,7 @@ export default class NoteForm extends Component {
         console.error(err);
         if (err.status >= 400 && err.status < 500) {
           this.flashErrorMessage(
-            'Error contacting micropub endpoint. Try logging out and back in.'
+            'Error authenticating to micropub endpoint. Try logging out and back in.'
           );
         } else {
           this.flashErrorMessage('Error posting Note');

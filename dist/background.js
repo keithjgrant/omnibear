@@ -63,13 +63,41 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 20);
+/******/ 	return __webpack_require__(__webpack_require__.s = 21);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */,
 /* 1 */,
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _micropubHelper = __webpack_require__(14);
+
+var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = new _micropubHelper2.default({
+  clientId: 'https://omnibear.com',
+  redirectUri: 'https://omnibear.com/auth/success/',
+  state: 'very-secret-omnibear-state',
+  me: localStorage.getItem('domain'),
+  authEndpoint: localStorage.getItem('authEndpoint'),
+  tokenEndpoint: localStorage.getItem('tokenEndpoint'),
+  micropubEndpoint: localStorage.getItem('micropubEndpoint'),
+  token: localStorage.getItem('token')
+});
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -130,7 +158,7 @@ function generateSlug(content) {
 }
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -155,7 +183,7 @@ module.exports = {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -364,34 +392,6 @@ exports.isBuffer = function isBuffer(obj) {
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _micropubHelper = __webpack_require__(14);
-
-var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = new _micropubHelper2.default({
-  clientId: 'https://omnibear.com',
-  redirectUri: 'https://omnibear.com/auth/success/',
-  state: 'very-secret-omnibear-state',
-  me: localStorage.getItem('domain'),
-  authEndpoint: localStorage.getItem('authEndpoint'),
-  tokenEndpoint: localStorage.getItem('tokenEndpoint'),
-  micropubEndpoint: localStorage.getItem('micropubEndpoint'),
-  token: localStorage.getItem('token')
-});
-
-/***/ }),
 /* 6 */,
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -401,7 +401,7 @@ exports.default = new _micropubHelper2.default({
 
 var stringify = __webpack_require__(9);
 var parse = __webpack_require__(8);
-var formats = __webpack_require__(3);
+var formats = __webpack_require__(4);
 
 module.exports = {
     formats: formats,
@@ -417,7 +417,7 @@ module.exports = {
 "use strict";
 
 
-var utils = __webpack_require__(4);
+var utils = __webpack_require__(5);
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -598,8 +598,8 @@ module.exports = function (str, opts) {
 "use strict";
 
 
-var utils = __webpack_require__(4);
-var formats = __webpack_require__(3);
+var utils = __webpack_require__(5);
+var formats = __webpack_require__(4);
 
 var arrayPrefixGenerators = {
     brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
@@ -1517,7 +1517,8 @@ module.exports = g;
 /* 16 */,
 /* 17 */,
 /* 18 */,
-/* 19 */
+/* 19 */,
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1533,7 +1534,7 @@ exports.paramsToQueryString = paramsToQueryString;
 exports.getUrlOrigin = getUrlOrigin;
 exports.cleanUrl = cleanUrl;
 
-var _parseUri = __webpack_require__(35);
+var _parseUri = __webpack_require__(36);
 
 var _parseUri2 = _interopRequireDefault(_parseUri);
 
@@ -1590,19 +1591,19 @@ function cleanUrl(url) {
 }
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _micropub = __webpack_require__(5);
+var _micropub = __webpack_require__(2);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
-var _url = __webpack_require__(19);
+var _url = __webpack_require__(20);
 
-var _utils = __webpack_require__(2);
+var _utils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1733,7 +1734,6 @@ menuId = chrome.contextMenus.create({
 // });
 
 /***/ }),
-/* 21 */,
 /* 22 */,
 /* 23 */,
 /* 24 */,
@@ -1747,7 +1747,8 @@ menuId = chrome.contextMenus.create({
 /* 32 */,
 /* 33 */,
 /* 34 */,
-/* 35 */
+/* 35 */,
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
