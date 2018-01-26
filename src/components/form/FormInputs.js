@@ -1,5 +1,6 @@
 import {h, Component} from 'preact';
 import SyndicateInputs from './SyndicateInputs';
+import {saveDraft} from '../../util/draft';
 import {clone} from '../../util/utils';
 import {generateSlug} from '../../util/utils';
 import {NEW_NOTE} from '../../constants';
@@ -17,7 +18,7 @@ export default class FormInputs extends Component {
   }
 
   componentDidUpdate() {
-    this.saveDraft();
+    saveDraft(this.props.entry);
   }
 
   render() {
@@ -138,18 +139,5 @@ export default class FormInputs extends Component {
   onSubmit = e => {
     e.preventDefault();
     this.props.onSubmit(this.props.entry);
-    this.deleteDraft();
   };
-
-  saveDraft = () => {
-    const {entry} = this.props;
-    localStorage.setItem('draft', JSON.stringify(entry));
-  };
-
-  deleteDraft() {
-    const cleanDraft = {
-      'mp-syndicate-to': this.props.entry['mp-syndicate-to'],
-    };
-    localStorage.setItem('draft', JSON.stringify(cleanDraft));
-  }
 }

@@ -3176,6 +3176,8 @@ var _SyndicateInputs = __webpack_require__(43);
 
 var _SyndicateInputs2 = _interopRequireDefault(_SyndicateInputs);
 
+var _draft = __webpack_require__(45);
+
 var _utils = __webpack_require__(3);
 
 var _constants = __webpack_require__(1);
@@ -3229,13 +3231,6 @@ var FormInputs = function (_Component) {
     _this.onSubmit = function (e) {
       e.preventDefault();
       _this.props.onSubmit(_this.props.entry);
-      _this.deleteDraft();
-    };
-
-    _this.saveDraft = function () {
-      var entry = _this.props.entry;
-
-      localStorage.setItem('draft', JSON.stringify(entry));
     };
 
     _this.state = {
@@ -3252,7 +3247,7 @@ var FormInputs = function (_Component) {
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
-      this.saveDraft();
+      (0, _draft.saveDraft)(this.props.entry);
     }
   }, {
     key: 'render',
@@ -3368,14 +3363,6 @@ var FormInputs = function (_Component) {
       }
       return false;
     }
-  }, {
-    key: 'deleteDraft',
-    value: function deleteDraft() {
-      var cleanDraft = {
-        'mp-syndicate-to': this.props.entry['mp-syndicate-to']
-      };
-      localStorage.setItem('draft', JSON.stringify(cleanDraft));
-    }
   }]);
 
   return FormInputs;
@@ -3417,6 +3404,10 @@ var _FormInputs2 = _interopRequireDefault(_FormInputs);
 var _Footer = __webpack_require__(16);
 
 var _Footer2 = _interopRequireDefault(_Footer);
+
+var _draft = __webpack_require__(45);
+
+var _utils = __webpack_require__(3);
 
 var _micropub = __webpack_require__(2);
 
@@ -3501,6 +3492,7 @@ var NoteForm = function (_Component) {
       }
       _this.postEntry(entry).then(function (location) {
         var type = _this.state.postType === _constants.NEW_NOTE ? 'Note' : 'Reply';
+        (0, _draft.deleteDraft)();
         _this.flashSuccessMessage(type + ' posted successfully', location);
       }).catch(function (err) {
         console.error(err);
@@ -3532,18 +3524,12 @@ var NoteForm = function (_Component) {
     var selectedEntry = localStorage.getItem('selectedEntry');
     var syndicateOptions = JSON.parse(localStorage.getItem('syndicateTo'));
     var settings = (0, _settings.getSettings)();
-    var draft = JSON.parse(localStorage.getItem('draft')) || {};
+    var draft = (0, _draft.getDraft)();
     _this.state = {
       postType: _this.getPostType(settings),
       url: _this.getEntryUrl(),
       userDomain: localStorage.getItem('domain'),
-      entry: {
-        h: 'entry',
-        content: draft.content || '',
-        category: draft.category || [],
-        'mp-slug': draft['mp-slug'] || '',
-        'mp-syndicate-to': draft['mp-syndicate-to'] || []
-      },
+      entry: draft,
       hasSelectedEntry: !!selectedEntry,
       isDisabled: false,
       isLoading: false,
@@ -3675,17 +3661,18 @@ var NoteForm = function (_Component) {
         isDisabled: true,
         isLoading: true
       });
+      var aliasedEntry = (0, _utils.clone)(entry);
       var slugName = this.state.settings.slug;
       var syndicateName = this.state.settings.syndicateTo;
       if (slugName) {
-        entry[slugName] = entry['mp-slug'];
-        delete entry['mp-slug'];
+        aliasedEntry[slugName] = aliasedEntry['mp-slug'];
+        delete aliasedEntry['mp-slug'];
       }
       if (syndicateName) {
-        entry[syndicateName] = entry['mp-syndicate-to'];
-        delete entry['mp-syndicate-to'];
+        aliasedEntry[syndicateName] = aliasedEntry['mp-syndicate-to'];
+        delete aliasedEntry['mp-syndicate-to'];
       }
-      return _micropub2.default.create(entry, 'form');
+      return _micropub2.default.create(aliasedEntry, 'form');
     }
   }]);
 
@@ -4016,8 +4003,7 @@ var SyndicateInputs = function (_Component) {
       var _this2 = this;
 
       return function (e) {
-        var selected = _this2.props.selected;
-
+        var selected = _this2.props.selected || [];
         if (e.target.checked) {
           selected.push(uid);
           _this2.props.onUpdate(selected);
@@ -4172,6 +4158,56 @@ var EndpointFields = function (_Component) {
 }(_preact.Component);
 
 exports.default = EndpointFields;
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getDraft = getDraft;
+exports.saveDraft = saveDraft;
+exports.deleteDraft = deleteDraft;
+var KEYS = ['h', 'content', 'category', 'mp-slug', 'mp-syndicate-to'];
+
+var EMPTY_DRAFT = {
+  h: 'entry',
+  content: '',
+  category: [],
+  'mp-slug': '',
+  'mp-syndicate-to': []
+};
+
+function getDraft() {
+  var draft = JSON.parse(localStorage.getItem('draft'));
+  if (draft) {
+    return draft;
+  }
+  return EMPTY_DRAFT;
+}
+
+function saveDraft(draft) {
+  var clean = {};
+  KEYS.forEach(function (key) {
+    clean[key] = draft[key];
+  });
+  localStorage.setItem('draft', JSON.stringify(clean));
+}
+
+function deleteDraft() {
+  var draft = getDraft();
+  saveDraft({
+    h: 'entry',
+    content: '',
+    category: [],
+    'mp-slug': '',
+    'mp-syndicate-to': draft['mp-syndicate-to']
+  });
+}
 
 /***/ })
 /******/ ]);

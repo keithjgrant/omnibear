@@ -32,7 +32,7 @@ export default class SyndicateInputs extends Component {
 
   toggleOption(uid) {
     return e => {
-      const {selected} = this.props;
+      const selected = this.props.selected || [];
       if (e.target.checked) {
         selected.push(uid);
         this.props.onUpdate(selected);

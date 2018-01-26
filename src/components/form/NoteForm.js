@@ -4,6 +4,8 @@ import Message from '../Message';
 import ChangeViewTabs from './ChangeViewTabs';
 import FormInputs from './FormInputs';
 import Footer from '../Footer';
+import {getDraft, deleteDraft} from '../../util/draft';
+import {clone} from '../../util/utils';
 import micropub from '../../util/micropub';
 import {
   NEW_NOTE,
@@ -20,18 +22,12 @@ export default class NoteForm extends Component {
     const selectedEntry = localStorage.getItem('selectedEntry');
     const syndicateOptions = JSON.parse(localStorage.getItem('syndicateTo'));
     const settings = getSettings();
-    const draft = JSON.parse(localStorage.getItem('draft')) || {};
+    const draft = getDraft();
     this.state = {
       postType: this.getPostType(settings),
       url: this.getEntryUrl(),
       userDomain: localStorage.getItem('domain'),
-      entry: {
-        h: 'entry',
-        content: draft.content || '',
-        category: draft.category || [],
-        'mp-slug': draft['mp-slug'] || '',
-        'mp-syndicate-to': draft['mp-syndicate-to'] || [],
-      },
+      entry: draft,
       hasSelectedEntry: !!selectedEntry,
       isDisabled: false,
       isLoading: false,
@@ -207,6 +203,7 @@ export default class NoteForm extends Component {
     this.postEntry(entry)
       .then(location => {
         const type = this.state.postType === NEW_NOTE ? 'Note' : 'Reply';
+        deleteDraft();
         this.flashSuccessMessage(`${type} posted successfully`, location);
       })
       .catch(err => {
@@ -226,17 +223,18 @@ export default class NoteForm extends Component {
       isDisabled: true,
       isLoading: true,
     });
+    const aliasedEntry = clone(entry);
     const slugName = this.state.settings.slug;
     const syndicateName = this.state.settings.syndicateTo;
     if (slugName) {
-      entry[slugName] = entry['mp-slug'];
-      delete entry['mp-slug'];
+      aliasedEntry[slugName] = aliasedEntry['mp-slug'];
+      delete aliasedEntry['mp-slug'];
     }
     if (syndicateName) {
-      entry[syndicateName] = entry['mp-syndicate-to'];
-      delete entry['mp-syndicate-to'];
+      aliasedEntry[syndicateName] = aliasedEntry['mp-syndicate-to'];
+      delete aliasedEntry['mp-syndicate-to'];
     }
-    return micropub.create(entry, 'form');
+    return micropub.create(aliasedEntry, 'form');
   }
 
   changeView = postType => {
