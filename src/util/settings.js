@@ -7,6 +7,7 @@ const KEYS = [
   'closeAfterPosting',
   'reacji',
   'slug',
+  'syndicateTo',
 ];
 
 const DEFAULT_SETTINGS = {

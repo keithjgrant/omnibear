@@ -7,6 +7,7 @@ export default class AuthenticationFields extends Component {
       showFields: false,
     };
   }
+
   render() {
     return (
       <fieldset>

@@ -2184,7 +2184,7 @@ var _constants = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var KEYS = ['defaultToCurrentPage', 'autoSlug', 'closeAfterPosting', 'reacji', 'slug'];
+var KEYS = ['defaultToCurrentPage', 'autoSlug', 'closeAfterPosting', 'reacji', 'slug', 'syndicateTo'];
 
 var DEFAULT_SETTINGS = {
   defaultToCurrentPage: false,
@@ -2851,6 +2851,10 @@ var _ReacjiSettings = __webpack_require__(29);
 
 var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
 
+var _EndpointFields = __webpack_require__(44);
+
+var _EndpointFields2 = _interopRequireDefault(_EndpointFields);
+
 var _AuthenticationFields = __webpack_require__(28);
 
 var _AuthenticationFields2 = _interopRequireDefault(_AuthenticationFields);
@@ -2886,22 +2890,11 @@ var SettingsForm = function (_Component) {
     _this.save = function (e) {
       e.preventDefault();
       var _this$state = _this.state,
-          defaultToCurrentPage = _this$state.defaultToCurrentPage,
-          autoSlug = _this$state.autoSlug,
-          closeAfterPosting = _this$state.closeAfterPosting,
-          reacji = _this$state.reacji,
-          slug = _this$state.slug,
           me = _this$state.me,
           token = _this$state.token,
           micropubEndpoint = _this$state.micropubEndpoint;
 
-      (0, _settings.saveSettings)({
-        defaultToCurrentPage: defaultToCurrentPage,
-        autoSlug: autoSlug,
-        closeAfterPosting: closeAfterPosting,
-        reacji: reacji,
-        slug: slug
-      });
+      (0, _settings.saveSettings)(_this.state);
       (0, _settings.saveAuthenticationDetails)(me, token, micropubEndpoint);
       _this.props.onClose();
     };
@@ -2975,71 +2968,11 @@ var SettingsForm = function (_Component) {
               'Close Omnibear window after posting'
             ),
             (0, _preact.h)(_ReacjiSettings2.default, { reacji: reacji, onChange: this.set('reacji') }),
-            (0, _preact.h)(
-              'div',
-              null,
-              (0, _preact.h)(
-                'label',
-                { htmlFor: 'slug' },
-                'Slug'
-              ),
-              (0, _preact.h)('input', {
-                id: 'slug',
-                type: 'text',
-                value: slug,
-                onChange: this.update('slug')
-              }),
-              (0, _preact.h)(
-                'div',
-                { 'class': 'settings-form__description' },
-                'Choose the name of the field that the slug will be sent in. This should be ',
-                (0, _preact.h)(
-                  'code',
-                  null,
-                  'mp-slug'
-                ),
-                ' unless your endpoint is using a custom property or the deprecated ',
-                (0, _preact.h)(
-                  'code',
-                  null,
-                  'slug'
-                ),
-                ' property.'
-              )
-            ),
-            (0, _preact.h)(
-              'div',
-              null,
-              (0, _preact.h)(
-                'label',
-                { htmlFor: 'syndicate-to' },
-                'Syndicate To'
-              ),
-              (0, _preact.h)('input', {
-                id: 'syndicate-to',
-                type: 'text',
-                value: syndicateTo,
-                onChange: this.update('syndicateTo')
-              }),
-              (0, _preact.h)(
-                'div',
-                { 'class': 'settings-form__description' },
-                'Choose the name of the field that the syndicate-to UIDs will be sent in. This should be ',
-                (0, _preact.h)(
-                  'code',
-                  null,
-                  'mp-syndicate-to'
-                ),
-                ' unless your endpoint is using a custom property or the deprecated',
-                ' ',
-                (0, _preact.h)(
-                  'code',
-                  null,
-                  'syndicate-to'
-                ),
-                ' property.'
-              )
-            ),
+            (0, _preact.h)(_EndpointFields2.default, {
+              slug: slug,
+              syndicateTo: syndicateTo,
+              onChange: this.set
+            }),
             (0, _preact.h)(_AuthenticationFields2.default, {
               me: me,
               micropubEndpoint: micropubEndpoint,
@@ -3438,7 +3371,10 @@ var FormInputs = function (_Component) {
   }, {
     key: 'deleteDraft',
     value: function deleteDraft() {
-      localStorage.removeItem('draft');
+      var cleanDraft = {
+        'mp-syndicate-to': this.props.entry['mp-syndicate-to']
+      };
+      localStorage.setItem('draft', JSON.stringify(cleanDraft));
     }
   }]);
 
@@ -4040,7 +3976,7 @@ var SyndicateInputs = function (_Component) {
           selected = _this$props.selected,
           isDisabled = _this$props.isDisabled;
 
-      var isChecked = selected.indexOf(option.uid) > -1;
+      var isChecked = selected ? selected.indexOf(option.uid) > -1 : false;
       return (0, _preact.h)(
         "label",
         null,
@@ -4098,6 +4034,144 @@ var SyndicateInputs = function (_Component) {
 }(_preact.Component);
 
 exports.default = SyndicateInputs;
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EndpointFields = function (_Component) {
+  _inherits(EndpointFields, _Component);
+
+  function EndpointFields(props) {
+    _classCallCheck(this, EndpointFields);
+
+    var _this = _possibleConstructorReturn(this, (EndpointFields.__proto__ || Object.getPrototypeOf(EndpointFields)).call(this, props));
+
+    _this.showAuthenticationDetails = function () {
+      _this.setState({
+        showFields: true
+      });
+    };
+
+    _this.state = {
+      showFields: false
+    };
+    return _this;
+  }
+
+  _createClass(EndpointFields, [{
+    key: "render",
+    value: function render() {
+      var _props = this.props,
+          slug = _props.slug,
+          syndicateTo = _props.syndicateTo;
+
+      return (0, _preact.h)(
+        "fieldset",
+        null,
+        (0, _preact.h)(
+          "legend",
+          null,
+          "Customize endpoint fields"
+        ),
+        (0, _preact.h)(
+          "div",
+          { "class": "settings-form__description" },
+          "If your micropub server expects custom or legacy fieldnames, you can specify those here"
+        ),
+        this.state.showFields ? [(0, _preact.h)(
+          "div",
+          null,
+          (0, _preact.h)(
+            "label",
+            { htmlFor: "slug" },
+            "Slug"
+          ),
+          (0, _preact.h)("input", {
+            id: "slug",
+            type: "text",
+            value: slug,
+            onChange: this.update('slug')
+          }),
+          (0, _preact.h)(
+            "div",
+            { "class": "settings-form__description" },
+            "Choose the name of the field that the slug will be sent in. This should be ",
+            (0, _preact.h)(
+              "code",
+              null,
+              "mp-slug"
+            ),
+            " for up-to-date endpoints."
+          )
+        ), (0, _preact.h)(
+          "div",
+          null,
+          (0, _preact.h)(
+            "label",
+            { htmlFor: "syndicate-to" },
+            "Syndicate To"
+          ),
+          (0, _preact.h)("input", {
+            id: "syndicate-to",
+            type: "text",
+            value: syndicateTo,
+            onChange: this.update('syndicateTo')
+          }),
+          (0, _preact.h)(
+            "div",
+            { "class": "settings-form__description" },
+            "Choose the name of the field that the syndicate-to UIDs will be sent in. This should be ",
+            (0, _preact.h)(
+              "code",
+              null,
+              "mp-syndicate-to"
+            ),
+            " for up-to-date endpoints."
+          )
+        )] : (0, _preact.h)(
+          "div",
+          { "class": "text-right" },
+          (0, _preact.h)(
+            "button",
+            { type: "button", onClick: this.showAuthenticationDetails },
+            "Show"
+          )
+        )
+      );
+    }
+  }, {
+    key: "update",
+    value: function update(fieldName) {
+      var _this2 = this;
+
+      return function (e) {
+        _this2.props.onChange(fieldName)(e.target.value);
+      };
+    }
+  }]);
+
+  return EndpointFields;
+}(_preact.Component);
+
+exports.default = EndpointFields;
 
 /***/ })
 /******/ ]);

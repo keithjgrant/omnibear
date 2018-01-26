@@ -16,7 +16,7 @@ export default class SyndicateInputs extends Component {
 
   renderOption = option => {
     const {selected, isDisabled} = this.props;
-    const isChecked = selected.indexOf(option.uid) > -1;
+    const isChecked = selected ? selected.indexOf(option.uid) > -1 : false;
     return (
       <label>
         <input

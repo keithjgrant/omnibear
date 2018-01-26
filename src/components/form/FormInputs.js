@@ -147,6 +147,9 @@ export default class FormInputs extends Component {
   };
 
   deleteDraft() {
-    localStorage.removeItem('draft');
+    const cleanDraft = {
+      'mp-syndicate-to': this.props.entry['mp-syndicate-to'],
+    };
+    localStorage.setItem('draft', JSON.stringify(cleanDraft));
   }
 }

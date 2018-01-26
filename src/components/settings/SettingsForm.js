@@ -1,5 +1,6 @@
 import {h, Component} from 'preact';
 import ReacjiSettings from './ReacjiSettings';
+import EndpointFields from './EndpointFields';
 import AuthenticationFields from './AuthenticationFields';
 import {DEFAULT_REACJI} from '../../constants';
 import {
@@ -65,38 +66,11 @@ export default class SettingsForm extends Component {
             </label>
 
             <ReacjiSettings reacji={reacji} onChange={this.set('reacji')} />
-
-            <div>
-              <label htmlFor="slug">Slug</label>
-              <input
-                id="slug"
-                type="text"
-                value={slug}
-                onChange={this.update('slug')}
-              />
-              <div class="settings-form__description">
-                Choose the name of the field that the slug will be sent in. This
-                should be <code>mp-slug</code> unless your endpoint is using a
-                custom property or the deprecated <code>slug</code> property.
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="syndicate-to">Syndicate To</label>
-              <input
-                id="syndicate-to"
-                type="text"
-                value={syndicateTo}
-                onChange={this.update('syndicateTo')}
-              />
-              <div class="settings-form__description">
-                Choose the name of the field that the syndicate-to UIDs will be
-                sent in. This should be <code>mp-syndicate-to</code> unless your
-                endpoint is using a custom property or the deprecated{' '}
-                <code>syndicate-to</code> property.
-              </div>
-            </div>
-
+            <EndpointFields
+              slug={slug}
+              syndicateTo={syndicateTo}
+              onChange={this.set}
+            />
             <AuthenticationFields
               me={me}
               micropubEndpoint={micropubEndpoint}
@@ -146,23 +120,8 @@ export default class SettingsForm extends Component {
 
   save = e => {
     e.preventDefault();
-    const {
-      defaultToCurrentPage,
-      autoSlug,
-      closeAfterPosting,
-      reacji,
-      slug,
-      me,
-      token,
-      micropubEndpoint,
-    } = this.state;
-    saveSettings({
-      defaultToCurrentPage,
-      autoSlug,
-      closeAfterPosting,
-      reacji,
-      slug,
-    });
+    const {me, token, micropubEndpoint} = this.state;
+    saveSettings(this.state);
     saveAuthenticationDetails(me, token, micropubEndpoint);
     this.props.onClose();
   };
