@@ -227,9 +227,14 @@ export default class NoteForm extends Component {
       isLoading: true,
     });
     const slugName = this.state.settings.slug;
+    const syndicateName = this.state.settings.syndicateTo;
     if (slugName) {
       entry[slugName] = entry['mp-slug'];
       delete entry['mp-slug'];
+    }
+    if (syndicateName) {
+      entry[syndicateName] = entry['mp-syndicate-to'];
+      delete entry['mp-syndicate-to'];
     }
     return micropub.create(entry, 'form');
   }

@@ -143,14 +143,7 @@ export default class FormInputs extends Component {
 
   saveDraft = () => {
     const {entry} = this.props;
-    localStorage.setItem(
-      'draft',
-      JSON.stringify({
-        content: entry.content,
-        category: entry.category,
-        'mp-slug': entry['mp-slug'],
-      })
-    );
+    localStorage.setItem('draft', JSON.stringify(entry));
   };
 
   deleteDraft() {

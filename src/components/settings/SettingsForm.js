@@ -26,6 +26,7 @@ export default class SettingsForm extends Component {
       closeAfterPosting,
       reacji,
       slug,
+      syndicateTo,
       me,
       micropubEndpoint,
       token,
@@ -77,6 +78,22 @@ export default class SettingsForm extends Component {
                 Choose the name of the field that the slug will be sent in. This
                 should be <code>mp-slug</code> unless your endpoint is using a
                 custom property or the deprecated <code>slug</code> property.
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="syndicate-to">Syndicate To</label>
+              <input
+                id="syndicate-to"
+                type="text"
+                value={syndicateTo}
+                onChange={this.update('syndicateTo')}
+              />
+              <div class="settings-form__description">
+                Choose the name of the field that the syndicate-to UIDs will be
+                sent in. This should be <code>mp-syndicate-to</code> unless your
+                endpoint is using a custom property or the deprecated{' '}
+                <code>syndicate-to</code> property.
               </div>
             </div>
 

@@ -15,6 +15,7 @@ const DEFAULT_SETTINGS = {
   closeAfterPosting: true,
   reacji: DEFAULT_REACJI,
   slug: 'mp-slug',
+  syndicateTo: 'mp-syndicate-to',
 };
 
 export function getSettings() {

@@ -2191,7 +2191,8 @@ var DEFAULT_SETTINGS = {
   autoSlug: false,
   closeAfterPosting: true,
   reacji: _constants.DEFAULT_REACJI,
-  slug: 'mp-slug'
+  slug: 'mp-slug',
+  syndicateTo: 'mp-syndicate-to'
 };
 
 function getSettings() {
@@ -2923,6 +2924,7 @@ var SettingsForm = function (_Component) {
           closeAfterPosting = _state.closeAfterPosting,
           reacji = _state.reacji,
           slug = _state.slug,
+          syndicateTo = _state.syndicateTo,
           me = _state.me,
           micropubEndpoint = _state.micropubEndpoint,
           token = _state.token,
@@ -3001,6 +3003,39 @@ var SettingsForm = function (_Component) {
                   'code',
                   null,
                   'slug'
+                ),
+                ' property.'
+              )
+            ),
+            (0, _preact.h)(
+              'div',
+              null,
+              (0, _preact.h)(
+                'label',
+                { htmlFor: 'syndicate-to' },
+                'Syndicate To'
+              ),
+              (0, _preact.h)('input', {
+                id: 'syndicate-to',
+                type: 'text',
+                value: syndicateTo,
+                onChange: this.update('syndicateTo')
+              }),
+              (0, _preact.h)(
+                'div',
+                { 'class': 'settings-form__description' },
+                'Choose the name of the field that the syndicate-to UIDs will be sent in. This should be ',
+                (0, _preact.h)(
+                  'code',
+                  null,
+                  'mp-syndicate-to'
+                ),
+                ' unless your endpoint is using a custom property or the deprecated',
+                ' ',
+                (0, _preact.h)(
+                  'code',
+                  null,
+                  'syndicate-to'
                 ),
                 ' property.'
               )
@@ -3267,11 +3302,7 @@ var FormInputs = function (_Component) {
     _this.saveDraft = function () {
       var entry = _this.props.entry;
 
-      localStorage.setItem('draft', JSON.stringify({
-        content: entry.content,
-        category: entry.category,
-        'mp-slug': entry['mp-slug']
-      }));
+      localStorage.setItem('draft', JSON.stringify(entry));
     };
 
     _this.state = {
@@ -3709,9 +3740,14 @@ var NoteForm = function (_Component) {
         isLoading: true
       });
       var slugName = this.state.settings.slug;
+      var syndicateName = this.state.settings.syndicateTo;
       if (slugName) {
         entry[slugName] = entry['mp-slug'];
         delete entry['mp-slug'];
+      }
+      if (syndicateName) {
+        entry[syndicateName] = entry['mp-syndicate-to'];
+        delete entry['mp-syndicate-to'];
       }
       return _micropub2.default.create(entry, 'form');
     }
