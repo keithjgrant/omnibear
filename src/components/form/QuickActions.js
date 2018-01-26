@@ -1,7 +1,12 @@
 import {h, Component} from 'preact';
-import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY, DEFAULT_REACJI} from '../constants';
-import HeartSvg from './svg/HeartSvg';
-import RepostSvg from './svg/RepostSvg';
+import {
+  NEW_NOTE,
+  PAGE_REPLY,
+  ITEM_REPLY,
+  DEFAULT_REACJI,
+} from '../../constants';
+import HeartSvg from '../svg/HeartSvg';
+import RepostSvg from '../svg/RepostSvg';
 
 export default class QuickActions extends Component {
   render() {

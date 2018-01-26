@@ -1534,7 +1534,7 @@ exports.paramsToQueryString = paramsToQueryString;
 exports.getUrlOrigin = getUrlOrigin;
 exports.cleanUrl = cleanUrl;
 
-var _parseUri = __webpack_require__(36);
+var _parseUri = __webpack_require__(37);
 
 var _parseUri2 = _interopRequireDefault(_parseUri);
 
@@ -1597,15 +1597,11 @@ function cleanUrl(url) {
 "use strict";
 
 
-var _micropub = __webpack_require__(2);
-
-var _micropub2 = _interopRequireDefault(_micropub);
-
 var _url = __webpack_require__(20);
 
 var _utils = __webpack_require__(3);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _authentication = __webpack_require__(38);
 
 var authTabId = null;
 var menuId = void 0;
@@ -1657,42 +1653,19 @@ function handleTabChange(tabId, changeInfo, tab) {
   if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
     return;
   }
-  var code = (0, _url.getParamFromUrl)('code', changeInfo.url);
-  var meFromUrl = (0, _url.getParamFromUrl)('me', changeInfo.url);
-  if (meFromUrl) {
-    var currentDomain = localStorage.getItem('domain');
-
-    if ((0, _url.getUrlOrigin)(currentDomain) !== (0, _url.getUrlOrigin)(meFromUrl)) {
-      chrome.tabs.sendMessage(tab.id, {
-        action: 'fetch-token-error',
-        payload: {
-          error: new Error("'me' url domain doesn't match auth endpoint domain")
-        }
-      });
-      (0, _utils.logout)();
-    }
-
-    localStorage.setItem('domain', meFromUrl);
+  var isValidDomain = (0, _authentication.validateMeDomainFromUrl)(changeInfo.url);
+  if (!isValidDomain) {
+    return;
   }
-  _micropub2.default.options.me = localStorage.getItem('domain');
-  _micropub2.default.options.tokenEndpoint = localStorage.getItem('tokenEndpoint');
-  _micropub2.default.getToken(code).then(function (token) {
-    if (!token) {
-      throw new Error("Token not found in token endpoint response. Missing expected field 'access_token'");
-    }
-    localStorage.setItem('token', token);
+  var code = (0, _url.getParamFromUrl)('code', changeInfo.url);
+  (0, _authentication.fetchToken)(code).then(function () {
+    console.log('fetching syndication');
+    return (0, _authentication.fetchSyndicationTargets)();
+  }).then(function () {
     chrome.tabs.remove(tab.id);
     authTabId = null;
   }).catch(function (err) {
-    (0, _utils.getAuthTab)().then(function (tab) {
-      chrome.tabs.sendMessage(tab.id, {
-        action: 'fetch-token-error',
-        payload: {
-          error: err
-        }
-      });
-      (0, _utils.logout)();
-    });
+    console.error(err.message, err);
   });
 }
 
@@ -1723,16 +1696,6 @@ menuId = chrome.contextMenus.create({
   }
 });
 
-// chrome.contextMenus.create({
-//   title: 'Reply to link url',
-//   contexts: ['link'],
-//   onclick: function (context) {
-//     chrome.runtime.sendMessage({ action: 'remove-entry-highlight' });
-//     selectEntry(context.linkUrl);
-//     window.open("index.html", "extension_popup", "width=450,height=500,status=no,scrollbars=yes,resizable=no");
-//   },
-// });
-
 /***/ }),
 /* 22 */,
 /* 23 */,
@@ -1748,7 +1711,8 @@ menuId = chrome.contextMenus.create({
 /* 33 */,
 /* 34 */,
 /* 35 */,
-/* 36 */
+/* 36 */,
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1783,6 +1747,81 @@ module.exports = function parseURI (str, opts) {
   return uri
 }
 
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.validateMeDomainFromUrl = validateMeDomainFromUrl;
+exports.fetchToken = fetchToken;
+exports.fetchSyndicationTargets = fetchSyndicationTargets;
+
+var _micropub = __webpack_require__(2);
+
+var _micropub2 = _interopRequireDefault(_micropub);
+
+var _url = __webpack_require__(20);
+
+var _utils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function validateMeDomainFromUrl(tabUrl) {
+  var meFromUrl = (0, _url.getParamFromUrl)('me', tabUrl);
+  if (meFromUrl) {
+    var currentDomain = localStorage.getItem('domain');
+
+    if ((0, _url.getUrlOrigin)(currentDomain) !== (0, _url.getUrlOrigin)(meFromUrl)) {
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'fetch-token-error',
+        payload: {
+          error: new Error("'me' url domain doesn't match auth endpoint domain")
+        }
+      });
+      (0, _utils.logout)();
+      return false;
+    }
+
+    localStorage.setItem('domain', meFromUrl);
+    return true;
+  }
+}
+
+function fetchToken(code) {
+  _micropub2.default.options.me = localStorage.getItem('domain');
+  _micropub2.default.options.tokenEndpoint = localStorage.getItem('tokenEndpoint');
+  _micropub2.default.options.micropubEndpoint = localStorage.getItem('micropubEndpoint');
+  return _micropub2.default.getToken(code).then(function (token) {
+    if (!token) {
+      throw new Error("Token not found in token endpoint response. Missing expected field 'access_token'");
+    }
+    localStorage.setItem('token', token);
+    _micropub2.default.options.token = token;
+  }).catch(function (err) {
+    console.log('error fetching token', err);
+    (0, _utils.getAuthTab)().then(function (tab) {
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'fetch-token-error',
+        payload: {
+          error: err
+        }
+      });
+      (0, _utils.logout)();
+    });
+  });
+}
+
+function fetchSyndicationTargets() {
+  return _micropub2.default.query('syndicate-to').then(function (response) {
+    localStorage.setItem('syndicateTo', JSON.stringify(response['syndicate-to']));
+  });
+}
 
 /***/ })
 /******/ ]);

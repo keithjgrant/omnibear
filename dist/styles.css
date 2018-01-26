@@ -78,7 +78,8 @@ input[type='text'] {
   font: inherit;
 }
 
-label {
+label,
+.label {
   display: block;
   color: var(--gray-50);
   font-weight: 700;

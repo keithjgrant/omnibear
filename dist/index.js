@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 32);
+/******/ 	return __webpack_require__(__webpack_require__.s = 33);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2244,7 +2244,7 @@ var _LoginForm = __webpack_require__(24);
 
 var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
-var _NoteForm = __webpack_require__(25);
+var _NoteForm = __webpack_require__(40);
 
 var _NoteForm2 = _interopRequireDefault(_NoteForm);
 
@@ -2252,7 +2252,7 @@ var _Message = __webpack_require__(6);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _SettingsForm = __webpack_require__(29);
+var _SettingsForm = __webpack_require__(30);
 
 var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
 
@@ -2345,312 +2345,8 @@ exports.default = App;
 /* 19 */,
 /* 20 */,
 /* 21 */,
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(0);
-
-var _Tab = __webpack_require__(27);
-
-var _Tab2 = _interopRequireDefault(_Tab);
-
-var _constants = __webpack_require__(1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ChangeViewTabs = function (_Component) {
-  _inherits(ChangeViewTabs, _Component);
-
-  function ChangeViewTabs() {
-    _classCallCheck(this, ChangeViewTabs);
-
-    return _possibleConstructorReturn(this, (ChangeViewTabs.__proto__ || Object.getPrototypeOf(ChangeViewTabs)).apply(this, arguments));
-  }
-
-  _createClass(ChangeViewTabs, [{
-    key: 'render',
-    value: function render() {
-      var postType = this.props.postType;
-      return (0, _preact.h)(
-        'div',
-        { className: 'tabs' },
-        this.renderNewNote(),
-        this.renderPageReply(),
-        this.renderItemReply()
-      );
-    }
-  }, {
-    key: 'renderNewNote',
-    value: function renderNewNote() {
-      return (0, _preact.h)(
-        _Tab2.default,
-        {
-          isActive: this.props.postType === _constants.NEW_NOTE,
-          onClick: this.switchTo(_constants.NEW_NOTE)
-        },
-        'New note'
-      );
-    }
-  }, {
-    key: 'renderPageReply',
-    value: function renderPageReply() {
-      return (0, _preact.h)(
-        _Tab2.default,
-        {
-          isActive: this.props.postType === _constants.PAGE_REPLY,
-          onClick: this.switchTo(_constants.PAGE_REPLY)
-        },
-        'Current page'
-      );
-    }
-  }, {
-    key: 'renderItemReply',
-    value: function renderItemReply() {
-      return (0, _preact.h)(
-        _Tab2.default,
-        {
-          isActive: this.props.postType === _constants.ITEM_REPLY,
-          isDisabled: !this.props.hasSelectedEntry,
-          onClick: this.switchTo(_constants.ITEM_REPLY) },
-        'Selected entry'
-      );
-    }
-  }, {
-    key: 'switchTo',
-    value: function switchTo(postType) {
-      var _this2 = this;
-
-      return function () {
-        _this2.props.onChange(postType);
-      };
-    }
-  }]);
-
-  return ChangeViewTabs;
-}(_preact.Component);
-
-exports.default = ChangeViewTabs;
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(0);
-
-var _utils = __webpack_require__(3);
-
-var _constants = __webpack_require__(1);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FormInputs = function (_Component) {
-  _inherits(FormInputs, _Component);
-
-  function FormInputs(props) {
-    _classCallCheck(this, FormInputs);
-
-    var _this = _possibleConstructorReturn(this, (FormInputs.__proto__ || Object.getPrototypeOf(FormInputs)).call(this, props));
-
-    _this.focus = function () {
-      _this.content.focus();
-    };
-
-    _this.updateSlug = function (e) {
-      var slug = e.target.value.trim();
-      var entry = (0, _utils.clone)(_this.props.entry);
-      entry['mp-slug'] = slug;
-      _this.props.updateEntry(entry);
-      _this.setState({
-        isSlugEdited: slug !== ''
-      });
-    };
-
-    _this.updateContent = function (e) {
-      var content = e.target.value;
-      var entry = (0, _utils.clone)(_this.props.entry);
-      entry.content = content;
-      if (_this.shouldAutoSlug()) {
-        entry['mp-slug'] = (0, _utils.generateSlug)(content);
-      }
-      _this.props.updateEntry(entry);
-    };
-
-    _this.onSubmit = function (e) {
-      e.preventDefault();
-      _this.props.onSubmit(_this.props.entry);
-      _this.deleteDraft();
-    };
-
-    _this.saveDraft = function () {
-      var entry = _this.props.entry;
-
-      localStorage.setItem('draft', JSON.stringify({
-        content: entry.content,
-        category: entry.category,
-        'mp-slug': entry['mp-slug']
-      }));
-    };
-
-    _this.state = {
-      isSlugEdited: false
-    };
-    return _this;
-  }
-
-  _createClass(FormInputs, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      setTimeout(this.focus, 150);
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.saveDraft();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      var postType = this.props.postType;
-
-      return (0, _preact.h)(
-        'form',
-        { onSubmit: this.onSubmit },
-        (0, _preact.h)(
-          'div',
-          null,
-          (0, _preact.h)(
-            'label',
-            { 'for': 'input-content' },
-            postType === _constants.NEW_NOTE ? 'Content' : 'Reply'
-          ),
-          (0, _preact.h)('textarea', {
-            id: 'input-content',
-            value: this.props.entry.content,
-            onInput: this.updateContent,
-            onBlur: this.updateContent,
-            rows: '4',
-            disabled: this.props.isDisabled,
-            ref: function ref(el) {
-              _this2.content = el;
-            }
-          }),
-          (0, _preact.h)(
-            'div',
-            { 'class': 'input-extra' },
-            this.props.entry.content.length
-          )
-        ),
-        (0, _preact.h)(
-          'div',
-          null,
-          (0, _preact.h)(
-            'label',
-            { 'for': 'input-category' },
-            'Tags (space separated)'
-          ),
-          (0, _preact.h)('input', {
-            id: 'input-category',
-            type: 'text',
-            placeholder: 'e.g. web  personal',
-            value: this.props.entry.category.join(' '),
-            onChange: this.updateFieldArray('category'),
-            disabled: this.props.isDisabled
-          })
-        ),
-        (0, _preact.h)(
-          'div',
-          null,
-          (0, _preact.h)(
-            'label',
-            { 'for': 'input-slug' },
-            'Slug'
-          ),
-          (0, _preact.h)('input', {
-            id: 'input-slug',
-            type: 'text',
-            name: 'mp-slug',
-            value: this.props.entry['mp-slug'],
-            onInput: this.updateSlug,
-            disabled: this.props.isDisabled
-          })
-        ),
-        (0, _preact.h)(
-          'button',
-          {
-            type: 'submit',
-            disabled: this.props.isDisabled || !this.props.entry.content,
-            className: this.props.isLoading ? 'button is-loading' : 'button'
-          },
-          'Post'
-        )
-      );
-    }
-  }, {
-    key: 'updateFieldArray',
-    value: function updateFieldArray(fieldName) {
-      var _this3 = this;
-
-      return function (e) {
-        e.preventDefault();
-        var entry = (0, _utils.clone)(_this3.props.entry);
-        entry[fieldName] = e.target.value.trim().split(' ');
-        _this3.props.updateEntry(entry);
-      };
-    }
-  }, {
-    key: 'shouldAutoSlug',
-    value: function shouldAutoSlug() {
-      if (this.state.isSlugEdited) {
-        return false;
-      }
-      if (this.props.settings && this.props.settings.autoSlug) {
-        return true;
-      }
-      return false;
-    }
-  }, {
-    key: 'deleteDraft',
-    value: function deleteDraft() {
-      localStorage.removeItem('draft');
-    }
-  }]);
-
-  return FormInputs;
-}(_preact.Component);
-
-exports.default = FormInputs;
-
-/***/ }),
+/* 22 */,
+/* 23 */,
 /* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2824,446 +2520,8 @@ var LoginForm = function (_Component) {
 exports.default = LoginForm;
 
 /***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(0);
-
-var _QuickActions = __webpack_require__(26);
-
-var _QuickActions2 = _interopRequireDefault(_QuickActions);
-
-var _Message = __webpack_require__(6);
-
-var _Message2 = _interopRequireDefault(_Message);
-
-var _ChangeViewTabs = __webpack_require__(22);
-
-var _ChangeViewTabs2 = _interopRequireDefault(_ChangeViewTabs);
-
-var _FormInputs = __webpack_require__(23);
-
-var _FormInputs2 = _interopRequireDefault(_FormInputs);
-
-var _Footer = __webpack_require__(16);
-
-var _Footer2 = _interopRequireDefault(_Footer);
-
-var _micropub = __webpack_require__(2);
-
-var _micropub2 = _interopRequireDefault(_micropub);
-
-var _constants = __webpack_require__(1);
-
-var _settings = __webpack_require__(17);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var NoteForm = function (_Component) {
-  _inherits(NoteForm, _Component);
-
-  function NoteForm(props) {
-    _classCallCheck(this, NoteForm);
-
-    var _this = _possibleConstructorReturn(this, (NoteForm.__proto__ || Object.getPrototypeOf(NoteForm)).call(this, props));
-
-    _this.handleLike = function () {
-      if (!_this.state.url) {
-        return;
-      }
-      _this.postEntry({
-        h: 'entry',
-        'like-of': _this.state.url
-      }).then(function (location) {
-        var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
-        _this.flashSuccessMessage(type + ' liked successfully', location);
-      }).catch(function (err) {
-        console.error(err);
-        _this.flashErrorMessage('Error posting like');
-      });
-    };
-
-    _this.handleRepost = function () {
-      if (!_this.state.url) {
-        return;
-      }
-      _this.postEntry({
-        h: 'entry',
-        'repost-of': _this.state.url
-      }).then(function (location) {
-        var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
-        _this.flashSuccessMessage(type + ' reposted successfully', location);
-      }).catch(function (err) {
-        console.error(err);
-        _this.flashErrorMessage('Error reposting');
-      });
-    };
-
-    _this.handleReacji = function (emoji) {
-      if (!_this.state.url) {
-        return;
-      }
-      _this.postEntry({
-        h: 'entry',
-        content: emoji,
-        'in-reply-to': _this.state.url
-      }).then(function (location) {
-        var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
-        _this.flashSuccessMessage(type + ' reacted to successfully', location);
-      }).catch(function (err) {
-        console.error(err);
-        _this.flashErrorMessage('Error reacting');
-      });
-    };
-
-    _this.updateEntry = function (newEntry) {
-      _this.setState({ entry: newEntry });
-    };
-
-    _this.handleSubmit = function (entry) {
-      if (_this.state.postType !== _constants.NEW_NOTE) {
-        entry['in-reply-to'] = _this.state.url;
-      }
-      _this.postEntry(entry).then(function (location) {
-        var type = _this.state.postType === _constants.NEW_NOTE ? 'Note' : 'Reply';
-        _this.flashSuccessMessage(type + ' posted successfully', location);
-      }).catch(function (err) {
-        console.error(err);
-        if (err.status >= 400 && err.status < 500) {
-          _this.flashErrorMessage('Error authenticating to micropub endpoint. Try logging out and back in.');
-        } else {
-          _this.flashErrorMessage('Error posting Note');
-        }
-      });
-    };
-
-    _this.changeView = function (postType) {
-      var url = void 0;
-      switch (postType) {
-        case _constants.NEW_NOTE:
-          url = null;
-          break;
-        case _constants.PAGE_REPLY:
-          url = localStorage.getItem('pageUrl');
-          break;
-        case _constants.ITEM_REPLY:
-          url = localStorage.getItem('selectedEntry');
-          break;
-      }
-      _this.setState({ url: url, postType: postType });
-      _this.form.focus();
-    };
-
-    var selectedEntry = localStorage.getItem('selectedEntry');
-    var settings = (0, _settings.getSettings)();
-    var draft = JSON.parse(localStorage.getItem('draft')) || {};
-    _this.state = {
-      postType: _this.getPostType(settings),
-      url: _this.getEntryUrl(),
-      userDomain: localStorage.getItem('domain'),
-      entry: {
-        h: 'entry',
-        content: draft.content || '',
-        category: draft.category || [],
-        'mp-slug': draft['mp-slug'] || ''
-      },
-      hasSelectedEntry: !!selectedEntry,
-      isDisabled: false,
-      isLoading: false,
-      settings: settings
-    };
-    return _this;
-  }
-
-  _createClass(NoteForm, [{
-    key: 'getPostType',
-    value: function getPostType(settings) {
-      var selectedEntry = localStorage.getItem('selectedEntry');
-      if (location.search.indexOf('reply=true') === -1 && !settings.defaultToCurrentPage) {
-        return _constants.NEW_NOTE;
-      }
-      if (selectedEntry) {
-        return _constants.ITEM_REPLY;
-      } else {
-        return _constants.PAGE_REPLY;
-      }
-    }
-  }, {
-    key: 'getEntryUrl',
-    value: function getEntryUrl() {
-      var selectedEntry = localStorage.getItem('selectedEntry');
-      if (selectedEntry) {
-        return selectedEntry;
-      } else {
-        return localStorage.getItem('pageUrl');
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      var _state = this.state,
-          postType = _state.postType,
-          url = _state.url,
-          isDisabled = _state.isDisabled,
-          isLoading = _state.isLoading,
-          settings = _state.settings,
-          userDomain = _state.userDomain,
-          entry = _state.entry,
-          hasSelectedEntry = _state.hasSelectedEntry,
-          errorMessage = _state.errorMessage;
-      var _props = this.props,
-          handleSettings = _props.handleSettings,
-          handleLogout = _props.handleLogout;
-
-      return (0, _preact.h)(
-        'div',
-        null,
-        (0, _preact.h)(_ChangeViewTabs2.default, {
-          postType: postType,
-          onChange: this.changeView,
-          hasSelectedEntry: hasSelectedEntry
-        }),
-        (0, _preact.h)(_QuickActions2.default, {
-          postType: postType,
-          url: url,
-          onLike: this.handleLike,
-          onRepost: this.handleRepost,
-          onReacji: this.handleReacji,
-          isDisabled: isLoading,
-          settings: settings
-        }),
-        (0, _preact.h)(
-          'div',
-          { className: 'container' },
-          (0, _preact.h)(_FormInputs2.default, {
-            postType: postType,
-            entry: entry,
-            settings: settings,
-            updateEntry: this.updateEntry,
-            onSubmit: this.handleSubmit,
-            isDisabled: isDisabled,
-            isLoading: isLoading,
-            ref: function ref(el) {
-              return _this2.form = el;
-            }
-          }),
-          errorMessage ? (0, _preact.h)(
-            _Message2.default,
-            { type: _constants.MESSAGE_ERROR },
-            errorMessage
-          ) : null
-        ),
-        (0, _preact.h)(_Footer2.default, {
-          domain: userDomain,
-          onSettings: handleSettings,
-          onLogout: handleLogout
-        })
-      );
-    }
-  }, {
-    key: 'flashSuccessMessage',
-    value: function flashSuccessMessage(message, location) {
-      this.props.userFeedback(message, _constants.MESSAGE_SUCCESS, location);
-      if (this.state.settings.closeAfterPosting) {
-        setTimeout(function () {
-          window.close();
-        }, 3000);
-      }
-    }
-  }, {
-    key: 'flashErrorMessage',
-    value: function flashErrorMessage(message) {
-      var _this3 = this;
-
-      this.setState({
-        errorMessage: message,
-        isDisabled: false,
-        isLoading: false
-      });
-      setTimeout(function () {
-        if (_this3.state.errorMessage === message) {
-          _this3.setState({ errorMessage: false });
-        }
-      }, 4000);
-    }
-  }, {
-    key: 'postEntry',
-    value: function postEntry(entry) {
-      var slugName = this.state.settings.slug;
-      this.setState({
-        isDisabled: true,
-        isLoading: true
-      });
-      if (slugName) {
-        entry[slugName] = entry['mp-slug'];
-        delete entry['mp-slug'];
-      }
-      return _micropub2.default.create(entry, 'form');
-    }
-  }]);
-
-  return NoteForm;
-}(_preact.Component);
-
-exports.default = NoteForm;
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(0);
-
-var _constants = __webpack_require__(1);
-
-var _HeartSvg = __webpack_require__(30);
-
-var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
-
-var _RepostSvg = __webpack_require__(31);
-
-var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var QuickActions = function (_Component) {
-  _inherits(QuickActions, _Component);
-
-  function QuickActions() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, QuickActions);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = QuickActions.__proto__ || Object.getPrototypeOf(QuickActions)).call.apply(_ref, [this].concat(args))), _this), _this.renderReacji = function (content, i) {
-      return (0, _preact.h)(
-        'li',
-        { key: content },
-        (0, _preact.h)(
-          'button',
-          {
-            onClick: function onClick() {
-              return _this.props.onReacji(content);
-            },
-            disabled: _this.props.isDisabled
-          },
-          content
-        )
-      );
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
-
-  _createClass(QuickActions, [{
-    key: 'render',
-    value: function render() {
-      if (this.props.postType === _constants.NEW_NOTE || !this.props.url) {
-        return null;
-      }
-      return (0, _preact.h)(
-        'div',
-        null,
-        (0, _preact.h)(
-          'div',
-          { className: 'info-banner' },
-          this.props.url
-        ),
-        (0, _preact.h)(
-          'div',
-          { className: 'container' },
-          (0, _preact.h)(
-            'h2',
-            { className: 'minor-heading' },
-            'Quick Actions'
-          ),
-          this.renderQuickActions()
-        )
-      );
-    }
-  }, {
-    key: 'renderQuickActions',
-    value: function renderQuickActions() {
-      var settings = this.props.settings;
-
-      var reacji = void 0;
-      if (settings && settings.reacji) {
-        reacji = settings.reacji;
-      } else {
-        reacji = _constants.DEFAULT_REACJI;
-      }
-
-      return (0, _preact.h)(
-        'ul',
-        { className: 'quick-actions' },
-        (0, _preact.h)(
-          'li',
-          null,
-          (0, _preact.h)(
-            'button',
-            {
-              onClick: this.props.onRepost,
-              disabled: this.props.isDisabled
-            },
-            (0, _preact.h)(_RepostSvg2.default, null),
-            ' repost'
-          )
-        ),
-        (0, _preact.h)(
-          'li',
-          null,
-          (0, _preact.h)(
-            'button',
-            { onClick: this.props.onLike, disabled: this.props.isDisabled },
-            (0, _preact.h)(_HeartSvg2.default, null),
-            ' like'
-          )
-        ),
-        reacji.map(this.renderReacji)
-      );
-    }
-  }]);
-
-  return QuickActions;
-}(_preact.Component);
-
-exports.default = QuickActions;
-
-/***/ }),
+/* 25 */,
+/* 26 */,
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3335,6 +2593,134 @@ exports.default = Tab;
 
 /***/ }),
 /* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AuthenticationFields = function (_Component) {
+  _inherits(AuthenticationFields, _Component);
+
+  function AuthenticationFields(props) {
+    _classCallCheck(this, AuthenticationFields);
+
+    var _this = _possibleConstructorReturn(this, (AuthenticationFields.__proto__ || Object.getPrototypeOf(AuthenticationFields)).call(this, props));
+
+    _this.showAuthenticationDetails = function () {
+      _this.setState({
+        showFields: true
+      });
+    };
+
+    _this.state = {
+      showFields: false
+    };
+    return _this;
+  }
+
+  _createClass(AuthenticationFields, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "fieldset",
+        null,
+        (0, _preact.h)(
+          "legend",
+          null,
+          "Authentication details (advanced)"
+        ),
+        (0, _preact.h)(
+          "div",
+          { "class": "settings-form__description" },
+          "These values are set automatically upon logging in. Only edit them if you are having trouble authenticating and wish to do so manually."
+        ),
+        this.state.showFields ? [(0, _preact.h)(
+          "div",
+          null,
+          (0, _preact.h)(
+            "label",
+            { htmlFor: "me" },
+            "Me (domain name)"
+          ),
+          (0, _preact.h)("input", {
+            id: "me",
+            type: "text",
+            value: this.props.me,
+            onChange: this.update('me'),
+            placeholder: "https://example.com"
+          })
+        ), (0, _preact.h)(
+          "div",
+          null,
+          (0, _preact.h)(
+            "label",
+            { htmlFor: "mp-endpoint" },
+            "Micropub endpoint"
+          ),
+          (0, _preact.h)("input", {
+            id: "mp-endpoint",
+            type: "text",
+            value: this.props.micropubEndpoint,
+            onChange: this.update('micropubEndpoint'),
+            placeholder: "https://example.com/micropub"
+          })
+        ), (0, _preact.h)(
+          "div",
+          null,
+          (0, _preact.h)(
+            "label",
+            { htmlFor: "token" },
+            "Token"
+          ),
+          (0, _preact.h)("input", {
+            id: "token",
+            type: "text",
+            value: this.props.token,
+            onChange: this.update('token')
+          })
+        )] : (0, _preact.h)(
+          "div",
+          { "class": "text-right" },
+          (0, _preact.h)(
+            "button",
+            { type: "button", onClick: this.showAuthenticationDetails },
+            "Show"
+          )
+        )
+      );
+    }
+  }, {
+    key: "update",
+    value: function update(fieldName) {
+      var _this2 = this;
+
+      return function (e) {
+        _this2.props.onChange(fieldName)(e.target.value);
+      };
+    }
+  }]);
+
+  return AuthenticationFields;
+}(_preact.Component);
+
+exports.default = AuthenticationFields;
+
+/***/ }),
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3446,7 +2832,7 @@ var ReacjiSettings = function (_Component) {
 exports.default = ReacjiSettings;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3460,11 +2846,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _ReacjiSettings = __webpack_require__(28);
+var _ReacjiSettings = __webpack_require__(29);
 
 var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
 
-var _AuthenticationFields = __webpack_require__(37);
+var _AuthenticationFields = __webpack_require__(28);
 
 var _AuthenticationFields2 = _interopRequireDefault(_AuthenticationFields);
 
@@ -3673,7 +3059,7 @@ var SettingsForm = function (_Component) {
 exports.default = SettingsForm;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3729,7 +3115,7 @@ var HeartSVG = function (_Component) {
 exports.default = HeartSVG;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3780,7 +3166,7 @@ var RepostSvg = function (_Component) {
 exports.default = RepostSvg;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3799,11 +3185,787 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /***/ }),
-/* 33 */,
 /* 34 */,
 /* 35 */,
 /* 36 */,
-/* 37 */
+/* 37 */,
+/* 38 */,
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+var _SyndicateInputs = __webpack_require__(43);
+
+var _SyndicateInputs2 = _interopRequireDefault(_SyndicateInputs);
+
+var _utils = __webpack_require__(3);
+
+var _constants = __webpack_require__(1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FormInputs = function (_Component) {
+  _inherits(FormInputs, _Component);
+
+  function FormInputs(props) {
+    _classCallCheck(this, FormInputs);
+
+    var _this = _possibleConstructorReturn(this, (FormInputs.__proto__ || Object.getPrototypeOf(FormInputs)).call(this, props));
+
+    _this.focus = function () {
+      _this.content.focus();
+    };
+
+    _this.updateSlug = function (e) {
+      var slug = e.target.value.trim();
+      var entry = (0, _utils.clone)(_this.props.entry);
+      entry['mp-slug'] = slug;
+      _this.props.updateEntry(entry);
+      _this.setState({
+        isSlugEdited: slug !== ''
+      });
+    };
+
+    _this.updateContent = function (e) {
+      var content = e.target.value;
+      var entry = (0, _utils.clone)(_this.props.entry);
+      entry.content = content;
+      if (_this.shouldAutoSlug()) {
+        entry['mp-slug'] = (0, _utils.generateSlug)(content);
+      }
+      _this.props.updateEntry(entry);
+    };
+
+    _this.updateSyndicateTo = function (values) {
+      var entry = (0, _utils.clone)(_this.props.entry);
+      entry['mp-syndicate-to'] = values;
+      _this.props.updateEntry(entry);
+    };
+
+    _this.onSubmit = function (e) {
+      e.preventDefault();
+      _this.props.onSubmit(_this.props.entry);
+      _this.deleteDraft();
+    };
+
+    _this.saveDraft = function () {
+      var entry = _this.props.entry;
+
+      localStorage.setItem('draft', JSON.stringify({
+        content: entry.content,
+        category: entry.category,
+        'mp-slug': entry['mp-slug']
+      }));
+    };
+
+    _this.state = {
+      isSlugEdited: false
+    };
+    return _this;
+  }
+
+  _createClass(FormInputs, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      setTimeout(this.focus, 150);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.saveDraft();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          postType = _props.postType,
+          entry = _props.entry,
+          syndicateOptions = _props.syndicateOptions,
+          isDisabled = _props.isDisabled,
+          isLoading = _props.isLoading;
+
+      return (0, _preact.h)(
+        'form',
+        { onSubmit: this.onSubmit },
+        (0, _preact.h)(
+          'div',
+          null,
+          (0, _preact.h)(
+            'label',
+            { 'for': 'input-content' },
+            postType === _constants.NEW_NOTE ? 'Content' : 'Reply'
+          ),
+          (0, _preact.h)('textarea', {
+            id: 'input-content',
+            value: entry.content,
+            onInput: this.updateContent,
+            onBlur: this.updateContent,
+            rows: '4',
+            disabled: isDisabled,
+            ref: function ref(el) {
+              _this2.content = el;
+            }
+          }),
+          (0, _preact.h)(
+            'div',
+            { 'class': 'input-extra' },
+            entry.content.length
+          )
+        ),
+        (0, _preact.h)(
+          'div',
+          null,
+          (0, _preact.h)(
+            'label',
+            { 'for': 'input-category' },
+            'Tags (space separated)'
+          ),
+          (0, _preact.h)('input', {
+            id: 'input-category',
+            type: 'text',
+            placeholder: 'e.g. web  personal',
+            value: entry.category.join(' '),
+            onChange: this.updateFieldArray('category'),
+            disabled: isDisabled
+          })
+        ),
+        (0, _preact.h)(
+          'div',
+          null,
+          (0, _preact.h)(
+            'label',
+            { 'for': 'input-slug' },
+            'Slug'
+          ),
+          (0, _preact.h)('input', {
+            id: 'input-slug',
+            type: 'text',
+            name: 'mp-slug',
+            value: entry['mp-slug'],
+            onInput: this.updateSlug,
+            disabled: isDisabled
+          })
+        ),
+        (0, _preact.h)(_SyndicateInputs2.default, {
+          options: syndicateOptions,
+          selected: entry['mp-syndicate-to'],
+          onUpdate: this.updateSyndicateTo,
+          isDisabled: isDisabled
+        }),
+        (0, _preact.h)(
+          'button',
+          {
+            type: 'submit',
+            disabled: isDisabled || !entry.content,
+            className: isLoading ? 'button is-loading' : 'button'
+          },
+          'Post'
+        )
+      );
+    }
+  }, {
+    key: 'updateFieldArray',
+    value: function updateFieldArray(fieldName) {
+      var _this3 = this;
+
+      return function (e) {
+        e.preventDefault();
+        var entry = (0, _utils.clone)(_this3.props.entry);
+        entry[fieldName] = e.target.value.trim().split(' ');
+        _this3.props.updateEntry(entry);
+      };
+    }
+  }, {
+    key: 'shouldAutoSlug',
+    value: function shouldAutoSlug() {
+      if (this.state.isSlugEdited) {
+        return false;
+      }
+      if (this.props.settings && this.props.settings.autoSlug) {
+        return true;
+      }
+      return false;
+    }
+  }, {
+    key: 'deleteDraft',
+    value: function deleteDraft() {
+      localStorage.removeItem('draft');
+    }
+  }]);
+
+  return FormInputs;
+}(_preact.Component);
+
+exports.default = FormInputs;
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+var _QuickActions = __webpack_require__(42);
+
+var _QuickActions2 = _interopRequireDefault(_QuickActions);
+
+var _Message = __webpack_require__(6);
+
+var _Message2 = _interopRequireDefault(_Message);
+
+var _ChangeViewTabs = __webpack_require__(41);
+
+var _ChangeViewTabs2 = _interopRequireDefault(_ChangeViewTabs);
+
+var _FormInputs = __webpack_require__(39);
+
+var _FormInputs2 = _interopRequireDefault(_FormInputs);
+
+var _Footer = __webpack_require__(16);
+
+var _Footer2 = _interopRequireDefault(_Footer);
+
+var _micropub = __webpack_require__(2);
+
+var _micropub2 = _interopRequireDefault(_micropub);
+
+var _constants = __webpack_require__(1);
+
+var _settings = __webpack_require__(17);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NoteForm = function (_Component) {
+  _inherits(NoteForm, _Component);
+
+  function NoteForm(props) {
+    _classCallCheck(this, NoteForm);
+
+    var _this = _possibleConstructorReturn(this, (NoteForm.__proto__ || Object.getPrototypeOf(NoteForm)).call(this, props));
+
+    _this.handleLike = function () {
+      if (!_this.state.url) {
+        return;
+      }
+      _this.postEntry({
+        h: 'entry',
+        'like-of': _this.state.url
+      }).then(function (location) {
+        var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
+        _this.flashSuccessMessage(type + ' liked successfully', location);
+      }).catch(function (err) {
+        console.error(err);
+        _this.flashErrorMessage('Error posting like');
+      });
+    };
+
+    _this.handleRepost = function () {
+      if (!_this.state.url) {
+        return;
+      }
+      _this.postEntry({
+        h: 'entry',
+        'repost-of': _this.state.url
+      }).then(function (location) {
+        var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
+        _this.flashSuccessMessage(type + ' reposted successfully', location);
+      }).catch(function (err) {
+        console.error(err);
+        _this.flashErrorMessage('Error reposting');
+      });
+    };
+
+    _this.handleReacji = function (emoji) {
+      if (!_this.state.url) {
+        return;
+      }
+      _this.postEntry({
+        h: 'entry',
+        content: emoji,
+        'in-reply-to': _this.state.url
+      }).then(function (location) {
+        var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
+        _this.flashSuccessMessage(type + ' reacted to successfully', location);
+      }).catch(function (err) {
+        console.error(err);
+        _this.flashErrorMessage('Error reacting');
+      });
+    };
+
+    _this.updateEntry = function (newEntry) {
+      _this.setState({ entry: newEntry });
+    };
+
+    _this.handleSubmit = function (entry) {
+      if (_this.state.postType !== _constants.NEW_NOTE) {
+        entry['in-reply-to'] = _this.state.url;
+      }
+      _this.postEntry(entry).then(function (location) {
+        var type = _this.state.postType === _constants.NEW_NOTE ? 'Note' : 'Reply';
+        _this.flashSuccessMessage(type + ' posted successfully', location);
+      }).catch(function (err) {
+        console.error(err);
+        if (err.status >= 400 && err.status < 500) {
+          _this.flashErrorMessage('Error authenticating to micropub endpoint. Try logging out and back in.');
+        } else {
+          _this.flashErrorMessage('Error posting Note');
+        }
+      });
+    };
+
+    _this.changeView = function (postType) {
+      var url = void 0;
+      switch (postType) {
+        case _constants.NEW_NOTE:
+          url = null;
+          break;
+        case _constants.PAGE_REPLY:
+          url = localStorage.getItem('pageUrl');
+          break;
+        case _constants.ITEM_REPLY:
+          url = localStorage.getItem('selectedEntry');
+          break;
+      }
+      _this.setState({ url: url, postType: postType });
+      _this.form.focus();
+    };
+
+    var selectedEntry = localStorage.getItem('selectedEntry');
+    var syndicateOptions = JSON.parse(localStorage.getItem('syndicateTo'));
+    var settings = (0, _settings.getSettings)();
+    var draft = JSON.parse(localStorage.getItem('draft')) || {};
+    _this.state = {
+      postType: _this.getPostType(settings),
+      url: _this.getEntryUrl(),
+      userDomain: localStorage.getItem('domain'),
+      entry: {
+        h: 'entry',
+        content: draft.content || '',
+        category: draft.category || [],
+        'mp-slug': draft['mp-slug'] || '',
+        'mp-syndicate-to': draft['mp-syndicate-to'] || []
+      },
+      hasSelectedEntry: !!selectedEntry,
+      isDisabled: false,
+      isLoading: false,
+      settings: settings,
+      syndicateOptions: syndicateOptions
+    };
+    return _this;
+  }
+
+  _createClass(NoteForm, [{
+    key: 'getPostType',
+    value: function getPostType(settings) {
+      var selectedEntry = localStorage.getItem('selectedEntry');
+      if (location.search.indexOf('reply=true') === -1 && !settings.defaultToCurrentPage) {
+        return _constants.NEW_NOTE;
+      }
+      if (selectedEntry) {
+        return _constants.ITEM_REPLY;
+      } else {
+        return _constants.PAGE_REPLY;
+      }
+    }
+  }, {
+    key: 'getEntryUrl',
+    value: function getEntryUrl() {
+      var selectedEntry = localStorage.getItem('selectedEntry');
+      if (selectedEntry) {
+        return selectedEntry;
+      } else {
+        return localStorage.getItem('pageUrl');
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _state = this.state,
+          postType = _state.postType,
+          url = _state.url,
+          isDisabled = _state.isDisabled,
+          isLoading = _state.isLoading,
+          settings = _state.settings,
+          userDomain = _state.userDomain,
+          entry = _state.entry,
+          syndicateOptions = _state.syndicateOptions,
+          hasSelectedEntry = _state.hasSelectedEntry,
+          errorMessage = _state.errorMessage;
+      var _props = this.props,
+          handleSettings = _props.handleSettings,
+          handleLogout = _props.handleLogout;
+
+      return (0, _preact.h)(
+        'div',
+        null,
+        (0, _preact.h)(_ChangeViewTabs2.default, {
+          postType: postType,
+          onChange: this.changeView,
+          hasSelectedEntry: hasSelectedEntry
+        }),
+        (0, _preact.h)(_QuickActions2.default, {
+          postType: postType,
+          url: url,
+          onLike: this.handleLike,
+          onRepost: this.handleRepost,
+          onReacji: this.handleReacji,
+          isDisabled: isLoading,
+          settings: settings
+        }),
+        (0, _preact.h)(
+          'div',
+          { className: 'container' },
+          (0, _preact.h)(_FormInputs2.default, {
+            postType: postType,
+            entry: entry,
+            settings: settings,
+            syndicateOptions: syndicateOptions,
+            updateEntry: this.updateEntry,
+            onSubmit: this.handleSubmit,
+            isDisabled: isDisabled,
+            isLoading: isLoading,
+            ref: function ref(el) {
+              return _this2.form = el;
+            }
+          }),
+          errorMessage ? (0, _preact.h)(
+            _Message2.default,
+            { type: _constants.MESSAGE_ERROR },
+            errorMessage
+          ) : null
+        ),
+        (0, _preact.h)(_Footer2.default, {
+          domain: userDomain,
+          onSettings: handleSettings,
+          onLogout: handleLogout
+        })
+      );
+    }
+  }, {
+    key: 'flashSuccessMessage',
+    value: function flashSuccessMessage(message, location) {
+      this.props.userFeedback(message, _constants.MESSAGE_SUCCESS, location);
+      if (this.state.settings.closeAfterPosting) {
+        setTimeout(function () {
+          window.close();
+        }, 3000);
+      }
+    }
+  }, {
+    key: 'flashErrorMessage',
+    value: function flashErrorMessage(message) {
+      var _this3 = this;
+
+      this.setState({
+        errorMessage: message,
+        isDisabled: false,
+        isLoading: false
+      });
+      setTimeout(function () {
+        if (_this3.state.errorMessage === message) {
+          _this3.setState({ errorMessage: false });
+        }
+      }, 4000);
+    }
+  }, {
+    key: 'postEntry',
+    value: function postEntry(entry) {
+      this.setState({
+        isDisabled: true,
+        isLoading: true
+      });
+      var slugName = this.state.settings.slug;
+      if (slugName) {
+        entry[slugName] = entry['mp-slug'];
+        delete entry['mp-slug'];
+      }
+      return _micropub2.default.create(entry, 'form');
+    }
+  }]);
+
+  return NoteForm;
+}(_preact.Component);
+
+exports.default = NoteForm;
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+var _Tab = __webpack_require__(27);
+
+var _Tab2 = _interopRequireDefault(_Tab);
+
+var _constants = __webpack_require__(1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ChangeViewTabs = function (_Component) {
+  _inherits(ChangeViewTabs, _Component);
+
+  function ChangeViewTabs() {
+    _classCallCheck(this, ChangeViewTabs);
+
+    return _possibleConstructorReturn(this, (ChangeViewTabs.__proto__ || Object.getPrototypeOf(ChangeViewTabs)).apply(this, arguments));
+  }
+
+  _createClass(ChangeViewTabs, [{
+    key: 'render',
+    value: function render() {
+      var postType = this.props.postType;
+      return (0, _preact.h)(
+        'div',
+        { className: 'tabs' },
+        this.renderNewNote(),
+        this.renderPageReply(),
+        this.renderItemReply()
+      );
+    }
+  }, {
+    key: 'renderNewNote',
+    value: function renderNewNote() {
+      return (0, _preact.h)(
+        _Tab2.default,
+        {
+          isActive: this.props.postType === _constants.NEW_NOTE,
+          onClick: this.switchTo(_constants.NEW_NOTE)
+        },
+        'New note'
+      );
+    }
+  }, {
+    key: 'renderPageReply',
+    value: function renderPageReply() {
+      return (0, _preact.h)(
+        _Tab2.default,
+        {
+          isActive: this.props.postType === _constants.PAGE_REPLY,
+          onClick: this.switchTo(_constants.PAGE_REPLY)
+        },
+        'Current page'
+      );
+    }
+  }, {
+    key: 'renderItemReply',
+    value: function renderItemReply() {
+      return (0, _preact.h)(
+        _Tab2.default,
+        {
+          isActive: this.props.postType === _constants.ITEM_REPLY,
+          isDisabled: !this.props.hasSelectedEntry,
+          onClick: this.switchTo(_constants.ITEM_REPLY)
+        },
+        'Selected entry'
+      );
+    }
+  }, {
+    key: 'switchTo',
+    value: function switchTo(postType) {
+      var _this2 = this;
+
+      return function () {
+        _this2.props.onChange(postType);
+      };
+    }
+  }]);
+
+  return ChangeViewTabs;
+}(_preact.Component);
+
+exports.default = ChangeViewTabs;
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+var _constants = __webpack_require__(1);
+
+var _HeartSvg = __webpack_require__(31);
+
+var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
+
+var _RepostSvg = __webpack_require__(32);
+
+var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var QuickActions = function (_Component) {
+  _inherits(QuickActions, _Component);
+
+  function QuickActions() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, QuickActions);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = QuickActions.__proto__ || Object.getPrototypeOf(QuickActions)).call.apply(_ref, [this].concat(args))), _this), _this.renderReacji = function (content, i) {
+      return (0, _preact.h)(
+        'li',
+        { key: content },
+        (0, _preact.h)(
+          'button',
+          {
+            onClick: function onClick() {
+              return _this.props.onReacji(content);
+            },
+            disabled: _this.props.isDisabled
+          },
+          content
+        )
+      );
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(QuickActions, [{
+    key: 'render',
+    value: function render() {
+      if (this.props.postType === _constants.NEW_NOTE || !this.props.url) {
+        return null;
+      }
+      return (0, _preact.h)(
+        'div',
+        null,
+        (0, _preact.h)(
+          'div',
+          { className: 'info-banner' },
+          this.props.url
+        ),
+        (0, _preact.h)(
+          'div',
+          { className: 'container' },
+          (0, _preact.h)(
+            'h2',
+            { className: 'minor-heading' },
+            'Quick Actions'
+          ),
+          this.renderQuickActions()
+        )
+      );
+    }
+  }, {
+    key: 'renderQuickActions',
+    value: function renderQuickActions() {
+      var settings = this.props.settings;
+
+      var reacji = void 0;
+      if (settings && settings.reacji) {
+        reacji = settings.reacji;
+      } else {
+        reacji = _constants.DEFAULT_REACJI;
+      }
+
+      return (0, _preact.h)(
+        'ul',
+        { className: 'quick-actions' },
+        (0, _preact.h)(
+          'li',
+          null,
+          (0, _preact.h)(
+            'button',
+            {
+              onClick: this.props.onRepost,
+              disabled: this.props.isDisabled
+            },
+            (0, _preact.h)(_RepostSvg2.default, null),
+            ' repost'
+          )
+        ),
+        (0, _preact.h)(
+          'li',
+          null,
+          (0, _preact.h)(
+            'button',
+            { onClick: this.props.onLike, disabled: this.props.isDisabled },
+            (0, _preact.h)(_HeartSvg2.default, null),
+            ' like'
+          )
+        ),
+        reacji.map(this.renderReacji)
+      );
+    }
+  }]);
+
+  return QuickActions;
+}(_preact.Component);
+
+exports.default = QuickActions;
+
+/***/ }),
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3823,112 +3985,83 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var AuthenticationFields = function (_Component) {
-  _inherits(AuthenticationFields, _Component);
+var SyndicateInputs = function (_Component) {
+  _inherits(SyndicateInputs, _Component);
 
-  function AuthenticationFields(props) {
-    _classCallCheck(this, AuthenticationFields);
+  function SyndicateInputs() {
+    var _ref;
 
-    var _this = _possibleConstructorReturn(this, (AuthenticationFields.__proto__ || Object.getPrototypeOf(AuthenticationFields)).call(this, props));
+    var _temp, _this, _ret;
 
-    _this.showAuthenticationDetails = function () {
-      _this.setState({
-        showFields: true
-      });
-    };
+    _classCallCheck(this, SyndicateInputs);
 
-    _this.state = {
-      showFields: false
-    };
-    return _this;
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SyndicateInputs.__proto__ || Object.getPrototypeOf(SyndicateInputs)).call.apply(_ref, [this].concat(args))), _this), _this.renderOption = function (option) {
+      var _this$props = _this.props,
+          selected = _this$props.selected,
+          isDisabled = _this$props.isDisabled;
+
+      var isChecked = selected.indexOf(option.uid) > -1;
+      return (0, _preact.h)(
+        "label",
+        null,
+        (0, _preact.h)("input", {
+          type: "checkbox",
+          checked: isChecked,
+          disabled: isDisabled,
+          onClick: _this.toggleOption(option.uid)
+        }),
+        option.name
+      );
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
-  _createClass(AuthenticationFields, [{
+  _createClass(SyndicateInputs, [{
     key: "render",
     value: function render() {
+      var options = this.props.options;
+
+      if (!options || !options.length) {
+        return null;
+      }
       return (0, _preact.h)(
-        "fieldset",
+        "div",
         null,
         (0, _preact.h)(
-          "legend",
-          null,
-          "Authentication details (advanced)"
+          "div",
+          { "class": "label" },
+          "Syndicate to"
         ),
-        (0, _preact.h)(
-          "div",
-          { "class": "settings-form__description" },
-          "These values are set automatically upon logging in. Only edit them if you are having trouble authenticating and wish to do so manually."
-        ),
-        this.state.showFields ? [(0, _preact.h)(
-          "div",
-          null,
-          (0, _preact.h)(
-            "label",
-            { htmlFor: "me" },
-            "Me (domain name)"
-          ),
-          (0, _preact.h)("input", {
-            id: "me",
-            type: "text",
-            value: this.props.me,
-            onChange: this.update('me'),
-            placeholder: "https://example.com"
-          })
-        ), (0, _preact.h)(
-          "div",
-          null,
-          (0, _preact.h)(
-            "label",
-            { htmlFor: "mp-endpoint" },
-            "Micropub endpoint"
-          ),
-          (0, _preact.h)("input", {
-            id: "mp-endpoint",
-            type: "text",
-            value: this.props.micropubEndpoint,
-            onChange: this.update('micropubEndpoint'),
-            placeholder: "https://example.com/micropub"
-          })
-        ), (0, _preact.h)(
-          "div",
-          null,
-          (0, _preact.h)(
-            "label",
-            { htmlFor: "token" },
-            "Token"
-          ),
-          (0, _preact.h)("input", {
-            id: "token",
-            type: "text",
-            value: this.props.token,
-            onChange: this.update('token')
-          })
-        )] : (0, _preact.h)(
-          "div",
-          { "class": "text-right" },
-          (0, _preact.h)(
-            "button",
-            { type: "button", onClick: this.showAuthenticationDetails },
-            "Show"
-          )
-        )
+        options.map(this.renderOption)
       );
     }
   }, {
-    key: "update",
-    value: function update(fieldName) {
+    key: "toggleOption",
+    value: function toggleOption(uid) {
       var _this2 = this;
 
       return function (e) {
-        _this2.props.onChange(fieldName)(e.target.value);
+        var selected = _this2.props.selected;
+
+        if (e.target.checked) {
+          selected.push(uid);
+          _this2.props.onUpdate(selected);
+        } else {
+          var index = selected.indexOf(uid);
+          selected.splice(index, 1);
+          _this2.props.onUpdate(selected);
+        }
       };
     }
   }]);
 
-  return AuthenticationFields;
+  return SyndicateInputs;
 }(_preact.Component);
 
-exports.default = AuthenticationFields;
+exports.default = SyndicateInputs;
 
 /***/ })
 /******/ ]);

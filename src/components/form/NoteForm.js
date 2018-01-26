@@ -1,23 +1,24 @@
 import {h, Component} from 'preact';
 import QuickActions from './QuickActions';
-import Message from './Message';
+import Message from '../Message';
 import ChangeViewTabs from './ChangeViewTabs';
 import FormInputs from './FormInputs';
-import Footer from './Footer';
-import micropub from '../util/micropub';
+import Footer from '../Footer';
+import micropub from '../../util/micropub';
 import {
   NEW_NOTE,
   PAGE_REPLY,
   ITEM_REPLY,
   MESSAGE_SUCCESS,
   MESSAGE_ERROR,
-} from '../constants';
-import {getSettings} from '../util/settings';
+} from '../../constants';
+import {getSettings} from '../../util/settings';
 
 export default class NoteForm extends Component {
   constructor(props) {
     super(props);
     const selectedEntry = localStorage.getItem('selectedEntry');
+    const syndicateOptions = JSON.parse(localStorage.getItem('syndicateTo'));
     const settings = getSettings();
     const draft = JSON.parse(localStorage.getItem('draft')) || {};
     this.state = {
@@ -29,11 +30,13 @@ export default class NoteForm extends Component {
         content: draft.content || '',
         category: draft.category || [],
         'mp-slug': draft['mp-slug'] || '',
+        'mp-syndicate-to': draft['mp-syndicate-to'] || [],
       },
       hasSelectedEntry: !!selectedEntry,
       isDisabled: false,
       isLoading: false,
       settings: settings,
+      syndicateOptions,
     };
   }
 
@@ -70,6 +73,7 @@ export default class NoteForm extends Component {
       settings,
       userDomain,
       entry,
+      syndicateOptions,
       hasSelectedEntry,
       errorMessage,
     } = this.state;
@@ -95,6 +99,7 @@ export default class NoteForm extends Component {
             postType={postType}
             entry={entry}
             settings={settings}
+            syndicateOptions={syndicateOptions}
             updateEntry={this.updateEntry}
             onSubmit={this.handleSubmit}
             isDisabled={isDisabled}
@@ -217,11 +222,11 @@ export default class NoteForm extends Component {
   };
 
   postEntry(entry) {
-    const slugName = this.state.settings.slug;
     this.setState({
       isDisabled: true,
       isLoading: true,
     });
+    const slugName = this.state.settings.slug;
     if (slugName) {
       entry[slugName] = entry['mp-slug'];
       delete entry['mp-slug'];

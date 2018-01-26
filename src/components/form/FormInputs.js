@@ -1,7 +1,8 @@
 import {h, Component} from 'preact';
-import {clone} from '../util/utils';
-import {generateSlug} from '../util/utils';
-import {NEW_NOTE} from '../constants';
+import SyndicateInputs from './SyndicateInputs';
+import {clone} from '../../util/utils';
+import {generateSlug} from '../../util/utils';
+import {NEW_NOTE} from '../../constants';
 
 export default class FormInputs extends Component {
   constructor(props) {
@@ -20,7 +21,13 @@ export default class FormInputs extends Component {
   }
 
   render() {
-    const {postType} = this.props;
+    const {
+      postType,
+      entry,
+      syndicateOptions,
+      isDisabled,
+      isLoading,
+    } = this.props;
     return (
       <form onSubmit={this.onSubmit}>
         <div>
@@ -29,16 +36,16 @@ export default class FormInputs extends Component {
           </label>
           <textarea
             id="input-content"
-            value={this.props.entry.content}
+            value={entry.content}
             onInput={this.updateContent}
             onBlur={this.updateContent}
             rows="4"
-            disabled={this.props.isDisabled}
+            disabled={isDisabled}
             ref={el => {
               this.content = el;
             }}
           />
-          <div class="input-extra">{this.props.entry.content.length}</div>
+          <div class="input-extra">{entry.content.length}</div>
         </div>
         <div>
           <label for="input-category">Tags (space separated)</label>
@@ -46,9 +53,9 @@ export default class FormInputs extends Component {
             id="input-category"
             type="text"
             placeholder="e.g. web  personal"
-            value={this.props.entry.category.join(' ')}
+            value={entry.category.join(' ')}
             onChange={this.updateFieldArray('category')}
-            disabled={this.props.isDisabled}
+            disabled={isDisabled}
           />
         </div>
         <div>
@@ -57,15 +64,21 @@ export default class FormInputs extends Component {
             id="input-slug"
             type="text"
             name="mp-slug"
-            value={this.props.entry['mp-slug']}
+            value={entry['mp-slug']}
             onInput={this.updateSlug}
-            disabled={this.props.isDisabled}
+            disabled={isDisabled}
           />
         </div>
+        <SyndicateInputs
+          options={syndicateOptions}
+          selected={entry['mp-syndicate-to']}
+          onUpdate={this.updateSyndicateTo}
+          isDisabled={isDisabled}
+        />
         <button
           type="submit"
-          disabled={this.props.isDisabled || !this.props.entry.content}
-          className={this.props.isLoading ? 'button is-loading' : 'button'}
+          disabled={isDisabled || !entry.content}
+          className={isLoading ? 'button is-loading' : 'button'}
         >
           Post
         </button>
@@ -79,7 +92,7 @@ export default class FormInputs extends Component {
 
   updateSlug = e => {
     const slug = e.target.value.trim();
-    var entry = clone(this.props.entry);
+    const entry = clone(this.props.entry);
     entry['mp-slug'] = slug;
     this.props.updateEntry(entry);
     this.setState({
@@ -89,7 +102,7 @@ export default class FormInputs extends Component {
 
   updateContent = e => {
     const content = e.target.value;
-    var entry = clone(this.props.entry);
+    const entry = clone(this.props.entry);
     entry.content = content;
     if (this.shouldAutoSlug()) {
       entry['mp-slug'] = generateSlug(content);
@@ -105,6 +118,12 @@ export default class FormInputs extends Component {
       this.props.updateEntry(entry);
     };
   }
+
+  updateSyndicateTo = values => {
+    const entry = clone(this.props.entry);
+    entry['mp-syndicate-to'] = values;
+    this.props.updateEntry(entry);
+  };
 
   shouldAutoSlug() {
     if (this.state.isSlugEdited) {

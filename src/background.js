@@ -1,6 +1,10 @@
-import micropub from './util/micropub';
-import {getParamFromUrl, cleanUrl, getUrlOrigin} from './util/url';
-import {getAuthTab, logout} from './util/utils';
+import {getParamFromUrl, cleanUrl} from './util/url';
+import {logout} from './util/utils';
+import {
+  validateMeDomainFromUrl,
+  fetchToken,
+  fetchSyndicationTargets,
+} from './background/authentication';
 
 let authTabId = null;
 let menuId;
@@ -52,49 +56,22 @@ function handleTabChange(tabId, changeInfo, tab) {
   if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
     return;
   }
-  var code = getParamFromUrl('code', changeInfo.url);
-  var meFromUrl = getParamFromUrl('me', changeInfo.url);
-  if (meFromUrl) {
-    var currentDomain = localStorage.getItem('domain');
-
-    if (getUrlOrigin(currentDomain) !== getUrlOrigin(meFromUrl)) {
-      chrome.tabs.sendMessage(tab.id, {
-        action: 'fetch-token-error',
-        payload: {
-          error: new Error(
-            "'me' url domain doesn't match auth endpoint domain"
-          ),
-        },
-      });
-      logout();
-    }
-
-    localStorage.setItem('domain', meFromUrl);
+  const isValidDomain = validateMeDomainFromUrl(changeInfo.url);
+  if (!isValidDomain) {
+    return;
   }
-  micropub.options.me = localStorage.getItem('domain');
-  micropub.options.tokenEndpoint = localStorage.getItem('tokenEndpoint');
-  micropub
-    .getToken(code)
-    .then(function(token) {
-      if (!token) {
-        throw new Error(
-          "Token not found in token endpoint response. Missing expected field 'access_token'"
-        );
-      }
-      localStorage.setItem('token', token);
+  var code = getParamFromUrl('code', changeInfo.url);
+  fetchToken(code)
+    .then(() => {
+      console.log('fetching syndication');
+      return fetchSyndicationTargets();
+    })
+    .then(() => {
       chrome.tabs.remove(tab.id);
       authTabId = null;
     })
-    .catch(function(err) {
-      getAuthTab().then(tab => {
-        chrome.tabs.sendMessage(tab.id, {
-          action: 'fetch-token-error',
-          payload: {
-            error: err,
-          },
-        });
-        logout();
-      });
+    .catch(err => {
+      console.error(err.message, err);
     });
 }
 
@@ -128,13 +105,3 @@ menuId = chrome.contextMenus.create({
     }
   },
 });
-
-// chrome.contextMenus.create({
-//   title: 'Reply to link url',
-//   contexts: ['link'],
-//   onclick: function (context) {
-//     chrome.runtime.sendMessage({ action: 'remove-entry-highlight' });
-//     selectEntry(context.linkUrl);
-//     window.open("index.html", "extension_popup", "width=450,height=500,status=no,scrollbars=yes,resizable=no");
-//   },
-// });

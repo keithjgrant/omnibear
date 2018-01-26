@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 33);
+/******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -82,11 +82,11 @@ exports.removeHighlight = removeHighlight;
 exports.focusClickedEntry = focusClickedEntry;
 exports.getCurrentItemUrl = getCurrentItemUrl;
 
-var _microformatShiv = __webpack_require__(35);
+var _microformatShiv = __webpack_require__(36);
 
 var _microformatShiv2 = _interopRequireDefault(_microformatShiv);
 
-var _dom = __webpack_require__(34);
+var _dom = __webpack_require__(35);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -198,7 +198,7 @@ function getCurrentItemUrl() {
 
 /***/ }),
 
-/***/ 33:
+/***/ 34:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -253,7 +253,7 @@ var _entry = __webpack_require__(19);
 
 /***/ }),
 
-/***/ 34:
+/***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -313,7 +313,7 @@ function getAncestorNode(el, filter) {
 
 /***/ }),
 
-/***/ 35:
+/***/ 36:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
