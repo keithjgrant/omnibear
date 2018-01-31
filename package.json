@@ -1,6 +1,6 @@
 {
   "name": "omnibear",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "description": "A micropub Chrome extension",
   "main": "dist/index.html",
   "scripts": {
@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "microformat-shiv": "^2.0.3",
-    "micropub-helper": "^1.3.3",
+    "micropub-helper": "^1.3.4",
     "parse-uri": "^1.0.0",
     "preact": "^7.2.0"
   }
