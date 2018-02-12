@@ -226,7 +226,7 @@ export default class NoteForm extends Component {
     const aliasedEntry = clone(entry);
     const slugName = this.state.settings.slug;
     const syndicateName = this.state.settings.syndicateTo;
-    if (slugName) {
+    if (slugName && slugName !== 'mp-slug') {
       aliasedEntry[slugName] = aliasedEntry['mp-slug'];
       delete aliasedEntry['mp-slug'];
     }
