@@ -230,7 +230,7 @@ export default class NoteForm extends Component {
       aliasedEntry[slugName] = aliasedEntry['mp-slug'];
       delete aliasedEntry['mp-slug'];
     }
-    if (syndicateName) {
+    if (syndicateName && syndicateName !== 'mp-syndicate-to') {
       aliasedEntry[syndicateName] = aliasedEntry['mp-syndicate-to'];
       delete aliasedEntry['mp-syndicate-to'];
     }
