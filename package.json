@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "microformat-shiv": "^2.0.3",
-    "micropub-helper": "^1.3.4",
+    "micropub-helper": "^1.3.10",
     "parse-uri": "^1.0.0",
     "preact": "^7.2.0"
   }
