@@ -15,7 +15,11 @@ function handleMessage(request, sender, sendResponse) {
       handleBeginAuth(request.payload);
       break;
     case 'focus-window':
-      updateFocusedWindow(sender.url, request.payload.selectedEntry);
+      updateFocusedWindow(
+        sender.tab.id,
+        sender.url,
+        request.payload.selectedEntry
+      );
       break;
     case 'select-entry':
       selectEntry(request.payload.url);
@@ -35,8 +39,9 @@ function handleBeginAuth(payload) {
   });
 }
 
-function updateFocusedWindow(url, selectedEntry) {
+function updateFocusedWindow(tabId, url, selectedEntry) {
   localStorage.setItem('pageUrl', cleanUrl(url));
+  localStorage.setItem('pageTabId', tabId);
   if (selectedEntry) {
     selectEntry(selectedEntry);
   } else {

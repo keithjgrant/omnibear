@@ -25,7 +25,7 @@ export default class NoteForm extends Component {
     const draft = getDraft();
     this.state = {
       postType: this.getPostType(settings),
-      url: this.getEntryUrl(),
+      selectedEntry: localStorage.getItem('selectedEntry'),
       userDomain: localStorage.getItem('domain'),
       entry: draft,
       hasSelectedEntry: !!selectedEntry,
@@ -51,19 +51,21 @@ export default class NoteForm extends Component {
     }
   }
 
-  getEntryUrl() {
-    const selectedEntry = localStorage.getItem('selectedEntry');
-    if (selectedEntry) {
-      return selectedEntry;
-    } else {
-      return localStorage.getItem('pageUrl');
+  getCurrentUrl() {
+    switch (this.state.postType) {
+      case NEW_NOTE:
+        return null;
+      case PAGE_REPLY:
+        return this.props.pageUrl;
+      case ITEM_REPLY:
+        return this.state.selectedEntry;
+        break;
     }
   }
 
   render() {
     const {
       postType,
-      url,
       isDisabled,
       isLoading,
       settings,
@@ -83,7 +85,7 @@ export default class NoteForm extends Component {
         />
         <QuickActions
           postType={postType}
-          url={url}
+          url={this.getCurrentUrl()}
           onLike={this.handleLike}
           onRepost={this.handleRepost}
           onReacji={this.handleReacji}
@@ -116,12 +118,13 @@ export default class NoteForm extends Component {
   }
 
   handleLike = () => {
-    if (!this.state.url) {
+    const url = this.getCurrentUrl();
+    if (!url) {
       return;
     }
     this.postEntry({
       h: 'entry',
-      'like-of': this.state.url,
+      'like-of': url,
     })
       .then(location => {
         const type = this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
@@ -134,12 +137,13 @@ export default class NoteForm extends Component {
   };
 
   handleRepost = () => {
-    if (!this.state.url) {
+    const url = this.getCurrentUrl();
+    if (!url) {
       return;
     }
     this.postEntry({
       h: 'entry',
-      'repost-of': this.state.url,
+      'repost-of': url,
     })
       .then(location => {
         const type = this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
@@ -152,13 +156,14 @@ export default class NoteForm extends Component {
   };
 
   handleReacji = emoji => {
-    if (!this.state.url) {
+    const url = this.getCurrentUrl();
+    if (!url) {
       return;
     }
     this.postEntry({
       h: 'entry',
       content: emoji,
-      'in-reply-to': this.state.url,
+      'in-reply-to': url,
     })
       .then(location => {
         const type = this.state.postType === ITEM_REPLY ? 'Item' : 'Page';

@@ -52,3 +52,12 @@ export function generateSlug(content) {
   const parts = formatted.split('-');
   return parts.splice(0, 6).join('-');
 }
+
+export function getPageUrl() {
+  return new Promise((resolve, reject) => {
+    var tabId = localStorage.getItem('pageTabId');
+    chrome.tabs.get(Number(tabId), tab => {
+      resolve(tab.url);
+    });
+  });
+}

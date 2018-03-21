@@ -3,11 +3,14 @@ import LoginForm from './LoginForm';
 import NoteForm from './form/NoteForm';
 import Message from './Message';
 import SettingsForm from './settings/SettingsForm';
-import {logout} from '../util/utils';
+import {logout, getPageUrl} from '../util/utils';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      pageUrl: '',
+    };
     this.setDefaultView();
   }
 
@@ -29,6 +32,7 @@ export default class App extends Component {
             handleLogout={this.handleLogout}
             handleSettings={this.handleSettings}
             userFeedback={this.displayMessage}
+            pageUrl={this.state.pageUrl}
           />
         );
     }
@@ -39,6 +43,7 @@ export default class App extends Component {
       this.setState({
         currentView: 'new-note',
       });
+      this.getPageUrl();
     } else {
       this.setState({
         currentView: 'login',
@@ -51,6 +56,14 @@ export default class App extends Component {
       !!localStorage.getItem('token') &&
       !!localStorage.getItem('micropubEndpoint')
     );
+  }
+
+  getPageUrl() {
+    getPageUrl().then(url => {
+      this.setState({
+        pageUrl: url,
+      });
+    });
   }
 
   displayMessage = (message, status, location) => {
