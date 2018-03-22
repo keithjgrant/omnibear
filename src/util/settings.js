@@ -49,3 +49,14 @@ export function saveAuthenticationDetails(domain, token, micropubEndpoint) {
     micropub.options.micropubEndpoint = micropubEndpoint;
   }
 }
+
+export function getSyndicateOptions() {
+  const options = localStorage.getItem('syndicateTo');
+  if (options && options !== 'undefined') {
+    return JSON.parse(options);
+  } else {
+    // Fix bad data from omnibear v1.0.0 bug that saved 'undefined' to localStorage
+    localStorage.setItem('syndicateTo', '[]');
+    return [];
+  }
+}

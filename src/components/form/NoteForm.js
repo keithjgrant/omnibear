@@ -14,13 +14,12 @@ import {
   MESSAGE_SUCCESS,
   MESSAGE_ERROR,
 } from '../../constants';
-import {getSettings} from '../../util/settings';
+import {getSettings, getSyndicateOptions} from '../../util/settings';
 
 export default class NoteForm extends Component {
   constructor(props) {
     super(props);
     const selectedEntry = localStorage.getItem('selectedEntry');
-    const syndicateOptions = JSON.parse(localStorage.getItem('syndicateTo'));
     const settings = getSettings();
     const draft = getDraft();
     this.state = {
@@ -32,7 +31,7 @@ export default class NoteForm extends Component {
       isDisabled: false,
       isLoading: false,
       settings: settings,
-      syndicateOptions,
+      syndicateOptions: getSyndicateOptions(),
     };
   }
 

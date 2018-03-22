@@ -68,7 +68,6 @@ function handleTabChange(tabId, changeInfo, tab) {
   var code = getParamFromUrl('code', changeInfo.url);
   fetchToken(code)
     .then(() => {
-      console.log('fetching syndication');
       return fetchSyndicationTargets();
     })
     .then(() => {
