@@ -56,9 +56,11 @@ export function fetchToken(code) {
 
 export function fetchSyndicationTargets() {
   return micropub.query('syndicate-to').then(response => {
-    localStorage.setItem(
-      'syndicateTo',
-      JSON.stringify(response['syndicate-to'])
-    );
+    const syndicateTo = response['syndicate-to'];
+    if (Array.isArray(syndicateTo)) {
+      localStorage.setItem('syndicateTo', JSON.stringify(syndicateTo));
+    } else {
+      localStorage.setItem('syndicateTo', JSON.stringify([]));
+    }
   });
 }
