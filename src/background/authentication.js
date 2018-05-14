@@ -57,7 +57,7 @@ export function fetchToken(code) {
 export function fetchSyndicationTargets() {
   return micropub.query('syndicate-to').then(response => {
     const syndicateTo = response['syndicate-to'];
-    if (response.ok && Array.isArray(syndicateTo)) {
+    if (Array.isArray(syndicateTo)) {
       localStorage.setItem('syndicateTo', JSON.stringify(syndicateTo));
     } else {
       localStorage.setItem('syndicateTo', JSON.stringify([]));
