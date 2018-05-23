@@ -202,7 +202,6 @@ export default class NoteForm extends Component {
   }
 
   handleSubmit = entry => {
-    console.log(this.state.postType);
     if (this.state.postType !== NEW_NOTE) {
       entry['in-reply-to'] = this.getCurrentUrl();
     }
