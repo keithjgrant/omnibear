@@ -1,10 +1,6 @@
 import {getParamFromUrl, cleanUrl} from './util/url';
 import {logout} from './util/utils';
-import {
-  validateMeDomainFromUrl,
-  fetchToken,
-  fetchSyndicationTargets,
-} from './background/authentication';
+import {fetchToken, fetchSyndicationTargets} from './background/authentication';
 
 let authTabId = null;
 let menuId;
@@ -59,10 +55,6 @@ function clearEntry() {
 
 function handleTabChange(tabId, changeInfo, tab) {
   if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
-    return;
-  }
-  const isValidDomain = validateMeDomainFromUrl(changeInfo.url);
-  if (!isValidDomain) {
     return;
   }
   var code = getParamFromUrl('code', changeInfo.url);

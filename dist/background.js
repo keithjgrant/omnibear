@@ -1623,7 +1623,6 @@ function cleanUrl(url) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.validateMeDomainFromUrl = validateMeDomainFromUrl;
 exports.fetchToken = fetchToken;
 exports.fetchSyndicationTargets = fetchSyndicationTargets;
 
@@ -1636,27 +1635,6 @@ var _url = __webpack_require__(16);
 var _utils = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function validateMeDomainFromUrl(tabUrl) {
-  var meFromUrl = (0, _url.getParamFromUrl)('me', tabUrl);
-  if (meFromUrl) {
-    var currentDomain = localStorage.getItem('domain');
-
-    if ((0, _url.getUrlOrigin)(currentDomain) !== (0, _url.getUrlOrigin)(meFromUrl)) {
-      chrome.tabs.sendMessage(tab.id, {
-        action: 'fetch-token-error',
-        payload: {
-          error: new Error("'me' url domain doesn't match auth endpoint domain")
-        }
-      });
-      (0, _utils.logout)();
-      return false;
-    }
-
-    localStorage.setItem('domain', meFromUrl);
-    return true;
-  }
-}
 
 function fetchToken(code) {
   _micropub2.default.options.me = localStorage.getItem('domain');
@@ -1757,10 +1735,6 @@ function clearEntry() {
 
 function handleTabChange(tabId, changeInfo, tab) {
   if (tabId !== authTabId || !isAuthRedirect(changeInfo)) {
-    return;
-  }
-  var isValidDomain = (0, _authentication.validateMeDomainFromUrl)(changeInfo.url);
-  if (!isValidDomain) {
     return;
   }
   var code = (0, _url.getParamFromUrl)('code', changeInfo.url);
