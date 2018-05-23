@@ -75,6 +75,7 @@ export default class NoteForm extends Component {
       errorMessage,
     } = this.state;
     const {handleSettings, handleLogout} = this.props;
+    console.log(postType);
     return (
       <div>
         <ChangeViewTabs
@@ -201,8 +202,9 @@ export default class NoteForm extends Component {
   }
 
   handleSubmit = entry => {
+    console.log(this.state.postType);
     if (this.state.postType !== NEW_NOTE) {
-      entry['in-reply-to'] = this.state.url;
+      entry['in-reply-to'] = this.getCurrentUrl();
     }
     this.postEntry(entry)
       .then(location => {
