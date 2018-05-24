@@ -1,6 +1,7 @@
 import {h, Component} from 'preact';
 import LoginForm from './LoginForm';
 import NoteForm from './form/NoteForm';
+import Logs from './log/Logs';
 import Message from './Message';
 import SettingsForm from './settings/SettingsForm';
 import {logout, getPageUrl} from '../util/utils';
@@ -17,7 +18,12 @@ export default class App extends Component {
   render() {
     switch (this.state.currentView) {
       case 'login':
-        return <LoginForm handleSettings={this.handleSettings} />;
+        return (
+          <LoginForm
+            handleSettings={this.handleSettings}
+            handleLogs={this.handleLogs}
+          />
+        );
       case 'feedback':
         return (
           <Message location={this.state.postLocation}>
@@ -26,11 +32,14 @@ export default class App extends Component {
         );
       case 'settings':
         return <SettingsForm onClose={this.setDefaultView} />;
+      case 'logs':
+        return <Logs onClose={this.setDefaultView} />;
       default:
         return (
           <NoteForm
             handleLogout={this.handleLogout}
             handleSettings={this.handleSettings}
+            handleLogs={this.handleLogs}
             userFeedback={this.displayMessage}
             pageUrl={this.state.pageUrl}
           />
@@ -76,6 +85,10 @@ export default class App extends Component {
 
   handleSettings = () => {
     this.setState({currentView: 'settings'});
+  };
+
+  handleLogs = () => {
+    this.setState({currentView: 'logs'});
   };
 
   handleLogout = () => {

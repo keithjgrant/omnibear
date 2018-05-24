@@ -75,7 +75,6 @@ export default class NoteForm extends Component {
       errorMessage,
     } = this.state;
     const {handleSettings, handleLogout} = this.props;
-    console.log(postType);
     return (
       <div>
         <ChangeViewTabs
@@ -111,6 +110,7 @@ export default class NoteForm extends Component {
         <Footer
           domain={userDomain}
           onSettings={handleSettings}
+          onLogs={this.state.settings.debugLog ? this.props.handleLogs : null}
           onLogout={handleLogout}
         />
       </div>

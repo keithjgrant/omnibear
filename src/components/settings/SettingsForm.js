@@ -8,6 +8,7 @@ import {
   saveSettings,
   saveAuthenticationDetails,
 } from '../../util/settings';
+import {clearLogs} from '../../util/log';
 
 export default class SettingsForm extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ export default class SettingsForm extends Component {
       defaultToCurrentPage,
       autoSlug,
       closeAfterPosting,
+      debugLog,
       reacji,
       slug,
       syndicateTo,
@@ -63,6 +65,15 @@ export default class SettingsForm extends Component {
                 onChange={this.updateBoolean('closeAfterPosting')}
               />
               Close Omnibear window after posting
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                checked={debugLog}
+                onChange={this.toggleLogs}
+              />
+              Record debug logs
             </label>
 
             <ReacjiSettings reacji={reacji} onChange={this.set('reacji')} />
@@ -117,6 +128,13 @@ export default class SettingsForm extends Component {
       });
     };
   }
+
+  toggleLogs = event => {
+    if (!event.target.checked) {
+      clearLogs();
+    }
+    this.updateBoolean('debugLog');
+  };
 
   save = e => {
     e.preventDefault();

@@ -412,6 +412,37 @@ legend + .settings-form__description {
   box-shadow: 0 0 0.2em var(--red);
 }
 
+.logs {
+  padding-left: 0;
+  border: 1px solid var(--gray-60);
+  list-style: none;
+}
+.logs > li {
+  margin: 0;
+  padding: 0.2em 0.4em;
+}
+.logs > li + li {
+  border-top: 1px solid currentColor;
+}
+.logs__info {
+  color: var(--green);
+  background-color: var(--green-light);
+}
+.logs__warning {
+  color: var(--orange);
+  background-color: var(--orange-light);
+}
+.logs__error {
+  color: var(--red);
+  background-color: var(--red-light);
+}
+.logs time {
+  display: block;
+  color: var(--gray-50);
+  font-size: 0.8rem;
+  text-align: right;
+}
+
 .metadata {
   font-size: 0.64em;
   font-weight: bold;

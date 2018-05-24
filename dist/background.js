@@ -1554,7 +1554,7 @@ exports.paramsToQueryString = paramsToQueryString;
 exports.getUrlOrigin = getUrlOrigin;
 exports.cleanUrl = cleanUrl;
 
-var _parseUri = __webpack_require__(41);
+var _parseUri = __webpack_require__(44);
 
 var _parseUri2 = _interopRequireDefault(_parseUri);
 
@@ -1793,7 +1793,10 @@ menuId = chrome.contextMenus.create({
 /* 38 */,
 /* 39 */,
 /* 40 */,
-/* 41 */
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

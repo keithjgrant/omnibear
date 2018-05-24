@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 37);
+/******/ 	return __webpack_require__(__webpack_require__.s = 39);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2169,6 +2169,15 @@ var Footer = function (_Component) {
           },
           "Settings"
         ) : null,
+        this.props.onLogs ? (0, _preact.h)(
+          "button",
+          {
+            className: "button-link",
+            type: "button",
+            onClick: this.props.onLogs
+          },
+          "Logs"
+        ) : null,
         this.props.onLogout ? (0, _preact.h)(
           "button",
           {
@@ -2260,12 +2269,13 @@ var _constants = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var KEYS = ['defaultToCurrentPage', 'autoSlug', 'closeAfterPosting', 'reacji', 'slug', 'syndicateTo'];
+var KEYS = ['defaultToCurrentPage', 'autoSlug', 'closeAfterPosting', 'debugLog', 'reacji', 'slug', 'syndicateTo'];
 
 var DEFAULT_SETTINGS = {
   defaultToCurrentPage: false,
   autoSlug: false,
   closeAfterPosting: true,
+  debugLog: false,
   reacji: _constants.DEFAULT_REACJI,
   slug: 'mp-slug',
   syndicateTo: 'mp-syndicate-to'
@@ -2337,11 +2347,15 @@ var _NoteForm = __webpack_require__(28);
 
 var _NoteForm2 = _interopRequireDefault(_NoteForm);
 
+var _Logs = __webpack_require__(32);
+
+var _Logs2 = _interopRequireDefault(_Logs);
+
 var _Message = __webpack_require__(6);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _SettingsForm = __webpack_require__(34);
+var _SettingsForm = __webpack_require__(36);
 
 var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
 
@@ -2388,6 +2402,10 @@ var App = function (_Component) {
       _this.setState({ currentView: 'settings' });
     };
 
+    _this.handleLogs = function () {
+      _this.setState({ currentView: 'logs' });
+    };
+
     _this.handleLogout = function () {
       (0, _utils.logout)();
       _this.setState({ currentView: 'login' });
@@ -2405,7 +2423,10 @@ var App = function (_Component) {
     value: function render() {
       switch (this.state.currentView) {
         case 'login':
-          return (0, _preact.h)(_LoginForm2.default, { handleSettings: this.handleSettings });
+          return (0, _preact.h)(_LoginForm2.default, {
+            handleSettings: this.handleSettings,
+            handleLogs: this.handleLogs
+          });
         case 'feedback':
           return (0, _preact.h)(
             _Message2.default,
@@ -2414,10 +2435,13 @@ var App = function (_Component) {
           );
         case 'settings':
           return (0, _preact.h)(_SettingsForm2.default, { onClose: this.setDefaultView });
+        case 'logs':
+          return (0, _preact.h)(_Logs2.default, { onClose: this.setDefaultView });
         default:
           return (0, _preact.h)(_NoteForm2.default, {
             handleLogout: this.handleLogout,
             handleSettings: this.handleSettings,
+            handleLogs: this.handleLogs,
             userFeedback: this.displayMessage,
             pageUrl: this.state.pageUrl
           });
@@ -2477,6 +2501,8 @@ var _micropub = __webpack_require__(3);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
+var _settings = __webpack_require__(19);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2488,23 +2514,19 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var LoginForm = function (_Component) {
   _inherits(LoginForm, _Component);
 
-  function LoginForm() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
+  function LoginForm(props) {
     _classCallCheck(this, LoginForm);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this, props));
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call.apply(_ref, [this].concat(args))), _this), _this.handleChange = function (e) {
+    _this.handleChange = function (e) {
       _this.setState({
         domain: e.target.value,
         hasErrors: false
       });
-    }, _this.handleSubmit = function (e) {
+    };
+
+    _this.handleSubmit = function (e) {
       e.preventDefault();
       var domain = _this.getNormalizedDomain();
       _this.setState({ isLoading: true, domain: domain });
@@ -2530,7 +2552,12 @@ var LoginForm = function (_Component) {
           isLoading: false
         });
       });
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    };
+
+    _this.state = {
+      logsEnabled: (0, _settings.getSettings)().debugLog
+    };
+    return _this;
   }
 
   _createClass(LoginForm, [{
@@ -2597,7 +2624,10 @@ var LoginForm = function (_Component) {
             this.state.errorMessage || 'Error'
           ) : null
         ),
-        (0, _preact.h)(_Footer2.default, { onSettings: this.props.handleSettings })
+        (0, _preact.h)(_Footer2.default, {
+          onSettings: this.props.handleSettings,
+          onLogs: this.state.logsEnabled ? this.props.handleLogs : null
+        })
       );
     }
   }, {
@@ -3127,7 +3157,6 @@ var NoteForm = function (_Component) {
     };
 
     _this.handleSubmit = function (entry) {
-      console.log(_this.state.postType);
       if (_this.state.postType !== _constants.NEW_NOTE) {
         entry['in-reply-to'] = _this.getCurrentUrl();
       }
@@ -3224,7 +3253,6 @@ var NoteForm = function (_Component) {
           handleSettings = _props.handleSettings,
           handleLogout = _props.handleLogout;
 
-      console.log(postType);
       return (0, _preact.h)(
         'div',
         null,
@@ -3267,6 +3295,7 @@ var NoteForm = function (_Component) {
         (0, _preact.h)(_Footer2.default, {
           domain: userDomain,
           onSettings: handleSettings,
+          onLogs: this.state.settings.debugLog ? this.props.handleLogs : null,
           onLogout: handleLogout
         })
       );
@@ -3341,11 +3370,11 @@ var _preact = __webpack_require__(0);
 
 var _constants = __webpack_require__(2);
 
-var _HeartSvg = __webpack_require__(35);
+var _HeartSvg = __webpack_require__(37);
 
 var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
 
-var _RepostSvg = __webpack_require__(36);
+var _RepostSvg = __webpack_require__(38);
 
 var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
 
@@ -3582,6 +3611,159 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var LogItem = function (_Component) {
+  _inherits(LogItem, _Component);
+
+  function LogItem(props) {
+    _classCallCheck(this, LogItem);
+
+    var _this = _possibleConstructorReturn(this, (LogItem.__proto__ || Object.getPrototypeOf(LogItem)).call(this, props));
+
+    _this.state = {
+      isExpanded: false
+    };
+    return _this;
+  }
+
+  _createClass(LogItem, [{
+    key: 'render',
+    value: function render() {
+      var log = this.props.log;
+
+      console.log(log);
+      return (0, _preact.h)(
+        'li',
+        { className: this.getClass() },
+        (0, _preact.h)(
+          'time',
+          null,
+          log.timestamp
+        ),
+        (0, _preact.h)(
+          'div',
+          null,
+          log.message
+        )
+      );
+    }
+  }, {
+    key: 'getClass',
+    value: function getClass() {
+      return 'logs__' + this.props.log.type + ' ' + (this.state.isExpanded ? 'is-expanded' : '');
+    }
+  }]);
+
+  return LogItem;
+}(_preact.Component);
+
+exports.default = LogItem;
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+var _LogItem = __webpack_require__(31);
+
+var _LogItem2 = _interopRequireDefault(_LogItem);
+
+var _log = __webpack_require__(42);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Logs = function (_Component) {
+  _inherits(Logs, _Component);
+
+  function Logs() {
+    _classCallCheck(this, Logs);
+
+    return _possibleConstructorReturn(this, (Logs.__proto__ || Object.getPrototypeOf(Logs)).apply(this, arguments));
+  }
+
+  _createClass(Logs, [{
+    key: 'render',
+    value: function render() {
+      var onClose = this.props.onClose;
+
+      var logs = (0, _log.getLogs)();
+      return (0, _preact.h)(
+        'div',
+        null,
+        (0, _preact.h)(
+          'div',
+          { 'class': 'container' },
+          (0, _preact.h)(
+            'p',
+            null,
+            'Logs'
+          ),
+          logs.length ? (0, _preact.h)(
+            'ul',
+            { className: 'logs' },
+            logs.map(function (log) {
+              return (0, _preact.h)(_LogItem2.default, { log: log });
+            })
+          ) : (0, _preact.h)(
+            'p',
+            { className: 'metadata' },
+            'No logs found'
+          )
+        ),
+        (0, _preact.h)(
+          'footer',
+          { className: 'footer' },
+          (0, _preact.h)(
+            'button',
+            { className: 'button-link', type: 'button', onClick: onClose },
+            'Close'
+          )
+        )
+      );
+    }
+  }]);
+
+  return Logs;
+}(_preact.Component);
+
+exports.default = Logs;
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var AuthenticationFields = function (_Component) {
   _inherits(AuthenticationFields, _Component);
 
@@ -3690,7 +3872,7 @@ var AuthenticationFields = function (_Component) {
 exports.default = AuthenticationFields;
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3828,7 +4010,7 @@ var EndpointFields = function (_Component) {
 exports.default = EndpointFields;
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3940,7 +4122,7 @@ var ReacjiSettings = function (_Component) {
 exports.default = ReacjiSettings;
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3954,21 +4136,23 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _ReacjiSettings = __webpack_require__(33);
+var _ReacjiSettings = __webpack_require__(35);
 
 var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
 
-var _EndpointFields = __webpack_require__(32);
+var _EndpointFields = __webpack_require__(34);
 
 var _EndpointFields2 = _interopRequireDefault(_EndpointFields);
 
-var _AuthenticationFields = __webpack_require__(31);
+var _AuthenticationFields = __webpack_require__(33);
 
 var _AuthenticationFields2 = _interopRequireDefault(_AuthenticationFields);
 
 var _constants = __webpack_require__(2);
 
 var _settings = __webpack_require__(19);
+
+var _log = __webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3992,6 +4176,13 @@ var SettingsForm = function (_Component) {
       return function (value) {
         _this.setState(_defineProperty({}, fieldName, value));
       };
+    };
+
+    _this.toggleLogs = function (event) {
+      if (!event.target.checked) {
+        (0, _log.clearLogs)();
+      }
+      _this.updateBoolean('debugLog');
     };
 
     _this.save = function (e) {
@@ -4022,6 +4213,7 @@ var SettingsForm = function (_Component) {
           defaultToCurrentPage = _state.defaultToCurrentPage,
           autoSlug = _state.autoSlug,
           closeAfterPosting = _state.closeAfterPosting,
+          debugLog = _state.debugLog,
           reacji = _state.reacji,
           slug = _state.slug,
           syndicateTo = _state.syndicateTo,
@@ -4073,6 +4265,16 @@ var SettingsForm = function (_Component) {
                 onChange: this.updateBoolean('closeAfterPosting')
               }),
               'Close Omnibear window after posting'
+            ),
+            (0, _preact.h)(
+              'label',
+              null,
+              (0, _preact.h)('input', {
+                type: 'checkbox',
+                checked: debugLog,
+                onChange: this.toggleLogs
+              }),
+              'Record debug logs'
             ),
             (0, _preact.h)(_ReacjiSettings2.default, { reacji: reacji, onChange: this.set('reacji') }),
             (0, _preact.h)(_EndpointFields2.default, {
@@ -4134,7 +4336,7 @@ var SettingsForm = function (_Component) {
 exports.default = SettingsForm;
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4190,7 +4392,7 @@ var HeartSVG = function (_Component) {
 exports.default = HeartSVG;
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4241,7 +4443,7 @@ var RepostSvg = function (_Component) {
 exports.default = RepostSvg;
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4258,6 +4460,86 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener('DOMContentLoaded', function () {
   (0, _preact.render)((0, _preact.h)(_App2.default, null), document.body);
 });
+
+/***/ }),
+/* 40 */,
+/* 41 */,
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getLogs = getLogs;
+exports.clearLogs = clearLogs;
+exports.info = info;
+exports.warning = warning;
+exports.error = error;
+
+var _settings = __webpack_require__(19);
+
+var INFO = 'info';
+var WARNING = 'warning';
+var ERROR = 'error';
+
+function getLogs() {
+  var log = JSON.parse(localStorage.getItem('log'));
+  if (log) {
+    return log;
+  }
+  return [];
+}
+
+function saveLog(log) {
+  localStorage.setItem('log', JSON.stringify(log));
+}
+
+function clearLogs() {
+  localStorage.setItem('log', '[]');
+}
+
+function formatDate(date) {
+  var day = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+  var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '.' + date.getMilliseconds();
+  return day + ' ' + time;
+}
+
+function append(message, data, type) {
+  if (!logsEnabled()) {
+    return;
+  }
+  var log = getLogs();
+  if (log.length > 100) {
+    log.unshift();
+  }
+  log.push({
+    message: message,
+    data: data,
+    type: type,
+    time: formatDate(new Date())
+  });
+  saveLog(log);
+}
+
+function info(message, data) {
+  append(message, data, INFO);
+}
+exports.default = info;
+function warning(message, data) {
+  append(message, data, WARNING);
+}
+
+function error(message, data) {
+  append(message, data, ERROR);
+}
+
+function logsEnabled() {
+  var settings = (0, _settings.getSettings)();
+  return settings.debugLog;
+}
 
 /***/ })
 /******/ ]);

@@ -3,8 +3,16 @@ import Message from './Message';
 import Footer from './Footer';
 import {openLink} from '../util/utils';
 import micropub from '../util/micropub';
+import {getSettings} from '../util/settings';
 
 export default class LoginForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      logsEnabled: getSettings().debugLog,
+    };
+  }
+
   componentDidMount() {
     setTimeout(() => {
       this.input.focus();
@@ -48,7 +56,10 @@ export default class LoginForm extends Component {
             <Message type="error">{this.state.errorMessage || 'Error'}</Message>
           ) : null}
         </form>
-        <Footer onSettings={this.props.handleSettings} />
+        <Footer
+          onSettings={this.props.handleSettings}
+          onLogs={this.state.logsEnabled ? this.props.handleLogs : null}
+        />
       </div>
     );
   }

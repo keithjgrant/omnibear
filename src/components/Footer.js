@@ -18,6 +18,15 @@ export default class Footer extends Component {
             Settings
           </button>
         ) : null}
+        {this.props.onLogs ? (
+          <button
+            className="button-link"
+            type="button"
+            onClick={this.props.onLogs}
+          >
+            Logs
+          </button>
+        ) : null}
         {this.props.onLogout ? (
           <button
             className="button-link"
