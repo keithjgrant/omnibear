@@ -426,8 +426,8 @@ legend + .settings-form__description {
   border-top: 1px solid currentColor;
 }
 .logs__info {
-  color: var(--green);
-  background-color: var(--green-light);
+  color: var(--gray-30);
+  background-color: var(--gray-90);
 }
 .logs__warning {
   color: var(--orange);
