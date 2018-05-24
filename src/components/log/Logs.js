@@ -1,20 +1,35 @@
 import {h, Component} from 'preact';
 import LogItem from './LogItem';
-import {getLogs} from '../../util/log';
+import {getLogs, clearLogs} from '../../util/log';
 
 export default class Logs extends Component {
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.forceUpdate();
+    }, 2000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   render() {
     const {onClose} = this.props;
     const logs = getLogs();
     return (
       <div>
+        <h1 className="section-heading">Logs</h1>
         <div class="container">
-          <p>Logs</p>
           {logs.length ? (
             <ul className="logs">{logs.map(log => <LogItem log={log} />)}</ul>
           ) : (
             <p className="metadata">No logs found</p>
           )}
+          <p className="text-right">
+            <button type="button" onClick={this.clearLogs}>
+              Clear logs
+            </button>
+          </p>
         </div>
         <footer className="footer">
           <button className="button-link" type="button" onClick={onClose}>
@@ -24,4 +39,9 @@ export default class Logs extends Component {
       </div>
     );
   }
+
+  clearLogs = () => {
+    clearLogs();
+    this.forceUpdate();
+  };
 }

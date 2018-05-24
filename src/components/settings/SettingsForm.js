@@ -71,7 +71,7 @@ export default class SettingsForm extends Component {
               <input
                 type="checkbox"
                 checked={debugLog}
-                onChange={this.toggleLogs}
+                onChange={this.updateBoolean('debugLog')}
               />
               Record debug logs
             </label>
@@ -129,18 +129,14 @@ export default class SettingsForm extends Component {
     };
   }
 
-  toggleLogs = event => {
-    if (!event.target.checked) {
-      clearLogs();
-    }
-    this.updateBoolean('debugLog');
-  };
-
   save = e => {
     e.preventDefault();
     const {me, token, micropubEndpoint} = this.state;
     saveSettings(this.state);
     saveAuthenticationDetails(me, token, micropubEndpoint);
+    if (!this.state.debugLog) {
+      clearLogs();
+    }
     this.props.onClose();
   };
 }

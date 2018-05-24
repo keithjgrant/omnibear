@@ -41,10 +41,11 @@ import {
   }
 
   function sendFocusMessage() {
+    const url = getCurrentItemUrl();
     chrome.runtime.sendMessage({
       action: 'focus-window',
       payload: {
-        selectedEntry: getCurrentItemUrl(),
+        selectedEntry: url,
       },
     });
   }

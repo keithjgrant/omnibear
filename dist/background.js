@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 24);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -139,7 +139,25 @@ function getPageUrl() {
 }
 
 /***/ }),
-/* 2 */,
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var NEW_NOTE = exports.NEW_NOTE = 'new-note';
+var PAGE_REPLY = exports.PAGE_REPLY = 'page-reply';
+var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';
+
+var MESSAGE_SUCCESS = exports.MESSAGE_SUCCESS = 'success';
+var MESSAGE_ERROR = exports.MESSAGE_ERROR = 'error';
+
+var DEFAULT_REACJI = exports.DEFAULT_REACJI = ['👍', '👎', '🎉', '😆', '😢', '😠'];
+
+/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -150,7 +168,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _micropubHelper = __webpack_require__(11);
+var _micropubHelper = __webpack_require__(12);
 
 var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
 
@@ -402,20 +420,97 @@ exports.isBuffer = function isBuffer(obj) {
 
 
 /***/ }),
-/* 6 */,
-/* 7 */
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getSettings = getSettings;
+exports.saveSettings = saveSettings;
+exports.saveAuthenticationDetails = saveAuthenticationDetails;
+exports.getSyndicateOptions = getSyndicateOptions;
+
+var _micropub = __webpack_require__(3);
+
+var _micropub2 = _interopRequireDefault(_micropub);
+
+var _constants = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var KEYS = ['defaultToCurrentPage', 'autoSlug', 'closeAfterPosting', 'debugLog', 'reacji', 'slug', 'syndicateTo'];
+
+var DEFAULT_SETTINGS = {
+  defaultToCurrentPage: false,
+  autoSlug: false,
+  closeAfterPosting: true,
+  debugLog: false,
+  reacji: _constants.DEFAULT_REACJI,
+  slug: 'mp-slug',
+  syndicateTo: 'mp-syndicate-to'
+};
+
+function getSettings() {
+  var settings = JSON.parse(localStorage.getItem('settings'));
+  if (settings) {
+    return settings;
+  }
+  return DEFAULT_SETTINGS;
+}
+
+function saveSettings(settings) {
+  var clean = {};
+  KEYS.forEach(function (key) {
+    clean[key] = settings[key];
+  });
+  localStorage.setItem('settings', JSON.stringify(clean));
+}
+
+function saveAuthenticationDetails(domain, token, micropubEndpoint) {
+  if (domain) {
+    localStorage.setItem('domain', domain);
+    _micropub2.default.options.me = domain;
+  }
+  if (token) {
+    localStorage.setItem('token', token);
+    _micropub2.default.options.token = token;
+  }
+  if (micropubEndpoint) {
+    localStorage.setItem('micropubEndpoint', micropubEndpoint);
+    _micropub2.default.options.micropubEndpoint = micropubEndpoint;
+  }
+}
+
+function getSyndicateOptions() {
+  var options = localStorage.getItem('syndicateTo');
+  if (options && options !== 'undefined') {
+    return JSON.parse(options);
+  } else {
+    // Fix bad data from omnibear v1.0.0 bug that saved 'undefined' to localStorage
+    localStorage.setItem('syndicateTo', '[]');
+    return [];
+  }
+}
+
+/***/ }),
+/* 7 */,
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_qs__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_qs__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_qs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_qs__);
 /* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0_qs__, "parse")) __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_qs__["parse"]; });
 /* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0_qs__, "stringify")) __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0_qs__["stringify"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_rel_scraper__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_rel_scraper__ = __webpack_require__(11);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__lib_rel_scraper__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_object_to_form_data__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_object_to_form_data__ = __webpack_require__(10);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_2__lib_object_to_form_data__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_append_query_string__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_append_query_string__ = __webpack_require__(9);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_3__lib_append_query_string__["a"]; });
 
 
@@ -424,7 +519,7 @@ exports.isBuffer = function isBuffer(obj) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -447,7 +542,7 @@ function appendQueryString(url, queryVars) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -479,7 +574,7 @@ function objectToFormData(
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -523,12 +618,12 @@ function objectToFormData(
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dependencies__ = __webpack_require__(7);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dependencies__ = __webpack_require__(8);
 
 
 
@@ -1092,17 +1187,17 @@ class Micropub {
 
 /* harmony default export */ __webpack_exports__["default"] = (Micropub);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(16)))
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stringify = __webpack_require__(14);
-var parse = __webpack_require__(13);
+var stringify = __webpack_require__(15);
+var parse = __webpack_require__(14);
 var formats = __webpack_require__(4);
 
 module.exports = {
@@ -1113,7 +1208,7 @@ module.exports = {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1294,7 +1389,7 @@ module.exports = function (str, opts) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1511,7 +1606,7 @@ module.exports = function (object, opts) {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 var g;
@@ -1538,7 +1633,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1611,10 +1706,91 @@ function cleanUrl(url) {
 }
 
 /***/ }),
-/* 17 */,
 /* 18 */,
 /* 19 */,
 /* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getLogs = getLogs;
+exports.clearLogs = clearLogs;
+exports.info = info;
+exports.warning = warning;
+exports.error = error;
+
+var _settings = __webpack_require__(6);
+
+var INFO = 'info';
+var WARNING = 'warning';
+var ERROR = 'error';
+
+function getLogs() {
+  var log = JSON.parse(localStorage.getItem('log'));
+  if (log) {
+    return log;
+  }
+  return [];
+}
+
+function saveLog(log) {
+  localStorage.setItem('log', JSON.stringify(log));
+}
+
+function clearLogs() {
+  localStorage.setItem('log', '[]');
+}
+
+function formatDate(date) {
+  var day = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+  var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '.' + date.getMilliseconds();
+  return day + ' ' + time;
+}
+
+function append(message, data, type) {
+  if (!logsEnabled() && type !== ERROR) {
+    return;
+  }
+  var log = getLogs();
+  if (log.length > 100) {
+    log.unshift();
+  }
+  var entry = {
+    message: message,
+    type: type,
+    timestamp: formatDate(new Date())
+  };
+  if (data) {
+    entry.data = data;
+  }
+  log.push(entry);
+  saveLog(log);
+}
+
+function info(message, data) {
+  append(message, data, INFO);
+}
+exports.default = info;
+function warning(message, data) {
+  append(message, data, WARNING);
+}
+
+function error(message, data) {
+  append(message, data, ERROR);
+}
+
+function logsEnabled() {
+  var settings = (0, _settings.getSettings)();
+  console.log(settings);
+  return settings.debugLog;
+}
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1630,9 +1806,11 @@ var _micropub = __webpack_require__(3);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
-var _url = __webpack_require__(16);
+var _url = __webpack_require__(17);
 
 var _utils = __webpack_require__(1);
+
+var _log = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1642,12 +1820,12 @@ function fetchToken(code) {
   _micropub2.default.options.micropubEndpoint = localStorage.getItem('micropubEndpoint');
   return _micropub2.default.getToken(code).then(function (token) {
     if (!token) {
-      throw new Error("Token not found in token endpoint response. Missing expected field 'access_token'");
+      throw new Error('Token not found in token endpoint response. Missing expected field `access_token`');
     }
     localStorage.setItem('token', token);
     _micropub2.default.options.token = token;
   }).catch(function (err) {
-    console.log('error fetching token', err);
+    (0, _log.error)('Error fetching token', err);
     (0, _utils.getAuthTab)().then(function (tab) {
       chrome.tabs.sendMessage(tab.id, {
         action: 'fetch-token-error',
@@ -1663,28 +1841,32 @@ function fetchToken(code) {
 function fetchSyndicationTargets() {
   return _micropub2.default.query('syndicate-to').then(function (response) {
     var syndicateTo = response['syndicate-to'];
+    (0, _log.info)('Syndication targets retreived', syndicateTo);
     if (Array.isArray(syndicateTo)) {
       localStorage.setItem('syndicateTo', JSON.stringify(syndicateTo));
     } else {
+      (0, _log.warning)('Syndication targets not in array format. Saving as empty array.');
       localStorage.setItem('syndicateTo', JSON.stringify([]));
     }
   });
 }
 
 /***/ }),
-/* 21 */,
 /* 22 */,
-/* 23 */
+/* 23 */,
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _url = __webpack_require__(16);
+var _url = __webpack_require__(17);
+
+var _authentication = __webpack_require__(21);
 
 var _utils = __webpack_require__(1);
 
-var _authentication = __webpack_require__(20);
+var _log = __webpack_require__(20);
 
 var authTabId = null;
 var menuId = void 0;
@@ -1738,13 +1920,16 @@ function handleTabChange(tabId, changeInfo, tab) {
     return;
   }
   var code = (0, _url.getParamFromUrl)('code', changeInfo.url);
+  (0, _log.info)('Auth code found beginning \'' + code.substr(0, 6) + '\'. Fetching token\u2026');
   (0, _authentication.fetchToken)(code).then(function () {
+    (0, _log.info)('Token retrieved. Fetching syndication targets…');
     return (0, _authentication.fetchSyndicationTargets)();
   }).then(function () {
+    (0, _log.info)('Authentication complete. Closing authentication tab.');
     chrome.tabs.remove(tab.id);
     authTabId = null;
   }).catch(function (err) {
-    console.error(err.message, err);
+    (0, _log.error)(err.message, err);
   });
 }
 
@@ -1776,7 +1961,6 @@ menuId = chrome.contextMenus.create({
 });
 
 /***/ }),
-/* 24 */,
 /* 25 */,
 /* 26 */,
 /* 27 */,

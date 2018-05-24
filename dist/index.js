@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 39);
+/******/ 	return __webpack_require__(__webpack_require__.s = 40);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -658,7 +658,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _micropubHelper = __webpack_require__(11);
+var _micropubHelper = __webpack_require__(12);
 
 var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
 
@@ -919,6 +919,83 @@ exports.isBuffer = function isBuffer(obj) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getSettings = getSettings;
+exports.saveSettings = saveSettings;
+exports.saveAuthenticationDetails = saveAuthenticationDetails;
+exports.getSyndicateOptions = getSyndicateOptions;
+
+var _micropub = __webpack_require__(3);
+
+var _micropub2 = _interopRequireDefault(_micropub);
+
+var _constants = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var KEYS = ['defaultToCurrentPage', 'autoSlug', 'closeAfterPosting', 'debugLog', 'reacji', 'slug', 'syndicateTo'];
+
+var DEFAULT_SETTINGS = {
+  defaultToCurrentPage: false,
+  autoSlug: false,
+  closeAfterPosting: true,
+  debugLog: false,
+  reacji: _constants.DEFAULT_REACJI,
+  slug: 'mp-slug',
+  syndicateTo: 'mp-syndicate-to'
+};
+
+function getSettings() {
+  var settings = JSON.parse(localStorage.getItem('settings'));
+  if (settings) {
+    return settings;
+  }
+  return DEFAULT_SETTINGS;
+}
+
+function saveSettings(settings) {
+  var clean = {};
+  KEYS.forEach(function (key) {
+    clean[key] = settings[key];
+  });
+  localStorage.setItem('settings', JSON.stringify(clean));
+}
+
+function saveAuthenticationDetails(domain, token, micropubEndpoint) {
+  if (domain) {
+    localStorage.setItem('domain', domain);
+    _micropub2.default.options.me = domain;
+  }
+  if (token) {
+    localStorage.setItem('token', token);
+    _micropub2.default.options.token = token;
+  }
+  if (micropubEndpoint) {
+    localStorage.setItem('micropubEndpoint', micropubEndpoint);
+    _micropub2.default.options.micropubEndpoint = micropubEndpoint;
+  }
+}
+
+function getSyndicateOptions() {
+  var options = localStorage.getItem('syndicateTo');
+  if (options && options !== 'undefined') {
+    return JSON.parse(options);
+  } else {
+    // Fix bad data from omnibear v1.0.0 bug that saved 'undefined' to localStorage
+    localStorage.setItem('syndicateTo', '[]');
+    return [];
+  }
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -979,19 +1056,19 @@ var Message = function (_Component) {
 exports.default = Message;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_qs__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_qs__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_qs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_qs__);
 /* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0_qs__, "parse")) __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_qs__["parse"]; });
 /* harmony reexport (binding) */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0_qs__, "stringify")) __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0_qs__["stringify"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_rel_scraper__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_rel_scraper__ = __webpack_require__(11);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__lib_rel_scraper__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_object_to_form_data__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_object_to_form_data__ = __webpack_require__(10);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_2__lib_object_to_form_data__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_append_query_string__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_append_query_string__ = __webpack_require__(9);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_3__lib_append_query_string__["a"]; });
 
 
@@ -1000,7 +1077,7 @@ exports.default = Message;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1023,7 +1100,7 @@ function appendQueryString(url, queryVars) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1055,7 +1132,7 @@ function objectToFormData(
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1099,12 +1176,12 @@ function objectToFormData(
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dependencies__ = __webpack_require__(7);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dependencies__ = __webpack_require__(8);
 
 
 
@@ -1668,17 +1745,17 @@ class Micropub {
 
 /* harmony default export */ __webpack_exports__["default"] = (Micropub);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(16)))
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stringify = __webpack_require__(14);
-var parse = __webpack_require__(13);
+var stringify = __webpack_require__(15);
+var parse = __webpack_require__(14);
 var formats = __webpack_require__(4);
 
 module.exports = {
@@ -1689,7 +1766,7 @@ module.exports = {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1870,7 +1947,7 @@ module.exports = function (str, opts) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2087,7 +2164,7 @@ module.exports = function (object, opts) {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 var g;
@@ -2114,8 +2191,8 @@ module.exports = g;
 
 
 /***/ }),
-/* 16 */,
-/* 17 */
+/* 17 */,
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2197,7 +2274,7 @@ var Footer = function (_Component) {
 exports.default = Footer;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2247,7 +2324,7 @@ function deleteDraft() {
 }
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2256,76 +2333,81 @@ function deleteDraft() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getSettings = getSettings;
-exports.saveSettings = saveSettings;
-exports.saveAuthenticationDetails = saveAuthenticationDetails;
-exports.getSyndicateOptions = getSyndicateOptions;
+exports.getLogs = getLogs;
+exports.clearLogs = clearLogs;
+exports.info = info;
+exports.warning = warning;
+exports.error = error;
 
-var _micropub = __webpack_require__(3);
+var _settings = __webpack_require__(6);
 
-var _micropub2 = _interopRequireDefault(_micropub);
+var INFO = 'info';
+var WARNING = 'warning';
+var ERROR = 'error';
 
-var _constants = __webpack_require__(2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var KEYS = ['defaultToCurrentPage', 'autoSlug', 'closeAfterPosting', 'debugLog', 'reacji', 'slug', 'syndicateTo'];
-
-var DEFAULT_SETTINGS = {
-  defaultToCurrentPage: false,
-  autoSlug: false,
-  closeAfterPosting: true,
-  debugLog: false,
-  reacji: _constants.DEFAULT_REACJI,
-  slug: 'mp-slug',
-  syndicateTo: 'mp-syndicate-to'
-};
-
-function getSettings() {
-  var settings = JSON.parse(localStorage.getItem('settings'));
-  if (settings) {
-    return settings;
+function getLogs() {
+  var log = JSON.parse(localStorage.getItem('log'));
+  if (log) {
+    return log;
   }
-  return DEFAULT_SETTINGS;
+  return [];
 }
 
-function saveSettings(settings) {
-  var clean = {};
-  KEYS.forEach(function (key) {
-    clean[key] = settings[key];
-  });
-  localStorage.setItem('settings', JSON.stringify(clean));
+function saveLog(log) {
+  localStorage.setItem('log', JSON.stringify(log));
 }
 
-function saveAuthenticationDetails(domain, token, micropubEndpoint) {
-  if (domain) {
-    localStorage.setItem('domain', domain);
-    _micropub2.default.options.me = domain;
-  }
-  if (token) {
-    localStorage.setItem('token', token);
-    _micropub2.default.options.token = token;
-  }
-  if (micropubEndpoint) {
-    localStorage.setItem('micropubEndpoint', micropubEndpoint);
-    _micropub2.default.options.micropubEndpoint = micropubEndpoint;
-  }
+function clearLogs() {
+  localStorage.setItem('log', '[]');
 }
 
-function getSyndicateOptions() {
-  var options = localStorage.getItem('syndicateTo');
-  if (options && options !== 'undefined') {
-    return JSON.parse(options);
-  } else {
-    // Fix bad data from omnibear v1.0.0 bug that saved 'undefined' to localStorage
-    localStorage.setItem('syndicateTo', '[]');
-    return [];
+function formatDate(date) {
+  var day = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+  var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '.' + date.getMilliseconds();
+  return day + ' ' + time;
+}
+
+function append(message, data, type) {
+  if (!logsEnabled() && type !== ERROR) {
+    return;
   }
+  var log = getLogs();
+  if (log.length > 100) {
+    log.unshift();
+  }
+  var entry = {
+    message: message,
+    type: type,
+    timestamp: formatDate(new Date())
+  };
+  if (data) {
+    entry.data = data;
+  }
+  log.push(entry);
+  saveLog(log);
+}
+
+function info(message, data) {
+  append(message, data, INFO);
+}
+exports.default = info;
+function warning(message, data) {
+  append(message, data, WARNING);
+}
+
+function error(message, data) {
+  append(message, data, ERROR);
+}
+
+function logsEnabled() {
+  var settings = (0, _settings.getSettings)();
+  console.log(settings);
+  return settings.debugLog;
 }
 
 /***/ }),
-/* 20 */,
-/* 21 */
+/* 21 */,
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2339,23 +2421,23 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _LoginForm = __webpack_require__(24);
+var _LoginForm = __webpack_require__(25);
 
 var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
-var _NoteForm = __webpack_require__(28);
+var _NoteForm = __webpack_require__(29);
 
 var _NoteForm2 = _interopRequireDefault(_NoteForm);
 
-var _Logs = __webpack_require__(32);
+var _Logs = __webpack_require__(33);
 
 var _Logs2 = _interopRequireDefault(_Logs);
 
-var _Message = __webpack_require__(6);
+var _Message = __webpack_require__(7);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _SettingsForm = __webpack_require__(36);
+var _SettingsForm = __webpack_require__(37);
 
 var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
 
@@ -2471,9 +2553,9 @@ var App = function (_Component) {
 exports.default = App;
 
 /***/ }),
-/* 22 */,
 /* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2487,11 +2569,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _Message = __webpack_require__(6);
+var _Message = __webpack_require__(7);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _Footer = __webpack_require__(17);
+var _Footer = __webpack_require__(18);
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -2501,7 +2583,9 @@ var _micropub = __webpack_require__(3);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
-var _settings = __webpack_require__(19);
+var _settings = __webpack_require__(6);
+
+var _log = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2530,6 +2614,7 @@ var LoginForm = function (_Component) {
       e.preventDefault();
       var domain = _this.getNormalizedDomain();
       _this.setState({ isLoading: true, domain: domain });
+      (0, _log.info)('Begin authentication to ' + domain);
       _micropub2.default.options.me = domain;
       _micropub2.default.getAuthUrl().then(function (url) {
         chrome.runtime.sendMessage({
@@ -2652,7 +2737,7 @@ var LoginForm = function (_Component) {
 exports.default = LoginForm;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2722,7 +2807,7 @@ var Tab = function (_Component) {
 exports.default = Tab;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2736,7 +2821,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _Tab = __webpack_require__(25);
+var _Tab = __webpack_require__(26);
 
 var _Tab2 = _interopRequireDefault(_Tab);
 
@@ -2825,7 +2910,7 @@ var ChangeViewTabs = function (_Component) {
 exports.default = ChangeViewTabs;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2839,11 +2924,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _SyndicateInputs = __webpack_require__(30);
+var _SyndicateInputs = __webpack_require__(31);
 
 var _SyndicateInputs2 = _interopRequireDefault(_SyndicateInputs);
 
-var _draft = __webpack_require__(18);
+var _draft = __webpack_require__(19);
 
 var _utils = __webpack_require__(1);
 
@@ -3038,7 +3123,7 @@ var FormInputs = function (_Component) {
 exports.default = FormInputs;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3052,27 +3137,27 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _QuickActions = __webpack_require__(29);
+var _QuickActions = __webpack_require__(30);
 
 var _QuickActions2 = _interopRequireDefault(_QuickActions);
 
-var _Message = __webpack_require__(6);
+var _Message = __webpack_require__(7);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _ChangeViewTabs = __webpack_require__(26);
+var _ChangeViewTabs = __webpack_require__(27);
 
 var _ChangeViewTabs2 = _interopRequireDefault(_ChangeViewTabs);
 
-var _FormInputs = __webpack_require__(27);
+var _FormInputs = __webpack_require__(28);
 
 var _FormInputs2 = _interopRequireDefault(_FormInputs);
 
-var _Footer = __webpack_require__(17);
+var _Footer = __webpack_require__(18);
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
-var _draft = __webpack_require__(18);
+var _draft = __webpack_require__(19);
 
 var _utils = __webpack_require__(1);
 
@@ -3082,7 +3167,9 @@ var _micropub2 = _interopRequireDefault(_micropub);
 
 var _constants = __webpack_require__(2);
 
-var _settings = __webpack_require__(19);
+var _settings = __webpack_require__(6);
+
+var _log = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3103,6 +3190,7 @@ var NoteForm = function (_Component) {
     _this.handleLike = function () {
       var url = _this.getCurrentUrl();
       if (!url) {
+        (0, _log.warning)('Cannot send like; no current URL found');
         return;
       }
       _this.postEntry({
@@ -3112,14 +3200,14 @@ var NoteForm = function (_Component) {
         var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
         _this.flashSuccessMessage(type + ' liked successfully', location);
       }).catch(function (err) {
-        console.error(err);
-        _this.flashErrorMessage('Error posting like');
+        _this.flashErrorMessage('Error posting like', err);
       });
     };
 
     _this.handleRepost = function () {
       var url = _this.getCurrentUrl();
       if (!url) {
+        (0, _log.warning)('Cannot send repost; no current URL found');
         return;
       }
       _this.postEntry({
@@ -3129,14 +3217,14 @@ var NoteForm = function (_Component) {
         var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
         _this.flashSuccessMessage(type + ' reposted successfully', location);
       }).catch(function (err) {
-        console.error(err);
-        _this.flashErrorMessage('Error reposting');
+        _this.flashErrorMessage('Error reposting', err);
       });
     };
 
     _this.handleReacji = function (emoji) {
       var url = _this.getCurrentUrl();
       if (!url) {
+        (0, _log.warning)('Cannot send reacji; no current URL found');
         return;
       }
       _this.postEntry({
@@ -3147,8 +3235,7 @@ var NoteForm = function (_Component) {
         var type = _this.state.postType === _constants.ITEM_REPLY ? 'Item' : 'Page';
         _this.flashSuccessMessage(type + ' reacted to successfully', location);
       }).catch(function (err) {
-        console.error(err);
-        _this.flashErrorMessage('Error reacting');
+        _this.flashErrorMessage('Error reacting', err);
       });
     };
 
@@ -3165,11 +3252,10 @@ var NoteForm = function (_Component) {
         (0, _draft.deleteDraft)();
         _this.flashSuccessMessage(type + ' posted successfully', location);
       }).catch(function (err) {
-        console.error(err);
         if (err.status >= 400 && err.status < 500) {
-          _this.flashErrorMessage('Error authenticating to micropub endpoint. Try logging out and back in.');
+          _this.flashErrorMessage('Error authenticating to micropub endpoint. Try logging out and back in.', err);
         } else {
-          _this.flashErrorMessage('Error posting Note');
+          _this.flashErrorMessage('Error posting Note', err);
         }
       });
     };
@@ -3303,6 +3389,7 @@ var NoteForm = function (_Component) {
   }, {
     key: 'flashSuccessMessage',
     value: function flashSuccessMessage(message, location) {
+      (0, _log.info)(message, location);
       this.props.userFeedback(message, _constants.MESSAGE_SUCCESS, location);
       if (this.state.settings.closeAfterPosting) {
         setTimeout(function () {
@@ -3312,9 +3399,10 @@ var NoteForm = function (_Component) {
     }
   }, {
     key: 'flashErrorMessage',
-    value: function flashErrorMessage(message) {
+    value: function flashErrorMessage(message, err) {
       var _this3 = this;
 
+      (0, _log.error)(message, err);
       this.setState({
         errorMessage: message,
         isDisabled: false,
@@ -3354,7 +3442,7 @@ var NoteForm = function (_Component) {
 exports.default = NoteForm;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3370,11 +3458,11 @@ var _preact = __webpack_require__(0);
 
 var _constants = __webpack_require__(2);
 
-var _HeartSvg = __webpack_require__(37);
+var _HeartSvg = __webpack_require__(38);
 
 var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
 
-var _RepostSvg = __webpack_require__(38);
+var _RepostSvg = __webpack_require__(39);
 
 var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
 
@@ -3493,7 +3581,7 @@ var QuickActions = function (_Component) {
 exports.default = QuickActions;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3591,7 +3679,7 @@ var SyndicateInputs = function (_Component) {
 exports.default = SyndicateInputs;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3630,7 +3718,6 @@ var LogItem = function (_Component) {
     value: function render() {
       var log = this.props.log;
 
-      console.log(log);
       return (0, _preact.h)(
         'li',
         { className: this.getClass() },
@@ -3659,7 +3746,7 @@ var LogItem = function (_Component) {
 exports.default = LogItem;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3673,11 +3760,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _LogItem = __webpack_require__(31);
+var _LogItem = __webpack_require__(32);
 
 var _LogItem2 = _interopRequireDefault(_LogItem);
 
-var _log = __webpack_require__(42);
+var _log = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3691,12 +3778,37 @@ var Logs = function (_Component) {
   _inherits(Logs, _Component);
 
   function Logs() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
     _classCallCheck(this, Logs);
 
-    return _possibleConstructorReturn(this, (Logs.__proto__ || Object.getPrototypeOf(Logs)).apply(this, arguments));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Logs.__proto__ || Object.getPrototypeOf(Logs)).call.apply(_ref, [this].concat(args))), _this), _this.clearLogs = function () {
+      (0, _log.clearLogs)();
+      _this.forceUpdate();
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(Logs, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.interval = setInterval(function () {
+        _this2.forceUpdate();
+      }, 2000);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      clearInterval(this.interval);
+    }
+  }, {
     key: 'render',
     value: function render() {
       var onClose = this.props.onClose;
@@ -3706,13 +3818,13 @@ var Logs = function (_Component) {
         'div',
         null,
         (0, _preact.h)(
+          'h1',
+          { className: 'section-heading' },
+          'Logs'
+        ),
+        (0, _preact.h)(
           'div',
           { 'class': 'container' },
-          (0, _preact.h)(
-            'p',
-            null,
-            'Logs'
-          ),
           logs.length ? (0, _preact.h)(
             'ul',
             { className: 'logs' },
@@ -3723,6 +3835,15 @@ var Logs = function (_Component) {
             'p',
             { className: 'metadata' },
             'No logs found'
+          ),
+          (0, _preact.h)(
+            'p',
+            { className: 'text-right' },
+            (0, _preact.h)(
+              'button',
+              { type: 'button', onClick: this.clearLogs },
+              'Clear logs'
+            )
           )
         ),
         (0, _preact.h)(
@@ -3744,7 +3865,7 @@ var Logs = function (_Component) {
 exports.default = Logs;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3872,7 +3993,7 @@ var AuthenticationFields = function (_Component) {
 exports.default = AuthenticationFields;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4010,7 +4131,7 @@ var EndpointFields = function (_Component) {
 exports.default = EndpointFields;
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4122,7 +4243,7 @@ var ReacjiSettings = function (_Component) {
 exports.default = ReacjiSettings;
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4136,23 +4257,23 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _ReacjiSettings = __webpack_require__(35);
+var _ReacjiSettings = __webpack_require__(36);
 
 var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
 
-var _EndpointFields = __webpack_require__(34);
+var _EndpointFields = __webpack_require__(35);
 
 var _EndpointFields2 = _interopRequireDefault(_EndpointFields);
 
-var _AuthenticationFields = __webpack_require__(33);
+var _AuthenticationFields = __webpack_require__(34);
 
 var _AuthenticationFields2 = _interopRequireDefault(_AuthenticationFields);
 
 var _constants = __webpack_require__(2);
 
-var _settings = __webpack_require__(19);
+var _settings = __webpack_require__(6);
 
-var _log = __webpack_require__(42);
+var _log = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4178,13 +4299,6 @@ var SettingsForm = function (_Component) {
       };
     };
 
-    _this.toggleLogs = function (event) {
-      if (!event.target.checked) {
-        (0, _log.clearLogs)();
-      }
-      _this.updateBoolean('debugLog');
-    };
-
     _this.save = function (e) {
       e.preventDefault();
       var _this$state = _this.state,
@@ -4194,6 +4308,9 @@ var SettingsForm = function (_Component) {
 
       (0, _settings.saveSettings)(_this.state);
       (0, _settings.saveAuthenticationDetails)(me, token, micropubEndpoint);
+      if (!_this.state.debugLog) {
+        (0, _log.clearLogs)();
+      }
       _this.props.onClose();
     };
 
@@ -4272,7 +4389,7 @@ var SettingsForm = function (_Component) {
               (0, _preact.h)('input', {
                 type: 'checkbox',
                 checked: debugLog,
-                onChange: this.toggleLogs
+                onChange: this.updateBoolean('debugLog')
               }),
               'Record debug logs'
             ),
@@ -4336,7 +4453,7 @@ var SettingsForm = function (_Component) {
 exports.default = SettingsForm;
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4392,7 +4509,7 @@ var HeartSVG = function (_Component) {
 exports.default = HeartSVG;
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4443,7 +4560,7 @@ var RepostSvg = function (_Component) {
 exports.default = RepostSvg;
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4451,7 +4568,7 @@ exports.default = RepostSvg;
 
 var _preact = __webpack_require__(0);
 
-var _App = __webpack_require__(21);
+var _App = __webpack_require__(22);
 
 var _App2 = _interopRequireDefault(_App);
 
@@ -4460,86 +4577,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener('DOMContentLoaded', function () {
   (0, _preact.render)((0, _preact.h)(_App2.default, null), document.body);
 });
-
-/***/ }),
-/* 40 */,
-/* 41 */,
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getLogs = getLogs;
-exports.clearLogs = clearLogs;
-exports.info = info;
-exports.warning = warning;
-exports.error = error;
-
-var _settings = __webpack_require__(19);
-
-var INFO = 'info';
-var WARNING = 'warning';
-var ERROR = 'error';
-
-function getLogs() {
-  var log = JSON.parse(localStorage.getItem('log'));
-  if (log) {
-    return log;
-  }
-  return [];
-}
-
-function saveLog(log) {
-  localStorage.setItem('log', JSON.stringify(log));
-}
-
-function clearLogs() {
-  localStorage.setItem('log', '[]');
-}
-
-function formatDate(date) {
-  var day = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-  var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '.' + date.getMilliseconds();
-  return day + ' ' + time;
-}
-
-function append(message, data, type) {
-  if (!logsEnabled()) {
-    return;
-  }
-  var log = getLogs();
-  if (log.length > 100) {
-    log.unshift();
-  }
-  log.push({
-    message: message,
-    data: data,
-    type: type,
-    time: formatDate(new Date())
-  });
-  saveLog(log);
-}
-
-function info(message, data) {
-  append(message, data, INFO);
-}
-exports.default = info;
-function warning(message, data) {
-  append(message, data, WARNING);
-}
-
-function error(message, data) {
-  append(message, data, ERROR);
-}
-
-function logsEnabled() {
-  var settings = (0, _settings.getSettings)();
-  return settings.debugLog;
-}
 
 /***/ })
 /******/ ]);

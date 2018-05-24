@@ -27,19 +27,22 @@ function formatDate(date) {
 }
 
 function append(message, data, type) {
-  if (!logsEnabled()) {
+  if (!logsEnabled() && type !== ERROR) {
     return;
   }
   const log = getLogs();
   if (log.length > 100) {
     log.unshift();
   }
-  log.push({
+  const entry = {
     message,
-    data,
     type,
-    time: formatDate(new Date()),
-  });
+    timestamp: formatDate(new Date()),
+  };
+  if (data) {
+    entry.data = data;
+  }
+  log.push(entry);
   saveLog(log);
 }
 
@@ -58,5 +61,6 @@ export function error(message, data) {
 
 function logsEnabled() {
   const settings = getSettings();
+  console.log(settings);
   return settings.debugLog;
 }

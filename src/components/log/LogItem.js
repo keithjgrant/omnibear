@@ -10,7 +10,6 @@ export default class LogItem extends Component {
 
   render() {
     const {log} = this.props;
-    console.log(log);
     return (
       <li className={this.getClass()}>
         <time>{log.timestamp}</time>

@@ -4,6 +4,7 @@ import Footer from './Footer';
 import {openLink} from '../util/utils';
 import micropub from '../util/micropub';
 import {getSettings} from '../util/settings';
+import {info as log} from '../util/log';
 
 export default class LoginForm extends Component {
   constructor(props) {
@@ -75,6 +76,7 @@ export default class LoginForm extends Component {
     e.preventDefault();
     const domain = this.getNormalizedDomain();
     this.setState({isLoading: true, domain});
+    log(`Begin authentication to ${domain}`);
     micropub.options.me = domain;
     micropub
       .getAuthUrl()

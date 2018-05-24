@@ -15,6 +15,7 @@ import {
   MESSAGE_ERROR,
 } from '../../constants';
 import {getSettings, getSyndicateOptions} from '../../util/settings';
+import {info, warning, error} from '../../util/log';
 
 export default class NoteForm extends Component {
   constructor(props) {
@@ -120,6 +121,7 @@ export default class NoteForm extends Component {
   handleLike = () => {
     const url = this.getCurrentUrl();
     if (!url) {
+      warning('Cannot send like; no current URL found');
       return;
     }
     this.postEntry({
@@ -131,14 +133,14 @@ export default class NoteForm extends Component {
         this.flashSuccessMessage(`${type} liked successfully`, location);
       })
       .catch(err => {
-        console.error(err);
-        this.flashErrorMessage('Error posting like');
+        this.flashErrorMessage('Error posting like', err);
       });
   };
 
   handleRepost = () => {
     const url = this.getCurrentUrl();
     if (!url) {
+      warning('Cannot send repost; no current URL found');
       return;
     }
     this.postEntry({
@@ -150,14 +152,14 @@ export default class NoteForm extends Component {
         this.flashSuccessMessage(`${type} reposted successfully`, location);
       })
       .catch(err => {
-        console.error(err);
-        this.flashErrorMessage('Error reposting');
+        this.flashErrorMessage('Error reposting', err);
       });
   };
 
   handleReacji = emoji => {
     const url = this.getCurrentUrl();
     if (!url) {
+      warning('Cannot send reacji; no current URL found');
       return;
     }
     this.postEntry({
@@ -170,8 +172,7 @@ export default class NoteForm extends Component {
         this.flashSuccessMessage(`${type} reacted to successfully`, location);
       })
       .catch(err => {
-        console.error(err);
-        this.flashErrorMessage('Error reacting');
+        this.flashErrorMessage('Error reacting', err);
       });
   };
 
@@ -180,6 +181,7 @@ export default class NoteForm extends Component {
   };
 
   flashSuccessMessage(message, location) {
+    info(message, location);
     this.props.userFeedback(message, MESSAGE_SUCCESS, location);
     if (this.state.settings.closeAfterPosting) {
       setTimeout(() => {
@@ -188,7 +190,8 @@ export default class NoteForm extends Component {
     }
   }
 
-  flashErrorMessage(message) {
+  flashErrorMessage(message, err) {
+    error(message, err);
     this.setState({
       errorMessage: message,
       isDisabled: false,
@@ -212,13 +215,13 @@ export default class NoteForm extends Component {
         this.flashSuccessMessage(`${type} posted successfully`, location);
       })
       .catch(err => {
-        console.error(err);
         if (err.status >= 400 && err.status < 500) {
           this.flashErrorMessage(
-            'Error authenticating to micropub endpoint. Try logging out and back in.'
+            'Error authenticating to micropub endpoint. Try logging out and back in.',
+            err
           );
         } else {
-          this.flashErrorMessage('Error posting Note');
+          this.flashErrorMessage('Error posting Note', err);
         }
       });
   };

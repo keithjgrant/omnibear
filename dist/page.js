@@ -63,12 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 40);
+/******/ 	return __webpack_require__(__webpack_require__.s = 41);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 22:
+/***/ 23:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -86,7 +86,7 @@ var _microformatShiv = __webpack_require__(43);
 
 var _microformatShiv2 = _interopRequireDefault(_microformatShiv);
 
-var _dom = __webpack_require__(41);
+var _dom = __webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -198,13 +198,13 @@ function getCurrentItemUrl() {
 
 /***/ }),
 
-/***/ 40:
+/***/ 41:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _entry = __webpack_require__(22);
+var _entry = __webpack_require__(23);
 
 (function () {
   document.body.addEventListener('click', _entry.clearItem);
@@ -242,10 +242,11 @@ var _entry = __webpack_require__(22);
   }
 
   function sendFocusMessage() {
+    var url = (0, _entry.getCurrentItemUrl)();
     chrome.runtime.sendMessage({
       action: 'focus-window',
       payload: {
-        selectedEntry: (0, _entry.getCurrentItemUrl)()
+        selectedEntry: url
       }
     });
   }
@@ -253,7 +254,7 @@ var _entry = __webpack_require__(22);
 
 /***/ }),
 
-/***/ 41:
+/***/ 42:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

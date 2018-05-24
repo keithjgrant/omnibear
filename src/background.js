@@ -1,6 +1,7 @@
 import {getParamFromUrl, cleanUrl} from './util/url';
-import {logout} from './util/utils';
 import {fetchToken, fetchSyndicationTargets} from './background/authentication';
+import {logout} from './util/utils';
+import {info, error} from './util/log';
 
 let authTabId = null;
 let menuId;
@@ -58,16 +59,19 @@ function handleTabChange(tabId, changeInfo, tab) {
     return;
   }
   var code = getParamFromUrl('code', changeInfo.url);
+  info(`Auth code found beginning '${code.substr(0, 6)}'. Fetching token…`);
   fetchToken(code)
     .then(() => {
+      info('Token retrieved. Fetching syndication targets…');
       return fetchSyndicationTargets();
     })
     .then(() => {
+      info(`Authentication complete. Closing authentication tab.`);
       chrome.tabs.remove(tab.id);
       authTabId = null;
     })
     .catch(err => {
-      console.error(err.message, err);
+      error(err.message, err);
     });
 }
 

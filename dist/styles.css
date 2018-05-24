@@ -413,6 +413,7 @@ legend + .settings-form__description {
 }
 
 .logs {
+  margin: 0;
   padding-left: 0;
   border: 1px solid var(--gray-60);
   list-style: none;
