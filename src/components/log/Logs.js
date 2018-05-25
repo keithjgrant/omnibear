@@ -33,7 +33,7 @@ export default class Logs extends Component {
         </div>
         <footer className="footer">
           <button className="button-link" type="button" onClick={onClose}>
-            Close
+            Close logs
           </button>
         </footer>
       </div>

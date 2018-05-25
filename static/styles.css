@@ -420,28 +420,71 @@ legend + .settings-form__description {
 }
 .logs > li {
   margin: 0;
+  padding: 0;
+}
+
+.logs > li:first-child > .log {
+  border-top: 0;
+}
+
+.log {
+  position: relative;
+  display: block;
+  width: 100%;
   padding: 0.2em 0.4em;
-}
-.logs > li + li {
+  border: 0;
+  border-radius: 0;
   border-top: 1px solid currentColor;
+  text-align: left;
 }
-.logs__info {
+.log--info {
   color: var(--gray-30);
   background-color: var(--gray-90);
 }
-.logs__warning {
+.log--warning {
   color: var(--orange);
   background-color: var(--orange-light);
 }
-.logs__error {
+.log--error {
   color: var(--red);
   background-color: var(--red-light);
 }
-.logs time {
+.log > time {
   display: block;
   color: var(--gray-50);
-  font-size: 0.8rem;
+  font-size: 0.6rem;
+  line-height: 1;
   text-align: right;
+}
+.log.has-data {
+  cursor: pointer;
+}
+.log.has-data::after {
+  position: absolute;
+  top: 0.3em;
+  right: 0;
+  content: '+';
+  font-weight: bold;
+  padding: 0.4em;
+  color: inherit;
+}
+.log.is-expanded::after {
+  content: '-';
+}
+
+.log-details {
+  padding: 0.4em;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #fff 0,
+    #fff 1em,
+    #f8f8f8 1em,
+    #f8f8f8 2em
+  );
+  background-position: 0 0.4em;
+  font-family: monospace;
+  font-size: 0.8rem;
+  line-height: 1;
 }
 
 .metadata {

@@ -40,7 +40,14 @@ function append(message, data, type) {
     timestamp: formatDate(new Date()),
   };
   if (data) {
-    entry.data = data;
+    if (data instanceof Error) {
+      entry.data = {
+        message: data.message,
+        stack: data.stack.trim().split('\n'),
+      };
+    } else {
+      entry.data = data;
+    }
   }
   log.push(entry);
   saveLog(log);
