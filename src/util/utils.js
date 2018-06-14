@@ -61,3 +61,10 @@ export function getPageUrl() {
     });
   });
 }
+
+export function getOrigin(url) {
+  const parts = url.split('//');
+  const protocol = parts[0];
+  const domain = parts[1].split('/')[0];
+  return `${protocol}//${domain}`;
+}

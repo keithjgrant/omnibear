@@ -56,12 +56,17 @@ body {
   color: var(--gray-30);
 }
 
+.body--md {
+  width: 700px;
+}
+
 button,
 input[type='submit'] {
   font: inherit;
   color: inherit;
   border: 1px solid var(--gray-40);
   border-radius: 0.3em;
+  cursor: pointer;
 }
 button:hover,
 input[type='submit']:hover {
@@ -182,6 +187,10 @@ fieldset > * + * {
 }
 .button-small {
   font-size: 0.8em;
+}
+.button--block {
+  display: block;
+  width: 100%;
 }
 
 .section-heading {
@@ -491,6 +500,13 @@ legend + .settings-form__description {
   font-size: 0.64em;
   font-weight: bold;
   opacity: 0.6;
+}
+
+.webmention-list {
+  width: 100%;
+}
+.webmention-list th {
+  text-align: left;
 }
 
 .disabled {

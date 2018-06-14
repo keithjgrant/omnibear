@@ -23,7 +23,7 @@ export default class LoginForm extends Component {
   render() {
     return (
       <div>
-        <form class="container" method="GET" onSubmit={this.handleSubmit}>
+        <form className="container" method="GET" onSubmit={this.handleSubmit}>
           <p>
             To use Omnibear, sign in with your domain. Your website will need to
             support{' '}

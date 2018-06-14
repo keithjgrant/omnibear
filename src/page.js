@@ -5,48 +5,46 @@ import {
   getCurrentItemUrl,
 } from './page/entry';
 
-(function() {
-  document.body.addEventListener('click', clearItem);
+document.body.addEventListener('click', clearItem);
 
-  document.body.addEventListener('contextmenu', focusClickedEntry);
+document.body.addEventListener('contextmenu', focusClickedEntry);
 
-  function handleMessage(request, sender, sendResponse) {
-    switch (request.action) {
-      case 'fetch-token-error':
-        handleTokenError(request.payload.error);
-        break;
-    }
+function handleMessage(request, sender, sendResponse) {
+  switch (request.action) {
+    case 'fetch-token-error':
+      handleTokenError(request.payload.error);
+      break;
   }
-  chrome.runtime.onMessage.addListener(handleMessage);
+}
+chrome.runtime.onMessage.addListener(handleMessage);
 
-  if (!document.hidden) {
-    sendFocusMessage();
-  }
-  window.addEventListener('focus', sendFocusMessage);
+if (!document.hidden) {
+  sendFocusMessage();
+}
+window.addEventListener('focus', sendFocusMessage);
 
-  function handleTokenError(error) {
-    if (!isAuthPage) {
-      return;
-    }
-
-    const heading = document.getElementById('status-heading');
-    const paragraph = document.getElementById('status-paragraph');
-    heading.textContent = 'Error fetching token from token endpoint';
-    paragraph.textContent = error.message;
+function handleTokenError(error) {
+  if (!isAuthPage) {
+    return;
   }
 
-  function isAuthPage() {
-    const l = document.location;
-    return l.hostname === 'omnibear.com' && l.pathname === '/auth/success/';
-  }
+  const heading = document.getElementById('status-heading');
+  const paragraph = document.getElementById('status-paragraph');
+  heading.textContent = 'Error fetching token from token endpoint';
+  paragraph.textContent = error.message;
+}
 
-  function sendFocusMessage() {
-    const url = getCurrentItemUrl();
-    chrome.runtime.sendMessage({
-      action: 'focus-window',
-      payload: {
-        selectedEntry: url,
-      },
-    });
-  }
-})();
+function isAuthPage() {
+  const l = document.location;
+  return l.hostname === 'omnibear.com' && l.pathname === '/auth/success/';
+}
+
+function sendFocusMessage() {
+  const url = getCurrentItemUrl();
+  chrome.runtime.sendMessage({
+    action: 'focus-window',
+    payload: {
+      selectedEntry: url,
+    },
+  });
+}

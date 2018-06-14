@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import {generateSlug} from './utils';
+import {generateSlug, getOrigin} from './utils';
 
 describe('generateSlug', function() {
   it('should replace spaces with dashes', function() {
@@ -42,5 +42,17 @@ describe('generateSlug', function() {
     const content = 'à pÓst wíth äçčeñt marks';
     const expected = 'a-post-with-accent-marks';
     assert.equal(expected, generateSlug(content));
+  });
+});
+
+describe('getOrigin', function() {
+  it('should get the origin', function() {
+    const url = 'https://keithjgrant.com/example';
+    assert.equal(getOrigin(url), 'https://keithjgrant.com');
+  });
+
+  it('should get the origin from base path', function() {
+    const url = 'https://keithjgrant.com';
+    assert.equal(getOrigin(url), 'https://keithjgrant.com');
   });
 });
