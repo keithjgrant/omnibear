@@ -68,6 +68,5 @@ export function error(message, data) {
 
 function logsEnabled() {
   const settings = getSettings();
-  console.log(settings);
   return settings.debugLog;
 }
