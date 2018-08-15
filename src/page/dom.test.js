@@ -2,9 +2,9 @@ import {assert} from 'chai';
 import {jsdom} from 'jsdom';
 import {getAncestorNode, getAncestorNodeByClass} from './dom';
 
-describe('page/dom', function () {
-  describe('getAncestorNodeByClass', function () {
-    it('should find container node', function () {
+describe('page/dom', function() {
+  describe('getAncestorNodeByClass', function() {
+    it('should find container node', function() {
       const document = jsdom(`
         <body>
           <div class="target" id="the-container">
@@ -19,7 +19,7 @@ describe('page/dom', function () {
       assert.equal(getAncestorNodeByClass(el, 'target').id, 'the-container');
     });
 
-    it('should find return null if not found', function () {
+    it('should find return null if not found', function() {
       const document = jsdom(`
         <body>
           <div>
@@ -33,7 +33,7 @@ describe('page/dom', function () {
       assert.isNull(getAncestorNodeByClass(el, 'target'));
     });
 
-    it('should not find find target if not a direct ancestor', function () {
+    it('should not find find target if not a direct ancestor', function() {
       const document = jsdom(`
         <body>
           <div>
@@ -48,7 +48,7 @@ describe('page/dom', function () {
       assert.isNull(getAncestorNodeByClass(el, 'target'));
     });
 
-    it('should match from array', function () {
+    it('should match from array', function() {
       const document = jsdom(`
         <body>
           <div class="target" id="the-container">
@@ -63,7 +63,7 @@ describe('page/dom', function () {
       assert.equal(match.id, 'the-container');
     });
 
-    it('should return body if it matches', function () {
+    it('should return body if it matches', function() {
       const document = jsdom(`
         <body class="target" id="the-container">
           <div>
@@ -76,11 +76,11 @@ describe('page/dom', function () {
       const el = document.getElementById('el');
       // compare ids for equality check
       assert.equal(getAncestorNodeByClass(el, 'target').id, 'the-container');
-    })
+    });
   });
 
-  describe('getAncestorNode', function () {
-    it('should find matching element', function () {
+  describe('getAncestorNode', function() {
+    it('should find matching element', function() {
       const document = jsdom(`
         <body>
           <div id="foo_123">
@@ -91,7 +91,7 @@ describe('page/dom', function () {
         </body>
       `);
       const el = document.getElementById('el');
-      const match = getAncestorNode(el, (e) => {
+      const match = getAncestorNode(el, e => {
         return e.id.startsWith('foo_');
       });
       assert.equal(match.id, 'foo_123');
