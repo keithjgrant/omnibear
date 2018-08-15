@@ -63,12 +63,91 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */,
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.openLink = openLink;
+exports.clone = clone;
+exports.getAuthTab = getAuthTab;
+exports.logout = logout;
+exports.generateSlug = generateSlug;
+exports.getPageUrl = getPageUrl;
+exports.getOrigin = getOrigin;
+function openLink(e) {
+  e.preventDefault();
+  if (e.target.href) {
+    chrome.tabs.create({ url: e.target.href });
+  }
+}
+
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function getAuthTab() {
+  return new Promise(function (resolve, reject) {
+    chrome.tabs.query({ url: 'https://omnibear.com/auth/success*' }, function (tabs) {
+      if (tabs.length) {
+        resolve(tabs[0]);
+      } else {
+        reject('Auth tab not found');
+      }
+    });
+  });
+}
+
+function logout() {
+  var items = ['token', 'domain', 'authEndpoint', 'tokenEndpoint', 'micropubEndpoint'];
+  items.map(function (item) {
+    return localStorage.removeItem(item);
+  });
+}
+
+var NON_ALPHANUM = /[^A-Za-z0-9\-]/g;
+var FROM = 'áäâàãåčçćďéěëèêẽĕȇęėíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;';
+var TO = 'aaaaaacccdeeeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------';
+
+function generateSlug(content) {
+  var formatted = content.toLocaleLowerCase().trim();
+  formatted = formatted.replace(/\s/g, '-');
+  for (var i = 0, l = FROM.length; i < l; i++) {
+    formatted = formatted.replace(new RegExp(FROM.charAt(i), 'g'), TO.charAt(i));
+  }
+  formatted = formatted.replace(NON_ALPHANUM, '');
+  formatted = formatted.replace(/\-\-+/g, '-');
+  var parts = formatted.split('-');
+  return parts.splice(0, 6).join('-');
+}
+
+function getPageUrl() {
+  return new Promise(function (resolve, reject) {
+    var tabId = localStorage.getItem('pageTabId');
+    chrome.tabs.get(Number(tabId), function (tab) {
+      resolve(tab.url);
+    });
+  });
+}
+
+function getOrigin(url) {
+  var parts = url.split('//');
+  var protocol = parts[0];
+  var domain = parts[1].split('/')[0];
+  return protocol + '//' + domain;
+}
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -87,7 +166,7 @@ var MESSAGE_ERROR = exports.MESSAGE_ERROR = 'error';
 var DEFAULT_REACJI = exports.DEFAULT_REACJI = ['👍', '👎', '🎉', '😆', '😢', '😠'];
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -176,85 +255,6 @@ function logsEnabled() {
 }
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.openLink = openLink;
-exports.clone = clone;
-exports.getAuthTab = getAuthTab;
-exports.logout = logout;
-exports.generateSlug = generateSlug;
-exports.getPageUrl = getPageUrl;
-exports.getOrigin = getOrigin;
-function openLink(e) {
-  e.preventDefault();
-  if (e.target.href) {
-    chrome.tabs.create({ url: e.target.href });
-  }
-}
-
-function clone(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
-
-function getAuthTab() {
-  return new Promise(function (resolve, reject) {
-    chrome.tabs.query({ url: 'https://omnibear.com/auth/success*' }, function (tabs) {
-      if (tabs.length) {
-        resolve(tabs[0]);
-      } else {
-        reject('Auth tab not found');
-      }
-    });
-  });
-}
-
-function logout() {
-  var items = ['token', 'domain', 'authEndpoint', 'tokenEndpoint', 'micropubEndpoint'];
-  items.map(function (item) {
-    return localStorage.removeItem(item);
-  });
-}
-
-var NON_ALPHANUM = /[^A-Za-z0-9\-]/g;
-var FROM = 'áäâàãåčçćďéěëèêẽĕȇęėíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;';
-var TO = 'aaaaaacccdeeeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------';
-
-function generateSlug(content) {
-  var formatted = content.toLocaleLowerCase().trim();
-  formatted = formatted.replace(/\s/g, '-');
-  for (var i = 0, l = FROM.length; i < l; i++) {
-    formatted = formatted.replace(new RegExp(FROM.charAt(i), 'g'), TO.charAt(i));
-  }
-  formatted = formatted.replace(NON_ALPHANUM, '');
-  formatted = formatted.replace(/\-\-+/g, '-');
-  var parts = formatted.split('-');
-  return parts.splice(0, 6).join('-');
-}
-
-function getPageUrl() {
-  return new Promise(function (resolve, reject) {
-    var tabId = localStorage.getItem('pageTabId');
-    chrome.tabs.get(Number(tabId), function (tab) {
-      resolve(tab.url);
-    });
-  });
-}
-
-function getOrigin(url) {
-  var parts = url.split('//');
-  var protocol = parts[0];
-  var domain = parts[1].split('/')[0];
-  return protocol + '//' + domain;
-}
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -301,7 +301,7 @@ var _micropub = __webpack_require__(4);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
-var _constants = __webpack_require__(1);
+var _constants = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1746,7 +1746,7 @@ exports.paramsToQueryString = paramsToQueryString;
 exports.getUrlOrigin = getUrlOrigin;
 exports.cleanUrl = cleanUrl;
 
-var _parseUri = __webpack_require__(45);
+var _parseUri = __webpack_require__(50);
 
 var _parseUri2 = _interopRequireDefault(_parseUri);
 
@@ -1805,7 +1805,8 @@ function cleanUrl(url) {
 /***/ }),
 /* 19 */,
 /* 20 */,
-/* 21 */
+/* 21 */,
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1823,9 +1824,9 @@ var _micropub2 = _interopRequireDefault(_micropub);
 
 var _url = __webpack_require__(18);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(1);
 
-var _log = __webpack_require__(2);
+var _log = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1867,9 +1868,10 @@ function fetchSyndicationTargets() {
 }
 
 /***/ }),
-/* 22 */,
 /* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */,
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1877,11 +1879,11 @@ function fetchSyndicationTargets() {
 
 var _url = __webpack_require__(18);
 
-var _authentication = __webpack_require__(21);
+var _authentication = __webpack_require__(22);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(1);
 
-var _log = __webpack_require__(2);
+var _log = __webpack_require__(3);
 
 var authTabId = null;
 var menuId = void 0;
@@ -1997,8 +1999,6 @@ webmentionMenuId = chrome.contextMenus.create({
 });
 
 /***/ }),
-/* 25 */,
-/* 26 */,
 /* 27 */,
 /* 28 */,
 /* 29 */,
@@ -2017,7 +2017,12 @@ webmentionMenuId = chrome.contextMenus.create({
 /* 42 */,
 /* 43 */,
 /* 44 */,
-/* 45 */
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

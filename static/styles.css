@@ -154,6 +154,15 @@ fieldset > * + * {
   opacity: 0.9;
   box-shadow: 0.05em 0.2em 0.2em rgba(0, 0, 0, 0.3);
 }
+.button[disabled] {
+  border: 1px solid var(--gray-80);
+  color: var(--gray-30);
+  background-color: var(--gray-90);
+  cursor: default;
+}
+.button[disabled]:hover {
+  box-shadow: none;
+}
 .button.is-loading {
   color: transparent;
 }
@@ -171,6 +180,14 @@ fieldset > * + * {
   border-radius: 50%;
   animation: spin 500ms linear infinite;
 }
+.button[disabled].is-loading::after {
+  border-top-color: var(--gray-40);
+}
+
+.button--block {
+  display: block;
+  width: 100%;
+}
 
 .button-link {
   display: inline;
@@ -187,10 +204,6 @@ fieldset > * + * {
 }
 .button-small {
   font-size: 0.8em;
-}
-.button--block {
-  display: block;
-  width: 100%;
 }
 
 .section-heading {
@@ -507,6 +520,9 @@ legend + .settings-form__description {
 }
 .webmention-list th {
   text-align: left;
+}
+.webmention-list tbody td {
+  border-top: 1px solid var(--gray-90);
 }
 
 .disabled {

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 41);
+/******/ 	return __webpack_require__(__webpack_require__.s = 46);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -567,6 +567,85 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.openLink = openLink;
+exports.clone = clone;
+exports.getAuthTab = getAuthTab;
+exports.logout = logout;
+exports.generateSlug = generateSlug;
+exports.getPageUrl = getPageUrl;
+exports.getOrigin = getOrigin;
+function openLink(e) {
+  e.preventDefault();
+  if (e.target.href) {
+    chrome.tabs.create({ url: e.target.href });
+  }
+}
+
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function getAuthTab() {
+  return new Promise(function (resolve, reject) {
+    chrome.tabs.query({ url: 'https://omnibear.com/auth/success*' }, function (tabs) {
+      if (tabs.length) {
+        resolve(tabs[0]);
+      } else {
+        reject('Auth tab not found');
+      }
+    });
+  });
+}
+
+function logout() {
+  var items = ['token', 'domain', 'authEndpoint', 'tokenEndpoint', 'micropubEndpoint'];
+  items.map(function (item) {
+    return localStorage.removeItem(item);
+  });
+}
+
+var NON_ALPHANUM = /[^A-Za-z0-9\-]/g;
+var FROM = 'áäâàãåčçćďéěëèêẽĕȇęėíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;';
+var TO = 'aaaaaacccdeeeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------';
+
+function generateSlug(content) {
+  var formatted = content.toLocaleLowerCase().trim();
+  formatted = formatted.replace(/\s/g, '-');
+  for (var i = 0, l = FROM.length; i < l; i++) {
+    formatted = formatted.replace(new RegExp(FROM.charAt(i), 'g'), TO.charAt(i));
+  }
+  formatted = formatted.replace(NON_ALPHANUM, '');
+  formatted = formatted.replace(/\-\-+/g, '-');
+  var parts = formatted.split('-');
+  return parts.splice(0, 6).join('-');
+}
+
+function getPageUrl() {
+  return new Promise(function (resolve, reject) {
+    var tabId = localStorage.getItem('pageTabId');
+    chrome.tabs.get(Number(tabId), function (tab) {
+      resolve(tab.url);
+    });
+  });
+}
+
+function getOrigin(url) {
+  var parts = url.split('//');
+  var protocol = parts[0];
+  var domain = parts[1].split('/')[0];
+  return protocol + '//' + domain;
+}
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var NEW_NOTE = exports.NEW_NOTE = 'new-note';
 var PAGE_REPLY = exports.PAGE_REPLY = 'page-reply';
 var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';
@@ -577,7 +656,7 @@ var MESSAGE_ERROR = exports.MESSAGE_ERROR = 'error';
 var DEFAULT_REACJI = exports.DEFAULT_REACJI = ['👍', '👎', '🎉', '😆', '😢', '😠'];
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -666,85 +745,6 @@ function logsEnabled() {
 }
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.openLink = openLink;
-exports.clone = clone;
-exports.getAuthTab = getAuthTab;
-exports.logout = logout;
-exports.generateSlug = generateSlug;
-exports.getPageUrl = getPageUrl;
-exports.getOrigin = getOrigin;
-function openLink(e) {
-  e.preventDefault();
-  if (e.target.href) {
-    chrome.tabs.create({ url: e.target.href });
-  }
-}
-
-function clone(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
-
-function getAuthTab() {
-  return new Promise(function (resolve, reject) {
-    chrome.tabs.query({ url: 'https://omnibear.com/auth/success*' }, function (tabs) {
-      if (tabs.length) {
-        resolve(tabs[0]);
-      } else {
-        reject('Auth tab not found');
-      }
-    });
-  });
-}
-
-function logout() {
-  var items = ['token', 'domain', 'authEndpoint', 'tokenEndpoint', 'micropubEndpoint'];
-  items.map(function (item) {
-    return localStorage.removeItem(item);
-  });
-}
-
-var NON_ALPHANUM = /[^A-Za-z0-9\-]/g;
-var FROM = 'áäâàãåčçćďéěëèêẽĕȇęėíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;';
-var TO = 'aaaaaacccdeeeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------';
-
-function generateSlug(content) {
-  var formatted = content.toLocaleLowerCase().trim();
-  formatted = formatted.replace(/\s/g, '-');
-  for (var i = 0, l = FROM.length; i < l; i++) {
-    formatted = formatted.replace(new RegExp(FROM.charAt(i), 'g'), TO.charAt(i));
-  }
-  formatted = formatted.replace(NON_ALPHANUM, '');
-  formatted = formatted.replace(/\-\-+/g, '-');
-  var parts = formatted.split('-');
-  return parts.splice(0, 6).join('-');
-}
-
-function getPageUrl() {
-  return new Promise(function (resolve, reject) {
-    var tabId = localStorage.getItem('pageTabId');
-    chrome.tabs.get(Number(tabId), function (tab) {
-      resolve(tab.url);
-    });
-  });
-}
-
-function getOrigin(url) {
-  var parts = url.split('//');
-  var protocol = parts[0];
-  var domain = parts[1].split('/')[0];
-  return protocol + '//' + domain;
-}
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -791,7 +791,7 @@ var _micropub = __webpack_require__(4);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
-var _constants = __webpack_require__(1);
+var _constants = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1098,7 +1098,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _constants = __webpack_require__(1);
+var _constants = __webpack_require__(2);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -2421,8 +2421,88 @@ function deleteDraft() {
 }
 
 /***/ }),
-/* 21 */,
-/* 22 */
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.findPageLinks = findPageLinks;
+exports.parseLinksFromMarkup = parseLinksFromMarkup;
+exports.findEndpoint = findEndpoint;
+exports.sendWebmention = sendWebmention;
+
+var _log = __webpack_require__(3);
+
+function findPageLinks(url, origin) {
+  return fetch(url).then(function (response) {
+    if (!response.ok) {
+      (0, _log.error)('Error fetching page source', { url: url, response: response });
+      throw Error('Error fetching source page');
+    }
+    return response.text();
+  }).then(function (content) {
+    return parseLinksFromMarkup(content, origin);
+  });
+}
+
+function parseLinksFromMarkup(content, origin) {
+  var container = document.createElement('div');
+  container.innerHTML = content;
+  removeNestedEntries(container);
+  var links = container.querySelectorAll('.h-entry .e-content a[href]');
+  if (!links.length) {
+    (0, _log.info)('No links found in h-entry; searching entire page');
+    links = container.querySelectorAll('a[href]');
+  }
+  var urls = [];
+  links.forEach(function (link) {
+    var url = link.attributes.href.value;
+    if (!url || url === '/' || url.startsWith('#')) {
+      return;
+    }
+    urls.push(getAbsoluteUrl(url, origin));
+  });
+  (0, _log.info)(urls.length + ' links found in page');
+  return urls;
+}
+
+function getAbsoluteUrl(href, origin) {
+  if (!href.startsWith('/')) {
+    return href;
+  }
+  return '' + origin + href;
+}
+
+function removeNestedEntries(container) {
+  var entries = container.querySelectorAll('.h-entry .h-entry');
+  entries.forEach(function (entry) {
+    entry.remove();
+  });
+}
+
+function findEndpoint(url) {
+  var content = fetch(url).then(function (response) {
+    if (response.ok) {
+      return response.text();
+    } else {
+      (0, _log.error)('Error fetching ' + url, response);
+      throw Error('Error fetching ' + url);
+    }
+  });
+  // TODO: parse content (& headers!) for micropub endpoint
+}
+
+function sendWebmention() {
+  //
+}
+
+/***/ }),
+/* 22 */,
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2436,15 +2516,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _LoginForm = __webpack_require__(25);
+var _LoginForm = __webpack_require__(27);
 
 var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
-var _NoteForm = __webpack_require__(29);
+var _NoteForm = __webpack_require__(31);
 
 var _NoteForm2 = _interopRequireDefault(_NoteForm);
 
-var _Logs = __webpack_require__(34);
+var _Logs = __webpack_require__(36);
 
 var _Logs2 = _interopRequireDefault(_Logs);
 
@@ -2452,11 +2532,11 @@ var _Message = __webpack_require__(8);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _SettingsForm = __webpack_require__(38);
+var _SettingsForm = __webpack_require__(40);
 
 var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2568,9 +2648,104 @@ var App = function (_Component) {
 exports.default = App;
 
 /***/ }),
-/* 23 */,
-/* 24 */,
-/* 25 */
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(0);
+
+var _WebmentionList = __webpack_require__(44);
+
+var _WebmentionList2 = _interopRequireDefault(_WebmentionList);
+
+var _utils = __webpack_require__(1);
+
+var _wm = __webpack_require__(21);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Webmentions = function (_Component) {
+  _inherits(Webmentions, _Component);
+
+  function Webmentions(props) {
+    _classCallCheck(this, Webmentions);
+
+    var _this = _possibleConstructorReturn(this, (Webmentions.__proto__ || Object.getPrototypeOf(Webmentions)).call(this, props));
+
+    _this.state = {
+      currentView: 'loading',
+      pageUrl: '',
+      links: []
+    };
+    _this.fetchPageLinks();
+    return _this;
+  }
+
+  _createClass(Webmentions, [{
+    key: 'render',
+    value: function render() {
+      var _state = this.state,
+          currentView = _state.currentView,
+          pageUrl = _state.pageUrl,
+          links = _state.links;
+
+      switch (currentView) {
+        case 'loading':
+          return (0, _preact.h)(
+            'div',
+            { className: 'container' },
+            'Loading\u2026'
+          );
+        default:
+          return (0, _preact.h)(
+            'div',
+            { className: 'container' },
+            (0, _preact.h)(_WebmentionList2.default, { sourceUrl: pageUrl, links: links })
+          );
+      }
+    }
+  }, {
+    key: 'fetchPageLinks',
+    value: function fetchPageLinks() {
+      var _this2 = this;
+
+      (0, _utils.getPageUrl)().then(function (url) {
+        var origin = (0, _utils.getOrigin)(url);
+        _this2.setState({ pageUrl: url }, function () {
+          (0, _wm.findPageLinks)(url, origin).then(function (links) {
+            _this2.setState({
+              currentView: 'ready',
+              links: links
+            });
+          });
+        });
+      });
+    }
+  }]);
+
+  return Webmentions;
+}(_preact.Component);
+
+exports.default = Webmentions;
+
+/***/ }),
+/* 25 */,
+/* 26 */,
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2592,7 +2767,7 @@ var _Footer = __webpack_require__(19);
 
 var _Footer2 = _interopRequireDefault(_Footer);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(1);
 
 var _micropub = __webpack_require__(4);
 
@@ -2600,7 +2775,7 @@ var _micropub2 = _interopRequireDefault(_micropub);
 
 var _settings = __webpack_require__(5);
 
-var _log = __webpack_require__(2);
+var _log = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2752,7 +2927,7 @@ var LoginForm = function (_Component) {
 exports.default = LoginForm;
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2822,7 +2997,7 @@ var Tab = function (_Component) {
 exports.default = Tab;
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2836,11 +3011,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _Tab = __webpack_require__(26);
+var _Tab = __webpack_require__(28);
 
 var _Tab2 = _interopRequireDefault(_Tab);
 
-var _constants = __webpack_require__(1);
+var _constants = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2925,7 +3100,7 @@ var ChangeViewTabs = function (_Component) {
 exports.default = ChangeViewTabs;
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2939,15 +3114,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _SyndicateInputs = __webpack_require__(31);
+var _SyndicateInputs = __webpack_require__(33);
 
 var _SyndicateInputs2 = _interopRequireDefault(_SyndicateInputs);
 
 var _draft = __webpack_require__(20);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(1);
 
-var _constants = __webpack_require__(1);
+var _constants = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3138,7 +3313,7 @@ var FormInputs = function (_Component) {
 exports.default = FormInputs;
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3152,7 +3327,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _QuickActions = __webpack_require__(30);
+var _QuickActions = __webpack_require__(32);
 
 var _QuickActions2 = _interopRequireDefault(_QuickActions);
 
@@ -3160,11 +3335,11 @@ var _Message = __webpack_require__(8);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _ChangeViewTabs = __webpack_require__(27);
+var _ChangeViewTabs = __webpack_require__(29);
 
 var _ChangeViewTabs2 = _interopRequireDefault(_ChangeViewTabs);
 
-var _FormInputs = __webpack_require__(28);
+var _FormInputs = __webpack_require__(30);
 
 var _FormInputs2 = _interopRequireDefault(_FormInputs);
 
@@ -3174,17 +3349,17 @@ var _Footer2 = _interopRequireDefault(_Footer);
 
 var _draft = __webpack_require__(20);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(1);
 
 var _micropub = __webpack_require__(4);
 
 var _micropub2 = _interopRequireDefault(_micropub);
 
-var _constants = __webpack_require__(1);
+var _constants = __webpack_require__(2);
 
 var _settings = __webpack_require__(5);
 
-var _log = __webpack_require__(2);
+var _log = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3457,7 +3632,7 @@ var NoteForm = function (_Component) {
 exports.default = NoteForm;
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3471,13 +3646,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _constants = __webpack_require__(1);
+var _constants = __webpack_require__(2);
 
-var _HeartSvg = __webpack_require__(39);
+var _HeartSvg = __webpack_require__(41);
 
 var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
 
-var _RepostSvg = __webpack_require__(40);
+var _RepostSvg = __webpack_require__(42);
 
 var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
 
@@ -3596,7 +3771,7 @@ var QuickActions = function (_Component) {
 exports.default = QuickActions;
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3694,7 +3869,7 @@ var SyndicateInputs = function (_Component) {
 exports.default = SyndicateInputs;
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3793,7 +3968,7 @@ var LogDetails = function (_Component) {
 exports.default = LogDetails;
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3807,7 +3982,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _LogDetails = __webpack_require__(32);
+var _LogDetails = __webpack_require__(34);
 
 var _LogDetails2 = _interopRequireDefault(_LogDetails);
 
@@ -3877,7 +4052,7 @@ var LogItem = function (_Component) {
 exports.default = LogItem;
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3891,11 +4066,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _LogItem = __webpack_require__(33);
+var _LogItem = __webpack_require__(35);
 
 var _LogItem2 = _interopRequireDefault(_LogItem);
 
-var _log = __webpack_require__(2);
+var _log = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3996,7 +4171,7 @@ var Logs = function (_Component) {
 exports.default = Logs;
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4124,7 +4299,7 @@ var AuthenticationFields = function (_Component) {
 exports.default = AuthenticationFields;
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4262,7 +4437,7 @@ var EndpointFields = function (_Component) {
 exports.default = EndpointFields;
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4374,7 +4549,7 @@ var ReacjiSettings = function (_Component) {
 exports.default = ReacjiSettings;
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4388,23 +4563,23 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _ReacjiSettings = __webpack_require__(37);
+var _ReacjiSettings = __webpack_require__(39);
 
 var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
 
-var _EndpointFields = __webpack_require__(36);
+var _EndpointFields = __webpack_require__(38);
 
 var _EndpointFields2 = _interopRequireDefault(_EndpointFields);
 
-var _AuthenticationFields = __webpack_require__(35);
+var _AuthenticationFields = __webpack_require__(37);
 
 var _AuthenticationFields2 = _interopRequireDefault(_AuthenticationFields);
 
-var _constants = __webpack_require__(1);
+var _constants = __webpack_require__(2);
 
 var _settings = __webpack_require__(5);
 
-var _log = __webpack_require__(2);
+var _log = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4584,7 +4759,7 @@ var SettingsForm = function (_Component) {
 exports.default = SettingsForm;
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4640,7 +4815,7 @@ var HeartSVG = function (_Component) {
 exports.default = HeartSVG;
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4691,41 +4866,7 @@ var RepostSvg = function (_Component) {
 exports.default = RepostSvg;
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _preact = __webpack_require__(0);
-
-var _App = __webpack_require__(22);
-
-var _App2 = _interopRequireDefault(_App);
-
-var _Webmentions = __webpack_require__(46);
-
-var _Webmentions2 = _interopRequireDefault(_Webmentions);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-if (document.location.search.includes('webmentions')) {
-  document.addEventListener('DOMContentLoaded', function () {
-    document.body.classList.add('body--md');
-    (0, _preact.render)((0, _preact.h)(_Webmentions2.default, null), document.body);
-  });
-} else {
-  document.addEventListener('DOMContentLoaded', function () {
-    (0, _preact.render)((0, _preact.h)(_App2.default, null), document.body);
-  });
-}
-
-/***/ }),
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4739,15 +4880,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _WebmentionList = __webpack_require__(47);
-
-var _WebmentionList2 = _interopRequireDefault(_WebmentionList);
-
-var _utils = __webpack_require__(3);
-
-var _wm = __webpack_require__(48);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _wm = __webpack_require__(21);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -4755,72 +4888,99 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Webmentions = function (_Component) {
-  _inherits(Webmentions, _Component);
+var LOADING = 'LOADING';
+var READY = 'READY';
+var NO_ENDPOINT = 'NO_ENDPOINT';
+var SENDING = 'SENDING';
+var SENT = 'SENT';
 
-  function Webmentions(props) {
-    _classCallCheck(this, Webmentions);
+var Control = function (_Component) {
+  _inherits(Control, _Component);
 
-    var _this = _possibleConstructorReturn(this, (Webmentions.__proto__ || Object.getPrototypeOf(Webmentions)).call(this, props));
+  function Control(props) {
+    _classCallCheck(this, Control);
+
+    var _this = _possibleConstructorReturn(this, (Control.__proto__ || Object.getPrototypeOf(Control)).call(this, props));
+
+    _this.setEndpoint = function (endpointUrl) {
+      if (endpointUrl) {
+        _this.setState({
+          status: READY,
+          endpointUrl: endpointUrl
+        });
+      } else {
+        _this.setState({
+          status: NO_ENDPOINT
+        });
+      }
+    };
+
+    _this.sendWebmention = function () {
+      //
+    };
 
     _this.state = {
-      currentView: 'loading',
-      pageUrl: '',
-      links: []
+      status: LOADING,
+      endpointUrl: null
     };
-    _this.fetchPageLinks();
     return _this;
   }
 
-  _createClass(Webmentions, [{
+  _createClass(Control, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      (0, _wm.findEndpoint)(this.props.target).then(this.setEndpoint);
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _state = this.state,
-          currentView = _state.currentView,
-          pageUrl = _state.pageUrl,
-          links = _state.links;
+      var _props = this.props,
+          source = _props.source,
+          target = _props.target;
 
-      switch (currentView) {
-        case 'loading':
+      var classes = 'button button-small button--block';
+      switch (this.state.status) {
+        case LOADING:
           return (0, _preact.h)(
-            'div',
-            { className: 'container' },
-            'Loading\u2026'
+            'button',
+            { className: classes + ' is-loading', disabled: true },
+            'Finding\xA0endpoint'
+          );
+        case READY:
+          return (0, _preact.h)(
+            'button',
+            { className: classes, onClick: this.sendWebmention },
+            'Send\xA0Webmention'
+          );
+        case NO_ENDPOINT:
+          return (0, _preact.h)(
+            'button',
+            { className: classes, disabled: true },
+            'No\xA0endpoint\xA0found'
+          );
+        case SENDING:
+          return (0, _preact.h)(
+            'button',
+            { className: classes + ' is-loading', disabled: true },
+            'Sending'
           );
         default:
           return (0, _preact.h)(
-            'div',
-            { className: 'container' },
-            (0, _preact.h)(_WebmentionList2.default, { sourceUrl: pageUrl, links: links })
+            'button',
+            { className: classes, disabled: true },
+            'Sent'
           );
       }
     }
-  }, {
-    key: 'fetchPageLinks',
-    value: function fetchPageLinks() {
-      var _this2 = this;
-
-      (0, _utils.getPageUrl)().then(function (url) {
-        var origin = (0, _utils.getOrigin)(url);
-        _this2.setState({ pageUrl: url }, function () {
-          (0, _wm.findPageLinks)(url, origin).then(function (links) {
-            _this2.setState({
-              currentView: 'ready',
-              links: links
-            });
-          });
-        });
-      });
-    }
   }]);
 
-  return Webmentions;
+  return Control;
 }(_preact.Component);
 
-exports.default = Webmentions;
+exports.default = Control;
 
 /***/ }),
-/* 47 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4834,11 +4994,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _WebmentionTarget = __webpack_require__(49);
+var _WebmentionTarget = __webpack_require__(45);
 
 var _WebmentionTarget2 = _interopRequireDefault(_WebmentionTarget);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4920,57 +5080,7 @@ var WebmentionList = function (_Component) {
 exports.default = WebmentionList;
 
 /***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.findPageLinks = findPageLinks;
-exports.parseLinksFromMarkup = parseLinksFromMarkup;
-function findPageLinks(url, origin) {
-  return fetch(url).then(function (response) {
-    if (!response.ok) {
-      // TODO: log
-      console.error(response);
-      throw Error('Problem fetching source page');
-    }
-    return response.text();
-  }).then(function (content) {
-    return parseLinksFromMarkup(content, origin);
-  });
-}
-
-function parseLinksFromMarkup(content, origin) {
-  var container = document.createElement('div');
-  container.innerHTML = content;
-  var links = container.querySelectorAll('.h-entry a[href]');
-  if (!links.length) {
-    links = container.querySelectorAll('a[href]');
-  }
-  var urls = [];
-  links.forEach(function (link) {
-    var url = link.attributes.href.value;
-    if (!url || url === '/' || url.startsWith('#')) {
-      return;
-    }
-    urls.push(getAbsoluteUrl(url, origin));
-  });
-  return urls;
-}
-
-function getAbsoluteUrl(href, origin) {
-  if (!href.startsWith('/')) {
-    return href;
-  }
-  return origin + '/' + href;
-}
-
-/***/ }),
-/* 49 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4984,11 +5094,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _preact = __webpack_require__(0);
 
-var _Control = __webpack_require__(50);
+var _Control = __webpack_require__(43);
 
 var _Control2 = _interopRequireDefault(_Control);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5037,54 +5147,34 @@ var WebmentionTarget = function (_Component) {
 exports.default = WebmentionTarget;
 
 /***/ }),
-/* 50 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _preact = __webpack_require__(0);
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _App = __webpack_require__(23);
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _App2 = _interopRequireDefault(_App);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _Webmentions = __webpack_require__(24);
 
-var Control = function (_Component) {
-  _inherits(Control, _Component);
+var _Webmentions2 = _interopRequireDefault(_Webmentions);
 
-  function Control() {
-    _classCallCheck(this, Control);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-    return _possibleConstructorReturn(this, (Control.__proto__ || Object.getPrototypeOf(Control)).apply(this, arguments));
-  }
-
-  _createClass(Control, [{
-    key: "render",
-    value: function render() {
-      var _props = this.props,
-          sourceUrl = _props.sourceUrl,
-          target = _props.target;
-
-      return (0, _preact.h)(
-        "button",
-        { className: "button button--block" },
-        "Send\xA0Webmention"
-      );
-    }
-  }]);
-
-  return Control;
-}(_preact.Component);
-
-exports.default = Control;
+if (document.location.search.includes('webmentions')) {
+  document.addEventListener('DOMContentLoaded', function () {
+    document.body.classList.add('body--md');
+    (0, _preact.render)((0, _preact.h)(_Webmentions2.default, null), document.body);
+  });
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    (0, _preact.render)((0, _preact.h)(_App2.default, null), document.body);
+  });
+}
 
 /***/ })
 /******/ ]);

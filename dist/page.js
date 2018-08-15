@@ -63,12 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 42);
+/******/ 	return __webpack_require__(__webpack_require__.s = 47);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 23:
+/***/ 25:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -82,11 +82,11 @@ exports.removeHighlight = removeHighlight;
 exports.focusClickedEntry = focusClickedEntry;
 exports.getCurrentItemUrl = getCurrentItemUrl;
 
-var _microformatShiv = __webpack_require__(44);
+var _microformatShiv = __webpack_require__(49);
 
 var _microformatShiv2 = _interopRequireDefault(_microformatShiv);
 
-var _dom = __webpack_require__(43);
+var _dom = __webpack_require__(48);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -198,13 +198,13 @@ function getCurrentItemUrl() {
 
 /***/ }),
 
-/***/ 42:
+/***/ 47:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _entry = __webpack_require__(23);
+var _entry = __webpack_require__(25);
 
 document.body.addEventListener('click', _entry.clearItem);
 
@@ -252,7 +252,7 @@ function sendFocusMessage() {
 
 /***/ }),
 
-/***/ 43:
+/***/ 48:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -312,7 +312,7 @@ function getAncestorNode(el, filter) {
 
 /***/ }),
 
-/***/ 44:
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
