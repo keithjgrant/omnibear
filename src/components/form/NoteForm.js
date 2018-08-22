@@ -2,15 +2,18 @@ import {h, Component} from 'preact';
 import QuickActions from './QuickActions';
 import Message from '../Message';
 import ChangeViewTabs from './ChangeViewTabs';
+import UrlSelector from './UrlSelector';
 import FormInputs from './FormInputs';
 import Footer from '../Footer';
 import {getDraft, deleteDraft} from '../../util/draft';
 import {clone} from '../../util/utils';
 import micropub from '../../util/micropub';
 import {
-  NEW_NOTE,
-  PAGE_REPLY,
-  ITEM_REPLY,
+  NOTE,
+  REPLY,
+  BOOKMARK,
+  LIKE,
+  REPOST,
   MESSAGE_SUCCESS,
   MESSAGE_ERROR,
 } from '../../constants';
@@ -37,29 +40,27 @@ export default class NoteForm extends Component {
   }
 
   getPostType(settings) {
-    const selectedEntry = localStorage.getItem('selectedEntry');
+    // TODO: support other post types?
+    // const selectedEntry = localStorage.getItem('selectedEntry');
     if (
-      location.search.indexOf('reply=true') === -1 &&
+      location.search.indexOf('type=reply') === -1 &&
       !settings.defaultToCurrentPage
     ) {
-      return NEW_NOTE;
+      return NOTE;
     }
-    if (selectedEntry) {
-      return ITEM_REPLY;
-    } else {
-      return PAGE_REPLY;
-    }
+    return REPLY;
   }
 
   getCurrentUrl() {
     switch (this.state.postType) {
-      case NEW_NOTE:
+      case NOTE:
         return null;
-      case PAGE_REPLY:
+      // case PAGE_REPLY:
+      default:
         return this.props.pageUrl;
-      case ITEM_REPLY:
-        return this.state.selectedEntry;
-        break;
+      // case ITEM_REPLY:
+      //   return this.state.selectedEntry;
+      //   break;
     }
   }
 
@@ -74,6 +75,7 @@ export default class NoteForm extends Component {
       syndicateOptions,
       hasSelectedEntry,
       errorMessage,
+      activeUrl,
     } = this.state;
     const {handleSettings, handleLogout} = this.props;
     return (
@@ -83,7 +85,7 @@ export default class NoteForm extends Component {
           onChange={this.changeView}
           hasSelectedEntry={hasSelectedEntry}
         />
-        <QuickActions
+        {/* <QuickActions
           postType={postType}
           url={this.getCurrentUrl()}
           onLike={this.handleLike}
@@ -91,7 +93,10 @@ export default class NoteForm extends Component {
           onReacji={this.handleReacji}
           isDisabled={isLoading}
           settings={settings}
-        />
+        /> */}
+        {postType !== NOTE ? (
+          <UrlSelector url={activeUrl} onChange={this.setUrl} />
+        ) : null}
         <div className="container">
           <FormInputs
             postType={postType}
@@ -117,6 +122,11 @@ export default class NoteForm extends Component {
       </div>
     );
   }
+
+  setUrl = url => {
+    console.log('setting activeUrl', url);
+    this.setState({activeUrl: url});
+  };
 
   handleLike = () => {
     const url = this.getCurrentUrl();
@@ -205,12 +215,12 @@ export default class NoteForm extends Component {
   }
 
   handleSubmit = entry => {
-    if (this.state.postType !== NEW_NOTE) {
+    if (this.state.postType !== NOTE) {
       entry['in-reply-to'] = this.getCurrentUrl();
     }
     this.postEntry(entry)
       .then(location => {
-        const type = this.state.postType === NEW_NOTE ? 'Note' : 'Reply';
+        const type = this.state.postType === NOTE ? 'Note' : 'Reply';
         deleteDraft();
         this.flashSuccessMessage(`${type} posted successfully`, location);
       })
@@ -248,15 +258,18 @@ export default class NoteForm extends Component {
   changeView = postType => {
     let url;
     switch (postType) {
-      case NEW_NOTE:
+      case NOTE:
         url = null;
         break;
-      case PAGE_REPLY:
+      default:
         url = localStorage.getItem('pageUrl');
         break;
-      case ITEM_REPLY:
-        url = localStorage.getItem('selectedEntry');
-        break;
+      // case PAGE_REPLY:
+      //   url = localStorage.getItem('pageUrl');
+      //   break;
+      // case ITEM_REPLY:
+      //   url = localStorage.getItem('selectedEntry');
+      //   break;
     }
     this.setState({url, postType});
     this.form.focus();

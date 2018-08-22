@@ -1,5 +1,9 @@
+export const NOTE = 'note';
+export const REPLY = 'reply';
+export const BOOKMARK = 'bookmark';
+export const REPOST = 'repost';
+export const LIKE = 'like';
 
-export const NEW_NOTE = 'new-note';
 export const PAGE_REPLY = 'page-reply';
 export const ITEM_REPLY = 'item-reply';
 

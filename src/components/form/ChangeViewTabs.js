@@ -1,49 +1,30 @@
 import {h, Component} from 'preact';
 import Tab from '../Tab';
-import {NEW_NOTE, PAGE_REPLY, ITEM_REPLY} from '../../constants';
+import {NOTE, REPLY, BOOKMARK, REPOST, LIKE} from '../../constants';
+
+const UNICODE_NBSP = '\u00a0';
 
 export default class ChangeViewTabs extends Component {
   render() {
-    const postType = this.props.postType;
+    const {postType} = this.props;
     return (
       <div className="tabs">
-        {this.renderNewNote()}
-        {this.renderPageReply()}
-        {this.renderItemReply()}
+        {this.renderTab(NOTE, `New${UNICODE_NBSP}note`)}
+        {this.renderTab(REPLY, 'Reply')}
+        {this.renderTab(BOOKMARK, 'Bookmark')}
+        {this.renderTab(REPOST, 'Repost')}
+        {this.renderTab(LIKE, 'Like')}
       </div>
     );
   }
 
-  renderNewNote() {
+  renderTab(postType, label) {
     return (
       <Tab
-        isActive={this.props.postType === NEW_NOTE}
-        onClick={this.switchTo(NEW_NOTE)}
+        isActive={this.props.postType === postType}
+        onClick={this.switchTo(postType)}
       >
-        New note
-      </Tab>
-    );
-  }
-
-  renderPageReply() {
-    return (
-      <Tab
-        isActive={this.props.postType === PAGE_REPLY}
-        onClick={this.switchTo(PAGE_REPLY)}
-      >
-        Current page
-      </Tab>
-    );
-  }
-
-  renderItemReply() {
-    return (
-      <Tab
-        isActive={this.props.postType === ITEM_REPLY}
-        isDisabled={!this.props.hasSelectedEntry}
-        onClick={this.switchTo(ITEM_REPLY)}
-      >
-        Selected entry
+        {label}
       </Tab>
     );
   }

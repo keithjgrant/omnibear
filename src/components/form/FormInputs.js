@@ -1,15 +1,27 @@
 import {h, Component} from 'preact';
+import QuickReplies from './QuickReplies';
 import SyndicateInputs from './SyndicateInputs';
 import {saveDraft} from '../../util/draft';
 import {clone} from '../../util/utils';
 import {generateSlug} from '../../util/utils';
-import {NEW_NOTE} from '../../constants';
+import {NOTE, REPLY, BOOKMARK, LIKE, REPOST} from '../../constants';
+
+/*
+Props:
+postType,
+entry,
+syndicateOptions,
+isDisabled,
+isLoading,
+updateEntry: (entry) => void,
+onSubmit: (entry) => void,
+*/
 
 export default class FormInputs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSlugEdited: false,
+      isSlugModified: false,
     };
   }
 
@@ -31,10 +43,9 @@ export default class FormInputs extends Component {
     } = this.props;
     return (
       <form onSubmit={this.onSubmit}>
+        {postType === REPLY ? <QuickReplies /> : null}
         <div>
-          <label for="input-content">
-            {postType === NEW_NOTE ? 'Content' : 'Reply'}
-          </label>
+          <label for="input-content">Content</label>
           <textarea
             id="input-content"
             value={entry.content}
@@ -97,7 +108,7 @@ export default class FormInputs extends Component {
     entry['mp-slug'] = slug;
     this.props.updateEntry(entry);
     this.setState({
-      isSlugEdited: slug !== '',
+      isSlugModified: slug !== '',
     });
   };
 
@@ -127,7 +138,7 @@ export default class FormInputs extends Component {
   };
 
   shouldAutoSlug() {
-    if (this.state.isSlugEdited) {
+    if (this.state.isSlugModified) {
       return false;
     }
     if (this.props.settings && this.props.settings.autoSlug) {

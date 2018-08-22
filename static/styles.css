@@ -62,6 +62,7 @@ input[type='submit'] {
   color: inherit;
   border: 1px solid var(--gray-40);
   border-radius: 0.3em;
+  cursor: pointer;
 }
 button:hover,
 input[type='submit']:hover {
@@ -192,12 +193,12 @@ fieldset > * + * {
   font-family: Jaldi, sans-serif;
   font-weight: bold;
 }
+
 .minor-heading {
-  margin: 0.2rem 0;
+  margin: 0.2rem 0 0;
   font-size: 1rem;
   font-family: Jaldi, sans-serif;
   font-weight: bold;
-  text-align: right;
 }
 
 .message {
@@ -226,6 +227,83 @@ fieldset > * + * {
   background-color: var(--yellow-light);
 }
 
+.dropdown {
+  position: relative;
+  margin: 0.5rem 0.2rem 0;
+}
+.dropdown__toggle {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0.2em 1.5em 0.2em 0.5em;
+  border: 1px solid var(--yellow);
+  border-radius: 0;
+  color: var(--gray-40);
+  background-color: var(--yellow-light);
+  font-size: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+}
+.dropdown__toggle::after {
+  position: absolute;
+  top: calc(50% - 0.25em);
+  right: 0.5em;
+  content: '';
+  width: 0.5em;
+  height: 0.5em;
+  border: transparent 0.5em solid;
+  border-top-color: currentColor;
+  transform-origin: center 0.25em;
+}
+.dropdown__drawer {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  display: none;
+  color: var(--gray-30);
+  background-color: white;
+  box-shadow: 1px 1px 3px var(--gray-80);
+}
+.dropdown.is-open > .dropdown__toggle::after {
+  transform: rotate(180deg);
+}
+.dropdown.is-open > .dropdown__drawer {
+  display: block;
+}
+
+.url-option {
+  display: block;
+  width: 100%;
+  margin-top: -1px;
+  padding: 0.2em 0.5em;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  background-color: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.url-option.is-active {
+  background-color: var(--gray-90);
+}
+.url-option__type {
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+.url-option__url {
+  font-size: 0.8rem;
+}
+.url-option:disabled {
+  color: var(--gray-80);
+  cursor: default;
+  box-shadow: none;
+}
+
+.dropdown__drawer .url-option {
+  border-color: var(--gray-80);
+}
+
 .footer {
   display: flex;
   justify-content: space-between;
@@ -250,10 +328,11 @@ fieldset > * + * {
   margin: 0 -0.25em;
   padding: 0 0 0.5em;
   border-bottom: 1px solid var(--gray-80);
+  justify-content: flex-end;
   list-style: none;
 }
 .quick-actions > li {
-  margin: 0.25em;
+  margin: 0 0.25em 0.5em;
 }
 .quick-actions button {
   padding: 0 0.5em;

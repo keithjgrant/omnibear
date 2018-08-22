@@ -9,4 +9,5 @@ export default new Micropub({
   tokenEndpoint: localStorage.getItem('tokenEndpoint'),
   micropubEndpoint: localStorage.getItem('micropubEndpoint'),
   token: localStorage.getItem('token'),
+  scope: 'create delete update',
 });

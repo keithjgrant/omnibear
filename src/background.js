@@ -89,14 +89,14 @@ menuId = chrome.contextMenus.create({
     if (typeof browser === 'undefined') {
       // Chrome
       window.open(
-        'index.html?reply=true',
+        'index.html?type=reply',
         'extension_popup',
         'width=450,height=510,status=no,scrollbars=yes,resizable=no,top=80,left=2000'
       );
     } else {
       // Firefox (and others?)
       browser.windows.create({
-        url: 'index.html?reply=true',
+        url: 'index.html?type=reply',
         width: 450,
         height: 580,
         type: 'panel',
