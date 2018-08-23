@@ -1,12 +1,18 @@
 {
-  "presets": [["env", {
-    "targets": {
-      "browsers": ["last 2 versions"],
-      "uglify": true
-    }
-  }]],
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions"],
+          "uglify": true
+        }
+      }
+    ]
+  ],
   "plugins": [
+    "transform-decorators-legacy",
     "transform-class-properties",
-    ["transform-react-jsx", { "pragma": "h" }]
+    ["transform-react-jsx", {"pragma": "h"}]
   ]
 }

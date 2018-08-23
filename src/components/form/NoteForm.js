@@ -1,4 +1,5 @@
 import {h, Component} from 'preact';
+import {inject, observer} from 'mobx-preact';
 import QuickActions from './QuickActions';
 import Message from '../Message';
 import FormInputs from './FormInputs';
@@ -17,6 +18,8 @@ import {
 import {getSettings, getSyndicateOptions} from '../../util/settings';
 import {info, warning, error} from '../../util/log';
 
+@inject('store', 'draftStore')
+@observer
 export default class NoteForm extends Component {
   constructor(props) {
     super(props);

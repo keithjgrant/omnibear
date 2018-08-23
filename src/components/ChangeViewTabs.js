@@ -1,4 +1,5 @@
 import {h, Component} from 'preact';
+import {inject, observer} from 'mobx-preact';
 import Tab from './Tab';
 import {NOTE, REPLY, BOOKMARK, REPOST, LIKE, SETTINGS} from '../constants';
 
@@ -13,9 +14,10 @@ const ICONS = {
   quick: '/icons/flash.svg',
 };
 
+@inject('store')
+@observer
 export default class ChangeViewTabs extends Component {
   render() {
-    const {postType} = this.props;
     return (
       <div className="side-nav">
         <img className="side-nav__logo" src="/icon.svg" alt="Omnibear Logo" />
@@ -31,9 +33,10 @@ export default class ChangeViewTabs extends Component {
   }
 
   renderTab(postType, label, onBottom = false) {
+    const {store} = this.props;
     return (
       <Tab
-        isActive={this.props.postType === postType}
+        isActive={store.viewType === postType}
         onClick={this.switchTo(postType)}
         onBottom={onBottom}
       >
@@ -43,9 +46,9 @@ export default class ChangeViewTabs extends Component {
     );
   }
 
-  switchTo(postType) {
+  switchTo(type) {
     return () => {
-      this.props.onChange(postType);
+      this.props.store.setViewType(type);
     };
   }
 }

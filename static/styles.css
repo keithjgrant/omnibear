@@ -73,7 +73,7 @@ textarea,
 input[type='text'] {
   display: block;
   width: 100%;
-  margin: 0 -0.1em;
+  margin: 0.5em -0.1em 0;
   padding: 0.1em;
   border: 0;
   border-radius: 0;
@@ -83,6 +83,10 @@ input[type='text'] {
 }
 textarea {
   resize: vertical;
+}
+
+::placeholder {
+  color: var(--gray-60);
 }
 
 label,
@@ -112,7 +116,7 @@ label {
 .l-main {
   display: grid;
   grid-template:
-    'sidebar header' 3rem
+    'sidebar header' 5rem
     'sidebar main' 1fr
     'footer  footer' auto
     / 3.125rem auto;
@@ -298,19 +302,24 @@ fieldset > * + * {
 .dropdown {
   position: relative;
   margin: 0.5rem 0.2rem 0;
+  z-index: 1;
 }
 .dropdown__toggle {
   position: relative;
   display: block;
   width: 100%;
+  max-height: 3.125rem;
   padding: 0.2em 1.5em 0.2em 0.5em;
-  border: 1px solid var(--yellow);
-  border-radius: 0;
-  color: var(--gray-40);
-  background-color: var(--yellow-light);
+  overflow-y: hidden;
+  border: 0;
+  color: #fff;
+  background-color: transparent;
   font-size: 0.8rem;
   text-align: left;
   cursor: pointer;
+}
+.dropdown__toggle:hover {
+  box-shadow: none;
 }
 .dropdown__toggle::after {
   position: absolute;
@@ -319,8 +328,7 @@ fieldset > * + * {
   content: '';
   width: 0.5em;
   height: 0.5em;
-  border: transparent 0.5em solid;
-  border-top-color: currentColor;
+  background-image: url('/icons/down-arrow.svg');
   transform-origin: center 0.25em;
 }
 .dropdown__drawer {

@@ -1,9 +1,8 @@
 import {h, Component} from 'preact';
+import {inject, observer} from 'mobx-preact';
 import QuickReplies from './QuickReplies';
 import SyndicateInputs from './SyndicateInputs';
-import {saveDraft} from '../../util/draft';
 import {clone} from '../../util/utils';
-import {generateSlug} from '../../util/utils';
 import {NOTE, REPLY, BOOKMARK, LIKE, REPOST} from '../../constants';
 
 /*
@@ -17,6 +16,7 @@ updateEntry: (entry) => void,
 onSubmit: (entry) => void,
 */
 
+@inject('store', 'draftStore')
 export default class FormInputs extends Component {
   constructor(props) {
     super(props);
@@ -30,16 +30,17 @@ export default class FormInputs extends Component {
   }
 
   componentDidUpdate() {
-    saveDraft(this.props.entry);
+    this.props.draftStore.save();
   }
 
   render() {
     const {
       postType,
-      entry,
+      // entry,
       syndicateOptions,
       isDisabled,
       isLoading,
+      entry = draftStore,
     } = this.props;
     return (
       <form onSubmit={this.onSubmit}>
@@ -60,13 +61,13 @@ export default class FormInputs extends Component {
           <div class="input-extra">{entry.content.length}</div>
         </div>
         <div>
-          <label for="input-category">Tags (space separated)</label>
+          <label for="input-tags">Tags (space separated)</label>
           <input
-            id="input-category"
+            id="input-tags"
             type="text"
             placeholder="e.g. web  personal"
-            value={entry.category.join(' ')}
-            onChange={this.updateFieldArray('category')}
+            value={entry.tags}
+            onChange={this.updateTags}
             disabled={isDisabled}
           />
         </div>
@@ -104,9 +105,7 @@ export default class FormInputs extends Component {
 
   updateSlug = e => {
     const slug = e.target.value.trim();
-    const entry = clone(this.props.entry);
-    entry['mp-slug'] = slug;
-    this.props.updateEntry(entry);
+    this.props.entryStore.setSlug(slug);
     this.setState({
       isSlugModified: slug !== '',
     });
@@ -114,12 +113,11 @@ export default class FormInputs extends Component {
 
   updateContent = e => {
     const content = e.target.value;
-    const entry = clone(this.props.entry);
-    entry.content = content;
-    if (this.shouldAutoSlug()) {
-      entry['mp-slug'] = generateSlug(content);
-    }
-    this.props.updateEntry(entry);
+    this.props.entryStore.setContent(content, this.shouldAutoSlug());
+  };
+
+  updateTags = e => {
+    this.props.entryStore.setTags(e.target.value);
   };
 
   updateFieldArray(fieldName) {
@@ -130,12 +128,6 @@ export default class FormInputs extends Component {
       this.props.updateEntry(entry);
     };
   }
-
-  updateSyndicateTo = values => {
-    const entry = clone(this.props.entry);
-    entry['mp-syndicate-to'] = values;
-    this.props.updateEntry(entry);
-  };
 
   shouldAutoSlug() {
     if (this.state.isSlugModified) {

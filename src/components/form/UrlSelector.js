@@ -1,12 +1,9 @@
 import {h, Component} from 'preact';
+import {inject, observer} from 'mobx-preact';
 import {getPageUrl} from '../../util/utils';
 
-/*
-Props:
-url
-onChange
-*/
-
+@inject('store')
+@observer
 export default class UrlSelector extends Component {
   constructor(props) {
     super(props);
@@ -22,16 +19,17 @@ export default class UrlSelector extends Component {
 
   render() {
     const {isOpen, options} = this.state;
-    const {url} = this.props;
+    const {store} = this.props;
     return (
       <div className={`dropdown ${isOpen ? ' is-open' : ''}`}>
         <button className="dropdown__toggle" onClick={this.toggle}>
-          {this.renderUrlOption(this.findActiveOption())}
+          {store.selectedUrl}
+          {/* {this.renderUrlOption(this.findActiveOption())} */}
         </button>
         {isOpen ? (
           <div className="dropdown__drawer">
             {options.map(option =>
-              this.renderUrlOption(option, option.url === url)
+              this.renderUrlOption(option, option.url === store.selectedUrl)
             )}
           </div>
         ) : null}
@@ -53,9 +51,13 @@ export default class UrlSelector extends Component {
   }
 
   findActiveOption() {
-    const {url} = this.props;
+    const {store} = this.props;
     const {options} = this.state;
-    return options.find(option => option.url === url) || {url};
+    return (
+      options.find(option => option.url === store.selectedUrl) || {
+        url: store.selectedUrl,
+      }
+    );
   }
 
   toggle = () => {
@@ -67,10 +69,11 @@ export default class UrlSelector extends Component {
       url: url,
       isOpen: false,
     });
-    this.props.onChange(url);
+    this.props.store.setSelectedUrl(url);
   }
 
   refreshUrls() {
+    const {store} = this.props;
     getPageUrl().then(url => {
       const options = [
         {
@@ -85,8 +88,8 @@ export default class UrlSelector extends Component {
         options.push({name: 'Selected entry', url: '—', isDisabled: true});
       }
       this.setState({options});
-      if (!this.props.url) {
-        this.props.onChange(url);
+      if (!store.selectedUrl) {
+        store.setSelectedUrl(url);
       }
     });
   }

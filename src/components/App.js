@@ -1,4 +1,5 @@
 import {h, Component} from 'preact';
+import {inject, observer} from 'mobx-preact';
 import LoginForm from './LoginForm';
 import ChangeViewTabs from './ChangeViewTabs';
 import NoteForm from './form/NoteForm';
@@ -11,6 +12,8 @@ import {logout, getPageUrl} from '../util/utils';
 import {getSettings} from '../util/settings';
 import {NOTE, SETTINGS, LOGS, LOGIN} from '../constants';
 
+@inject('store')
+@observer
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -19,14 +22,15 @@ export default class App extends Component {
       pageUrl: '',
       userDomain: localStorage.getItem('domain'),
       settings: settings,
-      url: '',
     };
-    this.setDefaultView();
+    // this.setDefaultView();
   }
 
   render() {
-    const {currentView, userDomain} = this.state;
-    if (currentView === LOGIN) {
+    const {store} = this.props;
+    const {userDomain} = this.state;
+    const viewType = store.viewType;
+    if (viewType === LOGIN) {
       return (
         <LoginForm
           handleSettings={this.handleSettings}
@@ -37,12 +41,12 @@ export default class App extends Component {
     return (
       <div className="l-main">
         <nav className="l-main__sidebar">
-          <ChangeViewTabs postType={currentView} onChange={this.changeView} />
+          <ChangeViewTabs />
         </nav>
-        <Header postType={currentView} url={pageUrl} setUrl={this.setUrl} />
+        <Header />
         <main className="l-main__main">
           <NoteForm
-            postType={currentView}
+            postType={viewType}
             handleLogout={this.handleLogout}
             handleSettings={this.handleSettings}
             handleLogs={this.handleLogs}
@@ -60,48 +64,17 @@ export default class App extends Component {
         </footer>
       </div>
     );
-    // switch (this.state.currentView) {
-    //   case 'login':
-    //   case 'feedback':
-    //     return (
-    //       <Message location={this.state.postLocation}>
-    //         {this.state.message}
-    //       </Message>
-    //     );
-    //   case 'settings':
-    //     return <SettingsForm onClose={this.setDefaultView} />;
-    //   case 'logs':
-    //     return <Logs onClose={this.setDefaultView} />;
-    //   default:
-    //     return (
-    //       <NoteForm
-    //         handleLogout={this.handleLogout}
-    //         handleSettings={this.handleSettings}
-    //         handleLogs={this.handleLogs}
-    //         userFeedback={this.displayMessage}
-    //         pageUrl={this.state.pageUrl}
-    //       />
-    //     );
-    // }
   }
 
-  setDefaultView = () => {
-    if (this.isAuthenticated()) {
-      this.setState({
-        currentView: NOTE,
-      });
-      this.getPageUrl();
-    } else {
-      this.setState({
-        currentView: LOGIN,
-      });
-    }
-  };
-
-  changeView = postType => {
-    console.log('change to ', postType);
-    this.setState({currentView: postType});
-  };
+  // setDefaultView = () => {
+  //   const {store} = this.props;
+  //   if (this.isAuthenticated()) {
+  //     store.setViewType(NOTE);
+  //     this.getPageUrl();
+  //   } else {
+  //     store.setViewType(LOGIN);
+  //   }
+  // };
 
   isAuthenticated() {
     return (
