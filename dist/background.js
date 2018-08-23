@@ -1862,6 +1862,9 @@ var REPLY = exports.REPLY = 'reply';
 var BOOKMARK = exports.BOOKMARK = 'bookmark';
 var REPOST = exports.REPOST = 'repost';
 var LIKE = exports.LIKE = 'like';
+var SETTINGS = exports.SETTINGS = 'settings';
+var LOGS = exports.LOGS = 'logs';
+var LOGIN = exports.LOGIN = 'login';
 
 var PAGE_REPLY = exports.PAGE_REPLY = 'page-reply';
 var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';

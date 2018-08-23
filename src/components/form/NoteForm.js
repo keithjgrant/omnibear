@@ -1,10 +1,7 @@
 import {h, Component} from 'preact';
 import QuickActions from './QuickActions';
 import Message from '../Message';
-import ChangeViewTabs from './ChangeViewTabs';
-import UrlSelector from './UrlSelector';
 import FormInputs from './FormInputs';
-import Footer from '../Footer';
 import {getDraft, deleteDraft} from '../../util/draft';
 import {clone} from '../../util/utils';
 import micropub from '../../util/micropub';
@@ -27,7 +24,7 @@ export default class NoteForm extends Component {
     const settings = getSettings();
     const draft = getDraft();
     this.state = {
-      postType: this.getPostType(settings),
+      postType: this.getPostType(settings), // TODO: determine this in <App>
       selectedEntry: localStorage.getItem('selectedEntry'),
       userDomain: localStorage.getItem('domain'),
       entry: draft,
@@ -52,7 +49,7 @@ export default class NoteForm extends Component {
   }
 
   getCurrentUrl() {
-    switch (this.state.postType) {
+    switch (this.props.postType) {
       case NOTE:
         return null;
       // case PAGE_REPLY:
@@ -66,7 +63,6 @@ export default class NoteForm extends Component {
 
   render() {
     const {
-      postType,
       isDisabled,
       isLoading,
       settings,
@@ -77,14 +73,9 @@ export default class NoteForm extends Component {
       errorMessage,
       activeUrl,
     } = this.state;
-    const {handleSettings, handleLogout} = this.props;
+    const {handleSettings, handleLogout, postType} = this.props;
     return (
-      <div>
-        <ChangeViewTabs
-          postType={postType}
-          onChange={this.changeView}
-          hasSelectedEntry={hasSelectedEntry}
-        />
+      <div style={{height: '100%'}}>
         {/* <QuickActions
           postType={postType}
           url={this.getCurrentUrl()}
@@ -94,9 +85,6 @@ export default class NoteForm extends Component {
           isDisabled={isLoading}
           settings={settings}
         /> */}
-        {postType !== NOTE ? (
-          <UrlSelector url={activeUrl} onChange={this.setUrl} />
-        ) : null}
         <div className="container">
           <FormInputs
             postType={postType}
@@ -113,12 +101,6 @@ export default class NoteForm extends Component {
             <Message type={MESSAGE_ERROR}>{errorMessage}</Message>
           ) : null}
         </div>
-        <Footer
-          domain={userDomain}
-          onSettings={handleSettings}
-          onLogs={this.state.settings.debugLog ? this.props.handleLogs : null}
-          onLogout={handleLogout}
-        />
       </div>
     );
   }
@@ -139,7 +121,7 @@ export default class NoteForm extends Component {
       'like-of': url,
     })
       .then(location => {
-        const type = this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
+        const type = this.props.postType === ITEM_REPLY ? 'Item' : 'Page';
         this.flashSuccessMessage(`${type} liked successfully`, location);
       })
       .catch(err => {
@@ -158,7 +140,7 @@ export default class NoteForm extends Component {
       'repost-of': url,
     })
       .then(location => {
-        const type = this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
+        const type = this.props.postType === ITEM_REPLY ? 'Item' : 'Page';
         this.flashSuccessMessage(`${type} reposted successfully`, location);
       })
       .catch(err => {
@@ -178,7 +160,7 @@ export default class NoteForm extends Component {
       'in-reply-to': url,
     })
       .then(location => {
-        const type = this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
+        const type = this.props.postType === ITEM_REPLY ? 'Item' : 'Page';
         this.flashSuccessMessage(`${type} reacted to successfully`, location);
       })
       .catch(err => {
@@ -215,12 +197,12 @@ export default class NoteForm extends Component {
   }
 
   handleSubmit = entry => {
-    if (this.state.postType !== NOTE) {
+    if (this.props.postType !== NOTE) {
       entry['in-reply-to'] = this.getCurrentUrl();
     }
     this.postEntry(entry)
       .then(location => {
-        const type = this.state.postType === NOTE ? 'Note' : 'Reply';
+        const type = this.props.postType === NOTE ? 'Note' : 'Reply';
         deleteDraft();
         this.flashSuccessMessage(`${type} posted successfully`, location);
       })
@@ -255,6 +237,7 @@ export default class NoteForm extends Component {
     return micropub.create(aliasedEntry, 'form');
   }
 
+  /*
   changeView = postType => {
     let url;
     switch (postType) {
@@ -274,4 +257,5 @@ export default class NoteForm extends Component {
     this.setState({url, postType});
     this.form.focus();
   };
+  */
 }

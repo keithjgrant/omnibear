@@ -2381,6 +2381,10 @@ var _LoginForm = __webpack_require__(/*! ./LoginForm */ "./src/components/LoginF
 
 var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
+var _ChangeViewTabs = __webpack_require__(/*! ./ChangeViewTabs */ "./src/components/ChangeViewTabs.js");
+
+var _ChangeViewTabs2 = _interopRequireDefault(_ChangeViewTabs);
+
 var _NoteForm = __webpack_require__(/*! ./form/NoteForm */ "./src/components/form/NoteForm.js");
 
 var _NoteForm2 = _interopRequireDefault(_NoteForm);
@@ -2397,7 +2401,19 @@ var _SettingsForm = __webpack_require__(/*! ./settings/SettingsForm */ "./src/co
 
 var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
 
+var _Header = __webpack_require__(/*! ./Header */ "./src/components/Header.js");
+
+var _Header2 = _interopRequireDefault(_Header);
+
+var _Footer = __webpack_require__(/*! ./Footer */ "./src/components/Footer.js");
+
+var _Footer2 = _interopRequireDefault(_Footer);
+
 var _utils = __webpack_require__(/*! ../util/utils */ "./src/util/utils.js");
+
+var _settings = __webpack_require__(/*! ../util/settings */ "./src/util/settings.js");
+
+var _constants = __webpack_require__(/*! ../constants */ "./src/constants.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2418,14 +2434,19 @@ var App = function (_Component) {
     _this.setDefaultView = function () {
       if (_this.isAuthenticated()) {
         _this.setState({
-          currentView: 'new-note'
+          currentView: _constants.NOTE
         });
         _this.getPageUrl();
       } else {
         _this.setState({
-          currentView: 'login'
+          currentView: _constants.LOGIN
         });
       }
+    };
+
+    _this.changeView = function (postType) {
+      console.log('change to ', postType);
+      _this.setState({ currentView: postType });
     };
 
     _this.displayMessage = function (message, status, location) {
@@ -2437,20 +2458,24 @@ var App = function (_Component) {
     };
 
     _this.handleSettings = function () {
-      _this.setState({ currentView: 'settings' });
+      _this.setState({ currentView: _constants.SETTINGS });
     };
 
     _this.handleLogs = function () {
-      _this.setState({ currentView: 'logs' });
+      _this.setState({ currentView: _constants.LOGS });
     };
 
     _this.handleLogout = function () {
       (0, _utils.logout)();
-      _this.setState({ currentView: 'login' });
+      _this.setState({ currentView: _constants.LOGIN });
     };
 
+    var settings = (0, _settings.getSettings)();
     _this.state = {
-      pageUrl: ''
+      pageUrl: '',
+      userDomain: localStorage.getItem('domain'),
+      settings: settings,
+      url: ''
     };
     _this.setDefaultView();
     return _this;
@@ -2459,31 +2484,71 @@ var App = function (_Component) {
   _createClass(App, [{
     key: 'render',
     value: function render() {
-      switch (this.state.currentView) {
-        case 'login':
-          return (0, _preact.h)(_LoginForm2.default, {
-            handleSettings: this.handleSettings,
-            handleLogs: this.handleLogs
-          });
-        case 'feedback':
-          return (0, _preact.h)(
-            _Message2.default,
-            { location: this.state.postLocation },
-            this.state.message
-          );
-        case 'settings':
-          return (0, _preact.h)(_SettingsForm2.default, { onClose: this.setDefaultView });
-        case 'logs':
-          return (0, _preact.h)(_Logs2.default, { onClose: this.setDefaultView });
-        default:
-          return (0, _preact.h)(_NoteForm2.default, {
+      var _state = this.state,
+          currentView = _state.currentView,
+          userDomain = _state.userDomain;
+
+      if (currentView === _constants.LOGIN) {
+        return (0, _preact.h)(_LoginForm2.default, {
+          handleSettings: this.handleSettings,
+          handleLogs: this.handleLogs
+        });
+      }
+      return (0, _preact.h)(
+        'div',
+        { className: 'l-main' },
+        (0, _preact.h)(
+          'nav',
+          { className: 'l-main__sidebar' },
+          (0, _preact.h)(_ChangeViewTabs2.default, { postType: currentView, onChange: this.changeView })
+        ),
+        (0, _preact.h)(_Header2.default, { postType: currentView, url: pageUrl, setUrl: this.setUrl }),
+        (0, _preact.h)(
+          'main',
+          { className: 'l-main__main' },
+          (0, _preact.h)(_NoteForm2.default, {
+            postType: currentView,
             handleLogout: this.handleLogout,
             handleSettings: this.handleSettings,
             handleLogs: this.handleLogs,
             userFeedback: this.displayMessage,
             pageUrl: this.state.pageUrl
-          });
-      }
+          })
+        ),
+        (0, _preact.h)(
+          'footer',
+          { className: 'l-main__footer' },
+          (0, _preact.h)(_Footer2.default, {
+            domain: userDomain,
+            onSettings: this.handleSettings,
+            onLogs: this.state.settings.debugLog ? this.props.handleLogs : null,
+            onLogout: this.handleLogout
+          })
+        )
+      );
+      // switch (this.state.currentView) {
+      //   case 'login':
+      //   case 'feedback':
+      //     return (
+      //       <Message location={this.state.postLocation}>
+      //         {this.state.message}
+      //       </Message>
+      //     );
+      //   case 'settings':
+      //     return <SettingsForm onClose={this.setDefaultView} />;
+      //   case 'logs':
+      //     return <Logs onClose={this.setDefaultView} />;
+      //   default:
+      //     return (
+      //       <NoteForm
+      //         handleLogout={this.handleLogout}
+      //         handleSettings={this.handleSettings}
+      //         handleLogs={this.handleLogs}
+      //         userFeedback={this.displayMessage}
+      //         pageUrl={this.state.pageUrl}
+      //       />
+      //     );
+      // }
     }
   }, {
     key: 'isAuthenticated',
@@ -2507,6 +2572,105 @@ var App = function (_Component) {
 }(_preact.Component);
 
 exports.default = App;
+
+/***/ }),
+
+/***/ "./src/components/ChangeViewTabs.js":
+/*!******************************************!*\
+  !*** ./src/components/ChangeViewTabs.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ICONS;
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+var _Tab = __webpack_require__(/*! ./Tab */ "./src/components/Tab.js");
+
+var _Tab2 = _interopRequireDefault(_Tab);
+
+var _constants = __webpack_require__(/*! ../constants */ "./src/constants.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var UNICODE_NBSP = '\xA0';
+var ICONS = (_ICONS = {}, _defineProperty(_ICONS, _constants.NOTE, '/icons/pen.svg'), _defineProperty(_ICONS, _constants.REPLY, '/icons/reply.svg'), _defineProperty(_ICONS, _constants.BOOKMARK, '/icons/bookmark.svg'), _defineProperty(_ICONS, _constants.REPOST, '/icons/refresh.svg'), _defineProperty(_ICONS, _constants.LIKE, '/icons/heart.svg'), _defineProperty(_ICONS, _constants.SETTINGS, '/icons/settings.svg'), _defineProperty(_ICONS, 'quick', '/icons/flash.svg'), _ICONS);
+
+var ChangeViewTabs = function (_Component) {
+  _inherits(ChangeViewTabs, _Component);
+
+  function ChangeViewTabs() {
+    _classCallCheck(this, ChangeViewTabs);
+
+    return _possibleConstructorReturn(this, (ChangeViewTabs.__proto__ || Object.getPrototypeOf(ChangeViewTabs)).apply(this, arguments));
+  }
+
+  _createClass(ChangeViewTabs, [{
+    key: 'render',
+    value: function render() {
+      var postType = this.props.postType;
+
+      return (0, _preact.h)(
+        'div',
+        { className: 'side-nav' },
+        (0, _preact.h)('img', { className: 'side-nav__logo', src: '/icon.svg', alt: 'Omnibear Logo' }),
+        this.renderTab(_constants.NOTE, 'New' + UNICODE_NBSP + 'note'),
+        this.renderTab(_constants.REPLY, 'Reply'),
+        this.renderTab(_constants.BOOKMARK, 'Bookmark'),
+        this.renderTab(_constants.LIKE, 'Like'),
+        this.renderTab(_constants.REPOST, 'Repost'),
+        this.renderTab(_constants.SETTINGS, 'Settings', true)
+      );
+    }
+  }, {
+    key: 'renderTab',
+    value: function renderTab(postType, label) {
+      var onBottom = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+      return (0, _preact.h)(
+        _Tab2.default,
+        {
+          isActive: this.props.postType === postType,
+          onClick: this.switchTo(postType),
+          onBottom: onBottom
+        },
+        (0, _preact.h)('img', { src: ICONS[postType], alt: label }),
+        label
+      );
+    }
+  }, {
+    key: 'switchTo',
+    value: function switchTo(postType) {
+      var _this2 = this;
+
+      return function () {
+        _this2.props.onChange(postType);
+      };
+    }
+  }]);
+
+  return ChangeViewTabs;
+}(_preact.Component);
+
+exports.default = ChangeViewTabs;
 
 /***/ }),
 
@@ -2594,6 +2758,81 @@ var Footer = function (_Component) {
 }(_preact.Component);
 
 exports.default = Footer;
+
+/***/ }),
+
+/***/ "./src/components/Header.js":
+/*!**********************************!*\
+  !*** ./src/components/Header.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+var _UrlSelector = __webpack_require__(/*! ./form/UrlSelector */ "./src/components/form/UrlSelector.js");
+
+var _UrlSelector2 = _interopRequireDefault(_UrlSelector);
+
+var _constants = __webpack_require__(/*! ../constants */ "./src/constants.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/*
+Props:
+postType
+url
+setUrl
+*/
+
+var Header = function (_Component) {
+  _inherits(Header, _Component);
+
+  function Header() {
+    _classCallCheck(this, Header);
+
+    return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
+  }
+
+  _createClass(Header, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          url = _props.url,
+          setUrl = _props.setUrl;
+
+      return (0, _preact.h)(
+        'header',
+        { className: 'l-main__header' },
+        this.showUrlSelector() ? (0, _preact.h)(_UrlSelector2.default, { url: url, onChange: setUrl }) : null
+      );
+    }
+  }, {
+    key: 'showUrlSelector',
+    value: function showUrlSelector() {
+      return [_constants.REPLY, _constants.BOOKMARK, _constants.LIKE, _constants.REPOST].includes(this.props.postType);
+    }
+  }]);
+
+  return Header;
+}(_preact.Component);
+
+exports.default = Header;
 
 /***/ }),
 
@@ -2918,11 +3157,14 @@ var Tab = function (_Component) {
   }, {
     key: 'getClass',
     value: function getClass() {
+      var classes = 'tab';
       if (this.props.isActive) {
-        return 'tab is-active';
-      } else {
-        return 'tab';
+        classes += ' is-active';
       }
+      if (this.props.onBottom) {
+        classes += ' side-nav__bottom';
+      }
+      return classes;
     }
   }]);
 
@@ -2930,94 +3172,6 @@ var Tab = function (_Component) {
 }(_preact.Component);
 
 exports.default = Tab;
-
-/***/ }),
-
-/***/ "./src/components/form/ChangeViewTabs.js":
-/*!***********************************************!*\
-  !*** ./src/components/form/ChangeViewTabs.js ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
-
-var _Tab = __webpack_require__(/*! ../Tab */ "./src/components/Tab.js");
-
-var _Tab2 = _interopRequireDefault(_Tab);
-
-var _constants = __webpack_require__(/*! ../../constants */ "./src/constants.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var UNICODE_NBSP = '\xA0';
-
-var ChangeViewTabs = function (_Component) {
-  _inherits(ChangeViewTabs, _Component);
-
-  function ChangeViewTabs() {
-    _classCallCheck(this, ChangeViewTabs);
-
-    return _possibleConstructorReturn(this, (ChangeViewTabs.__proto__ || Object.getPrototypeOf(ChangeViewTabs)).apply(this, arguments));
-  }
-
-  _createClass(ChangeViewTabs, [{
-    key: 'render',
-    value: function render() {
-      var postType = this.props.postType;
-
-      return (0, _preact.h)(
-        'div',
-        { className: 'tabs' },
-        this.renderTab(_constants.NOTE, 'New' + UNICODE_NBSP + 'note'),
-        this.renderTab(_constants.REPLY, 'Reply'),
-        this.renderTab(_constants.BOOKMARK, 'Bookmark'),
-        this.renderTab(_constants.REPOST, 'Repost'),
-        this.renderTab(_constants.LIKE, 'Like')
-      );
-    }
-  }, {
-    key: 'renderTab',
-    value: function renderTab(postType, label) {
-      return (0, _preact.h)(
-        _Tab2.default,
-        {
-          isActive: this.props.postType === postType,
-          onClick: this.switchTo(postType)
-        },
-        label
-      );
-    }
-  }, {
-    key: 'switchTo',
-    value: function switchTo(postType) {
-      var _this2 = this;
-
-      return function () {
-        _this2.props.onChange(postType);
-      };
-    }
-  }]);
-
-  return ChangeViewTabs;
-}(_preact.Component);
-
-exports.default = ChangeViewTabs;
 
 /***/ }),
 
@@ -3281,21 +3435,9 @@ var _Message = __webpack_require__(/*! ../Message */ "./src/components/Message.j
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _ChangeViewTabs = __webpack_require__(/*! ./ChangeViewTabs */ "./src/components/form/ChangeViewTabs.js");
-
-var _ChangeViewTabs2 = _interopRequireDefault(_ChangeViewTabs);
-
-var _UrlSelector = __webpack_require__(/*! ./UrlSelector */ "./src/components/form/UrlSelector.js");
-
-var _UrlSelector2 = _interopRequireDefault(_UrlSelector);
-
 var _FormInputs = __webpack_require__(/*! ./FormInputs */ "./src/components/form/FormInputs.js");
 
 var _FormInputs2 = _interopRequireDefault(_FormInputs);
-
-var _Footer = __webpack_require__(/*! ../Footer */ "./src/components/Footer.js");
-
-var _Footer2 = _interopRequireDefault(_Footer);
 
 var _draft = __webpack_require__(/*! ../../util/draft */ "./src/util/draft.js");
 
@@ -3342,7 +3484,7 @@ var NoteForm = function (_Component) {
         h: 'entry',
         'like-of': url
       }).then(function (location) {
-        var type = _this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
+        var type = _this.props.postType === ITEM_REPLY ? 'Item' : 'Page';
         _this.flashSuccessMessage(type + ' liked successfully', location);
       }).catch(function (err) {
         _this.flashErrorMessage('Error posting like', err);
@@ -3359,7 +3501,7 @@ var NoteForm = function (_Component) {
         h: 'entry',
         'repost-of': url
       }).then(function (location) {
-        var type = _this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
+        var type = _this.props.postType === ITEM_REPLY ? 'Item' : 'Page';
         _this.flashSuccessMessage(type + ' reposted successfully', location);
       }).catch(function (err) {
         _this.flashErrorMessage('Error reposting', err);
@@ -3377,7 +3519,7 @@ var NoteForm = function (_Component) {
         content: emoji,
         'in-reply-to': url
       }).then(function (location) {
-        var type = _this.state.postType === ITEM_REPLY ? 'Item' : 'Page';
+        var type = _this.props.postType === ITEM_REPLY ? 'Item' : 'Page';
         _this.flashSuccessMessage(type + ' reacted to successfully', location);
       }).catch(function (err) {
         _this.flashErrorMessage('Error reacting', err);
@@ -3389,11 +3531,11 @@ var NoteForm = function (_Component) {
     };
 
     _this.handleSubmit = function (entry) {
-      if (_this.state.postType !== _constants.NOTE) {
+      if (_this.props.postType !== _constants.NOTE) {
         entry['in-reply-to'] = _this.getCurrentUrl();
       }
       _this.postEntry(entry).then(function (location) {
-        var type = _this.state.postType === _constants.NOTE ? 'Note' : 'Reply';
+        var type = _this.props.postType === _constants.NOTE ? 'Note' : 'Reply';
         (0, _draft.deleteDraft)();
         _this.flashSuccessMessage(type + ' posted successfully', location);
       }).catch(function (err) {
@@ -3405,31 +3547,11 @@ var NoteForm = function (_Component) {
       });
     };
 
-    _this.changeView = function (postType) {
-      var url = void 0;
-      switch (postType) {
-        case _constants.NOTE:
-          url = null;
-          break;
-        default:
-          url = localStorage.getItem('pageUrl');
-          break;
-        // case PAGE_REPLY:
-        //   url = localStorage.getItem('pageUrl');
-        //   break;
-        // case ITEM_REPLY:
-        //   url = localStorage.getItem('selectedEntry');
-        //   break;
-      }
-      _this.setState({ url: url, postType: postType });
-      _this.form.focus();
-    };
-
     var selectedEntry = localStorage.getItem('selectedEntry');
     var settings = (0, _settings.getSettings)();
     var draft = (0, _draft.getDraft)();
     _this.state = {
-      postType: _this.getPostType(settings),
+      postType: _this.getPostType(settings), // TODO: determine this in <App>
       selectedEntry: localStorage.getItem('selectedEntry'),
       userDomain: localStorage.getItem('domain'),
       entry: draft,
@@ -3455,7 +3577,7 @@ var NoteForm = function (_Component) {
   }, {
     key: 'getCurrentUrl',
     value: function getCurrentUrl() {
-      switch (this.state.postType) {
+      switch (this.props.postType) {
         case _constants.NOTE:
           return null;
         // case PAGE_REPLY:
@@ -3472,7 +3594,6 @@ var NoteForm = function (_Component) {
       var _this2 = this;
 
       var _state = this.state,
-          postType = _state.postType,
           isDisabled = _state.isDisabled,
           isLoading = _state.isLoading,
           settings = _state.settings,
@@ -3484,17 +3605,12 @@ var NoteForm = function (_Component) {
           activeUrl = _state.activeUrl;
       var _props = this.props,
           handleSettings = _props.handleSettings,
-          handleLogout = _props.handleLogout;
+          handleLogout = _props.handleLogout,
+          postType = _props.postType;
 
       return (0, _preact.h)(
         'div',
-        null,
-        (0, _preact.h)(_ChangeViewTabs2.default, {
-          postType: postType,
-          onChange: this.changeView,
-          hasSelectedEntry: hasSelectedEntry
-        }),
-        postType !== _constants.NOTE ? (0, _preact.h)(_UrlSelector2.default, { url: activeUrl, onChange: this.setUrl }) : null,
+        { style: { height: '100%' } },
         (0, _preact.h)(
           'div',
           { className: 'container' },
@@ -3516,13 +3632,7 @@ var NoteForm = function (_Component) {
             { type: _constants.MESSAGE_ERROR },
             errorMessage
           ) : null
-        ),
-        (0, _preact.h)(_Footer2.default, {
-          domain: userDomain,
-          onSettings: handleSettings,
-          onLogs: this.state.settings.debugLog ? this.props.handleLogs : null,
-          onLogout: handleLogout
-        })
+        )
       );
     }
   }, {
@@ -3573,6 +3683,29 @@ var NoteForm = function (_Component) {
       }
       return _micropub2.default.create(aliasedEntry, 'form');
     }
+
+    /*
+    changeView = postType => {
+      let url;
+      switch (postType) {
+        case NOTE:
+          url = null;
+          break;
+        default:
+          url = localStorage.getItem('pageUrl');
+          break;
+        // case PAGE_REPLY:
+        //   url = localStorage.getItem('pageUrl');
+        //   break;
+        // case ITEM_REPLY:
+        //   url = localStorage.getItem('selectedEntry');
+        //   break;
+      }
+      this.setState({url, postType});
+      this.form.focus();
+    };
+    */
+
   }]);
 
   return NoteForm;
@@ -3910,7 +4043,7 @@ var SyndicateInputs = function (_Component) {
       }
       return (0, _preact.h)(
         "div",
-        null,
+        { className: "checkbox" },
         (0, _preact.h)(
           "div",
           { "class": "label" },
@@ -5160,6 +5293,9 @@ var REPLY = exports.REPLY = 'reply';
 var BOOKMARK = exports.BOOKMARK = 'bookmark';
 var REPOST = exports.REPOST = 'repost';
 var LIKE = exports.LIKE = 'like';
+var SETTINGS = exports.SETTINGS = 'settings';
+var LOGS = exports.LOGS = 'logs';
+var LOGIN = exports.LOGIN = 'login';
 
 var PAGE_REPLY = exports.PAGE_REPLY = 'page-reply';
 var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';

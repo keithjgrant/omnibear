@@ -49,19 +49,19 @@ body {
   width: 450px;
   margin: 0;
   font-size: 1rem;
-  font-family: Lato, sans-serif;
+  font-family: Jaldi, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  letter-spacing: 0.01em;
   color: var(--gray-30);
 }
 
 button,
 input[type='submit'] {
-  font: inherit;
-  color: inherit;
   border: 1px solid var(--gray-40);
   border-radius: 0.3em;
+  color: inherit;
+  /* stylelint-disable-next-line property-blacklist */
+  font: inherit;
   cursor: pointer;
 }
 button:hover,
@@ -73,22 +73,74 @@ textarea,
 input[type='text'] {
   display: block;
   width: 100%;
-  padding: 0.3em 0.5em;
-  border: 1px solid var(--gray-40);
-  border-radius: 0.3em;
+  margin: 0 -0.1em;
+  padding: 0.1em;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid var(--gray-60);
+  /* stylelint-disable-next-line property-blacklist */
   font: inherit;
 }
+textarea {
+  resize: vertical;
+}
 
-label {
+label,
+.checkbox {
   display: block;
   color: var(--gray-50);
+  font-family: Noto Serif, serif;
   font-weight: 700;
   font-size: 0.8rem;
+}
+label {
+  cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+}
+
+.checkbox > label {
+  color: var(--gray-30);
+  font-size: 1rem;
+  font-family: Jaldi;
+  font-weight: normal;
+}
+
+.l-main {
+  display: grid;
+  grid-template:
+    'sidebar header' 3rem
+    'sidebar main' 1fr
+    'footer  footer' auto
+    / 3.125rem auto;
+  min-height: 100vh;
+}
+.l-main__sidebar {
+  grid-area: sidebar;
+  background-color: hsl(41, 75%, 97%); /* TODO: move */
+}
+.l-main__header {
+  grid-area: header;
+  padding-bottom: 1rem;
+}
+.l-main__main {
+  grid-area: main;
+}
+.l-main__footer {
+  grid-area: footer;
+}
+.l-main::after {
+  content: '';
+  grid-column: 2 / 3;
+  grid-row: 1 / -2;
+  background-image: linear-gradient(
+    to right,
+    hsl(20, 75%, 65%),
+    hsl(45, 75%, 65%)
+  );
 }
 
 .svg-heart {
@@ -109,8 +161,9 @@ label {
 textarea:focus,
 button:focus,
 input[type='text']:focus {
+  border-radius: 0.1em;
   outline: none;
-  box-shadow: 0 0 5px var(--yellow);
+  box-shadow: 0 0 0 5px hsla(41, 75%, 49%, 0.3);
 }
 
 a {
@@ -135,7 +188,22 @@ fieldset > * + * {
 }
 
 .container {
+  position: relative;
+  height: 100%;
   padding: 0.5em 1em;
+  border-top-right-radius: 1em;
+  border-top-left-radius: 1em;
+  background: white;
+}
+.container::before {
+  position: absolute;
+  top: -0.5rem;
+  right: 1rem;
+  left: 1rem;
+  content: '';
+  height: 0.5rem;
+  border-radius: 1rem 1rem 0 0;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .button {
@@ -409,46 +477,46 @@ fieldset > * + * {
   margin-left: 0.2em;
 }
 
-.tabs {
+.side-nav {
   display: flex;
-  margin: 0.2em 0 0;
-  padding: 0 0.2em;
-  border-bottom: 1px solid var(--yellow);
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0.5em 0;
 }
-.tab {
-  flex: 1 1 0;
-  margin-bottom: -1px;
-  padding: 0.4em 0.6em;
-  border: 1px solid var(--yellow);
-  border-radius: 0;
-  color: var(--gray-40);
-  background-color: var(--yellow-light);
-  font-family: Jaldi;
-  font-weight: 700;
-  line-height: 1.1;
-  transition: flex-grow 0.2s ease-out, border-radius 0.2s linear;
-}
-.tab.is-active {
-  flex-grow: 2;
-  color: var(--gray-30);
-  border-color: var(--orange);
-  border-bottom-color: transparent;
-  background-color: white;
-  border-top-right-radius: 1em;
-}
-.tab[disabled] {
+.side-nav > button {
+  width: 100%;
+  min-height: 3.125rem;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
   color: var(--gray-60);
-  background-color: var(--gray-90);
-  opacity: 0.8;
+  background: transparent;
+  font-size: 0.5rem;
+  font-family: Jaldi, sans-serif;
+  line-height: 1;
+  text-transform: uppercase;
+  text-align: center;
 }
-.tab + .tab {
-  margin-left: 0.1em;
+.side-nav > button > img {
+  margin: 0.5rem 1rem 0.3rem;
 }
-.tab:hover {
+.side-nav > button:hover,
+.side-nav > button:focus,
+.side-nav > button.is-active {
+  color: var(--yellow);
   box-shadow: none;
 }
-.tab:hover:not(.is-active):not([disabled]) {
-  text-decoration: underline;
+.side-nav > button + button {
+  margin-top: 0.5rem;
+}
+.side-nav__logo {
+  flex-basis: 3.125rem;
+  padding: 0.3rem 0.5rem 0.5rem;
+  border-bottom: 1px solid var(--gray-90);
+}
+.side-nav > .side-nav__bottom {
+  margin-top: auto;
+  border-top: 1px solid var(--gray-90);
 }
 
 .settings-form__description {

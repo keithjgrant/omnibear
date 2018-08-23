@@ -1,4 +1,4 @@
-import { h, Component } from 'preact';
+import {h, Component} from 'preact';
 
 export default class Tab extends Component {
   render() {
@@ -7,20 +7,25 @@ export default class Tab extends Component {
         className={this.getClass()}
         disabled={this.props.isDisabled}
         onClick={this.handleClick}
-      >{this.props.children}</button>
+      >
+        {this.props.children}
+      </button>
     );
   }
 
   getClass() {
+    let classes = 'tab';
     if (this.props.isActive) {
-      return 'tab is-active';
-    } else {
-      return 'tab';
+      classes += ' is-active';
     }
+    if (this.props.onBottom) {
+      classes += ' side-nav__bottom';
+    }
+    return classes;
   }
 
-  handleClick = (e) => {
+  handleClick = e => {
     e.preventDefault();
     this.props.onClick();
-  }
+  };
 }
