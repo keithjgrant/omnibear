@@ -1,5 +1,7 @@
 import {h, Component} from 'preact';
+import {observer} from 'mobx-preact';
 
+@observer
 export default class ReacjiSettings extends Component {
   constructor(props) {
     super(props);
@@ -14,8 +16,14 @@ export default class ReacjiSettings extends Component {
       <div>
         <label>Quick replies (“Reacji”)</label>
         <div className="reacji-row">{reacji.map(this.renderReacji)}</div>
-        <div class="input-inline">
-          <input type="text" value={this.state.value} onChange={this.update} />
+        <div className="input-inline">
+          <input
+            type="text"
+            value={this.state.value}
+            onChange={this.update}
+            placeholder="Enter reaction emoji"
+            maxLength="15"
+          />
           <button type="button" onClick={this.addReacji}>
             Add
           </button>

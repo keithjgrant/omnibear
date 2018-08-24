@@ -1,4 +1,5 @@
 import {observable, computed, action} from 'mobx';
+import settingsStore from './settingsStore';
 import {getDraft, saveDraft} from '../util/draft';
 import {generateSlug} from '../util/utils';
 
@@ -14,6 +15,8 @@ class DraftStore {
     this.tags = savedDraft.category.join(' ');
     this.slug = savedDraft['mp-slug'];
     this.syndicateList = savedDraft['mp-syndicate-to'];
+    this._settings = settingsStore;
+    this._isSlugModified = false;
   }
 
   @computed
@@ -25,21 +28,33 @@ class DraftStore {
   }
 
   @action
-  setContent(content, autoSlug = false) {
+  setContent(content) {
     this.content = content;
-    if (autoSlug) {
+    console.log('content', content);
+    if (this.shouldAutoSlug()) {
+      console.log('slug', generateSlug(content));
       this.slug = generateSlug(content);
     }
+    this.save();
+  }
+
+  @action
+  setSlug(slug) {
+    this.slug = slug;
+    this._isSlugModified = slug !== '';
+    this.save();
   }
 
   @action
   setTags(tagString) {
     this.tags = tagString;
+    this.save();
   }
 
   @action
   setSyndicateList(syndicateTo) {
     this.syndicateList = syndicateTo;
+    this.save();
   }
 
   // TODO: clearDraft? or call util/draft.deleteDraft directly from component?
@@ -52,6 +67,16 @@ class DraftStore {
       'mp-slug': this.slug,
       'mp-syndicate-to': this.syndicateList,
     });
+  }
+
+  shouldAutoSlug() {
+    if (this._isSlugModified) {
+      return false;
+    }
+    if (this._settings.autoSlug) {
+      return true;
+    }
+    return false;
   }
 }
 

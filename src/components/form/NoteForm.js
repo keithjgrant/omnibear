@@ -51,19 +51,6 @@ export default class NoteForm extends Component {
     return REPLY;
   }
 
-  getCurrentUrl() {
-    switch (this.props.postType) {
-      case NOTE:
-        return null;
-      // case PAGE_REPLY:
-      default:
-        return this.props.pageUrl;
-      // case ITEM_REPLY:
-      //   return this.state.selectedEntry;
-      //   break;
-    }
-  }
-
   render() {
     const {
       isDisabled,
@@ -78,16 +65,7 @@ export default class NoteForm extends Component {
     } = this.state;
     const {handleSettings, handleLogout, postType} = this.props;
     return (
-      <div style={{height: '100%'}}>
-        {/* <QuickActions
-          postType={postType}
-          url={this.getCurrentUrl()}
-          onLike={this.handleLike}
-          onRepost={this.handleRepost}
-          onReacji={this.handleReacji}
-          isDisabled={isLoading}
-          settings={settings}
-        /> */}
+      <div className="l-main__main">
         <div className="container">
           <FormInputs
             postType={postType}
@@ -114,7 +92,7 @@ export default class NoteForm extends Component {
   };
 
   handleLike = () => {
-    const url = this.getCurrentUrl();
+    const url = this.props.store.selectedUrl;
     if (!url) {
       warning('Cannot send like; no current URL found');
       return;
@@ -133,7 +111,7 @@ export default class NoteForm extends Component {
   };
 
   handleRepost = () => {
-    const url = this.getCurrentUrl();
+    const url = this.props.store.selectedUrl;
     if (!url) {
       warning('Cannot send repost; no current URL found');
       return;
@@ -152,7 +130,7 @@ export default class NoteForm extends Component {
   };
 
   handleReacji = emoji => {
-    const url = this.getCurrentUrl();
+    const url = this.props.store.selectedUrl;
     if (!url) {
       warning('Cannot send reacji; no current URL found');
       return;
@@ -201,7 +179,7 @@ export default class NoteForm extends Component {
 
   handleSubmit = entry => {
     if (this.props.postType !== NOTE) {
-      entry['in-reply-to'] = this.getCurrentUrl();
+      entry['in-reply-to'] = this.props.store.selectedUrl;
     }
     this.postEntry(entry)
       .then(location => {

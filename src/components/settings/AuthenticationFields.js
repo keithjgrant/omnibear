@@ -1,5 +1,8 @@
 import {h, Component} from 'preact';
+import {inject, observer} from 'mobx-preact';
 
+@inject('authStore')
+@observer
 export default class AuthenticationFields extends Component {
   constructor(props) {
     super(props);
@@ -9,66 +12,68 @@ export default class AuthenticationFields extends Component {
   }
 
   render() {
+    const {authStore: auth} = this.props;
+    const {showFields} = this.state;
     return (
       <fieldset>
         <legend>Authentication details (advanced)</legend>
-        <div class="settings-form__description">
+        <div className="settings-form__description">
           These values are set automatically upon logging in. Only edit them if
           you are having trouble authenticating and wish to do so manually.
         </div>
 
-        {this.state.showFields ? (
-          [
-            <div>
-              <label htmlFor="me">Me (domain name)</label>
-              <input
-                id="me"
-                type="text"
-                value={this.props.me}
-                onChange={this.update('me')}
-                placeholder="https://example.com"
-              />
-            </div>,
-            <div>
-              <label htmlFor="mp-endpoint">Micropub endpoint</label>
-              <input
-                id="mp-endpoint"
-                type="text"
-                value={this.props.micropubEndpoint}
-                onChange={this.update('micropubEndpoint')}
-                placeholder="https://example.com/micropub"
-              />
-            </div>,
-            <div>
-              <label htmlFor="token">Token</label>
-              <input
-                id="token"
-                type="text"
-                value={this.props.token}
-                onChange={this.update('token')}
-              />
-            </div>,
-          ]
-        ) : (
-          <div class="text-right">
-            <button type="button" onClick={this.showAuthenticationDetails}>
-              Show
-            </button>
-          </div>
-        )}
+        {showFields
+          ? [
+              <div key="domain">
+                <label htmlFor="domain">Me (domain name)</label>
+                <input
+                  id="domain"
+                  type="text"
+                  value={auth.domain}
+                  onChange={this.update(auth.setDomain)}
+                  placeholder="https://example.com"
+                />
+              </div>,
+              <div key="endpoint">
+                <label htmlFor="mp-endpoint">Micropub endpoint</label>
+                <input
+                  id="mp-endpoint"
+                  type="text"
+                  value={auth.micropubEndpoint}
+                  onChange={this.update(auth.setMicropubEndpoint)}
+                  placeholder="https://example.com/micropub"
+                />
+              </div>,
+              <div key="token">
+                <label htmlFor="token">Token</label>
+                <input
+                  id="token"
+                  type="text"
+                  value={auth.token}
+                  onChange={this.update(auth.setToken)}
+                />
+              </div>,
+            ]
+          : null}
+        <div className="text-right">
+          <button type="button" onClick={this.toggle}>
+            {showFields ? 'Hide' : 'Show'}
+          </button>
+        </div>
       </fieldset>
     );
   }
 
-  update(fieldName) {
-    return e => {
-      this.props.onChange(fieldName)(e.target.value);
+  update(fn) {
+    return event => {
+      fn(event.target.value);
+      window.auth = this.props.authStore;
     };
   }
 
-  showAuthenticationDetails = () => {
+  toggle = () => {
     this.setState({
-      showFields: true,
+      showFields: !this.state.showFields,
     });
   };
 }

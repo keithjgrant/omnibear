@@ -69,7 +69,8 @@ export default class UrlSelector extends Component {
       url: url,
       isOpen: false,
     });
-    this.props.store.setSelectedUrl(url);
+    this.props.store.selectedUrl = url;
+    // this.props.store.setSelectedUrl(url);
   }
 
   refreshUrls() {

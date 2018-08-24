@@ -2112,7 +2112,7 @@ var _parseUri2 = _interopRequireDefault(_parseUri);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getParamFromUrl(paramName, url) {
-  var params = url.split('?')[1];
+  var params = url.split('?')[1] || '';
   return getParamFromUrlString(paramName, params);
 }
 

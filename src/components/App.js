@@ -7,6 +7,7 @@ import Logs from './log/Logs';
 import Message from './Message';
 import SettingsForm from './settings/SettingsForm';
 import Header from './Header';
+import MainPane from './MainPane';
 import Footer from './Footer';
 import {logout, getPageUrl} from '../util/utils';
 import {getSettings} from '../util/settings';
@@ -44,16 +45,7 @@ export default class App extends Component {
           <ChangeViewTabs />
         </nav>
         <Header />
-        <main className="l-main__main">
-          <NoteForm
-            postType={viewType}
-            handleLogout={this.handleLogout}
-            handleSettings={this.handleSettings}
-            handleLogs={this.handleLogs}
-            userFeedback={this.displayMessage}
-            pageUrl={this.state.pageUrl}
-          />
-        </main>
+        <MainPane />
         <footer className="l-main__footer">
           <Footer
             domain={userDomain}

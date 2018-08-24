@@ -7321,6 +7321,10 @@ var _Header = __webpack_require__(/*! ./Header */ "./src/components/Header.js");
 
 var _Header2 = _interopRequireDefault(_Header);
 
+var _MainPane = __webpack_require__(/*! ./MainPane */ "./src/components/MainPane.js");
+
+var _MainPane2 = _interopRequireDefault(_MainPane);
+
 var _Footer = __webpack_require__(/*! ./Footer */ "./src/components/Footer.js");
 
 var _Footer2 = _interopRequireDefault(_Footer);
@@ -7400,18 +7404,7 @@ var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreac
           (0, _preact.h)(_ChangeViewTabs2.default, null)
         ),
         (0, _preact.h)(_Header2.default, null),
-        (0, _preact.h)(
-          'main',
-          { className: 'l-main__main' },
-          (0, _preact.h)(_NoteForm2.default, {
-            postType: viewType,
-            handleLogout: this.handleLogout,
-            handleSettings: this.handleSettings,
-            handleLogs: this.handleLogs,
-            userFeedback: this.displayMessage,
-            pageUrl: this.state.pageUrl
-          })
-        ),
+        (0, _preact.h)(_MainPane2.default, null),
         (0, _preact.h)(
           'footer',
           { className: 'l-main__footer' },
@@ -7905,6 +7898,83 @@ exports.default = LoginForm;
 
 /***/ }),
 
+/***/ "./src/components/MainPane.js":
+/*!************************************!*\
+  !*** ./src/components/MainPane.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dec, _class;
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
+
+var _NoteForm = __webpack_require__(/*! ./form/NoteForm */ "./src/components/form/NoteForm.js");
+
+var _NoteForm2 = _interopRequireDefault(_NoteForm);
+
+var _SettingsForm = __webpack_require__(/*! ./settings/SettingsForm */ "./src/components/settings/SettingsForm.js");
+
+var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
+
+var _constants = __webpack_require__(/*! ../constants */ "./src/constants.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MainPane = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = function (_Component) {
+  _inherits(MainPane, _Component);
+
+  function MainPane() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, MainPane);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MainPane.__proto__ || Object.getPrototypeOf(MainPane)).call.apply(_ref, [this].concat(args))), _this), _this.closeSettings = function () {
+      _this.props.store.setViewType(_constants.NOTE);
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(MainPane, [{
+    key: 'render',
+    value: function render() {
+      var type = this.props.store.viewType;
+      if (type === _constants.SETTINGS) {
+        return (0, _preact.h)(_SettingsForm2.default, { onClose: this.closeSettings });
+      }
+      return (0, _preact.h)(_NoteForm2.default, null);
+    }
+  }]);
+
+  return MainPane;
+}(_preact.Component)) || _class);
+exports.default = MainPane;
+
+/***/ }),
+
 /***/ "./src/components/Message.js":
 /*!***********************************!*\
   !*** ./src/components/Message.js ***!
@@ -8113,7 +8183,7 @@ updateEntry: (entry) => void,
 onSubmit: (entry) => void,
 */
 
-var FormInputs = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_class = function (_Component) {
+var FormInputs = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(FormInputs, _Component);
 
   function FormInputs(props) {
@@ -8127,19 +8197,16 @@ var FormInputs = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_c
 
     _this.updateSlug = function (e) {
       var slug = e.target.value.trim();
-      _this.props.entryStore.setSlug(slug);
-      _this.setState({
-        isSlugModified: slug !== ''
-      });
+      _this.props.draftStore.setSlug(slug);
     };
 
     _this.updateContent = function (e) {
       var content = e.target.value;
-      _this.props.entryStore.setContent(content, _this.shouldAutoSlug());
+      _this.props.draftStore.setContent(content);
     };
 
     _this.updateTags = function (e) {
-      _this.props.entryStore.setTags(e.target.value);
+      _this.props.draftStore.setTags(e.target.value);
     };
 
     _this.onSubmit = function (e) {
@@ -8173,8 +8240,7 @@ var FormInputs = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_c
           syndicateOptions = _props.syndicateOptions,
           isDisabled = _props.isDisabled,
           isLoading = _props.isLoading,
-          _props$entry = _props.entry,
-          entry = _props$entry === undefined ? draftStore : _props$entry;
+          entry = _props.draftStore;
 
       return (0, _preact.h)(
         'form',
@@ -8185,7 +8251,7 @@ var FormInputs = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_c
           null,
           (0, _preact.h)(
             'label',
-            { 'for': 'input-content' },
+            { htmlFor: 'input-content' },
             'Content'
           ),
           (0, _preact.h)('textarea', {
@@ -8201,7 +8267,7 @@ var FormInputs = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_c
           }),
           (0, _preact.h)(
             'div',
-            { 'class': 'input-extra' },
+            { className: 'input-extra' },
             entry.content.length
           )
         ),
@@ -8210,7 +8276,7 @@ var FormInputs = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_c
           null,
           (0, _preact.h)(
             'label',
-            { 'for': 'input-tags' },
+            { htmlFor: 'input-tags' },
             'Tags (space separated)'
           ),
           (0, _preact.h)('input', {
@@ -8227,22 +8293,22 @@ var FormInputs = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_c
           null,
           (0, _preact.h)(
             'label',
-            { 'for': 'input-slug' },
+            { htmlFor: 'input-slug' },
             'Slug'
           ),
           (0, _preact.h)('input', {
             id: 'input-slug',
             type: 'text',
             name: 'mp-slug',
-            value: entry['mp-slug'],
+            value: entry.slug,
             onInput: this.updateSlug,
             disabled: isDisabled
           })
         ),
         (0, _preact.h)(_SyndicateInputs2.default, {
           options: syndicateOptions,
-          selected: entry['mp-syndicate-to'],
-          onUpdate: this.updateSyndicateTo,
+          selected: entry.syndicateList,
+          onUpdate: entry.setSyndicateList,
           isDisabled: isDisabled
         }),
         (0, _preact.h)(
@@ -8256,33 +8322,22 @@ var FormInputs = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_c
         )
       );
     }
-  }, {
-    key: 'updateFieldArray',
-    value: function updateFieldArray(fieldName) {
-      var _this3 = this;
 
-      return function (e) {
-        e.preventDefault();
-        var entry = (0, _utils.clone)(_this3.props.entry);
-        entry[fieldName] = e.target.value.trim().split(' ');
-        _this3.props.updateEntry(entry);
-      };
-    }
-  }, {
-    key: 'shouldAutoSlug',
-    value: function shouldAutoSlug() {
-      if (this.state.isSlugModified) {
-        return false;
-      }
-      if (this.props.settings && this.props.settings.autoSlug) {
-        return true;
-      }
-      return false;
-    }
+    // // TODO: move into draftStore?
+    // shouldAutoSlug() {
+    //   if (this.state.isSlugModified) {
+    //     return false;
+    //   }
+    //   if (this.props.settings && this.props.settings.autoSlug) {
+    //     return true;
+    //   }
+    //   return false;
+    // }
+
   }]);
 
   return FormInputs;
-}(_preact.Component)) || _class);
+}(_preact.Component)) || _class) || _class);
 exports.default = FormInputs;
 
 /***/ }),
@@ -8358,7 +8413,7 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_cla
     };
 
     _this.handleLike = function () {
-      var url = _this.getCurrentUrl();
+      var url = _this.props.store.selectedUrl;
       if (!url) {
         (0, _log.warning)('Cannot send like; no current URL found');
         return;
@@ -8375,7 +8430,7 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_cla
     };
 
     _this.handleRepost = function () {
-      var url = _this.getCurrentUrl();
+      var url = _this.props.store.selectedUrl;
       if (!url) {
         (0, _log.warning)('Cannot send repost; no current URL found');
         return;
@@ -8392,7 +8447,7 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_cla
     };
 
     _this.handleReacji = function (emoji) {
-      var url = _this.getCurrentUrl();
+      var url = _this.props.store.selectedUrl;
       if (!url) {
         (0, _log.warning)('Cannot send reacji; no current URL found');
         return;
@@ -8415,7 +8470,7 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_cla
 
     _this.handleSubmit = function (entry) {
       if (_this.props.postType !== _constants.NOTE) {
-        entry['in-reply-to'] = _this.getCurrentUrl();
+        entry['in-reply-to'] = _this.props.store.selectedUrl;
       }
       _this.postEntry(entry).then(function (location) {
         var type = _this.props.postType === _constants.NOTE ? 'Note' : 'Reply';
@@ -8458,20 +8513,6 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_cla
       return _constants.REPLY;
     }
   }, {
-    key: 'getCurrentUrl',
-    value: function getCurrentUrl() {
-      switch (this.props.postType) {
-        case _constants.NOTE:
-          return null;
-        // case PAGE_REPLY:
-        default:
-          return this.props.pageUrl;
-        // case ITEM_REPLY:
-        //   return this.state.selectedEntry;
-        //   break;
-      }
-    }
-  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -8493,7 +8534,7 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draftStore'), _dec(_cla
 
       return (0, _preact.h)(
         'div',
-        { style: { height: '100%' } },
+        { className: 'l-main__main' },
         (0, _preact.h)(
           'div',
           { className: 'container' },
@@ -9086,7 +9127,8 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
         url: url,
         isOpen: false
       });
-      this.props.store.setSelectedUrl(url);
+      this.props.store.selectedUrl = url;
+      // this.props.store.setSelectedUrl(url);
     }
   }, {
     key: 'refreshUrls',
@@ -9457,7 +9499,11 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _dec, _class;
+
 var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -9465,7 +9511,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var AuthenticationFields = function (_Component) {
+var AuthenticationFields = (_dec = (0, _mobxPreact.inject)('authStore'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(AuthenticationFields, _Component);
 
   function AuthenticationFields(props) {
@@ -9473,9 +9519,9 @@ var AuthenticationFields = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (AuthenticationFields.__proto__ || Object.getPrototypeOf(AuthenticationFields)).call(this, props));
 
-    _this.showAuthenticationDetails = function () {
+    _this.toggle = function () {
       _this.setState({
-        showFields: true
+        showFields: !_this.state.showFields
       });
     };
 
@@ -9486,90 +9532,94 @@ var AuthenticationFields = function (_Component) {
   }
 
   _createClass(AuthenticationFields, [{
-    key: "render",
+    key: 'render',
     value: function render() {
+      var auth = this.props.authStore;
+      var showFields = this.state.showFields;
+
       return (0, _preact.h)(
-        "fieldset",
+        'fieldset',
         null,
         (0, _preact.h)(
-          "legend",
+          'legend',
           null,
-          "Authentication details (advanced)"
+          'Authentication details (advanced)'
         ),
         (0, _preact.h)(
-          "div",
-          { "class": "settings-form__description" },
-          "These values are set automatically upon logging in. Only edit them if you are having trouble authenticating and wish to do so manually."
+          'div',
+          { className: 'settings-form__description' },
+          'These values are set automatically upon logging in. Only edit them if you are having trouble authenticating and wish to do so manually.'
         ),
-        this.state.showFields ? [(0, _preact.h)(
-          "div",
-          null,
+        showFields ? [(0, _preact.h)(
+          'div',
+          { key: 'domain' },
           (0, _preact.h)(
-            "label",
-            { htmlFor: "me" },
-            "Me (domain name)"
+            'label',
+            { htmlFor: 'domain' },
+            'Me (domain name)'
           ),
-          (0, _preact.h)("input", {
-            id: "me",
-            type: "text",
-            value: this.props.me,
-            onChange: this.update('me'),
-            placeholder: "https://example.com"
+          (0, _preact.h)('input', {
+            id: 'domain',
+            type: 'text',
+            value: auth.domain,
+            onChange: this.update(auth.setDomain),
+            placeholder: 'https://example.com'
           })
         ), (0, _preact.h)(
-          "div",
-          null,
+          'div',
+          { key: 'endpoint' },
           (0, _preact.h)(
-            "label",
-            { htmlFor: "mp-endpoint" },
-            "Micropub endpoint"
+            'label',
+            { htmlFor: 'mp-endpoint' },
+            'Micropub endpoint'
           ),
-          (0, _preact.h)("input", {
-            id: "mp-endpoint",
-            type: "text",
-            value: this.props.micropubEndpoint,
-            onChange: this.update('micropubEndpoint'),
-            placeholder: "https://example.com/micropub"
+          (0, _preact.h)('input', {
+            id: 'mp-endpoint',
+            type: 'text',
+            value: auth.micropubEndpoint,
+            onChange: this.update(auth.setMicropubEndpoint),
+            placeholder: 'https://example.com/micropub'
           })
         ), (0, _preact.h)(
-          "div",
-          null,
+          'div',
+          { key: 'token' },
           (0, _preact.h)(
-            "label",
-            { htmlFor: "token" },
-            "Token"
+            'label',
+            { htmlFor: 'token' },
+            'Token'
           ),
-          (0, _preact.h)("input", {
-            id: "token",
-            type: "text",
-            value: this.props.token,
-            onChange: this.update('token')
+          (0, _preact.h)('input', {
+            id: 'token',
+            type: 'text',
+            value: auth.token,
+            onChange: this.update(auth.setToken)
           })
-        )] : (0, _preact.h)(
-          "div",
-          { "class": "text-right" },
+        )] : null,
+        (0, _preact.h)(
+          'div',
+          { className: 'text-right' },
           (0, _preact.h)(
-            "button",
-            { type: "button", onClick: this.showAuthenticationDetails },
-            "Show"
+            'button',
+            { type: 'button', onClick: this.toggle },
+            showFields ? 'Hide' : 'Show'
           )
         )
       );
     }
   }, {
-    key: "update",
-    value: function update(fieldName) {
+    key: 'update',
+    value: function update(fn) {
       var _this2 = this;
 
-      return function (e) {
-        _this2.props.onChange(fieldName)(e.target.value);
+      return function (event) {
+        fn(event.target.value);
+        window.auth = _this2.props.authStore;
       };
     }
   }]);
 
   return AuthenticationFields;
-}(_preact.Component);
-
+}(_preact.Component)) || _class) || _class);
 exports.default = AuthenticationFields;
 
 /***/ }),
@@ -9591,7 +9641,11 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _dec, _class;
+
 var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -9599,7 +9653,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var EndpointFields = function (_Component) {
+var EndpointFields = (_dec = (0, _mobxPreact.inject)('settingsStore'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(EndpointFields, _Component);
 
   function EndpointFields(props) {
@@ -9607,9 +9661,9 @@ var EndpointFields = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (EndpointFields.__proto__ || Object.getPrototypeOf(EndpointFields)).call(this, props));
 
-    _this.showAuthenticationDetails = function () {
+    _this.toggle = function () {
       _this.setState({
-        showFields: true
+        showFields: !_this.state.showFields
       });
     };
 
@@ -9620,100 +9674,97 @@ var EndpointFields = function (_Component) {
   }
 
   _createClass(EndpointFields, [{
-    key: "render",
+    key: 'render',
     value: function render() {
-      var _props = this.props,
-          slug = _props.slug,
-          syndicateTo = _props.syndicateTo;
+      var settings = this.props.settingsStore;
+      var showFields = this.state.showFields;
 
       return (0, _preact.h)(
-        "fieldset",
+        'fieldset',
         null,
         (0, _preact.h)(
-          "legend",
+          'legend',
           null,
-          "Customize endpoint fields"
+          'Customize endpoint fields'
         ),
         (0, _preact.h)(
-          "div",
-          { "class": "settings-form__description" },
-          "If your micropub server expects custom or legacy fieldnames, you can specify those here"
+          'div',
+          { className: 'settings-form__description' },
+          'If your micropub server expects custom or legacy fieldnames, you can specify those here'
         ),
-        this.state.showFields ? [(0, _preact.h)(
-          "div",
-          null,
+        showFields ? [(0, _preact.h)(
+          'div',
+          { key: 'slug' },
           (0, _preact.h)(
-            "label",
-            { htmlFor: "slug" },
-            "Slug"
+            'label',
+            { htmlFor: 'slug' },
+            'Slug'
           ),
-          (0, _preact.h)("input", {
-            id: "slug",
-            type: "text",
-            value: slug,
-            onChange: this.update('slug')
+          (0, _preact.h)('input', {
+            id: 'slug',
+            type: 'text',
+            value: settings.slugFieldName,
+            onChange: this.update(settings.setSlugFieldName)
           }),
           (0, _preact.h)(
-            "div",
-            { "class": "settings-form__description" },
-            "Choose the name of the field that the slug will be sent in. This should be ",
+            'div',
+            { className: 'settings-form__description' },
+            'Choose the name of the field that the slug will be sent in. This should be ',
             (0, _preact.h)(
-              "code",
+              'code',
               null,
-              "mp-slug"
+              'mp-slug'
             ),
-            " for up-to-date endpoints."
+            ' for up-to-date endpoints.'
           )
         ), (0, _preact.h)(
-          "div",
-          null,
+          'div',
+          { key: 'syndicate' },
           (0, _preact.h)(
-            "label",
-            { htmlFor: "syndicate-to" },
-            "Syndicate To"
+            'label',
+            { htmlFor: 'syndicate-to' },
+            'Syndicate To'
           ),
-          (0, _preact.h)("input", {
-            id: "syndicate-to",
-            type: "text",
-            value: syndicateTo,
-            onChange: this.update('syndicateTo')
+          (0, _preact.h)('input', {
+            id: 'syndicate-to',
+            type: 'text',
+            value: settings.syndicateToFieldName,
+            onChange: this.update(settings.setSyndicateToFieldName)
           }),
           (0, _preact.h)(
-            "div",
-            { "class": "settings-form__description" },
-            "Choose the name of the field that the syndicate-to UIDs will be sent in. This should be ",
+            'div',
+            { className: 'settings-form__description' },
+            'Choose the name of the field that the syndicate-to UIDs will be sent in. This should be ',
             (0, _preact.h)(
-              "code",
+              'code',
               null,
-              "mp-syndicate-to"
+              'mp-syndicate-to'
             ),
-            " for up-to-date endpoints."
+            ' for up-to-date endpoints.'
           )
-        )] : (0, _preact.h)(
-          "div",
-          { "class": "text-right" },
+        )] : null,
+        (0, _preact.h)(
+          'div',
+          { className: 'text-right' },
           (0, _preact.h)(
-            "button",
-            { type: "button", onClick: this.showAuthenticationDetails },
-            "Show"
+            'button',
+            { type: 'button', onClick: this.toggle },
+            showFields ? 'Hide' : 'Show'
           )
         )
       );
     }
   }, {
-    key: "update",
-    value: function update(fieldName) {
-      var _this2 = this;
-
-      return function (e) {
-        _this2.props.onChange(fieldName)(e.target.value);
+    key: 'update',
+    value: function update(fn) {
+      return function (event) {
+        fn(event.target.value);
       };
     }
   }]);
 
   return EndpointFields;
-}(_preact.Component);
-
+}(_preact.Component)) || _class) || _class);
 exports.default = EndpointFields;
 
 /***/ }),
@@ -9735,7 +9786,11 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _class;
+
 var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -9743,7 +9798,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ReacjiSettings = function (_Component) {
+var ReacjiSettings = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(ReacjiSettings, _Component);
 
   function ReacjiSettings(props) {
@@ -9805,8 +9860,14 @@ var ReacjiSettings = function (_Component) {
         ),
         (0, _preact.h)(
           'div',
-          { 'class': 'input-inline' },
-          (0, _preact.h)('input', { type: 'text', value: this.state.value, onChange: this.update }),
+          { className: 'input-inline' },
+          (0, _preact.h)('input', {
+            type: 'text',
+            value: this.state.value,
+            onChange: this.update,
+            placeholder: 'Enter reaction emoji',
+            maxLength: '15'
+          }),
           (0, _preact.h)(
             'button',
             { type: 'button', onClick: this.addReacji },
@@ -9830,7 +9891,7 @@ var ReacjiSettings = function (_Component) {
   }]);
 
   return ReacjiSettings;
-}(_preact.Component);
+}(_preact.Component)) || _class;
 
 exports.default = ReacjiSettings;
 
@@ -9853,7 +9914,11 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _dec, _class;
+
 var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
 var _ReacjiSettings = __webpack_require__(/*! ./ReacjiSettings */ "./src/components/settings/ReacjiSettings.js");
 
@@ -9867,15 +9932,9 @@ var _AuthenticationFields = __webpack_require__(/*! ./AuthenticationFields */ ".
 
 var _AuthenticationFields2 = _interopRequireDefault(_AuthenticationFields);
 
-var _constants = __webpack_require__(/*! ../../constants */ "./src/constants.js");
-
-var _settings = __webpack_require__(/*! ../../util/settings */ "./src/util/settings.js");
-
 var _log = __webpack_require__(/*! ../../util/log */ "./src/util/log.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -9883,171 +9942,110 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var SettingsForm = function (_Component) {
+var SettingsForm = (_dec = (0, _mobxPreact.inject)('settingsStore'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(SettingsForm, _Component);
 
-  function SettingsForm(props) {
+  function SettingsForm() {
     _classCallCheck(this, SettingsForm);
 
-    var _this = _possibleConstructorReturn(this, (SettingsForm.__proto__ || Object.getPrototypeOf(SettingsForm)).call(this, props));
-
-    _this.set = function (fieldName) {
-      return function (value) {
-        _this.setState(_defineProperty({}, fieldName, value));
-      };
-    };
-
-    _this.save = function (e) {
-      e.preventDefault();
-      var _this$state = _this.state,
-          me = _this$state.me,
-          token = _this$state.token,
-          micropubEndpoint = _this$state.micropubEndpoint;
-
-      (0, _settings.saveSettings)(_this.state);
-      (0, _settings.saveAuthenticationDetails)(me, token, micropubEndpoint);
-      if (!_this.state.debugLog) {
-        (0, _log.clearLogs)();
-      }
-      _this.props.onClose();
-    };
-
-    var settings = (0, _settings.getSettings)();
-    settings.me = localStorage.getItem('domain');
-    settings.micropubEndpoint = localStorage.getItem('micropubEndpoint');
-    settings.token = localStorage.getItem('token');
-    settings.showAuthenticationDetails = false;
-    _this.setState(settings);
-    return _this;
+    return _possibleConstructorReturn(this, (SettingsForm.__proto__ || Object.getPrototypeOf(SettingsForm)).apply(this, arguments));
   }
 
   _createClass(SettingsForm, [{
     key: 'render',
     value: function render() {
-      var _state = this.state,
-          defaultToCurrentPage = _state.defaultToCurrentPage,
-          autoSlug = _state.autoSlug,
-          closeAfterPosting = _state.closeAfterPosting,
-          debugLog = _state.debugLog,
-          reacji = _state.reacji,
-          slug = _state.slug,
-          syndicateTo = _state.syndicateTo,
-          me = _state.me,
-          micropubEndpoint = _state.micropubEndpoint,
-          token = _state.token,
-          showAuthenticationDetails = _state.showAuthenticationDetails;
+      var settings = this.props.settingsStore;
 
       return (0, _preact.h)(
         'div',
-        null,
-        (0, _preact.h)(
-          'h1',
-          { 'class': 'section-heading' },
-          'Settings'
-        ),
+        { className: 'l-main__full' },
         (0, _preact.h)(
           'div',
-          { 'class': 'container' },
+          { className: 'container container--full' },
+          (0, _preact.h)(
+            'h1',
+            { className: 'section-heading' },
+            'Settings'
+          ),
           (0, _preact.h)(
             'form',
-            { 'class': 'settings-form', onSubmit: this.save },
-            (0, _preact.h)(
-              'label',
-              null,
-              (0, _preact.h)('input', {
-                type: 'checkbox',
-                checked: defaultToCurrentPage,
-                onChange: this.updateBoolean('defaultToCurrentPage')
-              }),
-              'Always open in \u201CReply to current page\u201D mode'
-            ),
-            (0, _preact.h)(
-              'label',
-              null,
-              (0, _preact.h)('input', {
-                type: 'checkbox',
-                checked: autoSlug,
-                onChange: this.updateBoolean('autoSlug')
-              }),
-              'Automatically generate slug from post content'
-            ),
-            (0, _preact.h)(
-              'label',
-              null,
-              (0, _preact.h)('input', {
-                type: 'checkbox',
-                checked: closeAfterPosting,
-                onChange: this.updateBoolean('closeAfterPosting')
-              }),
-              'Close Omnibear window after posting'
-            ),
-            (0, _preact.h)(
-              'label',
-              null,
-              (0, _preact.h)('input', {
-                type: 'checkbox',
-                checked: debugLog,
-                onChange: this.updateBoolean('debugLog')
-              }),
-              'Record debug logs'
-            ),
-            (0, _preact.h)(_ReacjiSettings2.default, { reacji: reacji, onChange: this.set('reacji') }),
-            (0, _preact.h)(_EndpointFields2.default, {
-              slug: slug,
-              syndicateTo: syndicateTo,
-              onChange: this.set
-            }),
-            (0, _preact.h)(_AuthenticationFields2.default, {
-              me: me,
-              micropubEndpoint: micropubEndpoint,
-              token: token,
-              onChange: this.set
-            }),
+            { className: 'settings-form', onSubmit: this.save },
             (0, _preact.h)(
               'div',
-              { 'class': 'form-buttons' },
+              { className: 'checkbox' },
               (0, _preact.h)(
-                'button',
-                { type: 'submit', className: 'button' },
-                'Save'
+                'label',
+                null,
+                (0, _preact.h)('input', {
+                  type: 'checkbox',
+                  checked: settings.defaultToCurrentPage,
+                  onChange: this.updateBoolean(settings.setDefaultToCurrentPage)
+                }),
+                'Always open in \u201CReply\u201D mode'
               ),
               (0, _preact.h)(
-                'button',
-                {
-                  type: 'button',
-                  className: 'button-link',
-                  onClick: this.props.onClose
-                },
-                'Cancel'
+                'label',
+                null,
+                (0, _preact.h)('input', {
+                  type: 'checkbox',
+                  checked: settings.autoSlug,
+                  onChange: this.updateBoolean(settings.setAutoSlug)
+                }),
+                'Automatically generate slug from post content'
+              ),
+              (0, _preact.h)(
+                'label',
+                null,
+                (0, _preact.h)('input', {
+                  type: 'checkbox',
+                  checked: settings.closeAfterPosting,
+                  onChange: this.updateBoolean(settings.setCloseAfterPosting)
+                }),
+                'Close Omnibear window after posting'
+              ),
+              (0, _preact.h)(
+                'label',
+                null,
+                (0, _preact.h)('input', {
+                  type: 'checkbox',
+                  checked: settings.debugLog,
+                  onChange: this.updateBoolean(settings.setDebugLog)
+                }),
+                'Record debug logs'
               )
-            )
+            ),
+            (0, _preact.h)(_ReacjiSettings2.default, {
+              reacji: settings.reacji,
+              onChange: settings.setReacji
+            }),
+            (0, _preact.h)(_EndpointFields2.default, null),
+            (0, _preact.h)(_AuthenticationFields2.default, null)
           )
         )
       );
     }
   }, {
-    key: 'update',
-    value: function update(fieldName) {
-      var _this2 = this;
-
-      return function (e) {
-        _this2.set(fieldName)(e.target.value);
-      };
-    }
-  }, {
     key: 'updateBoolean',
-    value: function updateBoolean(fieldName) {
-      var _this3 = this;
-
-      return function (e) {
-        _this3.setState(_defineProperty({}, fieldName, e.target.checked));
+    value: function updateBoolean(fn) {
+      return function (event) {
+        fn(event.target.checked);
       };
     }
+
+    // save = e => {
+    //   e.preventDefault();
+    //   const {settingsStore: settings} = this.props;
+    //   settings.save();
+    //   if (!settings.debugLog) {
+    //     clearLogs();
+    //   }
+    //   this.props.onClose();
+    // };
+
   }]);
 
   return SettingsForm;
-}(_preact.Component);
-
+}(_preact.Component)) || _class) || _class);
 exports.default = SettingsForm;
 
 /***/ }),
@@ -10225,15 +10223,25 @@ var _store = __webpack_require__(/*! ./stores/store */ "./src/stores/store.js");
 
 var _store2 = _interopRequireDefault(_store);
 
+var _authStore = __webpack_require__(/*! ./stores/authStore */ "./src/stores/authStore.js");
+
+var _authStore2 = _interopRequireDefault(_authStore);
+
 var _draftStore = __webpack_require__(/*! ./stores/draftStore */ "./src/stores/draftStore.js");
 
 var _draftStore2 = _interopRequireDefault(_draftStore);
+
+var _settingsStore = __webpack_require__(/*! ./stores/settingsStore */ "./src/stores/settingsStore.js");
+
+var _settingsStore2 = _interopRequireDefault(_settingsStore);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var stores = {
   store: _store2.default,
-  draftStore: _draftStore2.default
+  authStore: _authStore2.default,
+  draftStore: _draftStore2.default,
+  settingsStore: _settingsStore2.default
 };
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -10243,6 +10251,151 @@ document.addEventListener('DOMContentLoaded', function () {
     (0, _preact.h)(_App2.default, null)
   ), document.body);
 });
+
+/***/ }),
+
+/***/ "./src/stores/authStore.js":
+/*!*********************************!*\
+  !*** ./src/stores/authStore.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+
+var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
+
+var _micropub = __webpack_require__(/*! ../util/micropub */ "./src/util/micropub.js");
+
+var _micropub2 = _interopRequireDefault(_micropub);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _initDefineProp(target, property, descriptor, context) {
+  if (!descriptor) return;
+  Object.defineProperty(target, property, {
+    enumerable: descriptor.enumerable,
+    configurable: descriptor.configurable,
+    writable: descriptor.writable,
+    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+  });
+}
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+  var desc = {};
+  Object['ke' + 'ys'](descriptor).forEach(function (key) {
+    desc[key] = descriptor[key];
+  });
+  desc.enumerable = !!desc.enumerable;
+  desc.configurable = !!desc.configurable;
+
+  if ('value' in desc || desc.initializer) {
+    desc.writable = true;
+  }
+
+  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+    return decorator(target, property, desc) || desc;
+  }, desc);
+
+  if (context && desc.initializer !== void 0) {
+    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+    desc.initializer = undefined;
+  }
+
+  if (desc.initializer === void 0) {
+    Object['define' + 'Property'](target, property, desc);
+    desc = null;
+  }
+
+  return desc;
+}
+
+function _initializerWarningHelper(descriptor, context) {
+  throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+}
+
+var AuthStore = (_class = function AuthStore() {
+  _classCallCheck(this, AuthStore);
+
+  _initDefineProp(this, 'domain', _descriptor, this);
+
+  _initDefineProp(this, 'token', _descriptor2, this);
+
+  _initDefineProp(this, 'micropubEndpoint', _descriptor3, this);
+
+  _initDefineProp(this, 'loadSettings', _descriptor4, this);
+
+  _initDefineProp(this, 'setDomain', _descriptor5, this);
+
+  _initDefineProp(this, 'setToken', _descriptor6, this);
+
+  _initDefineProp(this, 'setMicropubEndpoint', _descriptor7, this);
+
+  this.loadSettings();
+}, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'domain', [_mobx.observable], {
+  enumerable: true,
+  initializer: null
+}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'token', [_mobx.observable], {
+  enumerable: true,
+  initializer: null
+}), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'micropubEndpoint', [_mobx.observable], {
+  enumerable: true,
+  initializer: null
+}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'loadSettings', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this = this;
+
+    return function () {
+      _this.domain = localStorage.getItem('domain');
+      _this.token = localStorage.getItem('token');
+      _this.micropubEndpoint = localStorage.getItem('micropubEndpoint');
+    };
+  }
+}), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'setDomain', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this2 = this;
+
+    return function (domain) {
+      _this2.domain = domain.trim();
+      _micropub2.default.options.me = _this2.domain;
+      localStorage.setItem('domain', _this2.domain);
+    };
+  }
+}), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'setToken', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this3 = this;
+
+    return function (token) {
+      _this3.token = token.trim();
+      _micropub2.default.options.token = _this3.token;
+      localStorage.setItem('token', _this3.token);
+    };
+  }
+}), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'setMicropubEndpoint', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this4 = this;
+
+    return function (url) {
+      _this4.micropubEndpoint = url.trim();
+      _micropub2.default.options.micropubEndpoint = _this4.micropubEndpoint;
+      localStorage.setItem('micropubEndpoint', _this4.micropubEndpoint);
+    };
+  }
+})), _class);
+exports.default = new AuthStore();
 
 /***/ }),
 
@@ -10266,9 +10419,15 @@ var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4
 
 var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
 
+var _settingsStore = __webpack_require__(/*! ./settingsStore */ "./src/stores/settingsStore.js");
+
+var _settingsStore2 = _interopRequireDefault(_settingsStore);
+
 var _draft = __webpack_require__(/*! ../util/draft */ "./src/util/draft.js");
 
 var _utils = __webpack_require__(/*! ../util/utils */ "./src/util/utils.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _initDefineProp(target, property, descriptor, context) {
   if (!descriptor) return;
@@ -10332,27 +10491,39 @@ var DraftStore = (_class = function () {
     this.tags = savedDraft.category.join(' ');
     this.slug = savedDraft['mp-slug'];
     this.syndicateList = savedDraft['mp-syndicate-to'];
+    this._settings = _settingsStore2.default;
+    this._isSlugModified = false;
   }
 
   _createClass(DraftStore, [{
     key: 'setContent',
     value: function setContent(content) {
-      var autoSlug = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
       this.content = content;
-      if (autoSlug) {
+      console.log('content', content);
+      if (this.shouldAutoSlug()) {
+        console.log('slug', (0, _utils.generateSlug)(content));
         this.slug = (0, _utils.generateSlug)(content);
       }
+      this.save();
+    }
+  }, {
+    key: 'setSlug',
+    value: function setSlug(slug) {
+      this.slug = slug;
+      this._isSlugModified = slug !== '';
+      this.save();
     }
   }, {
     key: 'setTags',
     value: function setTags(tagString) {
       this.tags = tagString;
+      this.save();
     }
   }, {
     key: 'setSyndicateList',
     value: function setSyndicateList(syndicateTo) {
       this.syndicateList = syndicateTo;
+      this.save();
     }
 
     // TODO: clearDraft? or call util/draft.deleteDraft directly from component?
@@ -10367,6 +10538,17 @@ var DraftStore = (_class = function () {
         'mp-slug': this.slug,
         'mp-syndicate-to': this.syndicateList
       });
+    }
+  }, {
+    key: 'shouldAutoSlug',
+    value: function shouldAutoSlug() {
+      if (this._isSlugModified) {
+        return false;
+      }
+      if (this._settings.autoSlug) {
+        return true;
+      }
+      return false;
     }
   }, {
     key: 'tagsArray',
@@ -10390,8 +10572,261 @@ var DraftStore = (_class = function () {
   initializer: function initializer() {
     return [];
   }
-}), _applyDecoratedDescriptor(_class.prototype, 'tagsArray', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'tagsArray'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setContent', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setContent'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setTags', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setTags'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSyndicateList', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSyndicateList'), _class.prototype)), _class);
+}), _applyDecoratedDescriptor(_class.prototype, 'tagsArray', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'tagsArray'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setContent', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setContent'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSlug'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setTags', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setTags'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSyndicateList', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSyndicateList'), _class.prototype)), _class);
 exports.default = new DraftStore();
+
+/***/ }),
+
+/***/ "./src/stores/settingsStore.js":
+/*!*************************************!*\
+  !*** ./src/stores/settingsStore.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14;
+
+var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
+
+var _constants = __webpack_require__(/*! ../constants */ "./src/constants.js");
+
+function _initDefineProp(target, property, descriptor, context) {
+  if (!descriptor) return;
+  Object.defineProperty(target, property, {
+    enumerable: descriptor.enumerable,
+    configurable: descriptor.configurable,
+    writable: descriptor.writable,
+    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+  });
+}
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+  var desc = {};
+  Object['ke' + 'ys'](descriptor).forEach(function (key) {
+    desc[key] = descriptor[key];
+  });
+  desc.enumerable = !!desc.enumerable;
+  desc.configurable = !!desc.configurable;
+
+  if ('value' in desc || desc.initializer) {
+    desc.writable = true;
+  }
+
+  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+    return decorator(target, property, desc) || desc;
+  }, desc);
+
+  if (context && desc.initializer !== void 0) {
+    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+    desc.initializer = undefined;
+  }
+
+  if (desc.initializer === void 0) {
+    Object['define' + 'Property'](target, property, desc);
+    desc = null;
+  }
+
+  return desc;
+}
+
+function _initializerWarningHelper(descriptor, context) {
+  throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+}
+
+var SettingsStore = (_class = function () {
+  function SettingsStore() {
+    var _this = this;
+
+    _classCallCheck(this, SettingsStore);
+
+    _initDefineProp(this, 'defaultToCurrentPage', _descriptor, this);
+
+    _initDefineProp(this, 'autoSlug', _descriptor2, this);
+
+    _initDefineProp(this, 'closeAfterPosting', _descriptor3, this);
+
+    _initDefineProp(this, 'debugLog', _descriptor4, this);
+
+    _initDefineProp(this, 'reacji', _descriptor5, this);
+
+    _initDefineProp(this, 'slugFieldName', _descriptor6, this);
+
+    _initDefineProp(this, 'syndicateToFieldName', _descriptor7, this);
+
+    _initDefineProp(this, 'setDefaultToCurrentPage', _descriptor8, this);
+
+    _initDefineProp(this, 'setAutoSlug', _descriptor9, this);
+
+    _initDefineProp(this, 'setCloseAfterPosting', _descriptor10, this);
+
+    _initDefineProp(this, 'setDebugLog', _descriptor11, this);
+
+    _initDefineProp(this, 'setReacji', _descriptor12, this);
+
+    _initDefineProp(this, 'setSlugFieldName', _descriptor13, this);
+
+    _initDefineProp(this, 'setSyndicateToFieldName', _descriptor14, this);
+
+    this.save = function () {
+      var settings = {
+        defaultToCurrentPage: _this.defaultToCurrentPage,
+        autoSlug: _this.autoSlug,
+        closeAfterPosting: _this.closeAfterPosting,
+        debugLog: _this.debugLog,
+        reacji: _this.reacji,
+        slug: _this.slugFieldName,
+        syndicateTo: _this.syndicateToFieldName
+      };
+      localStorage.setItem('settings', JSON.stringify(settings));
+    };
+
+    this.loadSettings();
+  }
+
+  _createClass(SettingsStore, [{
+    key: 'loadSettings',
+    value: function loadSettings() {
+      var settings = JSON.parse(localStorage.getItem('settings'));
+      if (!settings) {
+        return;
+      }
+      this.defaultToCurrentPage = settings.defaultToCurrentPage;
+      this.autoSlug = settings.autoSlug;
+      this.closeAfterPosting = settings.closeAfterPosting;
+      this.debugLog = settings.debugLog;
+      this.reacji = settings.reacji || this.reacji;
+      this.slugFieldName = settings.slug || this.slugFieldName;
+      this.syndicateToFieldName = settings.syndicateTo || this.syndicateToFieldName;
+    }
+  }]);
+
+  return SettingsStore;
+}(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'defaultToCurrentPage', [_mobx.observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return false;
+  }
+}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'autoSlug', [_mobx.observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return true;
+  }
+}), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'closeAfterPosting', [_mobx.observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return false;
+  }
+}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'debugLog', [_mobx.observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return false;
+  }
+}), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'reacji', [_mobx.observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return _constants.DEFAULT_REACJI;
+  }
+}), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'slugFieldName', [_mobx.observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return 'mp-slug';
+  }
+}), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'syndicateToFieldName', [_mobx.observable], {
+  enumerable: true,
+  initializer: function initializer() {
+    return 'mp-syndicate-to';
+  }
+}), _applyDecoratedDescriptor(_class.prototype, 'loadSettings', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'loadSettings'), _class.prototype), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'setDefaultToCurrentPage', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this2 = this;
+
+    return function () {
+      var on = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      _this2.defaultToCurrentPage = on;
+      _this2.save();
+    };
+  }
+}), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'setAutoSlug', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this3 = this;
+
+    return function () {
+      var on = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      _this3.autoSlug = on;
+      _this3.save();
+    };
+  }
+}), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'setCloseAfterPosting', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this4 = this;
+
+    return function () {
+      var on = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      _this4.closeAfterPosting = on;
+      _this4.save();
+    };
+  }
+}), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, 'setDebugLog', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this5 = this;
+
+    return function () {
+      var on = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      _this5.debugLog = on;
+      _this5.save();
+    };
+  }
+}), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, 'setReacji', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this6 = this;
+
+    return function (reacji) {
+      _this6.reacji = reacji;
+      _this6.save();
+    };
+  }
+}), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, 'setSlugFieldName', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this7 = this;
+
+    return function (name) {
+      _this7.slugFieldName = name;
+      _this7.save();
+    };
+  }
+}), _descriptor14 = _applyDecoratedDescriptor(_class.prototype, 'setSyndicateToFieldName', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this8 = this;
+
+    return function (name) {
+      _this8.syndicateToFieldName = name;
+      _this8.save();
+    };
+  }
+})), _class);
+exports.default = new SettingsStore();
 
 /***/ }),
 
@@ -10815,7 +11250,7 @@ var _parseUri2 = _interopRequireDefault(_parseUri);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getParamFromUrl(paramName, url) {
-  var params = url.split('?')[1];
+  var params = url.split('?')[1] || '';
   return getParamFromUrlString(paramName, params);
 }
 

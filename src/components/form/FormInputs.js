@@ -17,6 +17,7 @@ onSubmit: (entry) => void,
 */
 
 @inject('store', 'draftStore')
+@observer
 export default class FormInputs extends Component {
   constructor(props) {
     super(props);
@@ -36,17 +37,16 @@ export default class FormInputs extends Component {
   render() {
     const {
       postType,
-      // entry,
       syndicateOptions,
       isDisabled,
       isLoading,
-      entry = draftStore,
+      draftStore: entry,
     } = this.props;
     return (
       <form onSubmit={this.onSubmit}>
         {postType === REPLY ? <QuickReplies /> : null}
         <div>
-          <label for="input-content">Content</label>
+          <label htmlFor="input-content">Content</label>
           <textarea
             id="input-content"
             value={entry.content}
@@ -58,10 +58,10 @@ export default class FormInputs extends Component {
               this.content = el;
             }}
           />
-          <div class="input-extra">{entry.content.length}</div>
+          <div className="input-extra">{entry.content.length}</div>
         </div>
         <div>
-          <label for="input-tags">Tags (space separated)</label>
+          <label htmlFor="input-tags">Tags (space separated)</label>
           <input
             id="input-tags"
             type="text"
@@ -72,20 +72,20 @@ export default class FormInputs extends Component {
           />
         </div>
         <div>
-          <label for="input-slug">Slug</label>
+          <label htmlFor="input-slug">Slug</label>
           <input
             id="input-slug"
             type="text"
             name="mp-slug"
-            value={entry['mp-slug']}
+            value={entry.slug}
             onInput={this.updateSlug}
             disabled={isDisabled}
           />
         </div>
         <SyndicateInputs
           options={syndicateOptions}
-          selected={entry['mp-syndicate-to']}
-          onUpdate={this.updateSyndicateTo}
+          selected={entry.syndicateList}
+          onUpdate={entry.setSyndicateList}
           isDisabled={isDisabled}
         />
         <button
@@ -105,39 +105,28 @@ export default class FormInputs extends Component {
 
   updateSlug = e => {
     const slug = e.target.value.trim();
-    this.props.entryStore.setSlug(slug);
-    this.setState({
-      isSlugModified: slug !== '',
-    });
+    this.props.draftStore.setSlug(slug);
   };
 
   updateContent = e => {
     const content = e.target.value;
-    this.props.entryStore.setContent(content, this.shouldAutoSlug());
+    this.props.draftStore.setContent(content);
   };
 
   updateTags = e => {
-    this.props.entryStore.setTags(e.target.value);
+    this.props.draftStore.setTags(e.target.value);
   };
 
-  updateFieldArray(fieldName) {
-    return e => {
-      e.preventDefault();
-      var entry = clone(this.props.entry);
-      entry[fieldName] = e.target.value.trim().split(' ');
-      this.props.updateEntry(entry);
-    };
-  }
-
-  shouldAutoSlug() {
-    if (this.state.isSlugModified) {
-      return false;
-    }
-    if (this.props.settings && this.props.settings.autoSlug) {
-      return true;
-    }
-    return false;
-  }
+  // // TODO: move into draftStore?
+  // shouldAutoSlug() {
+  //   if (this.state.isSlugModified) {
+  //     return false;
+  //   }
+  //   if (this.props.settings && this.props.settings.autoSlug) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   onSubmit = e => {
     e.preventDefault();

@@ -125,6 +125,7 @@ label {
 .l-main__sidebar {
   grid-area: sidebar;
   background-color: hsl(41, 75%, 97%); /* TODO: move */
+  border-right: 1px solid var(--yellow-light);
 }
 .l-main__header {
   grid-area: header;
@@ -132,6 +133,10 @@ label {
 }
 .l-main__main {
   grid-area: main;
+}
+.l-main__full {
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
 }
 .l-main__footer {
   grid-area: footer;
@@ -209,6 +214,9 @@ fieldset > * + * {
   border-radius: 1rem 1rem 0 0;
   background-color: rgba(255, 255, 255, 0.3);
 }
+.container--full {
+  border-radius: 0;
+}
 
 .button {
   position: relative;
@@ -258,11 +266,9 @@ fieldset > * + * {
 }
 
 .section-heading {
-  margin: 0 1.4rem 0.5rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px dashed var(--gray-60);
-  font-size: 1.4rem;
-  font-family: Jaldi, sans-serif;
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  font-family: Noto Serif, serif;
   font-weight: bold;
 }
 
@@ -528,9 +534,9 @@ fieldset > * + * {
 }
 
 .settings-form__description {
-  margin: 0.5em 0 2em;
+  margin: 0;
   padding-left: 1em;
-  font-size: 0.8rem;
+  color: var(--gray-40);
 }
 legend + .settings-form__description {
   margin-bottom: 1em;
