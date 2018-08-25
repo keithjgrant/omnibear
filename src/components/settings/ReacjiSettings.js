@@ -1,21 +1,24 @@
 import {h, Component} from 'preact';
-import {observer} from 'mobx-preact';
+import {inject, observer} from 'mobx-preact';
 
+@inject('settings')
 @observer
 export default class ReacjiSettings extends Component {
   constructor(props) {
     super(props);
-    this.setState({
+    this.state = {
       value: '',
-    });
+    };
   }
 
   render() {
-    const {reacji} = this.props;
+    const {settings} = this.props;
     return (
       <div>
         <label>Quick replies (“Reacji”)</label>
-        <div className="reacji-row">{reacji.map(this.renderReacji)}</div>
+        <div className="reacji-row">
+          {settings.reacji.map(this.renderReacji)}
+        </div>
         <div className="input-inline">
           <input
             type="text"
@@ -49,18 +52,19 @@ export default class ReacjiSettings extends Component {
 
   deleteReacji(index) {
     return () => {
-      const {reacji} = this.props;
-      reacji.splice(index, 1);
-      this.props.onChange(reacji);
+      const {settings} = this.props;
+      const reacji = settings.reacji;
+      const before = reacji.slice(0, index);
+      const after = reacji.slice(index + 1);
+      settings.setReacji(before.concat(after));
     };
   }
 
   addReacji = () => {
     const {value} = this.state;
-    const {reacji} = this.props;
-    if (value && reacji.indexOf(value) === -1) {
-      reacji.push(value);
-      this.props.onChange(reacji);
+    const {settings} = this.props;
+    if (value && settings.reacji.indexOf(value) === -1) {
+      settings.addReacji(value);
       this.setState({value: ''});
     }
   };

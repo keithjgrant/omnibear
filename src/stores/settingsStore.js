@@ -1,6 +1,8 @@
 import {observable, action} from 'mobx';
 import {DEFAULT_REACJI} from '../constants';
 
+const MAX_LENGTH = 15;
+
 class SettingsStore {
   @observable defaultToCurrentPage = false;
   @observable autoSlug = true;
@@ -58,6 +60,11 @@ class SettingsStore {
   setReacji = reacji => {
     this.reacji = reacji;
     this.save();
+  };
+
+  @action
+  addReacji = value => {
+    this.reacji.push(value.substr(0, MAX_LENGTH));
   };
 
   @action

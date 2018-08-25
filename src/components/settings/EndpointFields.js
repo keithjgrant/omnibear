@@ -1,7 +1,7 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
 
-@inject('settingsStore')
+@inject('settings')
 @observer
 export default class EndpointFields extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ export default class EndpointFields extends Component {
   }
 
   render() {
-    const {settingsStore: settings} = this.props;
+    const {settings} = this.props;
     const {showFields} = this.state;
     return (
       <fieldset>

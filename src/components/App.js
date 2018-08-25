@@ -31,14 +31,14 @@ export default class App extends Component {
     const {store} = this.props;
     const {userDomain} = this.state;
     const viewType = store.viewType;
-    if (viewType === LOGIN) {
-      return (
-        <LoginForm
-          handleSettings={this.handleSettings}
-          handleLogs={this.handleLogs}
-        />
-      );
-    }
+    // if (viewType === LOGIN) {
+    //   return (
+    //     <LoginForm
+    //       handleSettings={this.handleSettings}
+    //       handleLogs={this.handleLogs}
+    //     />
+    //   );
+    // }
     return (
       <div className="l-main">
         <nav className="l-main__sidebar">
@@ -46,32 +46,13 @@ export default class App extends Component {
         </nav>
         <Header />
         <MainPane />
-        <footer className="l-main__footer">
-          <Footer
-            domain={userDomain}
-            onSettings={this.handleSettings}
-            onLogs={this.state.settings.debugLog ? this.props.handleLogs : null}
-            onLogout={this.handleLogout}
-          />
-        </footer>
+        <Footer
+          domain={userDomain}
+          onSettings={this.handleSettings}
+          onLogs={this.state.settings.debugLog ? this.props.handleLogs : null}
+          onLogout={this.handleLogout}
+        />
       </div>
-    );
-  }
-
-  // setDefaultView = () => {
-  //   const {store} = this.props;
-  //   if (this.isAuthenticated()) {
-  //     store.setViewType(NOTE);
-  //     this.getPageUrl();
-  //   } else {
-  //     store.setViewType(LOGIN);
-  //   }
-  // };
-
-  isAuthenticated() {
-    return (
-      !!localStorage.getItem('token') &&
-      !!localStorage.getItem('micropubEndpoint')
     );
   }
 

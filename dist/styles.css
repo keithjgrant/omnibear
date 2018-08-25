@@ -119,7 +119,7 @@ label {
     'sidebar header' 5rem
     'sidebar main' 1fr
     'footer  footer' auto
-    / 3.125rem auto;
+    / 3.125rem calc(100vw - 3.125rem);
   min-height: 100vh;
 }
 .l-main__sidebar {
@@ -306,7 +306,7 @@ fieldset > * + * {
   background-color: var(--yellow-light);
 }
 
-.url-label {
+.header-title {
   margin: 0.5rem 0 0;
   padding: 0 1rem;
   color: white;
@@ -323,7 +323,7 @@ fieldset > * + * {
   position: relative;
   display: block;
   width: 100%;
-  max-height: 3.125rem;
+  max-height: 1.7rem;
   padding: 0.3rem 1rem;
   overflow-y: hidden;
   border: 0;
@@ -699,6 +699,12 @@ legend + .settings-form__description {
 .disabled {
   color: var(--gray-80);
   box-shadow: none;
+}
+
+.nowrap {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .hidden {

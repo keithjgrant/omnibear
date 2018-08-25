@@ -18,7 +18,7 @@ import {
 import {getSettings, getSyndicateOptions} from '../../util/settings';
 import {info, warning, error} from '../../util/log';
 
-@inject('store', 'draftStore')
+@inject('store', 'draft')
 @observer
 export default class NoteForm extends Component {
   constructor(props) {
@@ -102,7 +102,7 @@ export default class NoteForm extends Component {
       'like-of': url,
     })
       .then(location => {
-        const type = this.props.postType === ITEM_REPLY ? 'Item' : 'Page';
+        const type = this.props.postType === REPLY ? 'Item' : 'Page';
         this.flashSuccessMessage(`${type} liked successfully`, location);
       })
       .catch(err => {
@@ -121,7 +121,7 @@ export default class NoteForm extends Component {
       'repost-of': url,
     })
       .then(location => {
-        const type = this.props.postType === ITEM_REPLY ? 'Item' : 'Page';
+        const type = this.props.postType === REPLY ? 'Item' : 'Page';
         this.flashSuccessMessage(`${type} reposted successfully`, location);
       })
       .catch(err => {
@@ -141,7 +141,7 @@ export default class NoteForm extends Component {
       'in-reply-to': url,
     })
       .then(location => {
-        const type = this.props.postType === ITEM_REPLY ? 'Item' : 'Page';
+        const type = this.props.postType === REPLY ? 'Item' : 'Page';
         this.flashSuccessMessage(`${type} reacted to successfully`, location);
       })
       .catch(err => {
@@ -217,26 +217,4 @@ export default class NoteForm extends Component {
     }
     return micropub.create(aliasedEntry, 'form');
   }
-
-  /*
-  changeView = postType => {
-    let url;
-    switch (postType) {
-      case NOTE:
-        url = null;
-        break;
-      default:
-        url = localStorage.getItem('pageUrl');
-        break;
-      // case PAGE_REPLY:
-      //   url = localStorage.getItem('pageUrl');
-      //   break;
-      // case ITEM_REPLY:
-      //   url = localStorage.getItem('selectedEntry');
-      //   break;
-    }
-    this.setState({url, postType});
-    this.form.focus();
-  };
-  */
 }

@@ -4,7 +4,7 @@ var copy = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    index: './src/index.js',
+    index: ['babel-polyfill', './src/index.js'],
     page: './src/page.js',
     background: './src/background.js',
   },

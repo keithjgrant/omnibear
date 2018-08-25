@@ -1,4 +1,5 @@
 import {h, Component} from 'preact';
+import {observer, inject} from 'mobx-preact';
 import Message from './Message';
 import Footer from './Footer';
 import {openLink} from '../util/utils';
@@ -6,11 +7,13 @@ import micropub from '../util/micropub';
 import {getSettings} from '../util/settings';
 import {info as log} from '../util/log';
 
+@inject('auth')
+@observer
 export default class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logsEnabled: getSettings().debugLog,
+      domain: '',
     };
   }
 
@@ -21,9 +24,14 @@ export default class LoginForm extends Component {
   }
 
   render() {
+    const {auth} = this.props;
     return (
-      <div>
-        <form class="container" method="GET" onSubmit={this.handleSubmit}>
+      <div className="l-main__full">
+        <form
+          className="container container--full"
+          method="GET"
+          onSubmit={this.handleSubmit}
+        >
           <p>
             To use Omnibear, sign in with your domain. Your website will need to
             support{' '}
@@ -33,7 +41,7 @@ export default class LoginForm extends Component {
             for creating new posts.
           </p>
 
-          <div class="fields-inline">
+          <div className="fields-inline">
             <input
               type="text"
               name="me"
@@ -41,26 +49,22 @@ export default class LoginForm extends Component {
               className="fields-inline__fill"
               value={this.state.domain}
               onInput={this.handleChange}
-              disabled={this.state.isLoading}
+              disabled={auth.isLoading}
               ref={el => (this.input = el)}
             />
             <button
               type="submit"
-              disabled={this.state.isLoading}
-              className={this.state.isLoading ? 'button is-loading' : 'button'}
+              disabled={auth.isLoading}
+              className={auth.isLoading ? 'button is-loading' : 'button'}
             >
               Sign in
             </button>
           </div>
 
-          {this.state.hasErrors ? (
-            <Message type="error">{this.state.errorMessage || 'Error'}</Message>
+          {auth.hasErrors ? (
+            <Message type="error">{auth.errorMessage || 'Error'}</Message>
           ) : null}
         </form>
-        <Footer
-          onSettings={this.props.handleSettings}
-          onLogs={this.state.logsEnabled ? this.props.handleLogs : null}
-        />
       </div>
     );
   }
@@ -68,42 +72,14 @@ export default class LoginForm extends Component {
   handleChange = e => {
     this.setState({
       domain: e.target.value,
-      hasErrors: false,
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
     const domain = this.getNormalizedDomain();
     this.setState({isLoading: true, domain});
-    log(`Begin authentication to ${domain}`);
-    micropub.options.me = domain;
-    micropub
-      .getAuthUrl()
-      .then(url => {
-        chrome.runtime.sendMessage({
-          action: 'begin-auth',
-          payload: {
-            authUrl: url,
-            domain: this.state.domain,
-            metadata: {
-              authEndpoint: micropub.options.authEndpoint,
-              tokenEndpoint: micropub.options.tokenEndpoint,
-              micropub: micropub.options.micropubEndpoint,
-            },
-          },
-        });
-      })
-      .catch(err => {
-        console.log(err.message);
-        return this.setState({
-          hasErrors: true,
-          errorMessage: `Missing micropub data on ${
-            this.state.domain
-          }. Please ensure the following links are present: authorization_endpoint, token_endpoint, micropub`,
-          isLoading: false,
-        });
-      });
+    await this.props.auth.login(domain);
   };
 
   getNormalizedDomain() {
@@ -113,7 +89,7 @@ export default class LoginForm extends Component {
     ) {
       return this.state.domain;
     } else {
-      return `http://${this.state.domain}`;
+      return `https://${this.state.domain}`;
     }
   }
 

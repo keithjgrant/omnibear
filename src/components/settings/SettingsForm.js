@@ -5,16 +5,16 @@ import EndpointFields from './EndpointFields';
 import AuthenticationFields from './AuthenticationFields';
 import {clearLogs} from '../../util/log';
 
-@inject('settingsStore')
+@inject('settings')
 @observer
 export default class SettingsForm extends Component {
   render() {
-    const {settingsStore: settings} = this.props;
+    const {settings} = this.props;
     return (
       <div className="l-main__full">
         <div className="container container--full">
           <h1 className="section-heading">Settings</h1>
-          <form className="settings-form" onSubmit={this.save}>
+          <form className="settings-form">
             <div className="checkbox">
               <label>
                 <input
@@ -55,25 +55,9 @@ export default class SettingsForm extends Component {
               </label>
             </div>
 
-            <ReacjiSettings
-              reacji={settings.reacji}
-              onChange={settings.setReacji}
-            />
+            <ReacjiSettings />
             <EndpointFields />
             <AuthenticationFields />
-
-            {/* <div className="form-buttons">
-              <button type="submit" className="button">
-                Save
-              </button>
-              <button
-                type="button"
-                className="button-link"
-                onClick={this.props.onClose}
-              >
-                Cancel
-              </button>
-            </div> */}
           </form>
         </div>
       </div>
@@ -85,14 +69,4 @@ export default class SettingsForm extends Component {
       fn(event.target.checked);
     };
   }
-
-  // save = e => {
-  //   e.preventDefault();
-  //   const {settingsStore: settings} = this.props;
-  //   settings.save();
-  //   if (!settings.debugLog) {
-  //     clearLogs();
-  //   }
-  //   this.props.onClose();
-  // };
 }

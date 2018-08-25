@@ -1,6 +1,6 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
-import {BOOKMARK} from '../../constants';
+import {BOOKMARK, LIKE, REPOST} from '../../constants';
 import {getPageUrl} from '../../util/utils';
 
 @inject('store')
@@ -16,22 +16,22 @@ export default class UrlSelector extends Component {
 
   componentDidMount() {
     this.refreshUrls();
+    document.addEventListener('click', this.close);
   }
 
   render() {
     const {isOpen, options} = this.state;
     const {store} = this.props;
     return (
-      <div>
-        <h2 className="url-label">{this.getLabel()}</h2>
+      <div onClick={e => e.stopPropagation()}>
+        <h2 className="header-title">{this.getLabel()}</h2>
         <div className={`dropdown ${isOpen ? ' is-open' : ''}`}>
           <button
             type="button"
             className="dropdown__toggle"
             onClick={this.toggle}
           >
-            {store.selectedUrl}
-            {/* {this.renderUrlOption(this.findActiveOption())} */}
+            <div className="nowrap">{store.selectedUrl}</div>
           </button>
           <div className="dropdown__drawer">
             {options.map(option =>
@@ -41,14 +41,6 @@ export default class UrlSelector extends Component {
         </div>
       </div>
     );
-  }
-
-  getLabel() {
-    const {store} = this.props;
-    const action = store.viewType === BOOKMARK ? 'Bookmark' : 'Reply to';
-    const option = this.findActiveOption();
-    const urlType = option.name ? ` ${option.name.toLowerCase()}` : '';
-    return `${action}${urlType}:`;
   }
 
   renderUrlOption(option, isActive) {
@@ -68,6 +60,28 @@ export default class UrlSelector extends Component {
     );
   }
 
+  getLabel() {
+    const {store} = this.props;
+    let action;
+    switch (store.viewType) {
+      case BOOKMARK:
+        action = 'Bookmark';
+        break;
+      case LIKE:
+        action = 'Like';
+        break;
+      case REPOST:
+        action = 'Repost';
+        break;
+      default:
+        action = 'Reply to';
+        break;
+    }
+    const option = this.findActiveOption();
+    const urlType = option.name ? ` ${option.name.toLowerCase()}` : '';
+    return `${action}${urlType}:`;
+  }
+
   findActiveOption() {
     const {store} = this.props;
     const {options} = this.state;
@@ -83,12 +97,15 @@ export default class UrlSelector extends Component {
     this.setState({isOpen: !this.state.isOpen});
   };
 
+  close = () => {
+    this.setState({isOpen: false});
+  };
+
   selectUrl(url) {
     this.setState({
-      // url: url,
       isOpen: false,
     });
-    this.props.store.selectedUrl = url;
+    this.props.store.setSelectedUrl(url);
   }
 
   refreshUrls() {

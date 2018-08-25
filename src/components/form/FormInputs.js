@@ -16,7 +16,7 @@ updateEntry: (entry) => void,
 onSubmit: (entry) => void,
 */
 
-@inject('store', 'draftStore')
+@inject('store', 'draft')
 @observer
 export default class FormInputs extends Component {
   constructor(props) {
@@ -31,7 +31,7 @@ export default class FormInputs extends Component {
   }
 
   componentDidUpdate() {
-    this.props.draftStore.save();
+    this.props.draft.save();
   }
 
   render() {
@@ -40,7 +40,7 @@ export default class FormInputs extends Component {
       syndicateOptions,
       isDisabled,
       isLoading,
-      draftStore: entry,
+      draft: entry,
     } = this.props;
     return (
       <form onSubmit={this.onSubmit}>
@@ -105,28 +105,17 @@ export default class FormInputs extends Component {
 
   updateSlug = e => {
     const slug = e.target.value.trim();
-    this.props.draftStore.setSlug(slug);
+    this.props.draft.setSlug(slug);
   };
 
   updateContent = e => {
     const content = e.target.value;
-    this.props.draftStore.setContent(content);
+    this.props.draft.setContent(content);
   };
 
   updateTags = e => {
-    this.props.draftStore.setTags(e.target.value);
+    this.props.draft.setTags(e.target.value);
   };
-
-  // // TODO: move into draftStore?
-  // shouldAutoSlug() {
-  //   if (this.state.isSlugModified) {
-  //     return false;
-  //   }
-  //   if (this.props.settings && this.props.settings.autoSlug) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   onSubmit = e => {
     e.preventDefault();

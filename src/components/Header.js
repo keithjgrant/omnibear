@@ -15,8 +15,12 @@ import {
 @observer
 export default class Header extends Component {
   render() {
+    const {store} = this.props;
     return (
       <header className="l-main__header">
+        {store.viewType === NOTE ? (
+          <h2 className="header-title">New note</h2>
+        ) : null}
         {this.showUrlSelector() ? <UrlSelector /> : null}
       </header>
     );

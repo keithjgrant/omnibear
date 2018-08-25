@@ -1,17 +1,34 @@
 import {h, Component} from 'preact';
 import {inject} from 'mobx-preact';
+import LoginForm from './LoginForm';
 import NoteForm from './form/NoteForm';
+import LikeForm from './form/LikeForm';
 import SettingsForm from './settings/SettingsForm';
-import {NOTE, REPLY, BOOKMARK, LIKE, REPOST, SETTINGS} from '../constants';
+import {
+  LOGIN,
+  NOTE,
+  REPLY,
+  BOOKMARK,
+  LIKE,
+  REPOST,
+  SETTINGS,
+} from '../constants';
 
 @inject('store')
 export default class MainPane extends Component {
   render() {
-    const type = this.props.store.viewType;
-    if (type === SETTINGS) {
-      return <SettingsForm onClose={this.closeSettings} />;
+    switch (this.props.store.viewType) {
+      case LOGIN:
+        return <LoginForm />;
+      case SETTINGS:
+        return <SettingsForm onClose={this.closeSettings} />;
+      case LIKE:
+        return <LikeForm />;
+      // case REPOST:
+      //   return <RepostForm />;
+      default:
+        return <NoteForm />;
     }
-    return <NoteForm />;
   }
 
   closeSettings = () => {

@@ -1,7 +1,7 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
 
-@inject('authStore')
+@inject('auth')
 @observer
 export default class AuthenticationFields extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ export default class AuthenticationFields extends Component {
   }
 
   render() {
-    const {authStore: auth} = this.props;
+    const {auth} = this.props;
     const {showFields} = this.state;
     return (
       <fieldset>
@@ -67,7 +67,7 @@ export default class AuthenticationFields extends Component {
   update(fn) {
     return event => {
       fn(event.target.value);
-      window.auth = this.props.authStore;
+      window.auth = this.props.auth;
     };
   }
 

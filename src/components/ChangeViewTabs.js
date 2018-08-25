@@ -1,10 +1,19 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
 import Tab from './Tab';
-import {NOTE, REPLY, BOOKMARK, REPOST, LIKE, SETTINGS} from '../constants';
+import {
+  LOGIN,
+  NOTE,
+  REPLY,
+  BOOKMARK,
+  REPOST,
+  LIKE,
+  SETTINGS,
+} from '../constants';
 
 const UNICODE_NBSP = '\u00a0';
 const ICONS = {
+  [LOGIN]: '/icons/login.svg',
   [NOTE]: '/icons/pen.svg',
   [REPLY]: '/icons/reply.svg',
   [BOOKMARK]: '/icons/bookmark.svg',
@@ -14,19 +23,24 @@ const ICONS = {
   quick: '/icons/flash.svg',
 };
 
-@inject('store')
+@inject('store', 'auth')
 @observer
 export default class ChangeViewTabs extends Component {
   render() {
+    const {auth} = this.props;
     return (
       <div className="side-nav">
         <img className="side-nav__logo" src="/icon.svg" alt="Omnibear Logo" />
-        {this.renderTab(NOTE, `New${UNICODE_NBSP}note`)}
-        {this.renderTab(REPLY, 'Reply')}
-        {this.renderTab(BOOKMARK, 'Bookmark')}
-        {this.renderTab(LIKE, 'Like')}
-        {this.renderTab(REPOST, 'Repost')}
-        {/* {this.renderTab('quick', 'Quick actions')} */}
+        {auth.isLoggedIn()
+          ? [
+              this.renderTab(NOTE, `New note`),
+              this.renderTab(REPLY, 'Reply'),
+              this.renderTab(BOOKMARK, 'Bookmark'),
+              this.renderTab(LIKE, 'Like'),
+              this.renderTab(REPOST, 'Repost'),
+              /* {this.renderTab('quick', 'Quick actions')} */
+            ]
+          : this.renderTab(LOGIN, 'Sign in')}
         {this.renderTab(SETTINGS, 'Settings', true)}
       </div>
     );
@@ -41,7 +55,7 @@ export default class ChangeViewTabs extends Component {
         onBottom={onBottom}
       >
         <img src={ICONS[postType]} alt={label} />
-        {label}
+        {label.replace(' ', UNICODE_NBSP)}
       </Tab>
     );
   }
