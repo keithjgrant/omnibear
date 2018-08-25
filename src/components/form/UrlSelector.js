@@ -1,5 +1,6 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
+import {BOOKMARK} from '../../constants';
 import {getPageUrl} from '../../util/utils';
 
 @inject('store')
@@ -13,7 +14,7 @@ export default class UrlSelector extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.refreshUrls();
   }
 
@@ -21,26 +22,43 @@ export default class UrlSelector extends Component {
     const {isOpen, options} = this.state;
     const {store} = this.props;
     return (
-      <div className={`dropdown ${isOpen ? ' is-open' : ''}`}>
-        <button className="dropdown__toggle" onClick={this.toggle}>
-          {store.selectedUrl}
-          {/* {this.renderUrlOption(this.findActiveOption())} */}
-        </button>
-        {isOpen ? (
+      <div>
+        <h2 className="url-label">{this.getLabel()}</h2>
+        <div className={`dropdown ${isOpen ? ' is-open' : ''}`}>
+          <button
+            type="button"
+            className="dropdown__toggle"
+            onClick={this.toggle}
+          >
+            {store.selectedUrl}
+            {/* {this.renderUrlOption(this.findActiveOption())} */}
+          </button>
           <div className="dropdown__drawer">
             {options.map(option =>
               this.renderUrlOption(option, option.url === store.selectedUrl)
             )}
           </div>
-        ) : null}
+        </div>
       </div>
     );
   }
 
+  getLabel() {
+    const {store} = this.props;
+    const action = store.viewType === BOOKMARK ? 'Bookmark' : 'Reply to';
+    const option = this.findActiveOption();
+    const urlType = option.name ? ` ${option.name.toLowerCase()}` : '';
+    return `${action}${urlType}:`;
+  }
+
   renderUrlOption(option, isActive) {
+    const {isOpen} = this.state;
     return (
       <button
-        className={`url-option${isActive ? ' is-active' : ''}`}
+        type="button"
+        className={`url-option${isActive ? ' is-active' : ''} ${
+          isOpen ? ' is-in' : ''
+        }`}
         onClick={this.selectUrl.bind(this, option.url)}
         disabled={option.isDisabled}
       >
@@ -61,16 +79,16 @@ export default class UrlSelector extends Component {
   }
 
   toggle = () => {
+    this.refreshUrls();
     this.setState({isOpen: !this.state.isOpen});
   };
 
   selectUrl(url) {
     this.setState({
-      url: url,
+      // url: url,
       isOpen: false,
     });
     this.props.store.selectedUrl = url;
-    // this.props.store.setSelectedUrl(url);
   }
 
   refreshUrls() {
@@ -86,7 +104,11 @@ export default class UrlSelector extends Component {
       if (selectedEntry) {
         options.push({name: 'Selected entry', url: selectedEntry});
       } else {
-        options.push({name: 'Selected entry', url: '—', isDisabled: true});
+        options.push({
+          name: 'Selected entry',
+          url: '- none -',
+          isDisabled: true,
+        });
       }
       this.setState({options});
       if (!store.selectedUrl) {

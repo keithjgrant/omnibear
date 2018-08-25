@@ -30,9 +30,7 @@ class DraftStore {
   @action
   setContent(content) {
     this.content = content;
-    console.log('content', content);
     if (this.shouldAutoSlug()) {
-      console.log('slug', generateSlug(content));
       this.slug = generateSlug(content);
     }
     this.save();

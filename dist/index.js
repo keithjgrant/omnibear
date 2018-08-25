@@ -9027,6 +9027,8 @@ var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/prea
 
 var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
+var _constants = __webpack_require__(/*! ../../constants */ "./src/constants.js");
+
 var _utils = __webpack_require__(/*! ../../util/utils */ "./src/util/utils.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9044,6 +9046,7 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
     var _this = _possibleConstructorReturn(this, (UrlSelector.__proto__ || Object.getPrototypeOf(UrlSelector)).call(this, props));
 
     _this.toggle = function () {
+      _this.refreshUrls();
       _this.setState({ isOpen: !_this.state.isOpen });
     };
 
@@ -9055,8 +9058,8 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
   }
 
   _createClass(UrlSelector, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
       this.refreshUrls();
     }
   }, {
@@ -9071,28 +9074,54 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
 
       return (0, _preact.h)(
         'div',
-        { className: 'dropdown ' + (isOpen ? ' is-open' : '') },
+        null,
         (0, _preact.h)(
-          'button',
-          { className: 'dropdown__toggle', onClick: this.toggle },
-          store.selectedUrl
+          'h2',
+          { className: 'url-label' },
+          this.getLabel()
         ),
-        isOpen ? (0, _preact.h)(
+        (0, _preact.h)(
           'div',
-          { className: 'dropdown__drawer' },
-          options.map(function (option) {
-            return _this2.renderUrlOption(option, option.url === store.selectedUrl);
-          })
-        ) : null
+          { className: 'dropdown ' + (isOpen ? ' is-open' : '') },
+          (0, _preact.h)(
+            'button',
+            {
+              type: 'button',
+              className: 'dropdown__toggle',
+              onClick: this.toggle
+            },
+            store.selectedUrl
+          ),
+          (0, _preact.h)(
+            'div',
+            { className: 'dropdown__drawer' },
+            options.map(function (option) {
+              return _this2.renderUrlOption(option, option.url === store.selectedUrl);
+            })
+          )
+        )
       );
+    }
+  }, {
+    key: 'getLabel',
+    value: function getLabel() {
+      var store = this.props.store;
+
+      var action = store.viewType === _constants.BOOKMARK ? 'Bookmark' : 'Reply to';
+      var option = this.findActiveOption();
+      var urlType = option.name ? ' ' + option.name.toLowerCase() : '';
+      return '' + action + urlType + ':';
     }
   }, {
     key: 'renderUrlOption',
     value: function renderUrlOption(option, isActive) {
+      var isOpen = this.state.isOpen;
+
       return (0, _preact.h)(
         'button',
         {
-          className: 'url-option' + (isActive ? ' is-active' : ''),
+          type: 'button',
+          className: 'url-option' + (isActive ? ' is-active' : '') + ' ' + (isOpen ? ' is-in' : ''),
           onClick: this.selectUrl.bind(this, option.url),
           disabled: option.isDisabled
         },
@@ -9124,11 +9153,10 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
     key: 'selectUrl',
     value: function selectUrl(url) {
       this.setState({
-        url: url,
+        // url: url,
         isOpen: false
       });
       this.props.store.selectedUrl = url;
-      // this.props.store.setSelectedUrl(url);
     }
   }, {
     key: 'refreshUrls',
@@ -9146,7 +9174,11 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
         if (selectedEntry) {
           options.push({ name: 'Selected entry', url: selectedEntry });
         } else {
-          options.push({ name: 'Selected entry', url: '—', isDisabled: true });
+          options.push({
+            name: 'Selected entry',
+            url: '- none -',
+            isDisabled: true
+          });
         }
         _this3.setState({ options: options });
         if (!store.selectedUrl) {
@@ -10499,9 +10531,7 @@ var DraftStore = (_class = function () {
     key: 'setContent',
     value: function setContent(content) {
       this.content = content;
-      console.log('content', content);
       if (this.shouldAutoSlug()) {
-        console.log('slug', (0, _utils.generateSlug)(content));
         this.slug = (0, _utils.generateSlug)(content);
       }
       this.save();
