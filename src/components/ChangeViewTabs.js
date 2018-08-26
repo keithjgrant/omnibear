@@ -8,6 +8,7 @@ import {
   BOOKMARK,
   REPOST,
   LIKE,
+  LOGS,
   SETTINGS,
 } from '../constants';
 
@@ -19,15 +20,16 @@ const ICONS = {
   [BOOKMARK]: '/icons/bookmark.svg',
   [REPOST]: '/icons/refresh.svg',
   [LIKE]: '/icons/heart.svg',
+  [LOGS]: '/icons/alert.svg',
   [SETTINGS]: '/icons/settings.svg',
   quick: '/icons/flash.svg',
 };
 
-@inject('store', 'auth')
+@inject('store', 'auth', 'settings')
 @observer
 export default class ChangeViewTabs extends Component {
   render() {
-    const {auth} = this.props;
+    const {auth, settings} = this.props;
     return (
       <div className="side-nav">
         <img className="side-nav__logo" src="/icon.svg" alt="Omnibear Logo" />
@@ -41,6 +43,7 @@ export default class ChangeViewTabs extends Component {
               /* {this.renderTab('quick', 'Quick actions')} */
             ]
           : this.renderTab(LOGIN, 'Sign in')}
+        {settings.debugLog ? this.renderTab(LOGS, 'Logs', true) : null}
         {this.renderTab(SETTINGS, 'Settings', true)}
       </div>
     );

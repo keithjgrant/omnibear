@@ -17,9 +17,9 @@ export default class Logs extends Component {
     const {onClose} = this.props;
     const logs = getLogs();
     return (
-      <div>
-        <h1 className="section-heading">Logs</h1>
-        <div class="container">
+      <div className="l-main__full">
+        <div className="container container--full">
+          <h1 className="section-heading">Logs</h1>
           {logs.length ? (
             <ul className="logs">{logs.map(log => <LogItem log={log} />)}</ul>
           ) : (

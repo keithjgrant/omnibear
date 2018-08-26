@@ -281,20 +281,27 @@ fieldset > * + * {
 }
 
 .message {
-  padding: 0.3em 1em;
-  border-left: 5px solid currentColor;
+  --hue: 211;
+
+  margin-bottom: 0.5em;
+  padding: 0.5em 1em;
+  border: 0;
+  border-radius: 0.5rem;
+  color: hsl(var(--hue), 40%, 40%);
+  background-color: hsl(var(--hue), 30%, 95%);
+  box-shadow: 0 2px 4px hsla(var(--hue), 30%, 40%, 0.2);
 }
 .message--info {
-  color: var(--blue);
+  --hue: 211;
 }
 .message--success {
-  color: var(--green);
+  --hue: 190;
 }
 .message--danger {
-  color: var(--red);
+  --hue: 0;
 }
 .message--warning {
-  color: var(--orange);
+  --hue: 32;
 }
 
 .info-banner {
@@ -574,6 +581,10 @@ fieldset > * + * {
   margin-top: auto;
   border-top: 1px solid var(--gray-90);
 }
+.side-nav > .side-nav__bottom ~ .side-nav__bottom {
+  margin-top: 0;
+  border-top: 0;
+}
 
 .settings-form__description {
   margin: 0;
@@ -639,6 +650,7 @@ legend + .settings-form__description {
   border-radius: 0;
   border-top: 1px solid currentColor;
   text-align: left;
+  cursor: default;
 }
 .log--info {
   color: var(--gray-30);

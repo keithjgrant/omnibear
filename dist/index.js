@@ -17940,15 +17940,6 @@ var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreac
       var store = this.props.store;
       var userDomain = this.state.userDomain;
 
-      var viewType = store.viewType;
-      // if (viewType === LOGIN) {
-      //   return (
-      //     <LoginForm
-      //       handleSettings={this.handleSettings}
-      //       handleLogs={this.handleLogs}
-      //     />
-      //   );
-      // }
       return (0, _preact.h)(
         'div',
         { className: 'l-main' },
@@ -18026,9 +18017,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var UNICODE_NBSP = '\xA0';
-var ICONS = (_ICONS = {}, _defineProperty(_ICONS, _constants.LOGIN, '/icons/login.svg'), _defineProperty(_ICONS, _constants.NOTE, '/icons/pen.svg'), _defineProperty(_ICONS, _constants.REPLY, '/icons/reply.svg'), _defineProperty(_ICONS, _constants.BOOKMARK, '/icons/bookmark.svg'), _defineProperty(_ICONS, _constants.REPOST, '/icons/refresh.svg'), _defineProperty(_ICONS, _constants.LIKE, '/icons/heart.svg'), _defineProperty(_ICONS, _constants.SETTINGS, '/icons/settings.svg'), _defineProperty(_ICONS, 'quick', '/icons/flash.svg'), _ICONS);
+var ICONS = (_ICONS = {}, _defineProperty(_ICONS, _constants.LOGIN, '/icons/login.svg'), _defineProperty(_ICONS, _constants.NOTE, '/icons/pen.svg'), _defineProperty(_ICONS, _constants.REPLY, '/icons/reply.svg'), _defineProperty(_ICONS, _constants.BOOKMARK, '/icons/bookmark.svg'), _defineProperty(_ICONS, _constants.REPOST, '/icons/refresh.svg'), _defineProperty(_ICONS, _constants.LIKE, '/icons/heart.svg'), _defineProperty(_ICONS, _constants.LOGS, '/icons/alert.svg'), _defineProperty(_ICONS, _constants.SETTINGS, '/icons/settings.svg'), _defineProperty(_ICONS, 'quick', '/icons/flash.svg'), _ICONS);
 
-var ChangeViewTabs = (_dec = (0, _mobxPreact.inject)('store', 'auth'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
+var ChangeViewTabs = (_dec = (0, _mobxPreact.inject)('store', 'auth', 'settings'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(ChangeViewTabs, _Component);
 
   function ChangeViewTabs() {
@@ -18040,13 +18031,16 @@ var ChangeViewTabs = (_dec = (0, _mobxPreact.inject)('store', 'auth'), _dec(_cla
   _createClass(ChangeViewTabs, [{
     key: 'render',
     value: function render() {
-      var auth = this.props.auth;
+      var _props = this.props,
+          auth = _props.auth,
+          settings = _props.settings;
 
       return (0, _preact.h)(
         'div',
         { className: 'side-nav' },
         (0, _preact.h)('img', { className: 'side-nav__logo', src: '/icon.svg', alt: 'Omnibear Logo' }),
         auth.isLoggedIn() ? [this.renderTab(_constants.NOTE, 'New note'), this.renderTab(_constants.REPLY, 'Reply'), this.renderTab(_constants.BOOKMARK, 'Bookmark'), this.renderTab(_constants.LIKE, 'Like'), this.renderTab(_constants.REPOST, 'Repost')] : this.renderTab(_constants.LOGIN, 'Sign in'),
+        settings.debugLog ? this.renderTab(_constants.LOGS, 'Logs', true) : null,
         this.renderTab(_constants.SETTINGS, 'Settings', true)
       );
     }
@@ -18478,6 +18472,14 @@ var _SettingsForm = __webpack_require__(/*! ./settings/SettingsForm */ "./src/co
 
 var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
 
+var _Message = __webpack_require__(/*! ./Message */ "./src/components/Message.js");
+
+var _Message2 = _interopRequireDefault(_Message);
+
+var _Logs = __webpack_require__(/*! ./log/Logs */ "./src/components/log/Logs.js");
+
+var _Logs2 = _interopRequireDefault(_Logs);
+
 var _constants = __webpack_require__(/*! ../constants */ "./src/constants.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -18488,7 +18490,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var MainPane = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = function (_Component) {
+var MainPane = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(MainPane, _Component);
 
   function MainPane() {
@@ -18510,15 +18512,29 @@ var MainPane = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = function 
   _createClass(MainPane, [{
     key: 'render',
     value: function render() {
-      switch (this.props.store.viewType) {
+      var store = this.props.store;
+
+      switch (store.viewType) {
         case _constants.LOGIN:
           return (0, _preact.h)(_LoginForm2.default, null);
         case _constants.SETTINGS:
           return (0, _preact.h)(_SettingsForm2.default, { onClose: this.closeSettings });
+        case _constants.LOGS:
+          return (0, _preact.h)(_Logs2.default, null);
         case _constants.LIKE:
           return (0, _preact.h)(_LikeForm2.default, null);
         // case REPOST:
         //   return <RepostForm />;
+        case _constants.MESSAGE:
+          return (0, _preact.h)(
+            'div',
+            { className: 'l-main__full' },
+            (0, _preact.h)(
+              'div',
+              { className: 'container container--full' },
+              (0, _preact.h)(_Message2.default, { message: store.flashMessage })
+            )
+          );
         default:
           return (0, _preact.h)(_NoteForm2.default, null);
       }
@@ -18526,7 +18542,7 @@ var MainPane = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = function 
   }]);
 
   return MainPane;
-}(_preact.Component)) || _class);
+}(_preact.Component)) || _class) || _class);
 exports.default = MainPane;
 
 /***/ }),
@@ -18548,7 +18564,11 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _class;
+
 var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
 var _constants = __webpack_require__(/*! ../constants */ "./src/constants.js");
 
@@ -18560,7 +18580,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Message = function (_Component) {
+var Message = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(Message, _Component);
 
   function Message() {
@@ -18572,19 +18592,22 @@ var Message = function (_Component) {
   _createClass(Message, [{
     key: 'render',
     value: function render() {
+      var _ref = this.props || {},
+          message = _ref.message;
+
       return (0, _preact.h)(
         'div',
         { className: this.getClass() },
-        this.props.children,
-        this.props.location ? (0, _preact.h)(
+        message.message,
+        message.location ? (0, _preact.h)(
           'span',
           null,
           ':',
           (0, _preact.h)('br', null),
           (0, _preact.h)(
             'a',
-            { href: this.props.location },
-            this.props.location
+            { href: message.location },
+            message.location
           )
         ) : null
       );
@@ -18595,12 +18618,12 @@ var Message = function (_Component) {
       var _types;
 
       var types = (_types = {}, _defineProperty(_types, _constants.MESSAGE_INFO, 'message message--info'), _defineProperty(_types, _constants.MESSAGE_SUCCESS, 'message message--success'), _defineProperty(_types, _constants.MESSAGE_ERROR, 'message message--danger'), _types);
-      return types[this.props.type] || types[_constants.MESSAGE_INFO];
+      return types[this.props.message.type] || types[_constants.MESSAGE_INFO];
     }
   }]);
 
   return Message;
-}(_preact.Component);
+}(_preact.Component)) || _class;
 
 exports.default = Message;
 
@@ -18909,17 +18932,9 @@ var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/prea
 
 var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
-var _QuickActions = __webpack_require__(/*! ./QuickActions */ "./src/components/form/QuickActions.js");
-
-var _QuickActions2 = _interopRequireDefault(_QuickActions);
-
 var _Message = __webpack_require__(/*! ../Message */ "./src/components/Message.js");
 
 var _Message2 = _interopRequireDefault(_Message);
-
-var _micropub = __webpack_require__(/*! ../../util/micropub */ "./src/util/micropub.js");
-
-var _micropub2 = _interopRequireDefault(_micropub);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18941,6 +18956,8 @@ var LikeForm = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobx
   _createClass(LikeForm, [{
     key: 'render',
     value: function render() {
+      var store = this.props.store;
+
       return (0, _preact.h)(
         'div',
         { className: 'l-main__main' },
@@ -18956,11 +18973,13 @@ var LikeForm = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobx
             'button',
             {
               type: 'button',
-              className: 'button',
-              onClick: this.props.store.sendLike
+              className: 'button' + (store.isSending ? ' is-loading' : ''),
+              onClick: store.sendLike,
+              disabled: store.isSending
             },
             'Like'
-          )
+          ),
+          store.flashMessage ? (0, _preact.h)(_Message2.default, { message: store.flashMessage }) : null
         )
       );
     }
@@ -19970,9 +19989,11 @@ var LogItem = function (_Component) {
     var _this = _possibleConstructorReturn(this, (LogItem.__proto__ || Object.getPrototypeOf(LogItem)).call(this, props));
 
     _this.toggle = function () {
-      _this.setState({
-        isExpanded: !_this.state.isExpanded
-      });
+      if (_this.props.log.data) {
+        _this.setState({
+          isExpanded: !_this.state.isExpanded
+        });
+      }
     };
 
     _this.state = {
@@ -20095,15 +20116,15 @@ var Logs = function (_Component) {
       var logs = (0, _log.getLogs)();
       return (0, _preact.h)(
         'div',
-        null,
-        (0, _preact.h)(
-          'h1',
-          { className: 'section-heading' },
-          'Logs'
-        ),
+        { className: 'l-main__full' },
         (0, _preact.h)(
           'div',
-          { 'class': 'container' },
+          { className: 'container container--full' },
+          (0, _preact.h)(
+            'h1',
+            { className: 'section-heading' },
+            'Logs'
+          ),
           logs.length ? (0, _preact.h)(
             'ul',
             { className: 'logs' },
@@ -20839,6 +20860,7 @@ var LIKE = exports.LIKE = 'like';
 var SETTINGS = exports.SETTINGS = 'settings';
 var LOGS = exports.LOGS = 'logs';
 var LOGIN = exports.LOGIN = 'login';
+var MESSAGE = exports.MESSAGE = 'message';
 
 var PAGE_REPLY = exports.PAGE_REPLY = 'page-reply';
 var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';
@@ -21620,7 +21642,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
 
 var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
 
@@ -21628,7 +21650,13 @@ var _authStore = __webpack_require__(/*! ./authStore */ "./src/stores/authStore.
 
 var _authStore2 = _interopRequireDefault(_authStore);
 
+var _settingsStore = __webpack_require__(/*! ./settingsStore */ "./src/stores/settingsStore.js");
+
+var _settingsStore2 = _interopRequireDefault(_settingsStore);
+
 var _constants = __webpack_require__(/*! ../constants */ "./src/constants.js");
+
+var _micropub = __webpack_require__(/*! ../util/micropub */ "./src/util/micropub.js");
 
 var _url = __webpack_require__(/*! ../util/url */ "./src/util/url.js");
 
@@ -21695,17 +21723,25 @@ var Store = (_class = function () {
 
     _initDefineProp(this, 'selectedUrl', _descriptor4, this);
 
-    _initDefineProp(this, 'isSubmitting', _descriptor5, this);
+    _initDefineProp(this, 'isSending', _descriptor5, this);
+
+    _initDefineProp(this, 'flashMessage', _descriptor6, this);
+
+    _initDefineProp(this, 'sendLike', _descriptor7, this);
 
     this.viewType = this._determineInitialView();
-    this.isSubmitting = false;
+    this.isSending = false;
     this.auth = _authStore2.default;
+    this.settings = _settingsStore2.default;
   }
 
   _createClass(Store, [{
     key: 'setViewType',
     value: function setViewType(type) {
       this.viewType = type;
+      if (type !== _constants.MESSAGE) {
+        this.flashMessage = null;
+      }
     }
   }, {
     key: 'setSelectedUrl',
@@ -21719,38 +21755,34 @@ var Store = (_class = function () {
       this.viewType = _constants.LOGIN;
     }
   }, {
-    key: 'sendLike',
-    value: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (this.selectedUrl) {
-                  _context.next = 3;
-                  break;
-                }
-
-                (0, _log.warning)('Cannot send like; no current URL found');
-                return _context.abrupt('return');
-
-              case 3:
-                this.isSubmitting = true;
-
-              case 4:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function sendLike() {
-        return _ref.apply(this, arguments);
+    key: '_flashSuccessMessage',
+    value: function _flashSuccessMessage(message, location) {
+      (0, _log.info)(message, location);
+      this.flashMessage = {
+        message: message,
+        type: _constants.MESSAGE_SUCCESS,
+        location: location
+      };
+      this._closeAfterDelay();
+    }
+  }, {
+    key: '_flashErrorMessage',
+    value: function _flashErrorMessage(message, error) {
+      error(message, error);
+      this.flashMessage = {
+        message: message,
+        type: _constants.MESSAGE_ERROR,
+        error: error
+      };
+      this._closeAfterDelay();
+    }
+  }, {
+    key: '_closeAfterDelay',
+    value: function _closeAfterDelay() {
+      if (this.settings.closeAfterPosting) {
+        setTimeout(window.close, 3000);
       }
-
-      return sendLike;
-    }()
+    }
   }, {
     key: '_determineInitialView',
     value: function _determineInitialView() {
@@ -21775,10 +21807,68 @@ var Store = (_class = function () {
 }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'selectedUrl', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'isSubmitting', [_mobx.observable], {
+}), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'isSending', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class.prototype, 'setViewType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setViewType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSelectedUrl', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSelectedUrl'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'logout', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'logout'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'sendLike', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'sendLike'), _class.prototype)), _class);
+}), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'flashMessage', [_mobx.observable], {
+  enumerable: true,
+  initializer: null
+}), _applyDecoratedDescriptor(_class.prototype, 'setViewType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setViewType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSelectedUrl', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSelectedUrl'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'logout', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'logout'), _class.prototype), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'sendLike', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var location;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (_this.selectedUrl) {
+                _context.next = 3;
+                break;
+              }
+
+              (0, _log.warning)('Cannot send like; no current URL found');
+              return _context.abrupt('return');
+
+            case 3:
+              _this.isSending = true;
+              _context.prev = 4;
+
+              (0, _log.info)('Sending like...', _this.selectedUrl);
+              _context.next = 8;
+              return (0, _micropub.postLike)(_this.selectedUrl);
+
+            case 8:
+              location = _context.sent;
+
+              (0, _mobx.runInAction)(function () {
+                _this.viewType = _constants.MESSAGE;
+                _this._flashSuccessMessage('Item liked successfully', location);
+                _this.isSending = false;
+              });
+              _context.next = 15;
+              break;
+
+            case 12:
+              _context.prev = 12;
+              _context.t0 = _context['catch'](4);
+
+              (0, _mobx.runInAction)(function () {
+                _this._flashErrorMessage('Error posting like', _context.t0);
+                _this.isSending = false;
+              });
+
+            case 15:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, _this, [[4, 12]]);
+    }));
+  }
+})), _class);
 exports.default = new Store();
 
 // TODO: move to authStore
@@ -21950,6 +22040,7 @@ function logsEnabled() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.postLike = postLike;
 
 var _micropubHelper = __webpack_require__(/*! micropub-helper */ "./node_modules/micropub-helper/src/main.js");
 
@@ -21957,7 +22048,7 @@ var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = new _micropubHelper2.default({
+var micropub = new _micropubHelper2.default({
   clientId: 'https://omnibear.com',
   redirectUri: 'https://omnibear.com/auth/success/',
   state: 'very-secret-omnibear-state',
@@ -21968,6 +22059,14 @@ exports.default = new _micropubHelper2.default({
   token: localStorage.getItem('token'),
   scope: 'create delete update'
 });
+exports.default = micropub;
+function postLike(url) {
+  var entry = {
+    h: 'entry',
+    'like-of': url
+  };
+  return micropub.create(entry, 'form');
+}
 
 /***/ }),
 

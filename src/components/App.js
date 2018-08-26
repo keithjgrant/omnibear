@@ -30,15 +30,6 @@ export default class App extends Component {
   render() {
     const {store} = this.props;
     const {userDomain} = this.state;
-    const viewType = store.viewType;
-    // if (viewType === LOGIN) {
-    //   return (
-    //     <LoginForm
-    //       handleSettings={this.handleSettings}
-    //       handleLogs={this.handleLogs}
-    //     />
-    //   );
-    // }
     return (
       <div className="l-main">
         <nav className="l-main__sidebar">

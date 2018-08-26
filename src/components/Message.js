@@ -1,16 +1,19 @@
 import {h, Component} from 'preact';
+import {observer} from 'mobx-preact';
 import {MESSAGE_SUCCESS, MESSAGE_ERROR, MESSAGE_INFO} from '../constants';
 
+@observer
 export default class Message extends Component {
   render() {
+    const {message} = this.props || {};
     return (
       <div className={this.getClass()}>
-        {this.props.children}
-        {this.props.location ? (
+        {message.message}
+        {message.location ? (
           <span>
             {':'}
             <br />
-            <a href={this.props.location}>{this.props.location}</a>
+            <a href={message.location}>{message.location}</a>
           </span>
         ) : null}
       </div>
@@ -23,6 +26,6 @@ export default class Message extends Component {
       [MESSAGE_SUCCESS]: 'message message--success',
       [MESSAGE_ERROR]: 'message message--danger',
     };
-    return types[this.props.type] || types[MESSAGE_INFO];
+    return types[this.props.message.type] || types[MESSAGE_INFO];
   }
 }

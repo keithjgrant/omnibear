@@ -1865,6 +1865,7 @@ var LIKE = exports.LIKE = 'like';
 var SETTINGS = exports.SETTINGS = 'settings';
 var LOGS = exports.LOGS = 'logs';
 var LOGIN = exports.LOGIN = 'login';
+var MESSAGE = exports.MESSAGE = 'message';
 
 var PAGE_REPLY = exports.PAGE_REPLY = 'page-reply';
 var ITEM_REPLY = exports.ITEM_REPLY = 'item-reply';
@@ -1982,6 +1983,7 @@ function logsEnabled() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.postLike = postLike;
 
 var _micropubHelper = __webpack_require__(/*! micropub-helper */ "./node_modules/micropub-helper/src/main.js");
 
@@ -1989,7 +1991,7 @@ var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = new _micropubHelper2.default({
+var micropub = new _micropubHelper2.default({
   clientId: 'https://omnibear.com',
   redirectUri: 'https://omnibear.com/auth/success/',
   state: 'very-secret-omnibear-state',
@@ -2000,6 +2002,14 @@ exports.default = new _micropubHelper2.default({
   token: localStorage.getItem('token'),
   scope: 'create delete update'
 });
+exports.default = micropub;
+function postLike(url) {
+  var entry = {
+    h: 'entry',
+    'like-of': url
+  };
+  return micropub.create(entry, 'form');
+}
 
 /***/ }),
 

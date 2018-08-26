@@ -32,8 +32,10 @@ export default class LogItem extends Component {
   }
 
   toggle = () => {
-    this.setState({
-      isExpanded: !this.state.isExpanded,
-    });
+    if (this.props.log.data) {
+      this.setState({
+        isExpanded: !this.state.isExpanded,
+      });
+    }
   };
 }

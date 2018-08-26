@@ -1,6 +1,6 @@
 import Micropub from 'micropub-helper';
 
-export default new Micropub({
+const micropub = new Micropub({
   clientId: 'https://omnibear.com',
   redirectUri: 'https://omnibear.com/auth/success/',
   state: 'very-secret-omnibear-state',
@@ -11,3 +11,12 @@ export default new Micropub({
   token: localStorage.getItem('token'),
   scope: 'create delete update',
 });
+export default micropub;
+
+export function postLike(url) {
+  const entry = {
+    h: 'entry',
+    'like-of': url,
+  };
+  return micropub.create(entry, 'form');
+}
