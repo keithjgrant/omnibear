@@ -8,7 +8,7 @@ export default class SyndicateInputs extends Component {
     }
     return (
       <div className="checkbox">
-        <div class="label">Syndicate to</div>
+        <div className="label">Syndicate to</div>
         {options.map(this.renderOption)}
       </div>
     );

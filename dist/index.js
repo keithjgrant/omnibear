@@ -18468,6 +18468,10 @@ var _LikeForm = __webpack_require__(/*! ./form/LikeForm */ "./src/components/for
 
 var _LikeForm2 = _interopRequireDefault(_LikeForm);
 
+var _RepostForm = __webpack_require__(/*! ./form/RepostForm */ "./src/components/form/RepostForm.js");
+
+var _RepostForm2 = _interopRequireDefault(_RepostForm);
+
 var _SettingsForm = __webpack_require__(/*! ./settings/SettingsForm */ "./src/components/settings/SettingsForm.js");
 
 var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
@@ -18523,8 +18527,8 @@ var MainPane = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobx
           return (0, _preact.h)(_Logs2.default, null);
         case _constants.LIKE:
           return (0, _preact.h)(_LikeForm2.default, null);
-        // case REPOST:
-        //   return <RepostForm />;
+        case _constants.REPOST:
+          return (0, _preact.h)(_RepostForm2.default, null);
         case _constants.MESSAGE:
           return (0, _preact.h)(
             'div',
@@ -19056,45 +19060,6 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft'), _dec(_class = 
 
     var _this = _possibleConstructorReturn(this, (NoteForm.__proto__ || Object.getPrototypeOf(NoteForm)).call(this, props));
 
-    _this.setUrl = function (url) {
-      console.log('setting activeUrl', url);
-      _this.setState({ activeUrl: url });
-    };
-
-    _this.handleLike = function () {
-      var url = _this.props.store.selectedUrl;
-      if (!url) {
-        (0, _log.warning)('Cannot send like; no current URL found');
-        return;
-      }
-      _this.postEntry({
-        h: 'entry',
-        'like-of': url
-      }).then(function (location) {
-        var type = _this.props.postType === _constants.REPLY ? 'Item' : 'Page';
-        _this.flashSuccessMessage(type + ' liked successfully', location);
-      }).catch(function (err) {
-        _this.flashErrorMessage('Error posting like', err);
-      });
-    };
-
-    _this.handleRepost = function () {
-      var url = _this.props.store.selectedUrl;
-      if (!url) {
-        (0, _log.warning)('Cannot send repost; no current URL found');
-        return;
-      }
-      _this.postEntry({
-        h: 'entry',
-        'repost-of': url
-      }).then(function (location) {
-        var type = _this.props.postType === _constants.REPLY ? 'Item' : 'Page';
-        _this.flashSuccessMessage(type + ' reposted successfully', location);
-      }).catch(function (err) {
-        _this.flashErrorMessage('Error reposting', err);
-      });
-    };
-
     _this.handleReacji = function (emoji) {
       var url = _this.props.store.selectedUrl;
       if (!url) {
@@ -19208,6 +19173,49 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft'), _dec(_class = 
         )
       );
     }
+
+    // setUrl = url => {
+    //   this.setState({activeUrl: url});
+    // };
+
+    // handleLike = () => {
+    //   const url = this.props.store.selectedUrl;
+    //   if (!url) {
+    //     warning('Cannot send like; no current URL found');
+    //     return;
+    //   }
+    //   this.postEntry({
+    //     h: 'entry',
+    //     'like-of': url,
+    //   })
+    //     .then(location => {
+    //       const type = this.props.postType === REPLY ? 'Item' : 'Page';
+    //       this.flashSuccessMessage(`${type} liked successfully`, location);
+    //     })
+    //     .catch(err => {
+    //       this.flashErrorMessage('Error posting like', err);
+    //     });
+    // };
+
+    // handleRepost = () => {
+    //   const url = this.props.store.selectedUrl;
+    //   if (!url) {
+    //     warning('Cannot send repost; no current URL found');
+    //     return;
+    //   }
+    //   this.postEntry({
+    //     h: 'entry',
+    //     'repost-of': url,
+    //   })
+    //     .then(location => {
+    //       const type = this.props.postType === REPLY ? 'Item' : 'Page';
+    //       this.flashSuccessMessage(`${type} reposted successfully`, location);
+    //     })
+    //     .catch(err => {
+    //       this.flashErrorMessage('Error reposting', err);
+    //     });
+    // };
+
   }, {
     key: 'flashSuccessMessage',
     value: function flashSuccessMessage(message, location) {
@@ -19526,6 +19534,88 @@ exports.default = QuickActions;
 
 /***/ }),
 
+/***/ "./src/components/form/RepostForm.js":
+/*!*******************************************!*\
+  !*** ./src/components/form/RepostForm.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dec, _class;
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
+
+var _Message = __webpack_require__(/*! ../Message */ "./src/components/Message.js");
+
+var _Message2 = _interopRequireDefault(_Message);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var RepostForm = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
+  _inherits(RepostForm, _Component);
+
+  function RepostForm() {
+    _classCallCheck(this, RepostForm);
+
+    return _possibleConstructorReturn(this, (RepostForm.__proto__ || Object.getPrototypeOf(RepostForm)).apply(this, arguments));
+  }
+
+  _createClass(RepostForm, [{
+    key: 'render',
+    value: function render() {
+      var store = this.props.store;
+
+      return (0, _preact.h)(
+        'div',
+        { className: 'l-main__main' },
+        (0, _preact.h)(
+          'div',
+          { className: 'container text-center' },
+          (0, _preact.h)(
+            'p',
+            null,
+            'Repost this entry?'
+          ),
+          (0, _preact.h)(
+            'button',
+            {
+              type: 'button',
+              className: 'button' + (store.isSending ? ' is-loading' : ''),
+              onClick: store.sendRepost,
+              disabled: store.isSending
+            },
+            'Repost'
+          ),
+          store.flashMessage ? (0, _preact.h)(_Message2.default, { message: store.flashMessage }) : null
+        )
+      );
+    }
+  }]);
+
+  return RepostForm;
+}(_preact.Component)) || _class) || _class);
+exports.default = RepostForm;
+
+/***/ }),
+
 /***/ "./src/components/form/SyndicateInputs.js":
 /*!************************************************!*\
   !*** ./src/components/form/SyndicateInputs.js ***!
@@ -19598,7 +19688,7 @@ var SyndicateInputs = function (_Component) {
         { className: "checkbox" },
         (0, _preact.h)(
           "div",
-          { "class": "label" },
+          { className: "label" },
           "Syndicate to"
         ),
         options.map(this.renderOption)
@@ -21642,7 +21732,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
 
 var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
 
@@ -21729,10 +21819,12 @@ var Store = (_class = function () {
 
     _initDefineProp(this, 'sendLike', _descriptor7, this);
 
-    this.viewType = this._determineInitialView();
-    this.isSending = false;
+    _initDefineProp(this, 'sendRepost', _descriptor8, this);
+
     this.auth = _authStore2.default;
     this.settings = _settingsStore2.default;
+    this.viewType = this._determineInitialView();
+    this.isSending = false;
   }
 
   _createClass(Store, [{
@@ -21763,16 +21855,17 @@ var Store = (_class = function () {
         type: _constants.MESSAGE_SUCCESS,
         location: location
       };
+      this.viewType = _constants.MESSAGE;
       this._closeAfterDelay();
     }
   }, {
     key: '_flashErrorMessage',
-    value: function _flashErrorMessage(message, error) {
-      error(message, error);
+    value: function _flashErrorMessage(message, err) {
+      (0, _log.error)(message, err);
       this.flashMessage = {
         message: message,
         type: _constants.MESSAGE_ERROR,
-        error: error
+        error: _log.error
       };
       this._closeAfterDelay();
     }
@@ -21786,7 +21879,7 @@ var Store = (_class = function () {
   }, {
     key: '_determineInitialView',
     value: function _determineInitialView() {
-      if (!isAuthenticated()) {
+      if (!this.auth.isLoggedIn()) {
         return _constants.LOGIN;
       }
       var type = (0, _url.getParamFromUrl)('type', window.location.search);
@@ -21844,7 +21937,6 @@ var Store = (_class = function () {
               location = _context.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this.viewType = _constants.MESSAGE;
                 _this._flashSuccessMessage('Item liked successfully', location);
                 _this.isSending = false;
               });
@@ -21856,7 +21948,7 @@ var Store = (_class = function () {
               _context.t0 = _context['catch'](4);
 
               (0, _mobx.runInAction)(function () {
-                _this._flashErrorMessage('Error posting like', _context.t0);
+                _this._flashErrorMessage('Error sending like', _context.t0);
                 _this.isSending = false;
               });
 
@@ -21868,14 +21960,62 @@ var Store = (_class = function () {
       }, _callee, _this, [[4, 12]]);
     }));
   }
+}), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'sendRepost', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this2 = this;
+
+    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      var location;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              if (_this2.selectedUrl) {
+                _context2.next = 3;
+                break;
+              }
+
+              (0, _log.warning)('Cannot send repost; no current URL found');
+              return _context2.abrupt('return');
+
+            case 3:
+              _this2.isSending = true;
+              _context2.prev = 4;
+
+              (0, _log.info)('Sending repost...', _this2.selectedUrl);
+              _context2.next = 8;
+              return (0, _micropub.postRepost)(_this2.selectedUrl);
+
+            case 8:
+              location = _context2.sent;
+
+              (0, _mobx.runInAction)(function () {
+                _this2._flashSuccessMessage('Item reposted successfully', location);
+                _this2.isSending = false;
+              });
+              _context2.next = 15;
+              break;
+
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2['catch'](4);
+
+              (0, _mobx.runInAction)(function () {
+                _this2._flashErrorMessage('Error reposting', _context2.t0);
+                _this2.isSending = false;
+              });
+
+            case 15:
+            case 'end':
+              return _context2.stop();
+          }
+        }
+      }, _callee2, _this2, [[4, 12]]);
+    }));
+  }
 })), _class);
 exports.default = new Store();
-
-// TODO: move to authStore
-
-function isAuthenticated() {
-  return !!localStorage.getItem('token') && !!localStorage.getItem('micropubEndpoint');
-}
 
 /***/ }),
 
@@ -22041,6 +22181,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.postLike = postLike;
+exports.postRepost = postRepost;
 
 var _micropubHelper = __webpack_require__(/*! micropub-helper */ "./node_modules/micropub-helper/src/main.js");
 
@@ -22064,6 +22205,14 @@ function postLike(url) {
   var entry = {
     h: 'entry',
     'like-of': url
+  };
+  return micropub.create(entry, 'form');
+}
+
+function postRepost(url) {
+  var entry = {
+    h: 'entry',
+    'repost-of': url
   };
   return micropub.create(entry, 'form');
 }

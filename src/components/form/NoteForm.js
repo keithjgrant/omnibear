@@ -86,48 +86,47 @@ export default class NoteForm extends Component {
     );
   }
 
-  setUrl = url => {
-    console.log('setting activeUrl', url);
-    this.setState({activeUrl: url});
-  };
+  // setUrl = url => {
+  //   this.setState({activeUrl: url});
+  // };
 
-  handleLike = () => {
-    const url = this.props.store.selectedUrl;
-    if (!url) {
-      warning('Cannot send like; no current URL found');
-      return;
-    }
-    this.postEntry({
-      h: 'entry',
-      'like-of': url,
-    })
-      .then(location => {
-        const type = this.props.postType === REPLY ? 'Item' : 'Page';
-        this.flashSuccessMessage(`${type} liked successfully`, location);
-      })
-      .catch(err => {
-        this.flashErrorMessage('Error posting like', err);
-      });
-  };
+  // handleLike = () => {
+  //   const url = this.props.store.selectedUrl;
+  //   if (!url) {
+  //     warning('Cannot send like; no current URL found');
+  //     return;
+  //   }
+  //   this.postEntry({
+  //     h: 'entry',
+  //     'like-of': url,
+  //   })
+  //     .then(location => {
+  //       const type = this.props.postType === REPLY ? 'Item' : 'Page';
+  //       this.flashSuccessMessage(`${type} liked successfully`, location);
+  //     })
+  //     .catch(err => {
+  //       this.flashErrorMessage('Error posting like', err);
+  //     });
+  // };
 
-  handleRepost = () => {
-    const url = this.props.store.selectedUrl;
-    if (!url) {
-      warning('Cannot send repost; no current URL found');
-      return;
-    }
-    this.postEntry({
-      h: 'entry',
-      'repost-of': url,
-    })
-      .then(location => {
-        const type = this.props.postType === REPLY ? 'Item' : 'Page';
-        this.flashSuccessMessage(`${type} reposted successfully`, location);
-      })
-      .catch(err => {
-        this.flashErrorMessage('Error reposting', err);
-      });
-  };
+  // handleRepost = () => {
+  //   const url = this.props.store.selectedUrl;
+  //   if (!url) {
+  //     warning('Cannot send repost; no current URL found');
+  //     return;
+  //   }
+  //   this.postEntry({
+  //     h: 'entry',
+  //     'repost-of': url,
+  //   })
+  //     .then(location => {
+  //       const type = this.props.postType === REPLY ? 'Item' : 'Page';
+  //       this.flashSuccessMessage(`${type} reposted successfully`, location);
+  //     })
+  //     .catch(err => {
+  //       this.flashErrorMessage('Error reposting', err);
+  //     });
+  // };
 
   handleReacji = emoji => {
     const url = this.props.store.selectedUrl;

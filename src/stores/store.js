@@ -11,7 +11,7 @@ import {
   MESSAGE_SUCCESS,
   MESSAGE_ERROR,
 } from '../constants';
-import {postLike} from '../util/micropub';
+import {postLike, postRepost} from '../util/micropub';
 import {getParamFromUrl} from '../util/url';
 import {info, warning, error} from '../util/log';
 
@@ -24,10 +24,10 @@ class Store {
   @observable flashMessage;
 
   constructor() {
-    this.viewType = this._determineInitialView();
-    this.isSending = false;
     this.auth = authStore;
     this.settings = settingsStore;
+    this.viewType = this._determineInitialView();
+    this.isSending = false;
   }
 
   @action
@@ -60,13 +60,34 @@ class Store {
       info('Sending like...', this.selectedUrl);
       const location = await postLike(this.selectedUrl);
       runInAction(() => {
-        this.viewType = MESSAGE;
         this._flashSuccessMessage('Item liked successfully', location);
         this.isSending = false;
       });
     } catch (err) {
       runInAction(() => {
-        this._flashErrorMessage('Error posting like', err);
+        this._flashErrorMessage('Error sending like', err);
+        this.isSending = false;
+      });
+    }
+  };
+
+  @action
+  sendRepost = async () => {
+    if (!this.selectedUrl) {
+      warning('Cannot send repost; no current URL found');
+      return;
+    }
+    this.isSending = true;
+    try {
+      info('Sending repost...', this.selectedUrl);
+      const location = await postRepost(this.selectedUrl);
+      runInAction(() => {
+        this._flashSuccessMessage('Item reposted successfully', location);
+        this.isSending = false;
+      });
+    } catch (err) {
+      runInAction(() => {
+        this._flashErrorMessage('Error reposting', err);
         this.isSending = false;
       });
     }
@@ -79,11 +100,12 @@ class Store {
       type: MESSAGE_SUCCESS,
       location,
     };
+    this.viewType = MESSAGE;
     this._closeAfterDelay();
   }
 
-  _flashErrorMessage(message, error) {
-    error(message, error);
+  _flashErrorMessage(message, err) {
+    error(message, err);
     this.flashMessage = {
       message,
       type: MESSAGE_ERROR,
@@ -99,7 +121,7 @@ class Store {
   }
 
   _determineInitialView() {
-    if (!isAuthenticated()) {
+    if (!this.auth.isLoggedIn()) {
       return LOGIN;
     }
     const type = getParamFromUrl('type', window.location.search);
@@ -108,11 +130,3 @@ class Store {
 }
 
 export default new Store();
-
-// TODO: move to authStore
-function isAuthenticated() {
-  return (
-    !!localStorage.getItem('token') &&
-    !!localStorage.getItem('micropubEndpoint')
-  );
-}

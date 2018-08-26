@@ -20,3 +20,11 @@ export function postLike(url) {
   };
   return micropub.create(entry, 'form');
 }
+
+export function postRepost(url) {
+  const entry = {
+    h: 'entry',
+    'repost-of': url,
+  };
+  return micropub.create(entry, 'form');
+}

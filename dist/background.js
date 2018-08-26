@@ -1984,6 +1984,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.postLike = postLike;
+exports.postRepost = postRepost;
 
 var _micropubHelper = __webpack_require__(/*! micropub-helper */ "./node_modules/micropub-helper/src/main.js");
 
@@ -2007,6 +2008,14 @@ function postLike(url) {
   var entry = {
     h: 'entry',
     'like-of': url
+  };
+  return micropub.create(entry, 'form');
+}
+
+function postRepost(url) {
+  var entry = {
+    h: 'entry',
+    'repost-of': url
   };
   return micropub.create(entry, 'form');
 }

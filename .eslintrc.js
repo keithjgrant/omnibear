@@ -9,15 +9,16 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'object-curly-spacing': 0,
-    'react/prop-types': false,
-    'react/react-in-jsx-scope': false,
+    'no-shadow': 'warn',
     'no-unused-vars': [
       'error',
       {
         varsIgnorePattern: '^h$',
       },
     ],
+    'object-curly-spacing': 0,
+    'react/prop-types': false,
+    'react/react-in-jsx-scope': false,
   },
   globals: {
     document: true,

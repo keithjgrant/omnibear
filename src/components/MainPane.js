@@ -3,6 +3,7 @@ import {inject, observer} from 'mobx-preact';
 import LoginForm from './LoginForm';
 import NoteForm from './form/NoteForm';
 import LikeForm from './form/LikeForm';
+import RepostForm from './form/RepostForm';
 import SettingsForm from './settings/SettingsForm';
 import Message from './Message';
 import Logs from './log/Logs';
@@ -32,8 +33,8 @@ export default class MainPane extends Component {
         return <Logs />;
       case LIKE:
         return <LikeForm />;
-      // case REPOST:
-      //   return <RepostForm />;
+      case REPOST:
+        return <RepostForm />;
       case MESSAGE:
         return (
           <div className="l-main__full">
