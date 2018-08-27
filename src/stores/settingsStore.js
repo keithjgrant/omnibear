@@ -1,4 +1,4 @@
-import {observable, action} from 'mobx';
+import {observable, action, computed} from 'mobx';
 import {DEFAULT_REACJI} from '../constants';
 
 const MAX_LENGTH = 15;
@@ -78,6 +78,14 @@ class SettingsStore {
     this.syndicateToFieldName = name;
     this.save();
   };
+
+  @computed
+  get aliases() {
+    return {
+      slug: this.slugFieldName || 'mp-slug',
+      syndicateTo: this.syndicateToFieldName || 'mp-syndicate-to',
+    };
+  }
 
   save = () => {
     const settings = {

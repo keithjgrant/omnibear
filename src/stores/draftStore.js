@@ -13,8 +13,9 @@ class DraftStore {
     const savedDraft = getDraft();
     this.content = savedDraft.content;
     this.tags = savedDraft.category.join(' ');
-    this.slug = savedDraft['mp-slug'];
-    this.syndicateList = savedDraft['mp-syndicate-to'];
+    this.slug = savedDraft.slug || savedDraft['mp-slug'];
+    this.syndicateList =
+      savedDraft.syndicateTo || savedDraft['mp-syndicate-to'];
     this._settings = settingsStore;
     this._isSlugModified = false;
   }
@@ -44,26 +45,25 @@ class DraftStore {
   }
 
   @action
-  setTags(tagString) {
+  setTags = tagString => {
     this.tags = tagString;
     this.save();
-  }
+  };
 
   @action
-  setSyndicateList(syndicateTo) {
+  setSyndicateList = syndicateTo => {
     this.syndicateList = syndicateTo;
     this.save();
-  }
+  };
 
   // TODO: clearDraft? or call util/draft.deleteDraft directly from component?
 
   save() {
     saveDraft({
-      h: 'entry',
       content: this.content,
       category: this.tagsArray,
-      'mp-slug': this.slug,
-      'mp-syndicate-to': this.syndicateList,
+      slug: this.slug,
+      syndicateTo: this.syndicateList,
     });
   }
 

@@ -21290,7 +21290,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
 
 var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
 
@@ -21361,11 +21361,15 @@ var DraftStore = (_class = function () {
 
     _initDefineProp(this, 'syndicateList', _descriptor4, this);
 
+    _initDefineProp(this, 'setTags', _descriptor5, this);
+
+    _initDefineProp(this, 'setSyndicateList', _descriptor6, this);
+
     var savedDraft = (0, _draft.getDraft)();
     this.content = savedDraft.content;
     this.tags = savedDraft.category.join(' ');
-    this.slug = savedDraft['mp-slug'];
-    this.syndicateList = savedDraft['mp-syndicate-to'];
+    this.slug = savedDraft.slug || savedDraft['mp-slug'];
+    this.syndicateList = savedDraft.syndicateTo || savedDraft['mp-syndicate-to'];
     this._settings = _settingsStore2.default;
     this._isSlugModified = false;
   }
@@ -21387,29 +21391,17 @@ var DraftStore = (_class = function () {
       this.save();
     }
   }, {
-    key: 'setTags',
-    value: function setTags(tagString) {
-      this.tags = tagString;
-      this.save();
-    }
-  }, {
-    key: 'setSyndicateList',
-    value: function setSyndicateList(syndicateTo) {
-      this.syndicateList = syndicateTo;
-      this.save();
-    }
+    key: 'save',
+
 
     // TODO: clearDraft? or call util/draft.deleteDraft directly from component?
 
-  }, {
-    key: 'save',
     value: function save() {
       (0, _draft.saveDraft)({
-        h: 'entry',
         content: this.content,
         category: this.tagsArray,
-        'mp-slug': this.slug,
-        'mp-syndicate-to': this.syndicateList
+        slug: this.slug,
+        syndicateTo: this.syndicateList
       });
     }
   }, {
@@ -21445,7 +21437,27 @@ var DraftStore = (_class = function () {
   initializer: function initializer() {
     return [];
   }
-}), _applyDecoratedDescriptor(_class.prototype, 'tagsArray', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'tagsArray'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setContent', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setContent'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSlug'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setTags', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setTags'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSyndicateList', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSyndicateList'), _class.prototype)), _class);
+}), _applyDecoratedDescriptor(_class.prototype, 'tagsArray', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'tagsArray'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setContent', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setContent'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSlug'), _class.prototype), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'setTags', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this = this;
+
+    return function (tagString) {
+      _this.tags = tagString;
+      _this.save();
+    };
+  }
+}), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'setSyndicateList', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this2 = this;
+
+    return function (syndicateTo) {
+      _this2.syndicateList = syndicateTo;
+      _this2.save();
+    };
+  }
+})), _class);
 exports.default = new DraftStore();
 
 /***/ }),
@@ -21586,6 +21598,14 @@ var SettingsStore = (_class = function () {
       this.slugFieldName = settings.slug || this.slugFieldName;
       this.syndicateToFieldName = settings.syndicateTo || this.syndicateToFieldName;
     }
+  }, {
+    key: 'aliases',
+    get: function get() {
+      return {
+        slug: this.slugFieldName || 'mp-slug',
+        syndicateTo: this.syndicateToFieldName || 'mp-syndicate-to'
+      };
+    }
   }]);
 
   return SettingsStore;
@@ -21711,7 +21731,7 @@ var SettingsStore = (_class = function () {
       _this9.save();
     };
   }
-})), _class);
+}), _applyDecoratedDescriptor(_class.prototype, 'aliases', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'aliases'), _class.prototype)), _class);
 exports.default = new SettingsStore();
 
 /***/ }),
@@ -21732,13 +21752,17 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9;
 
 var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
 
 var _authStore = __webpack_require__(/*! ./authStore */ "./src/stores/authStore.js");
 
 var _authStore2 = _interopRequireDefault(_authStore);
+
+var _draftStore = __webpack_require__(/*! ./draftStore */ "./src/stores/draftStore.js");
+
+var _draftStore2 = _interopRequireDefault(_draftStore);
 
 var _settingsStore = __webpack_require__(/*! ./settingsStore */ "./src/stores/settingsStore.js");
 
@@ -21817,11 +21841,14 @@ var Store = (_class = function () {
 
     _initDefineProp(this, 'flashMessage', _descriptor6, this);
 
-    _initDefineProp(this, 'sendLike', _descriptor7, this);
+    _initDefineProp(this, 'sendNote', _descriptor7, this);
 
-    _initDefineProp(this, 'sendRepost', _descriptor8, this);
+    _initDefineProp(this, 'sendLike', _descriptor8, this);
+
+    _initDefineProp(this, 'sendRepost', _descriptor9, this);
 
     this.auth = _authStore2.default;
+    this.draft = _draftStore2.default;
     this.settings = _settingsStore2.default;
     this.viewType = this._determineInitialView();
     this.isSending = false;
@@ -21906,7 +21933,7 @@ var Store = (_class = function () {
 }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'flashMessage', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class.prototype, 'setViewType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setViewType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSelectedUrl', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSelectedUrl'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'logout', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'logout'), _class.prototype), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'sendLike', [_mobx.action], {
+}), _applyDecoratedDescriptor(_class.prototype, 'setViewType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setViewType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSelectedUrl', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSelectedUrl'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'logout', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'logout'), _class.prototype), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'sendNote', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this = this;
@@ -21917,50 +21944,31 @@ var Store = (_class = function () {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (_this.selectedUrl) {
-                _context.next = 3;
-                break;
-              }
-
-              (0, _log.warning)('Cannot send like; no current URL found');
-              return _context.abrupt('return');
-
-            case 3:
               _this.isSending = true;
-              _context.prev = 4;
+              _context.prev = 1;
 
-              (0, _log.info)('Sending like...', _this.selectedUrl);
-              _context.next = 8;
-              return (0, _micropub.postLike)(_this.selectedUrl);
+              (0, _log.info)('Sending note...');
+              _context.next = 5;
+              return (0, _micropub.postNote)(_this.draft, _this.settings.aliases);
 
-            case 8:
+            case 5:
               location = _context.sent;
-
-              (0, _mobx.runInAction)(function () {
-                _this._flashSuccessMessage('Item liked successfully', location);
-                _this.isSending = false;
-              });
-              _context.next = 15;
+              _context.next = 10;
               break;
 
-            case 12:
-              _context.prev = 12;
-              _context.t0 = _context['catch'](4);
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context['catch'](1);
 
-              (0, _mobx.runInAction)(function () {
-                _this._flashErrorMessage('Error sending like', _context.t0);
-                _this.isSending = false;
-              });
-
-            case 15:
+            case 10:
             case 'end':
               return _context.stop();
           }
         }
-      }, _callee, _this, [[4, 12]]);
+      }, _callee, _this, [[1, 8]]);
     }));
   }
-}), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'sendRepost', [_mobx.action], {
+}), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'sendLike', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this2 = this;
@@ -21976,22 +21984,22 @@ var Store = (_class = function () {
                 break;
               }
 
-              (0, _log.warning)('Cannot send repost; no current URL found');
+              (0, _log.warning)('Cannot send like; no current URL found');
               return _context2.abrupt('return');
 
             case 3:
               _this2.isSending = true;
               _context2.prev = 4;
 
-              (0, _log.info)('Sending repost...', _this2.selectedUrl);
+              (0, _log.info)('Sending like...', _this2.selectedUrl);
               _context2.next = 8;
-              return (0, _micropub.postRepost)(_this2.selectedUrl);
+              return (0, _micropub.postLike)(_this2.selectedUrl);
 
             case 8:
               location = _context2.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this2._flashSuccessMessage('Item reposted successfully', location);
+                _this2._flashSuccessMessage('Item liked successfully', location);
                 _this2.isSending = false;
               });
               _context2.next = 15;
@@ -22002,7 +22010,7 @@ var Store = (_class = function () {
               _context2.t0 = _context2['catch'](4);
 
               (0, _mobx.runInAction)(function () {
-                _this2._flashErrorMessage('Error reposting', _context2.t0);
+                _this2._flashErrorMessage('Error sending like', _context2.t0);
                 _this2.isSending = false;
               });
 
@@ -22012,6 +22020,60 @@ var Store = (_class = function () {
           }
         }
       }, _callee2, _this2, [[4, 12]]);
+    }));
+  }
+}), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'sendRepost', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this3 = this;
+
+    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+      var location;
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              if (_this3.selectedUrl) {
+                _context3.next = 3;
+                break;
+              }
+
+              (0, _log.warning)('Cannot send repost; no current URL found');
+              return _context3.abrupt('return');
+
+            case 3:
+              _this3.isSending = true;
+              _context3.prev = 4;
+
+              (0, _log.info)('Sending repost...', _this3.selectedUrl);
+              _context3.next = 8;
+              return (0, _micropub.postRepost)(_this3.selectedUrl);
+
+            case 8:
+              location = _context3.sent;
+
+              (0, _mobx.runInAction)(function () {
+                _this3._flashSuccessMessage('Item reposted successfully', location);
+                _this3.isSending = false;
+              });
+              _context3.next = 15;
+              break;
+
+            case 12:
+              _context3.prev = 12;
+              _context3.t0 = _context3['catch'](4);
+
+              (0, _mobx.runInAction)(function () {
+                _this3._flashErrorMessage('Error reposting', _context3.t0);
+                _this3.isSending = false;
+              });
+
+            case 15:
+            case 'end':
+              return _context3.stop();
+          }
+        }
+      }, _callee3, _this3, [[4, 12]]);
     }));
   }
 })), _class);
@@ -22035,14 +22097,13 @@ Object.defineProperty(exports, "__esModule", {
 exports.getDraft = getDraft;
 exports.saveDraft = saveDraft;
 exports.deleteDraft = deleteDraft;
-var KEYS = ['h', 'content', 'category', 'mp-slug', 'mp-syndicate-to'];
+var KEYS = ['content', 'category', 'slug', 'syndicateTo'];
 
 var EMPTY_DRAFT = {
-  h: 'entry',
   content: '',
   category: [],
-  'mp-slug': '',
-  'mp-syndicate-to': []
+  slug: '',
+  syndicateTo: []
 };
 
 function getDraft() {
@@ -22064,11 +22125,10 @@ function saveDraft(draft) {
 function deleteDraft() {
   var draft = getDraft();
   saveDraft({
-    h: 'entry',
     content: '',
     category: [],
-    'mp-slug': '',
-    'mp-syndicate-to': draft['mp-syndicate-to']
+    slug: '',
+    syndicateTo: draft.syndicateTo
   });
 }
 
@@ -22180,6 +22240,7 @@ function logsEnabled() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.postNote = postNote;
 exports.postLike = postLike;
 exports.postRepost = postRepost;
 
@@ -22188,6 +22249,8 @@ var _micropubHelper = __webpack_require__(/*! micropub-helper */ "./node_modules
 var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var micropub = new _micropubHelper2.default({
   clientId: 'https://omnibear.com',
@@ -22201,6 +22264,16 @@ var micropub = new _micropubHelper2.default({
   scope: 'create delete update'
 });
 exports.default = micropub;
+function postNote(entry, aliases) {
+  var _micropub$create;
+
+  return micropub.create((_micropub$create = {
+    h: 'entry',
+    content: entry.content,
+    category: entry.category
+  }, _defineProperty(_micropub$create, aliases.slug, entry.slug), _defineProperty(_micropub$create, aliases.syndicateTo, entry.syndicateTo), _micropub$create), 'form');
+}
+
 function postLike(url) {
   var entry = {
     h: 'entry',

@@ -1,5 +1,6 @@
 import {observable, computed, action, runInAction} from 'mobx';
 import authStore from './authStore';
+import draftStore from './draftStore';
 import settingsStore from './settingsStore';
 import {
   NOTE,
@@ -11,7 +12,7 @@ import {
   MESSAGE_SUCCESS,
   MESSAGE_ERROR,
 } from '../constants';
-import {postLike, postRepost} from '../util/micropub';
+import {postNote, postLike, postRepost} from '../util/micropub';
 import {getParamFromUrl} from '../util/url';
 import {info, warning, error} from '../util/log';
 
@@ -25,6 +26,7 @@ class Store {
 
   constructor() {
     this.auth = authStore;
+    this.draft = draftStore;
     this.settings = settingsStore;
     this.viewType = this._determineInitialView();
     this.isSending = false;
@@ -48,6 +50,15 @@ class Store {
     this.auth.clearCredentials();
     this.viewType = LOGIN;
   }
+
+  @action
+  sendNote = async () => {
+    this.isSending = true;
+    try {
+      info('Sending note...');
+      const location = await postNote(this.draft, this.settings.aliases);
+    } catch (err) {}
+  };
 
   @action
   sendLike = async () => {

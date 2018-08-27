@@ -1983,6 +1983,7 @@ function logsEnabled() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.postNote = postNote;
 exports.postLike = postLike;
 exports.postRepost = postRepost;
 
@@ -1991,6 +1992,8 @@ var _micropubHelper = __webpack_require__(/*! micropub-helper */ "./node_modules
 var _micropubHelper2 = _interopRequireDefault(_micropubHelper);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var micropub = new _micropubHelper2.default({
   clientId: 'https://omnibear.com',
@@ -2004,6 +2007,16 @@ var micropub = new _micropubHelper2.default({
   scope: 'create delete update'
 });
 exports.default = micropub;
+function postNote(entry, aliases) {
+  var _micropub$create;
+
+  return micropub.create((_micropub$create = {
+    h: 'entry',
+    content: entry.content,
+    category: entry.category
+  }, _defineProperty(_micropub$create, aliases.slug, entry.slug), _defineProperty(_micropub$create, aliases.syndicateTo, entry.syndicateTo), _micropub$create), 'form');
+}
+
 function postLike(url) {
   var entry = {
     h: 'entry',

@@ -1,11 +1,10 @@
-const KEYS = ['h', 'content', 'category', 'mp-slug', 'mp-syndicate-to'];
+const KEYS = ['content', 'category', 'slug', 'syndicateTo'];
 
 const EMPTY_DRAFT = {
-  h: 'entry',
   content: '',
   category: [],
-  'mp-slug': '',
-  'mp-syndicate-to': [],
+  slug: '',
+  syndicateTo: [],
 };
 
 export function getDraft() {
@@ -27,10 +26,9 @@ export function saveDraft(draft) {
 export function deleteDraft() {
   const draft = getDraft();
   saveDraft({
-    h: 'entry',
     content: '',
     category: [],
-    'mp-slug': '',
-    'mp-syndicate-to': draft['mp-syndicate-to'],
+    slug: '',
+    syndicateTo: draft.syndicateTo,
   });
 }

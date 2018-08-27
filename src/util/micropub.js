@@ -13,6 +13,19 @@ const micropub = new Micropub({
 });
 export default micropub;
 
+export function postNote(entry, aliases) {
+  return micropub.create(
+    {
+      h: 'entry',
+      content: entry.content,
+      category: entry.category,
+      [aliases.slug]: entry.slug,
+      [aliases.syndicateTo]: entry.syndicateTo,
+    },
+    'form'
+  );
+}
+
 export function postLike(url) {
   const entry = {
     h: 'entry',
