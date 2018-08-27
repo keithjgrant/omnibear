@@ -10,7 +10,7 @@ onReacji
 isDisabled,
 */
 
-export default class QuickActions extends Component {
+export default class QuickReplies extends Component {
   render() {
     const reacji = this.getReacjiList();
     if (!reacji || !reacji.length) {

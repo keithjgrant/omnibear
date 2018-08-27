@@ -79,6 +79,17 @@ class SettingsStore {
     this.save();
   };
 
+  getSyndicateOptions() {
+    const options = localStorage.getItem('syndicateTo');
+    if (options && options !== 'undefined') {
+      return JSON.parse(options);
+    } else {
+      // Fix bad data from omnibear v1.0.0 bug that saved 'undefined' to localStorage
+      localStorage.setItem('syndicateTo', '[]');
+      return [];
+    }
+  }
+
   @computed
   get aliases() {
     return {

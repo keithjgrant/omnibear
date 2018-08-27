@@ -37,12 +37,7 @@ export default class App extends Component {
         </nav>
         <Header />
         <MainPane />
-        <Footer
-          domain={userDomain}
-          onSettings={this.handleSettings}
-          onLogs={this.state.settings.debugLog ? this.props.handleLogs : null}
-          onLogout={this.handleLogout}
-        />
+        <Footer />
       </div>
     );
   }

@@ -5,6 +5,7 @@ import settingsStore from './settingsStore';
 import {
   NOTE,
   REPLY,
+  BOOKMARK,
   SETTINGS,
   LOGS,
   LOGIN,
@@ -12,7 +13,13 @@ import {
   MESSAGE_SUCCESS,
   MESSAGE_ERROR,
 } from '../constants';
-import {postNote, postLike, postRepost} from '../util/micropub';
+import {
+  postNote,
+  postReply,
+  postBookmark,
+  postLike,
+  postRepost,
+} from '../util/micropub';
 import {getParamFromUrl} from '../util/url';
 import {info, warning, error} from '../util/log';
 
@@ -51,13 +58,85 @@ class Store {
     this.viewType = LOGIN;
   }
 
+  send() {
+    switch (this.viewType) {
+      case NOTE:
+        this.sendNote();
+        break;
+      case REPLY:
+        this.sendReply();
+        break;
+      case BOOKMARK:
+        this.sendBookmark();
+        break;
+    }
+  }
+
   @action
   sendNote = async () => {
     this.isSending = true;
     try {
-      info('Sending note...');
+      info(`Sending note...`);
       const location = await postNote(this.draft, this.settings.aliases);
-    } catch (err) {}
+      runInAction(() => {
+        this.draft.clear();
+        this._flashSuccessMessage('Note sucessfully sent', location);
+        this.isSending = false;
+      });
+    } catch (err) {
+      this._flashErrorMessage('Error sending note', err);
+      this.isSending = false;
+    }
+  };
+
+  @action
+  sendReply = async () => {
+    if (!this.selectedUrl) {
+      warning('Cannot send reply; no current URL found');
+      return;
+    }
+    this.isSending = true;
+    try {
+      info(`Sending reply...`);
+      const location = await postReply(
+        this.draft,
+        this.selectedUrl,
+        this.settings.aliases
+      );
+      runInAction(() => {
+        this.draft.clear();
+        this._flashSuccessMessage('Reply sucessfully sent', location);
+        this.isSending = false;
+      });
+    } catch (err) {
+      this._flashErrorMessage('Error sending reply', err);
+      this.isSending = false;
+    }
+  };
+
+  @action
+  sendBookmark = async () => {
+    if (!this.selectedUrl) {
+      warning('Cannot send bookmark; no current URL found');
+      return;
+    }
+    this.isSending = true;
+    try {
+      info(`Sending bookmark...`);
+      const location = await postBookmark(
+        this.draft,
+        this.selectedUrl,
+        this.settings.aliases
+      );
+      runInAction(() => {
+        this.draft.clear();
+        this._flashSuccessMessage('Bookmark sucessfully sent', location);
+        this.isSending = false;
+      });
+    } catch (err) {
+      this._flashErrorMessage('Error sending bookmark', err);
+      this.isSending = false;
+    }
   };
 
   @action

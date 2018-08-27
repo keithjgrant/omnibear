@@ -56,7 +56,14 @@ class DraftStore {
     this.save();
   };
 
-  // TODO: clearDraft? or call util/draft.deleteDraft directly from component?
+  @action
+  clear() {
+    this.content = '';
+    this.tags = '';
+    this.slug = '';
+    this._isSlugModified = false;
+    this.save();
+  }
 
   save() {
     saveDraft({

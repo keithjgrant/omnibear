@@ -17950,12 +17950,7 @@ var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreac
         ),
         (0, _preact.h)(_Header2.default, null),
         (0, _preact.h)(_MainPane2.default, null),
-        (0, _preact.h)(_Footer2.default, {
-          domain: userDomain,
-          onSettings: this.handleSettings,
-          onLogs: this.state.settings.debugLog ? this.props.handleLogs : null,
-          onLogout: this.handleLogout
-        })
+        (0, _preact.h)(_Footer2.default, null)
       );
     }
   }, {
@@ -18107,7 +18102,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Footer = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = function (_Component) {
+var Footer = (_dec = (0, _mobxPreact.inject)('store', 'auth'), _dec(_class = function (_Component) {
   _inherits(Footer, _Component);
 
   function Footer() {
@@ -18119,39 +18114,36 @@ var Footer = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = function (_
   _createClass(Footer, [{
     key: 'render',
     value: function render() {
-      var store = this.props.store;
+      var _props = this.props,
+          store = _props.store,
+          auth = _props.auth;
 
       return (0, _preact.h)(
         'footer',
         { className: 'l-main__footer footer' },
-        this.props.domain ? (0, _preact.h)(
+        auth.isLoggedIn() ? [(0, _preact.h)(
           'div',
-          { className: 'footer__message' },
+          { key: 'message', className: 'footer__message' },
           'Authenticated to ',
           (0, _preact.h)(
             'strong',
             null,
-            this.props.domain
+            auth.domain
           )
-        ) : (0, _preact.h)(
-          'div',
-          { className: 'footer__message' },
-          'Not authenticated'
-        ),
-        this.props.onLogs ? (0, _preact.h)(
+        ), (0, _preact.h)(
           'button',
           {
+            key: 'logout',
             className: 'button-link',
             type: 'button',
-            onClick: this.props.onLogs
+            onClick: store.logout
           },
-          'Logs'
-        ) : null,
-        this.props.onLogout ? (0, _preact.h)(
-          'button',
-          { className: 'button-link', type: 'button', onClick: store.logout },
           'Logout'
-        ) : null
+        )] : (0, _preact.h)(
+          'div',
+          { key: 'message', className: 'footer__message' },
+          'Not authenticated'
+        )
       );
     }
   }]);
@@ -18712,207 +18704,6 @@ exports.default = Tab;
 
 /***/ }),
 
-/***/ "./src/components/form/FormInputs.js":
-/*!*******************************************!*\
-  !*** ./src/components/form/FormInputs.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _dec, _class;
-
-var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
-
-var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
-
-var _QuickReplies = __webpack_require__(/*! ./QuickReplies */ "./src/components/form/QuickReplies.js");
-
-var _QuickReplies2 = _interopRequireDefault(_QuickReplies);
-
-var _SyndicateInputs = __webpack_require__(/*! ./SyndicateInputs */ "./src/components/form/SyndicateInputs.js");
-
-var _SyndicateInputs2 = _interopRequireDefault(_SyndicateInputs);
-
-var _utils = __webpack_require__(/*! ../../util/utils */ "./src/util/utils.js");
-
-var _constants = __webpack_require__(/*! ../../constants */ "./src/constants.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/*
-Props:
-postType,
-entry,
-syndicateOptions,
-isDisabled,
-isLoading,
-updateEntry: (entry) => void,
-onSubmit: (entry) => void,
-*/
-
-var FormInputs = (_dec = (0, _mobxPreact.inject)('store', 'draft'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
-  _inherits(FormInputs, _Component);
-
-  function FormInputs(props) {
-    _classCallCheck(this, FormInputs);
-
-    var _this = _possibleConstructorReturn(this, (FormInputs.__proto__ || Object.getPrototypeOf(FormInputs)).call(this, props));
-
-    _this.focus = function () {
-      _this.content.focus();
-    };
-
-    _this.updateSlug = function (e) {
-      var slug = e.target.value.trim();
-      _this.props.draft.setSlug(slug);
-    };
-
-    _this.updateContent = function (e) {
-      var content = e.target.value;
-      _this.props.draft.setContent(content);
-    };
-
-    _this.updateTags = function (e) {
-      _this.props.draft.setTags(e.target.value);
-    };
-
-    _this.onSubmit = function (e) {
-      e.preventDefault();
-      _this.props.onSubmit(_this.props.entry);
-    };
-
-    _this.state = {
-      isSlugModified: false
-    };
-    return _this;
-  }
-
-  _createClass(FormInputs, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      setTimeout(this.focus, 150);
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.props.draft.save();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      var _props = this.props,
-          postType = _props.postType,
-          syndicateOptions = _props.syndicateOptions,
-          isDisabled = _props.isDisabled,
-          isLoading = _props.isLoading,
-          entry = _props.draft;
-
-      return (0, _preact.h)(
-        'form',
-        { onSubmit: this.onSubmit },
-        postType === _constants.REPLY ? (0, _preact.h)(_QuickReplies2.default, null) : null,
-        (0, _preact.h)(
-          'div',
-          null,
-          (0, _preact.h)(
-            'label',
-            { htmlFor: 'input-content' },
-            'Content'
-          ),
-          (0, _preact.h)('textarea', {
-            id: 'input-content',
-            value: entry.content,
-            onInput: this.updateContent,
-            onBlur: this.updateContent,
-            rows: '4',
-            disabled: isDisabled,
-            ref: function ref(el) {
-              _this2.content = el;
-            }
-          }),
-          (0, _preact.h)(
-            'div',
-            { className: 'input-extra' },
-            entry.content.length
-          )
-        ),
-        (0, _preact.h)(
-          'div',
-          null,
-          (0, _preact.h)(
-            'label',
-            { htmlFor: 'input-tags' },
-            'Tags (space separated)'
-          ),
-          (0, _preact.h)('input', {
-            id: 'input-tags',
-            type: 'text',
-            placeholder: 'e.g. web  personal',
-            value: entry.tags,
-            onChange: this.updateTags,
-            disabled: isDisabled
-          })
-        ),
-        (0, _preact.h)(
-          'div',
-          null,
-          (0, _preact.h)(
-            'label',
-            { htmlFor: 'input-slug' },
-            'Slug'
-          ),
-          (0, _preact.h)('input', {
-            id: 'input-slug',
-            type: 'text',
-            name: 'mp-slug',
-            value: entry.slug,
-            onInput: this.updateSlug,
-            disabled: isDisabled
-          })
-        ),
-        (0, _preact.h)(_SyndicateInputs2.default, {
-          options: syndicateOptions,
-          selected: entry.syndicateList,
-          onUpdate: entry.setSyndicateList,
-          isDisabled: isDisabled
-        }),
-        (0, _preact.h)(
-          'button',
-          {
-            type: 'submit',
-            disabled: isDisabled || !entry.content,
-            className: isLoading ? 'button is-loading' : 'button'
-          },
-          'Post'
-        )
-      );
-    }
-  }]);
-
-  return FormInputs;
-}(_preact.Component)) || _class) || _class);
-exports.default = FormInputs;
-
-/***/ }),
-
 /***/ "./src/components/form/LikeForm.js":
 /*!*****************************************!*\
   !*** ./src/components/form/LikeForm.js ***!
@@ -19018,31 +18809,15 @@ var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/prea
 
 var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
-var _QuickActions = __webpack_require__(/*! ./QuickActions */ "./src/components/form/QuickActions.js");
+var _QuickReplies = __webpack_require__(/*! ./QuickReplies */ "./src/components/form/QuickReplies.js");
 
-var _QuickActions2 = _interopRequireDefault(_QuickActions);
+var _QuickReplies2 = _interopRequireDefault(_QuickReplies);
 
-var _Message = __webpack_require__(/*! ../Message */ "./src/components/Message.js");
+var _SyndicateInputs = __webpack_require__(/*! ./SyndicateInputs */ "./src/components/form/SyndicateInputs.js");
 
-var _Message2 = _interopRequireDefault(_Message);
-
-var _FormInputs = __webpack_require__(/*! ./FormInputs */ "./src/components/form/FormInputs.js");
-
-var _FormInputs2 = _interopRequireDefault(_FormInputs);
-
-var _draft = __webpack_require__(/*! ../../util/draft */ "./src/util/draft.js");
-
-var _utils = __webpack_require__(/*! ../../util/utils */ "./src/util/utils.js");
-
-var _micropub = __webpack_require__(/*! ../../util/micropub */ "./src/util/micropub.js");
-
-var _micropub2 = _interopRequireDefault(_micropub);
+var _SyndicateInputs2 = _interopRequireDefault(_SyndicateInputs);
 
 var _constants = __webpack_require__(/*! ../../constants */ "./src/constants.js");
-
-var _settings = __webpack_require__(/*! ../../util/settings */ "./src/util/settings.js");
-
-var _log = __webpack_require__(/*! ../../util/log */ "./src/util/log.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19052,7 +18827,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
+var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft', 'settings'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(NoteForm, _Component);
 
   function NoteForm(props) {
@@ -19060,360 +18835,145 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft'), _dec(_class = 
 
     var _this = _possibleConstructorReturn(this, (NoteForm.__proto__ || Object.getPrototypeOf(NoteForm)).call(this, props));
 
-    _this.handleReacji = function (emoji) {
-      var url = _this.props.store.selectedUrl;
-      if (!url) {
-        (0, _log.warning)('Cannot send reacji; no current URL found');
-        return;
-      }
-      _this.postEntry({
-        h: 'entry',
-        content: emoji,
-        'in-reply-to': url
-      }).then(function (location) {
-        var type = _this.props.postType === _constants.REPLY ? 'Item' : 'Page';
-        _this.flashSuccessMessage(type + ' reacted to successfully', location);
-      }).catch(function (err) {
-        _this.flashErrorMessage('Error reacting', err);
-      });
+    _this.focus = function () {
+      _this.content.focus();
     };
 
-    _this.updateEntry = function (newEntry) {
-      _this.setState({ entry: newEntry });
+    _this.updateSlug = function (e) {
+      var slug = e.target.value.trim();
+      _this.props.draft.setSlug(slug);
     };
 
-    _this.handleSubmit = function (entry) {
-      if (_this.props.postType !== _constants.NOTE) {
-        entry['in-reply-to'] = _this.props.store.selectedUrl;
-      }
-      _this.postEntry(entry).then(function (location) {
-        var type = _this.props.postType === _constants.NOTE ? 'Note' : 'Reply';
-        (0, _draft.deleteDraft)();
-        _this.flashSuccessMessage(type + ' posted successfully', location);
-      }).catch(function (err) {
-        if (err.status >= 400 && err.status < 500) {
-          _this.flashErrorMessage('Error authenticating to micropub endpoint. Try logging out and back in.', err);
-        } else {
-          _this.flashErrorMessage('Error posting Note', err);
-        }
-      });
+    _this.updateContent = function (e) {
+      var content = e.target.value;
+      _this.props.draft.setContent(content);
     };
 
-    var selectedEntry = localStorage.getItem('selectedEntry');
-    var settings = (0, _settings.getSettings)();
-    var draft = (0, _draft.getDraft)();
+    _this.updateTags = function (e) {
+      _this.props.draft.setTags(e.target.value);
+    };
+
+    _this.onSubmit = function (e) {
+      e.preventDefault();
+      _this.props.store.send();
+    };
+
     _this.state = {
-      postType: _this.getPostType(settings), // TODO: determine this in <App>
-      selectedEntry: localStorage.getItem('selectedEntry'),
-      userDomain: localStorage.getItem('domain'),
-      entry: draft,
-      hasSelectedEntry: !!selectedEntry,
-      isDisabled: false,
-      isLoading: false,
-      settings: settings,
-      syndicateOptions: (0, _settings.getSyndicateOptions)()
+      syndicateOptions: props.settings.getSyndicateOptions()
     };
     return _this;
   }
 
   _createClass(NoteForm, [{
-    key: 'getPostType',
-    value: function getPostType(settings) {
-      // TODO: support other post types?
-      // const selectedEntry = localStorage.getItem('selectedEntry');
-      if (location.search.indexOf('type=reply') === -1 && !settings.defaultToCurrentPage) {
-        return _constants.NOTE;
-      }
-      return _constants.REPLY;
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      setTimeout(this.focus, 150);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.props.draft.save();
     }
   }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
 
-      var _state = this.state,
-          isDisabled = _state.isDisabled,
-          isLoading = _state.isLoading,
-          settings = _state.settings,
-          userDomain = _state.userDomain,
-          entry = _state.entry,
-          syndicateOptions = _state.syndicateOptions,
-          hasSelectedEntry = _state.hasSelectedEntry,
-          errorMessage = _state.errorMessage,
-          activeUrl = _state.activeUrl;
       var _props = this.props,
-          handleSettings = _props.handleSettings,
-          handleLogout = _props.handleLogout,
-          postType = _props.postType;
+          store = _props.store,
+          draft = _props.draft;
+      var syndicateOptions = this.state.syndicateOptions;
 
+      var isLoading = store.isSending;
       return (0, _preact.h)(
         'div',
         { className: 'l-main__main' },
         (0, _preact.h)(
-          'div',
-          { className: 'container' },
-          (0, _preact.h)(_FormInputs2.default, {
-            postType: postType,
-            entry: entry,
-            settings: settings,
-            syndicateOptions: syndicateOptions,
-            updateEntry: this.updateEntry,
-            onSubmit: this.handleSubmit,
-            isDisabled: isDisabled,
-            isLoading: isLoading,
-            ref: function ref(el) {
-              return _this2.form = el;
-            }
+          'form',
+          { className: 'container', onSubmit: this.onSubmit },
+          store.viewType === _constants.REPLY ? (0, _preact.h)(_QuickReplies2.default, null) : null,
+          (0, _preact.h)(
+            'div',
+            null,
+            (0, _preact.h)(
+              'label',
+              { htmlFor: 'input-content' },
+              'Content'
+            ),
+            (0, _preact.h)('textarea', {
+              id: 'input-content',
+              value: draft.content,
+              onInput: this.updateContent,
+              onBlur: this.updateContent,
+              rows: '4',
+              disabled: isLoading,
+              ref: function ref(el) {
+                _this2.content = el;
+              }
+            }),
+            (0, _preact.h)(
+              'div',
+              { className: 'input-extra' },
+              draft.content.length
+            )
+          ),
+          (0, _preact.h)(
+            'div',
+            null,
+            (0, _preact.h)(
+              'label',
+              { htmlFor: 'input-tags' },
+              'Tags (space separated)'
+            ),
+            (0, _preact.h)('input', {
+              id: 'input-tags',
+              type: 'text',
+              placeholder: 'e.g. web  personal',
+              value: draft.tags,
+              onChange: this.updateTags,
+              disabled: isLoading
+            })
+          ),
+          (0, _preact.h)(
+            'div',
+            null,
+            (0, _preact.h)(
+              'label',
+              { htmlFor: 'input-slug' },
+              'Slug'
+            ),
+            (0, _preact.h)('input', {
+              id: 'input-slug',
+              type: 'text',
+              name: 'mp-slug',
+              value: draft.slug,
+              onInput: this.updateSlug,
+              disabled: isLoading
+            })
+          ),
+          (0, _preact.h)(_SyndicateInputs2.default, {
+            options: syndicateOptions,
+            selected: draft.syndicateList,
+            onUpdate: draft.setSyndicateList,
+            isDisabled: isLoading
           }),
-          errorMessage ? (0, _preact.h)(
-            _Message2.default,
-            { type: _constants.MESSAGE_ERROR },
-            errorMessage
-          ) : null
+          (0, _preact.h)(
+            'button',
+            {
+              type: 'submit',
+              disabled: isLoading || !draft.content,
+              className: isLoading ? 'button is-loading' : 'button'
+            },
+            'Post'
+          )
         )
       );
-    }
-
-    // setUrl = url => {
-    //   this.setState({activeUrl: url});
-    // };
-
-    // handleLike = () => {
-    //   const url = this.props.store.selectedUrl;
-    //   if (!url) {
-    //     warning('Cannot send like; no current URL found');
-    //     return;
-    //   }
-    //   this.postEntry({
-    //     h: 'entry',
-    //     'like-of': url,
-    //   })
-    //     .then(location => {
-    //       const type = this.props.postType === REPLY ? 'Item' : 'Page';
-    //       this.flashSuccessMessage(`${type} liked successfully`, location);
-    //     })
-    //     .catch(err => {
-    //       this.flashErrorMessage('Error posting like', err);
-    //     });
-    // };
-
-    // handleRepost = () => {
-    //   const url = this.props.store.selectedUrl;
-    //   if (!url) {
-    //     warning('Cannot send repost; no current URL found');
-    //     return;
-    //   }
-    //   this.postEntry({
-    //     h: 'entry',
-    //     'repost-of': url,
-    //   })
-    //     .then(location => {
-    //       const type = this.props.postType === REPLY ? 'Item' : 'Page';
-    //       this.flashSuccessMessage(`${type} reposted successfully`, location);
-    //     })
-    //     .catch(err => {
-    //       this.flashErrorMessage('Error reposting', err);
-    //     });
-    // };
-
-  }, {
-    key: 'flashSuccessMessage',
-    value: function flashSuccessMessage(message, location) {
-      (0, _log.info)(message, location);
-      this.props.userFeedback(message, _constants.MESSAGE_SUCCESS, location);
-      if (this.state.settings.closeAfterPosting) {
-        setTimeout(function () {
-          window.close();
-        }, 3000);
-      }
-    }
-  }, {
-    key: 'flashErrorMessage',
-    value: function flashErrorMessage(message, err) {
-      var _this3 = this;
-
-      (0, _log.error)(message, err);
-      this.setState({
-        errorMessage: message,
-        isDisabled: false,
-        isLoading: false
-      });
-      setTimeout(function () {
-        if (_this3.state.errorMessage === message) {
-          _this3.setState({ errorMessage: false });
-        }
-      }, 4000);
-    }
-  }, {
-    key: 'postEntry',
-    value: function postEntry(entry) {
-      this.setState({
-        isDisabled: true,
-        isLoading: true
-      });
-      var aliasedEntry = (0, _utils.clone)(entry);
-      var slugName = this.state.settings.slug;
-      var syndicateName = this.state.settings.syndicateTo;
-      if (slugName && slugName !== 'mp-slug') {
-        aliasedEntry[slugName] = aliasedEntry['mp-slug'];
-        delete aliasedEntry['mp-slug'];
-      }
-      if (syndicateName && syndicateName !== 'mp-syndicate-to') {
-        aliasedEntry[syndicateName] = aliasedEntry['mp-syndicate-to'];
-        delete aliasedEntry['mp-syndicate-to'];
-      }
-      return _micropub2.default.create(aliasedEntry, 'form');
     }
   }]);
 
   return NoteForm;
 }(_preact.Component)) || _class) || _class);
 exports.default = NoteForm;
-
-/***/ }),
-
-/***/ "./src/components/form/QuickActions.js":
-/*!*********************************************!*\
-  !*** ./src/components/form/QuickActions.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
-
-var _constants = __webpack_require__(/*! ../../constants */ "./src/constants.js");
-
-var _HeartSvg = __webpack_require__(/*! ../svg/HeartSvg */ "./src/components/svg/HeartSvg.js");
-
-var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
-
-var _RepostSvg = __webpack_require__(/*! ../svg/RepostSvg */ "./src/components/svg/RepostSvg.js");
-
-var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var QuickActions = function (_Component) {
-  _inherits(QuickActions, _Component);
-
-  function QuickActions() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, QuickActions);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = QuickActions.__proto__ || Object.getPrototypeOf(QuickActions)).call.apply(_ref, [this].concat(args))), _this), _this.renderReacji = function (content, i) {
-      return (0, _preact.h)(
-        'li',
-        { key: content },
-        (0, _preact.h)(
-          'button',
-          {
-            onClick: function onClick() {
-              return _this.props.onReacji(content);
-            },
-            disabled: _this.props.isDisabled
-          },
-          content
-        )
-      );
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
-
-  _createClass(QuickActions, [{
-    key: 'render',
-    value: function render() {
-      if (this.props.postType === _constants.NEW_NOTE || !this.props.url) {
-        return null;
-      }
-      return (0, _preact.h)(
-        'div',
-        null,
-        (0, _preact.h)(
-          'div',
-          { className: 'info-banner' },
-          this.props.url
-        ),
-        (0, _preact.h)(
-          'div',
-          { className: 'container' },
-          (0, _preact.h)(
-            'h2',
-            { className: 'minor-heading' },
-            'Quick Actions'
-          ),
-          this.renderQuickActions()
-        )
-      );
-    }
-  }, {
-    key: 'renderQuickActions',
-    value: function renderQuickActions() {
-      var settings = this.props.settings;
-
-      var reacji = void 0;
-      if (settings && settings.reacji) {
-        reacji = settings.reacji;
-      } else {
-        reacji = _constants.DEFAULT_REACJI;
-      }
-
-      return (0, _preact.h)(
-        'ul',
-        { className: 'quick-actions' },
-        (0, _preact.h)(
-          'li',
-          null,
-          (0, _preact.h)(
-            'button',
-            {
-              onClick: this.props.onRepost,
-              disabled: this.props.isDisabled
-            },
-            (0, _preact.h)(_RepostSvg2.default, null),
-            ' repost'
-          )
-        ),
-        (0, _preact.h)(
-          'li',
-          null,
-          (0, _preact.h)(
-            'button',
-            { onClick: this.props.onLike, disabled: this.props.isDisabled },
-            (0, _preact.h)(_HeartSvg2.default, null),
-            ' like'
-          )
-        ),
-        reacji.map(this.renderReacji)
-      );
-    }
-  }]);
-
-  return QuickActions;
-}(_preact.Component);
-
-exports.default = QuickActions;
 
 /***/ }),
 
@@ -19461,21 +19021,21 @@ onReacji
 isDisabled,
 */
 
-var QuickActions = function (_Component) {
-  _inherits(QuickActions, _Component);
+var QuickReplies = function (_Component) {
+  _inherits(QuickReplies, _Component);
 
-  function QuickActions() {
+  function QuickReplies() {
     var _ref;
 
     var _temp, _this, _ret;
 
-    _classCallCheck(this, QuickActions);
+    _classCallCheck(this, QuickReplies);
 
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = QuickActions.__proto__ || Object.getPrototypeOf(QuickActions)).call.apply(_ref, [this].concat(args))), _this), _this.renderReacji = function (content, i) {
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = QuickReplies.__proto__ || Object.getPrototypeOf(QuickReplies)).call.apply(_ref, [this].concat(args))), _this), _this.renderReacji = function (content, i) {
       return (0, _preact.h)(
         'li',
         { key: content },
@@ -19493,7 +19053,7 @@ var QuickActions = function (_Component) {
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
-  _createClass(QuickActions, [{
+  _createClass(QuickReplies, [{
     key: 'render',
     value: function render() {
       var reacji = this.getReacjiList();
@@ -19527,10 +19087,10 @@ var QuickActions = function (_Component) {
     }
   }]);
 
-  return QuickActions;
+  return QuickReplies;
 }(_preact.Component);
 
-exports.default = QuickActions;
+exports.default = QuickReplies;
 
 /***/ }),
 
@@ -21391,11 +20951,16 @@ var DraftStore = (_class = function () {
       this.save();
     }
   }, {
+    key: 'clear',
+    value: function clear() {
+      this.content = '';
+      this.tags = '';
+      this.slug = '';
+      this._isSlugModified = false;
+      this.save();
+    }
+  }, {
     key: 'save',
-
-
-    // TODO: clearDraft? or call util/draft.deleteDraft directly from component?
-
     value: function save() {
       (0, _draft.saveDraft)({
         content: this.content,
@@ -21457,7 +21022,7 @@ var DraftStore = (_class = function () {
       _this2.save();
     };
   }
-})), _class);
+}), _applyDecoratedDescriptor(_class.prototype, 'clear', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'clear'), _class.prototype)), _class);
 exports.default = new DraftStore();
 
 /***/ }),
@@ -21597,6 +21162,18 @@ var SettingsStore = (_class = function () {
       this.reacji = settings.reacji || this.reacji;
       this.slugFieldName = settings.slug || this.slugFieldName;
       this.syndicateToFieldName = settings.syndicateTo || this.syndicateToFieldName;
+    }
+  }, {
+    key: 'getSyndicateOptions',
+    value: function getSyndicateOptions() {
+      var options = localStorage.getItem('syndicateTo');
+      if (options && options !== 'undefined') {
+        return JSON.parse(options);
+      } else {
+        // Fix bad data from omnibear v1.0.0 bug that saved 'undefined' to localStorage
+        localStorage.setItem('syndicateTo', '[]');
+        return [];
+      }
     }
   }, {
     key: 'aliases',
@@ -21752,7 +21329,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11;
 
 var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
 
@@ -21843,9 +21420,13 @@ var Store = (_class = function () {
 
     _initDefineProp(this, 'sendNote', _descriptor7, this);
 
-    _initDefineProp(this, 'sendLike', _descriptor8, this);
+    _initDefineProp(this, 'sendReply', _descriptor8, this);
 
-    _initDefineProp(this, 'sendRepost', _descriptor9, this);
+    _initDefineProp(this, 'sendBookmark', _descriptor9, this);
+
+    _initDefineProp(this, 'sendLike', _descriptor10, this);
+
+    _initDefineProp(this, 'sendRepost', _descriptor11, this);
 
     this.auth = _authStore2.default;
     this.draft = _draftStore2.default;
@@ -21872,6 +21453,21 @@ var Store = (_class = function () {
     value: function logout() {
       this.auth.clearCredentials();
       this.viewType = _constants.LOGIN;
+    }
+  }, {
+    key: 'send',
+    value: function send() {
+      switch (this.viewType) {
+        case _constants.NOTE:
+          this.sendNote();
+          break;
+        case _constants.REPLY:
+          this.sendReply();
+          break;
+        case _constants.BOOKMARK:
+          this.sendBookmark();
+          break;
+      }
     }
   }, {
     key: '_flashSuccessMessage',
@@ -21953,22 +21549,31 @@ var Store = (_class = function () {
 
             case 5:
               location = _context.sent;
-              _context.next = 10;
+
+              (0, _mobx.runInAction)(function () {
+                _this.draft.clear();
+                _this._flashSuccessMessage('Note sucessfully sent', location);
+                _this.isSending = false;
+              });
+              _context.next = 13;
               break;
 
-            case 8:
-              _context.prev = 8;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context['catch'](1);
 
-            case 10:
+              _this._flashErrorMessage('Error sending note', _context.t0);
+              _this.isSending = false;
+
+            case 13:
             case 'end':
               return _context.stop();
           }
         }
-      }, _callee, _this, [[1, 8]]);
+      }, _callee, _this, [[1, 9]]);
     }));
   }
-}), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'sendLike', [_mobx.action], {
+}), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'sendReply', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this2 = this;
@@ -21984,37 +21589,36 @@ var Store = (_class = function () {
                 break;
               }
 
-              (0, _log.warning)('Cannot send like; no current URL found');
+              (0, _log.warning)('Cannot send reply; no current URL found');
               return _context2.abrupt('return');
 
             case 3:
               _this2.isSending = true;
               _context2.prev = 4;
 
-              (0, _log.info)('Sending like...', _this2.selectedUrl);
+              (0, _log.info)('Sending reply...');
               _context2.next = 8;
-              return (0, _micropub.postLike)(_this2.selectedUrl);
+              return (0, _micropub.postReply)(_this2.draft, _this2.selectedUrl, _this2.settings.aliases);
 
             case 8:
               location = _context2.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this2._flashSuccessMessage('Item liked successfully', location);
+                _this2.draft.clear();
+                _this2._flashSuccessMessage('Reply sucessfully sent', location);
                 _this2.isSending = false;
               });
-              _context2.next = 15;
+              _context2.next = 16;
               break;
 
             case 12:
               _context2.prev = 12;
               _context2.t0 = _context2['catch'](4);
 
-              (0, _mobx.runInAction)(function () {
-                _this2._flashErrorMessage('Error sending like', _context2.t0);
-                _this2.isSending = false;
-              });
+              _this2._flashErrorMessage('Error sending reply', _context2.t0);
+              _this2.isSending = false;
 
-            case 15:
+            case 16:
             case 'end':
               return _context2.stop();
           }
@@ -22022,7 +21626,7 @@ var Store = (_class = function () {
       }, _callee2, _this2, [[4, 12]]);
     }));
   }
-}), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'sendRepost', [_mobx.action], {
+}), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'sendBookmark', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this3 = this;
@@ -22038,42 +21642,149 @@ var Store = (_class = function () {
                 break;
               }
 
-              (0, _log.warning)('Cannot send repost; no current URL found');
+              (0, _log.warning)('Cannot send bookmark; no current URL found');
               return _context3.abrupt('return');
 
             case 3:
               _this3.isSending = true;
               _context3.prev = 4;
 
-              (0, _log.info)('Sending repost...', _this3.selectedUrl);
+              (0, _log.info)('Sending bookmark...');
               _context3.next = 8;
-              return (0, _micropub.postRepost)(_this3.selectedUrl);
+              return (0, _micropub.postBookmark)(_this3.draft, _this3.selectedUrl, _this3.settings.aliases);
 
             case 8:
               location = _context3.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this3._flashSuccessMessage('Item reposted successfully', location);
+                _this3.draft.clear();
+                _this3._flashSuccessMessage('Bookmark sucessfully sent', location);
                 _this3.isSending = false;
               });
-              _context3.next = 15;
+              _context3.next = 16;
               break;
 
             case 12:
               _context3.prev = 12;
               _context3.t0 = _context3['catch'](4);
 
-              (0, _mobx.runInAction)(function () {
-                _this3._flashErrorMessage('Error reposting', _context3.t0);
-                _this3.isSending = false;
-              });
+              _this3._flashErrorMessage('Error sending bookmark', _context3.t0);
+              _this3.isSending = false;
 
-            case 15:
+            case 16:
             case 'end':
               return _context3.stop();
           }
         }
       }, _callee3, _this3, [[4, 12]]);
+    }));
+  }
+}), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'sendLike', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this4 = this;
+
+    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+      var location;
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              if (_this4.selectedUrl) {
+                _context4.next = 3;
+                break;
+              }
+
+              (0, _log.warning)('Cannot send like; no current URL found');
+              return _context4.abrupt('return');
+
+            case 3:
+              _this4.isSending = true;
+              _context4.prev = 4;
+
+              (0, _log.info)('Sending like...', _this4.selectedUrl);
+              _context4.next = 8;
+              return (0, _micropub.postLike)(_this4.selectedUrl);
+
+            case 8:
+              location = _context4.sent;
+
+              (0, _mobx.runInAction)(function () {
+                _this4._flashSuccessMessage('Item liked successfully', location);
+                _this4.isSending = false;
+              });
+              _context4.next = 15;
+              break;
+
+            case 12:
+              _context4.prev = 12;
+              _context4.t0 = _context4['catch'](4);
+
+              (0, _mobx.runInAction)(function () {
+                _this4._flashErrorMessage('Error sending like', _context4.t0);
+                _this4.isSending = false;
+              });
+
+            case 15:
+            case 'end':
+              return _context4.stop();
+          }
+        }
+      }, _callee4, _this4, [[4, 12]]);
+    }));
+  }
+}), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, 'sendRepost', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this5 = this;
+
+    return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+      var location;
+      return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              if (_this5.selectedUrl) {
+                _context5.next = 3;
+                break;
+              }
+
+              (0, _log.warning)('Cannot send repost; no current URL found');
+              return _context5.abrupt('return');
+
+            case 3:
+              _this5.isSending = true;
+              _context5.prev = 4;
+
+              (0, _log.info)('Sending repost...', _this5.selectedUrl);
+              _context5.next = 8;
+              return (0, _micropub.postRepost)(_this5.selectedUrl);
+
+            case 8:
+              location = _context5.sent;
+
+              (0, _mobx.runInAction)(function () {
+                _this5._flashSuccessMessage('Item reposted successfully', location);
+                _this5.isSending = false;
+              });
+              _context5.next = 15;
+              break;
+
+            case 12:
+              _context5.prev = 12;
+              _context5.t0 = _context5['catch'](4);
+
+              (0, _mobx.runInAction)(function () {
+                _this5._flashErrorMessage('Error reposting', _context5.t0);
+                _this5.isSending = false;
+              });
+
+            case 15:
+            case 'end':
+              return _context5.stop();
+          }
+        }
+      }, _callee5, _this5, [[4, 12]]);
     }));
   }
 })), _class);
@@ -22096,7 +21807,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getDraft = getDraft;
 exports.saveDraft = saveDraft;
-exports.deleteDraft = deleteDraft;
 var KEYS = ['content', 'category', 'slug', 'syndicateTo'];
 
 var EMPTY_DRAFT = {
@@ -22122,15 +21832,15 @@ function saveDraft(draft) {
   localStorage.setItem('draft', JSON.stringify(clean));
 }
 
-function deleteDraft() {
-  var draft = getDraft();
-  saveDraft({
-    content: '',
-    category: [],
-    slug: '',
-    syndicateTo: draft.syndicateTo
-  });
-}
+// export function deleteDraft() {
+//   const draft = getDraft();
+//   saveDraft({
+//     content: '',
+//     category: [],
+//     slug: '',
+//     syndicateTo: draft.syndicateTo,
+//   });
+// }
 
 /***/ }),
 
@@ -22241,6 +21951,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.postNote = postNote;
+exports.postReply = postReply;
+exports.postBookmark = postBookmark;
 exports.postLike = postLike;
 exports.postRepost = postRepost;
 
@@ -22270,8 +21982,30 @@ function postNote(entry, aliases) {
   return micropub.create((_micropub$create = {
     h: 'entry',
     content: entry.content,
-    category: entry.category
-  }, _defineProperty(_micropub$create, aliases.slug, entry.slug), _defineProperty(_micropub$create, aliases.syndicateTo, entry.syndicateTo), _micropub$create), 'form');
+    category: entry.tagsArray
+  }, _defineProperty(_micropub$create, aliases.slug, entry.slug), _defineProperty(_micropub$create, aliases.syndicateTo, entry.syndicateList), _micropub$create), 'form');
+}
+
+function postReply(entry, url, aliases) {
+  var _micropub$create2;
+
+  return micropub.create((_micropub$create2 = {
+    h: 'entry',
+    'in-reply-to': url,
+    content: entry.content,
+    category: entry.tagsArray
+  }, _defineProperty(_micropub$create2, aliases.slug, entry.slug), _defineProperty(_micropub$create2, aliases.syndicateTo, entry.syndicateList), _micropub$create2), 'form');
+}
+
+function postBookmark(entry, url, aliases) {
+  var _micropub$create3;
+
+  return micropub.create((_micropub$create3 = {
+    h: 'entry',
+    'bookmark-of': url,
+    content: entry.content,
+    category: entry.tagsArray
+  }, _defineProperty(_micropub$create3, aliases.slug, entry.slug), _defineProperty(_micropub$create3, aliases.syndicateTo, entry.syndicateList), _micropub$create3), 'form');
 }
 
 function postLike(url) {

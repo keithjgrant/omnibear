@@ -1984,6 +1984,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.postNote = postNote;
+exports.postReply = postReply;
+exports.postBookmark = postBookmark;
 exports.postLike = postLike;
 exports.postRepost = postRepost;
 
@@ -2013,8 +2015,30 @@ function postNote(entry, aliases) {
   return micropub.create((_micropub$create = {
     h: 'entry',
     content: entry.content,
-    category: entry.category
-  }, _defineProperty(_micropub$create, aliases.slug, entry.slug), _defineProperty(_micropub$create, aliases.syndicateTo, entry.syndicateTo), _micropub$create), 'form');
+    category: entry.tagsArray
+  }, _defineProperty(_micropub$create, aliases.slug, entry.slug), _defineProperty(_micropub$create, aliases.syndicateTo, entry.syndicateList), _micropub$create), 'form');
+}
+
+function postReply(entry, url, aliases) {
+  var _micropub$create2;
+
+  return micropub.create((_micropub$create2 = {
+    h: 'entry',
+    'in-reply-to': url,
+    content: entry.content,
+    category: entry.tagsArray
+  }, _defineProperty(_micropub$create2, aliases.slug, entry.slug), _defineProperty(_micropub$create2, aliases.syndicateTo, entry.syndicateList), _micropub$create2), 'form');
+}
+
+function postBookmark(entry, url, aliases) {
+  var _micropub$create3;
+
+  return micropub.create((_micropub$create3 = {
+    h: 'entry',
+    'bookmark-of': url,
+    content: entry.content,
+    category: entry.tagsArray
+  }, _defineProperty(_micropub$create3, aliases.slug, entry.slug), _defineProperty(_micropub$create3, aliases.syndicateTo, entry.syndicateList), _micropub$create3), 'form');
 }
 
 function postLike(url) {

@@ -23,12 +23,12 @@ export function saveDraft(draft) {
   localStorage.setItem('draft', JSON.stringify(clean));
 }
 
-export function deleteDraft() {
-  const draft = getDraft();
-  saveDraft({
-    content: '',
-    category: [],
-    slug: '',
-    syndicateTo: draft.syndicateTo,
-  });
-}
+// export function deleteDraft() {
+//   const draft = getDraft();
+//   saveDraft({
+//     content: '',
+//     category: [],
+//     slug: '',
+//     syndicateTo: draft.syndicateTo,
+//   });
+// }

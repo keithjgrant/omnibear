@@ -1,33 +1,31 @@
 import {h, Component} from 'preact';
 import {inject} from 'mobx-preact';
 
-@inject('store')
+@inject('store', 'auth')
 export default class Footer extends Component {
   render() {
-    const {store} = this.props;
+    const {store, auth} = this.props;
     return (
       <footer className="l-main__footer footer">
-        {this.props.domain ? (
-          <div className="footer__message">
-            Authenticated to <strong>{this.props.domain}</strong>
-          </div>
+        {auth.isLoggedIn() ? (
+          [
+            <div key="message" className="footer__message">
+              Authenticated to <strong>{auth.domain}</strong>
+            </div>,
+            <button
+              key="logout"
+              className="button-link"
+              type="button"
+              onClick={store.logout}
+            >
+              Logout
+            </button>,
+          ]
         ) : (
-          <div className="footer__message">Not authenticated</div>
+          <div key="message" className="footer__message">
+            Not authenticated
+          </div>
         )}
-        {this.props.onLogs ? (
-          <button
-            className="button-link"
-            type="button"
-            onClick={this.props.onLogs}
-          >
-            Logs
-          </button>
-        ) : null}
-        {this.props.onLogout ? (
-          <button className="button-link" type="button" onClick={store.logout}>
-            Logout
-          </button>
-        ) : null}
       </footer>
     );
   }

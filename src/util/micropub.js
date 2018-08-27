@@ -18,9 +18,37 @@ export function postNote(entry, aliases) {
     {
       h: 'entry',
       content: entry.content,
-      category: entry.category,
+      category: entry.tagsArray,
       [aliases.slug]: entry.slug,
-      [aliases.syndicateTo]: entry.syndicateTo,
+      [aliases.syndicateTo]: entry.syndicateList,
+    },
+    'form'
+  );
+}
+
+export function postReply(entry, url, aliases) {
+  return micropub.create(
+    {
+      h: 'entry',
+      'in-reply-to': url,
+      content: entry.content,
+      category: entry.tagsArray,
+      [aliases.slug]: entry.slug,
+      [aliases.syndicateTo]: entry.syndicateList,
+    },
+    'form'
+  );
+}
+
+export function postBookmark(entry, url, aliases) {
+  return micropub.create(
+    {
+      h: 'entry',
+      'bookmark-of': url,
+      content: entry.content,
+      category: entry.tagsArray,
+      [aliases.slug]: entry.slug,
+      [aliases.syndicateTo]: entry.syndicateList,
     },
     'form'
   );
