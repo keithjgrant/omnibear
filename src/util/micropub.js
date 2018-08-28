@@ -45,7 +45,7 @@ export function postBookmark(entry, url, aliases) {
     {
       h: 'entry',
       'bookmark-of': url,
-      title: entry.title,
+      name: entry.title,
       content: entry.content,
       category: entry.tagsArray,
       [aliases.slug]: entry.slug,

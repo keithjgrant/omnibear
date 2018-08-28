@@ -29,7 +29,6 @@ export default class NoteForm extends Component {
     return (
       <div className="l-main__main">
         <form className="container" onSubmit={this.onSubmit}>
-          {store.viewType === REPLY ? <QuickReplies /> : null}
           {store.includeTitle ? (
             <div>
               <label htmlFor="input-title">Title</label>
@@ -57,6 +56,7 @@ export default class NoteForm extends Component {
               }}
             />
             <div className="input-extra">{draft.content.length}</div>
+            {store.viewType === REPLY ? <QuickReplies /> : null}
           </div>
           <div>
             <label htmlFor="input-tags">Tags (space separated)</label>
@@ -108,7 +108,7 @@ export default class NoteForm extends Component {
   };
 
   updateSlug = e => {
-    const slug = e.target.value.trim();
+    const slug = e.target.value;
     this.props.draft.setSlug(slug);
   };
 

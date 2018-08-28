@@ -57,6 +57,7 @@ export default class ReacjiSettings extends Component {
       const before = reacji.slice(0, index);
       const after = reacji.slice(index + 1);
       settings.setReacji(before.concat(after));
+      settings.save();
     };
   }
 
@@ -65,6 +66,7 @@ export default class ReacjiSettings extends Component {
     const {settings} = this.props;
     if (value && settings.reacji.indexOf(value) === -1) {
       settings.addReacji(value);
+      settings.save();
       this.setState({value: ''});
     }
   };

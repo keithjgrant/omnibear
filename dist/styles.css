@@ -13,30 +13,14 @@
   --orange-light: hsl(32, 60%, 90%);
   --blue: hsl(198, 70%, 40%);
   --blue-light: hsl(198, 60%, 90%);
+  --blue-10: hsl(211, 40%, 10%);
+  --blue-20: hsl(211, 40%, 20%);
   --green: hsl(150, 45%, 35%);
   --green-light: hsl(150, 60%, 90%);
   --red: hsl(0, 50%, 45%);
   --red-light: hsl(0, 60%, 90%);
-  box-sizing: border-box;
-}
 
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: url(/fonts/lato-regular.woff2);
-}
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 700;
-  src: url(/fonts/lato-bold.woff2);
-}
-@font-face {
-  font-family: 'Jaldi';
-  font-style: normal;
-  font-weight: 600;
-  src: url(/fonts/jaldi-bold.woff2);
+  box-sizing: border-box;
 }
 
 *,
@@ -334,7 +318,7 @@ fieldset > * + * {
   padding: 0.3rem 1rem;
   overflow-y: hidden;
   border: 0;
-  color: #fff;
+  color: var(--blue-20);
   background-color: transparent;
   font-size: 0.8rem;
   text-align: left;
@@ -453,59 +437,30 @@ fieldset > * + * {
   margin-left: 1em;
 }
 
-.quick-actions {
+.quick-replies {
   display: flex;
   flex-wrap: wrap;
   margin: 0 -0.25em;
   padding: 0 0 0.5em;
-  border-bottom: 1px solid var(--gray-80);
-  justify-content: flex-end;
   list-style: none;
 }
-.quick-actions > li {
-  margin: 0 0.25em 0.5em;
-}
-.quick-actions button {
-  padding: 0 0.5em;
+.quick-replies > li > button {
+  padding: 0.3em 0.7em;
+  border: 0;
+  border-radius: 0;
   background: transparent;
-  border: 1px solid var(--yellow);
-  border-radius: 0.3em;
 }
-.quick-actions button:hover {
-  background-color: var(--yellow-light);
+.quick-replies > li + li > button {
+  border-left: 1px solid var(--gray-80);
 }
-.quick-actions button:active {
-  text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.3);
+.quick-replies button:hover,
+.quick-replies button:focus {
+  border-radius: 0.1em;
+  outline: none;
+  box-shadow: 0 0 0 5px hsla(41, 75%, 49%, 0.3);
 }
-.quick-actions button[disabled] {
+.quick-replies button[disabled] {
   color: var(--gray-60);
-}
-
-.reacji-actions {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-  display: flex;
-  justify-content: flex-end;
-  flex-grow: 1;
-}
-.reacji-actions button {
-  background: transparent;
-  border: none;
-  line-height: 1em;
-  width: 2em;
-  height: 2em;
-  border-radius: 1em;
-  text-align: center;
-  padding: 0.5em;
-  cursor: pointer;
-}
-.reacji-actions button:hover,
-.reacji-actions button:active {
-  background: var(--yellow);
-}
-.reacji-actions button[disabled] {
-  filter: grayscale(100%);
 }
 
 .fields-inline {
@@ -612,13 +567,14 @@ legend + .settings-form__description {
   display: inline-block;
   margin: 0 0.2em 0.2em;
   padding-left: 0.2em;
-  border: 1px solid var(--gray-60);
-  border-radius: 0.3em;
+  border: 1px solid var(--gray-90);
+  border-radius: 0;
 }
 .reacji-tag > button {
   margin-left: 0.2em;
   padding: 0.2em;
   border: 0;
+  border-radius: 0;
   color: var(--red);
   background-color: transparent;
 }

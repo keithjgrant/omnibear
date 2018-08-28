@@ -34,6 +34,7 @@ class DraftStore {
   @action
   setTitle(title) {
     this.title = title;
+    // TODO: make slug match Title for bookmarks?
   }
 
   @action
@@ -47,7 +48,7 @@ class DraftStore {
 
   @action
   setSlug(slug) {
-    this.slug = slug;
+    this.slug = slug.replace(/ /g, '-');
     this._isSlugModified = slug !== '';
     this.save();
   }

@@ -45,7 +45,7 @@ export default class AuthenticationFields extends Component {
                 />
               </div>,
               <div key="token">
-                <label htmlFor="token">Token</label>
+                <label htmlFor="token">OAuth Token</label>
                 <input
                   id="token"
                   type="text"

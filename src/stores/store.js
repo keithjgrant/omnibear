@@ -126,6 +126,12 @@ class Store {
   };
 
   @action
+  sendQuickReply = content => {
+    this.draft.content = content;
+    this.sendReply();
+  };
+
+  @action
   sendBookmark = async () => {
     if (!this.selectedEntry || !this.selectedEntry.url) {
       warning('Cannot send bookmark; no current URL found');

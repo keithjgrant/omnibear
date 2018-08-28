@@ -18845,7 +18845,7 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft', 'settings'), _d
     };
 
     _this.updateSlug = function (e) {
-      var slug = e.target.value.trim();
+      var slug = e.target.value;
       _this.props.draft.setSlug(slug);
     };
 
@@ -18896,7 +18896,6 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft', 'settings'), _d
         (0, _preact.h)(
           'form',
           { className: 'container', onSubmit: this.onSubmit },
-          store.viewType === _constants.REPLY ? (0, _preact.h)(_QuickReplies2.default, null) : null,
           store.includeTitle ? (0, _preact.h)(
             'div',
             null,
@@ -18937,7 +18936,8 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft', 'settings'), _d
               'div',
               { className: 'input-extra' },
               draft.content.length
-            )
+            ),
+            store.viewType === _constants.REPLY ? (0, _preact.h)(_QuickReplies2.default, null) : null
           ),
           (0, _preact.h)(
             'div',
@@ -19016,19 +19016,11 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _dec, _class;
+
 var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
 
-var _constants = __webpack_require__(/*! ../../constants */ "./src/constants.js");
-
-var _HeartSvg = __webpack_require__(/*! ../svg/HeartSvg */ "./src/components/svg/HeartSvg.js");
-
-var _HeartSvg2 = _interopRequireDefault(_HeartSvg);
-
-var _RepostSvg = __webpack_require__(/*! ../svg/RepostSvg */ "./src/components/svg/RepostSvg.js");
-
-var _RepostSvg2 = _interopRequireDefault(_RepostSvg);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -19036,14 +19028,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-/*
-Props:
-settings
-onReacji
-isDisabled,
-*/
-
-var QuickReplies = function (_Component) {
+var QuickReplies = (_dec = (0, _mobxPreact.inject)('store', 'settings'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(QuickReplies, _Component);
 
   function QuickReplies() {
@@ -19057,61 +19042,48 @@ var QuickReplies = function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = QuickReplies.__proto__ || Object.getPrototypeOf(QuickReplies)).call.apply(_ref, [this].concat(args))), _this), _this.renderReacji = function (content, i) {
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = QuickReplies.__proto__ || Object.getPrototypeOf(QuickReplies)).call.apply(_ref, [this].concat(args))), _this), _this.renderReacji = function (content) {
       return (0, _preact.h)(
         'li',
         { key: content },
         (0, _preact.h)(
           'button',
           {
+            type: 'button',
             onClick: function onClick() {
-              return _this.props.onReacji(content);
+              return _this.send(content);
             },
-            disabled: _this.props.isDisabled
+            disabled: _this.props.store.isSending
           },
           content
         )
       );
+    }, _this.send = function (content) {
+      var store = _this.props.store;
+
+      store.sendQuickReply(content);
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(QuickReplies, [{
     key: 'render',
     value: function render() {
-      var reacji = this.getReacjiList();
+      var settings = this.props.settings;
+
+      var reacji = settings.reacji;
       if (!reacji || !reacji.length) {
         return null;
       }
       return (0, _preact.h)(
-        'div',
-        null,
-        (0, _preact.h)(
-          'h2',
-          { className: 'minor-heading text-right' },
-          'Quick Replies'
-        ),
-        (0, _preact.h)(
-          'ul',
-          { className: 'quick-actions' },
-          reacji.map(this.renderReacji)
-        )
+        'ul',
+        { className: 'quick-replies' },
+        reacji.map(this.renderReacji)
       );
-    }
-  }, {
-    key: 'getReacjiList',
-    value: function getReacjiList() {
-      var settings = this.props.settings;
-
-      if (settings && settings.reacji) {
-        return settings.reacji;
-      }
-      return _constants.DEFAULT_REACJI;
     }
   }]);
 
   return QuickReplies;
-}(_preact.Component);
-
+}(_preact.Component)) || _class) || _class);
 exports.default = QuickReplies;
 
 /***/ }),
@@ -19951,7 +19923,7 @@ var AuthenticationFields = (_dec = (0, _mobxPreact.inject)('auth'), _dec(_class 
           (0, _preact.h)(
             'label',
             { htmlFor: 'token' },
-            'Token'
+            'OAuth Token'
           ),
           (0, _preact.h)('input', {
             id: 'token',
@@ -20194,6 +20166,7 @@ var ReacjiSettings = (_dec = (0, _mobxPreact.inject)('settings'), _dec(_class = 
 
       if (value && settings.reacji.indexOf(value) === -1) {
         settings.addReacji(value);
+        settings.save();
         _this.setState({ value: '' });
       }
     };
@@ -20252,6 +20225,7 @@ var ReacjiSettings = (_dec = (0, _mobxPreact.inject)('settings'), _dec(_class = 
         var before = reacji.slice(0, index);
         var after = reacji.slice(index + 1);
         settings.setReacji(before.concat(after));
+        settings.save();
       };
     }
   }]);
@@ -20398,125 +20372,6 @@ var SettingsForm = (_dec = (0, _mobxPreact.inject)('settings'), _dec(_class = (0
   return SettingsForm;
 }(_preact.Component)) || _class) || _class);
 exports.default = SettingsForm;
-
-/***/ }),
-
-/***/ "./src/components/svg/HeartSvg.js":
-/*!****************************************!*\
-  !*** ./src/components/svg/HeartSvg.js ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var HeartSVG = function (_Component) {
-  _inherits(HeartSVG, _Component);
-
-  function HeartSVG() {
-    _classCallCheck(this, HeartSVG);
-
-    return _possibleConstructorReturn(this, (HeartSVG.__proto__ || Object.getPrototypeOf(HeartSVG)).apply(this, arguments));
-  }
-
-  _createClass(HeartSVG, [{
-    key: "render",
-    value: function render() {
-      return (0, _preact.h)(
-        "svg",
-        { className: "svg-heart", viewBox: "-5 0 110 125" },
-        (0, _preact.h)(
-          "desc",
-          null,
-          "heart"
-        ),
-        (0, _preact.h)("path", {
-          d: "M49.99,96.266c4.246-2.908,50.016-34.809,50.016-63.154c0-17.711-10.822-29.378-26.424-29.378  c-14.357,0-22.389,13.18-23.582,15.29c-1.194-2.109-9.225-15.29-23.582-15.29c-15.603,0-26.425,11.667-26.425,29.378  c0,28.345,45.724,60.246,49.97,63.154H49.99z",
-          fill: "transparent",
-          stroke: "var(--red)",
-          "stroke-width": "10"
-        })
-      );
-    }
-  }]);
-
-  return HeartSVG;
-}(_preact.Component);
-
-exports.default = HeartSVG;
-
-/***/ }),
-
-/***/ "./src/components/svg/RepostSvg.js":
-/*!*****************************************!*\
-  !*** ./src/components/svg/RepostSvg.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var RepostSvg = function (_Component) {
-  _inherits(RepostSvg, _Component);
-
-  function RepostSvg() {
-    _classCallCheck(this, RepostSvg);
-
-    return _possibleConstructorReturn(this, (RepostSvg.__proto__ || Object.getPrototypeOf(RepostSvg)).apply(this, arguments));
-  }
-
-  _createClass(RepostSvg, [{
-    key: "render",
-    value: function render() {
-      return (0, _preact.h)(
-        "svg",
-        { className: "svg-repost", viewBox: "390 45 396 225" },
-        (0, _preact.h)("path", {
-          d: " M 570 220 L 490 220 L 490 160 L 520 160 C 530.71 160 540 151.53 540 140 C 540 132.5 536.09 127.66 530 120 L 490 71.88 C 483.90999999999997 64.69 478.13 60 470 60 C 461.87 60 456.09000000000003 64.69 450 71.88 L 410 120 C 403.91 127.66 400 132.5 400 140 C 400 151.53 409.29 160 420 160 L 450 160 L 450 240 C 450 251.04 458.96 260 470 260 L 570 260 C 581.04 260 590 251.04 590 240 C 590 228.96 581.04 220 570 220 Z  M 760 160 L 730 160 L 730 80 C 730 68.96 721.04 60 710 60 L 610 60 C 598.96 60 590 68.96 590 80 C 590 91.03999999999999 598.96 100 610 100 L 690 100 L 690 160 L 660 160 C 649.29 160 640 168.47000000000003 640 180 C 640 187.5 643.91 192.34000000000003 650 200 L 690 248.13 C 696.09 255.31 701.88 260 710 260 C 718.12 260 723.91 255.31 730 248.12 L 770 200 C 776.09 192.34000000000003 780 187.5 780 180 C 780 168.47000000000003 770.71 160 760 160 Z ",
-          fill: "transparent",
-          stroke: "var(--green)",
-          "stroke-width": "20"
-        })
-      );
-    }
-  }]);
-
-  return RepostSvg;
-}(_preact.Component);
-
-exports.default = RepostSvg;
 
 /***/ }),
 
@@ -20973,6 +20828,7 @@ var DraftStore = (_class = function () {
     key: 'setTitle',
     value: function setTitle(title) {
       this.title = title;
+      // TODO: make slug match Title for bookmarks?
     }
   }, {
     key: 'setContent',
@@ -20986,7 +20842,7 @@ var DraftStore = (_class = function () {
   }, {
     key: 'setSlug',
     value: function setSlug(slug) {
-      this.slug = slug;
+      this.slug = slug.replace(/ /g, '-');
       this._isSlugModified = slug !== '';
       this.save();
     }
@@ -21372,7 +21228,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12;
 
 var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
 
@@ -21465,11 +21321,13 @@ var Store = (_class = function () {
 
     _initDefineProp(this, 'sendReply', _descriptor8, this);
 
-    _initDefineProp(this, 'sendBookmark', _descriptor9, this);
+    _initDefineProp(this, 'sendQuickReply', _descriptor9, this);
 
-    _initDefineProp(this, 'sendLike', _descriptor10, this);
+    _initDefineProp(this, 'sendBookmark', _descriptor10, this);
 
-    _initDefineProp(this, 'sendRepost', _descriptor11, this);
+    _initDefineProp(this, 'sendLike', _descriptor11, this);
+
+    _initDefineProp(this, 'sendRepost', _descriptor12, this);
 
     this.auth = _authStore2.default;
     this.draft = _draftStore2.default;
@@ -21682,10 +21540,20 @@ var Store = (_class = function () {
       }, _callee2, _this2, [[4, 12]]);
     }));
   }
-}), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'sendBookmark', [_mobx.action], {
+}), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'sendQuickReply', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this3 = this;
+
+    return function (content) {
+      _this3.draft.content = content;
+      _this3.sendReply();
+    };
+  }
+}), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'sendBookmark', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this4 = this;
 
     return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
       var location;
@@ -21693,7 +21561,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              if (!(!_this3.selectedEntry || !_this3.selectedEntry.url)) {
+              if (!(!_this4.selectedEntry || !_this4.selectedEntry.url)) {
                 _context3.next = 3;
                 break;
               }
@@ -21702,20 +21570,20 @@ var Store = (_class = function () {
               return _context3.abrupt('return');
 
             case 3:
-              _this3.isSending = true;
+              _this4.isSending = true;
               _context3.prev = 4;
 
               (0, _log.info)('Sending bookmark...');
               _context3.next = 8;
-              return (0, _micropub.postBookmark)(_this3.draft, _this3.selectedEntry.url, _this3.settings.aliases);
+              return (0, _micropub.postBookmark)(_this4.draft, _this4.selectedEntry.url, _this4.settings.aliases);
 
             case 8:
               location = _context3.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this3.draft.clear();
-                _this3._flashSuccessMessage('Bookmark sucessfully sent', location);
-                _this3.isSending = false;
+                _this4.draft.clear();
+                _this4._flashSuccessMessage('Bookmark sucessfully sent', location);
+                _this4.isSending = false;
               });
               _context3.next = 16;
               break;
@@ -21724,21 +21592,21 @@ var Store = (_class = function () {
               _context3.prev = 12;
               _context3.t0 = _context3['catch'](4);
 
-              _this3._flashErrorMessage('Error sending bookmark', _context3.t0);
-              _this3.isSending = false;
+              _this4._flashErrorMessage('Error sending bookmark', _context3.t0);
+              _this4.isSending = false;
 
             case 16:
             case 'end':
               return _context3.stop();
           }
         }
-      }, _callee3, _this3, [[4, 12]]);
+      }, _callee3, _this4, [[4, 12]]);
     }));
   }
-}), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'sendLike', [_mobx.action], {
+}), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, 'sendLike', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
-    var _this4 = this;
+    var _this5 = this;
 
     return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
       var location;
@@ -21746,7 +21614,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              if (!(!_this4.selectedEntry || !_this4.selectedEntry.url)) {
+              if (!(!_this5.selectedEntry || !_this5.selectedEntry.url)) {
                 _context4.next = 3;
                 break;
               }
@@ -21755,19 +21623,19 @@ var Store = (_class = function () {
               return _context4.abrupt('return');
 
             case 3:
-              _this4.isSending = true;
+              _this5.isSending = true;
               _context4.prev = 4;
 
-              (0, _log.info)('Sending like...', _this4.selectedEntry);
+              (0, _log.info)('Sending like...', _this5.selectedEntry);
               _context4.next = 8;
-              return (0, _micropub.postLike)(_this4.selectedEntry.url);
+              return (0, _micropub.postLike)(_this5.selectedEntry.url);
 
             case 8:
               location = _context4.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this4._flashSuccessMessage('Item liked successfully', location);
-                _this4.isSending = false;
+                _this5._flashSuccessMessage('Item liked successfully', location);
+                _this5.isSending = false;
               });
               _context4.next = 15;
               break;
@@ -21777,8 +21645,8 @@ var Store = (_class = function () {
               _context4.t0 = _context4['catch'](4);
 
               (0, _mobx.runInAction)(function () {
-                _this4._flashErrorMessage('Error sending like', _context4.t0);
-                _this4.isSending = false;
+                _this5._flashErrorMessage('Error sending like', _context4.t0);
+                _this5.isSending = false;
               });
 
             case 15:
@@ -21786,13 +21654,13 @@ var Store = (_class = function () {
               return _context4.stop();
           }
         }
-      }, _callee4, _this4, [[4, 12]]);
+      }, _callee4, _this5, [[4, 12]]);
     }));
   }
-}), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, 'sendRepost', [_mobx.action], {
+}), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, 'sendRepost', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
-    var _this5 = this;
+    var _this6 = this;
 
     return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
       var location;
@@ -21800,7 +21668,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              if (!(!_this5.selectedEntry || !_this5.selectedEntry.url)) {
+              if (!(!_this6.selectedEntry || !_this6.selectedEntry.url)) {
                 _context5.next = 3;
                 break;
               }
@@ -21809,19 +21677,19 @@ var Store = (_class = function () {
               return _context5.abrupt('return');
 
             case 3:
-              _this5.isSending = true;
+              _this6.isSending = true;
               _context5.prev = 4;
 
-              (0, _log.info)('Sending repost...', _this5.selectedEntry);
+              (0, _log.info)('Sending repost...', _this6.selectedEntry);
               _context5.next = 8;
-              return (0, _micropub.postRepost)(_this5.selectedEntry.url);
+              return (0, _micropub.postRepost)(_this6.selectedEntry.url);
 
             case 8:
               location = _context5.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this5._flashSuccessMessage('Item reposted successfully', location);
-                _this5.isSending = false;
+                _this6._flashSuccessMessage('Item reposted successfully', location);
+                _this6.isSending = false;
               });
               _context5.next = 15;
               break;
@@ -21831,8 +21699,8 @@ var Store = (_class = function () {
               _context5.t0 = _context5['catch'](4);
 
               (0, _mobx.runInAction)(function () {
-                _this5._flashErrorMessage('Error reposting', _context5.t0);
-                _this5.isSending = false;
+                _this6._flashErrorMessage('Error reposting', _context5.t0);
+                _this6.isSending = false;
               });
 
             case 15:
@@ -21840,7 +21708,7 @@ var Store = (_class = function () {
               return _context5.stop();
           }
         }
-      }, _callee5, _this5, [[4, 12]]);
+      }, _callee5, _this6, [[4, 12]]);
     }));
   }
 })), _class);
@@ -22059,7 +21927,7 @@ function postBookmark(entry, url, aliases) {
   return micropub.create((_micropub$create3 = {
     h: 'entry',
     'bookmark-of': url,
-    title: entry.title,
+    name: entry.title,
     content: entry.content,
     category: entry.tagsArray
   }, _defineProperty(_micropub$create3, aliases.slug, entry.slug), _defineProperty(_micropub$create3, aliases.syndicateTo, entry.syndicateList), _micropub$create3), 'form');

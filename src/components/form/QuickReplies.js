@@ -1,35 +1,25 @@
 import {h, Component} from 'preact';
-import {DEFAULT_REACJI} from '../../constants';
-import HeartSvg from '../svg/HeartSvg';
-import RepostSvg from '../svg/RepostSvg';
+import {inject, observer} from 'mobx-preact';
 
-/*
-Props:
-settings
-onReacji
-isDisabled,
-*/
-
+@inject('store', 'settings')
+@observer
 export default class QuickReplies extends Component {
   render() {
-    const reacji = this.getReacjiList();
+    const {settings} = this.props;
+    const reacji = settings.reacji;
     if (!reacji || !reacji.length) {
       return null;
     }
-    return (
-      <div>
-        <h2 className="minor-heading text-right">Quick Replies</h2>
-        <ul className="quick-actions">{reacji.map(this.renderReacji)}</ul>
-      </div>
-    );
+    return <ul className="quick-replies">{reacji.map(this.renderReacji)}</ul>;
   }
 
-  renderReacji = (content, i) => {
+  renderReacji = content => {
     return (
       <li key={content}>
         <button
-          onClick={() => this.props.onReacji(content)}
-          disabled={this.props.isDisabled}
+          type="button"
+          onClick={() => this.send(content)}
+          disabled={this.props.store.isSending}
         >
           {content}
         </button>
@@ -37,11 +27,8 @@ export default class QuickReplies extends Component {
     );
   };
 
-  getReacjiList() {
-    const {settings} = this.props;
-    if (settings && settings.reacji) {
-      return settings.reacji;
-    }
-    return DEFAULT_REACJI;
-  }
+  send = content => {
+    const {store} = this.props;
+    store.sendQuickReply(content);
+  };
 }
