@@ -2036,6 +2036,7 @@ function postBookmark(entry, url, aliases) {
   return micropub.create((_micropub$create3 = {
     h: 'entry',
     'bookmark-of': url,
+    title: entry.title,
     content: entry.content,
     category: entry.tagsArray
   }, _defineProperty(_micropub$create3, aliases.slug, entry.slug), _defineProperty(_micropub$create3, aliases.syndicateTo, entry.syndicateList), _micropub$create3), 'form');

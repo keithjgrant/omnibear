@@ -93,7 +93,6 @@ export default class UrlSelector extends Component {
   }
 
   toggle = () => {
-    this.refreshUrls();
     this.setState({isOpen: !this.state.isOpen});
   };
 
@@ -129,7 +128,7 @@ export default class UrlSelector extends Component {
       }
       this.setState({options});
       if (!store.selectedUrl) {
-        store.setSelectedUrl(url);
+        store.setSelectedUrl(selectedEntry || url);
       }
     });
   }

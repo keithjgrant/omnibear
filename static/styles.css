@@ -92,7 +92,7 @@ textarea {
 label,
 .checkbox {
   display: block;
-  color: var(--gray-50);
+  color: var(--gray-40);
   font-family: Noto Serif, serif;
   font-weight: 700;
   font-size: 0.8rem;

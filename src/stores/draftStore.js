@@ -4,6 +4,7 @@ import {getDraft, saveDraft} from '../util/draft';
 import {generateSlug} from '../util/utils';
 
 class DraftStore {
+  @observable title;
   @observable content;
   @observable tags;
   @observable slug;
@@ -13,7 +14,9 @@ class DraftStore {
     const savedDraft = getDraft();
     this.content = savedDraft.content;
     this.tags = savedDraft.category.join(' ');
+    // backwards support to <= v1.1.0 'mp-slug'
     this.slug = savedDraft.slug || savedDraft['mp-slug'];
+    // backwards support to <= v1.1.0 'mp-syndicate to'
     this.syndicateList =
       savedDraft.syndicateTo || savedDraft['mp-syndicate-to'];
     this._settings = settingsStore;
@@ -26,6 +29,11 @@ class DraftStore {
       .trim()
       .replace(/[\s+]/g, ' ')
       .split(' ');
+  }
+
+  @action
+  setTitle(title) {
+    this.title = title;
   }
 
   @action

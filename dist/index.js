@@ -18839,6 +18839,11 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft', 'settings'), _d
       _this.content.focus();
     };
 
+    _this.updateTitle = function (e) {
+      var title = e.target.value;
+      _this.props.draft.setTitle(title);
+    };
+
     _this.updateSlug = function (e) {
       var slug = e.target.value.trim();
       _this.props.draft.setSlug(slug);
@@ -18892,6 +18897,23 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft', 'settings'), _d
           'form',
           { className: 'container', onSubmit: this.onSubmit },
           store.viewType === _constants.REPLY ? (0, _preact.h)(_QuickReplies2.default, null) : null,
+          store.includeTitle ? (0, _preact.h)(
+            'div',
+            null,
+            (0, _preact.h)(
+              'label',
+              { htmlFor: 'input-title' },
+              'Title'
+            ),
+            (0, _preact.h)('input', {
+              id: 'input-title',
+              type: 'text',
+              name: 'title',
+              value: draft.title,
+              onInput: this.updateTitle,
+              disabled: isLoading
+            })
+          ) : null,
           (0, _preact.h)(
             'div',
             null,
@@ -19322,7 +19344,6 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
     var _this = _possibleConstructorReturn(this, (UrlSelector.__proto__ || Object.getPrototypeOf(UrlSelector)).call(this, props));
 
     _this.toggle = function () {
-      _this.refreshUrls();
       _this.setState({ isOpen: !_this.state.isOpen });
     };
 
@@ -19482,7 +19503,7 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
         }
         _this3.setState({ options: options });
         if (!store.selectedUrl) {
-          store.setSelectedUrl(url);
+          store.setSelectedUrl(selectedEntry || url);
         }
       });
     }
@@ -20850,7 +20871,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
 
 var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
 
@@ -20913,28 +20934,37 @@ var DraftStore = (_class = function () {
   function DraftStore() {
     _classCallCheck(this, DraftStore);
 
-    _initDefineProp(this, 'content', _descriptor, this);
+    _initDefineProp(this, 'title', _descriptor, this);
 
-    _initDefineProp(this, 'tags', _descriptor2, this);
+    _initDefineProp(this, 'content', _descriptor2, this);
 
-    _initDefineProp(this, 'slug', _descriptor3, this);
+    _initDefineProp(this, 'tags', _descriptor3, this);
 
-    _initDefineProp(this, 'syndicateList', _descriptor4, this);
+    _initDefineProp(this, 'slug', _descriptor4, this);
 
-    _initDefineProp(this, 'setTags', _descriptor5, this);
+    _initDefineProp(this, 'syndicateList', _descriptor5, this);
 
-    _initDefineProp(this, 'setSyndicateList', _descriptor6, this);
+    _initDefineProp(this, 'setTags', _descriptor6, this);
+
+    _initDefineProp(this, 'setSyndicateList', _descriptor7, this);
 
     var savedDraft = (0, _draft.getDraft)();
     this.content = savedDraft.content;
     this.tags = savedDraft.category.join(' ');
+    // backwards support to <= v1.1.0 'mp-slug'
     this.slug = savedDraft.slug || savedDraft['mp-slug'];
+    // backwards support to <= v1.1.0 'mp-syndicate to'
     this.syndicateList = savedDraft.syndicateTo || savedDraft['mp-syndicate-to'];
     this._settings = _settingsStore2.default;
     this._isSlugModified = false;
   }
 
   _createClass(DraftStore, [{
+    key: 'setTitle',
+    value: function setTitle(title) {
+      this.title = title;
+    }
+  }, {
     key: 'setContent',
     value: function setContent(content) {
       this.content = content;
@@ -20988,21 +21018,24 @@ var DraftStore = (_class = function () {
   }]);
 
   return DraftStore;
-}(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'content', [_mobx.observable], {
+}(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'title', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'tags', [_mobx.observable], {
+}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'content', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'slug', [_mobx.observable], {
+}), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'tags', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'syndicateList', [_mobx.observable], {
+}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'slug', [_mobx.observable], {
+  enumerable: true,
+  initializer: null
+}), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'syndicateList', [_mobx.observable], {
   enumerable: true,
   initializer: function initializer() {
     return [];
   }
-}), _applyDecoratedDescriptor(_class.prototype, 'tagsArray', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'tagsArray'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setContent', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setContent'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSlug'), _class.prototype), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'setTags', [_mobx.action], {
+}), _applyDecoratedDescriptor(_class.prototype, 'tagsArray', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'tagsArray'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setTitle', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setTitle'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setContent', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setContent'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSlug'), _class.prototype), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'setTags', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this = this;
@@ -21012,7 +21045,7 @@ var DraftStore = (_class = function () {
       _this.save();
     };
   }
-}), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'setSyndicateList', [_mobx.action], {
+}), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'setSyndicateList', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this2 = this;
@@ -21442,6 +21475,9 @@ var Store = (_class = function () {
       if (type !== _constants.MESSAGE) {
         this.flashMessage = null;
       }
+      if (type !== _constants.BOOKMARK) {
+        this.draft.title = '';
+      }
     }
   }, {
     key: 'setSelectedUrl',
@@ -21508,6 +21544,11 @@ var Store = (_class = function () {
       var type = (0, _url.getParamFromUrl)('type', window.location.search);
       return type || _constants.NOTE;
     }
+  }, {
+    key: 'includeTitle',
+    get: function get() {
+      return this.viewType === _constants.BOOKMARK;
+    }
   }]);
 
   return Store;
@@ -21529,7 +21570,7 @@ var Store = (_class = function () {
 }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'flashMessage', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class.prototype, 'setViewType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setViewType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSelectedUrl', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSelectedUrl'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'logout', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'logout'), _class.prototype), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'sendNote', [_mobx.action], {
+}), _applyDecoratedDescriptor(_class.prototype, 'includeTitle', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'includeTitle'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setViewType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setViewType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSelectedUrl', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSelectedUrl'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'logout', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'logout'), _class.prototype), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'sendNote', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this = this;
@@ -22003,6 +22044,7 @@ function postBookmark(entry, url, aliases) {
   return micropub.create((_micropub$create3 = {
     h: 'entry',
     'bookmark-of': url,
+    title: entry.title,
     content: entry.content,
     category: entry.tagsArray
   }, _defineProperty(_micropub$create3, aliases.slug, entry.slug), _defineProperty(_micropub$create3, aliases.syndicateTo, entry.syndicateList), _micropub$create3), 'form');

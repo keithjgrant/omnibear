@@ -1,4 +1,4 @@
-import {observable, computed, action, runInAction} from 'mobx';
+import {observable, action, computed, runInAction} from 'mobx';
 import authStore from './authStore';
 import draftStore from './draftStore';
 import settingsStore from './settingsStore';
@@ -6,8 +6,6 @@ import {
   NOTE,
   REPLY,
   BOOKMARK,
-  SETTINGS,
-  LOGS,
   LOGIN,
   MESSAGE,
   MESSAGE_SUCCESS,
@@ -39,11 +37,19 @@ class Store {
     this.isSending = false;
   }
 
+  @computed
+  get includeTitle() {
+    return this.viewType === BOOKMARK;
+  }
+
   @action
   setViewType(type) {
     this.viewType = type;
     if (type !== MESSAGE) {
       this.flashMessage = null;
+    }
+    if (type !== BOOKMARK) {
+      this.draft.title = '';
     }
   }
 

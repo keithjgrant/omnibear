@@ -30,6 +30,19 @@ export default class NoteForm extends Component {
       <div className="l-main__main">
         <form className="container" onSubmit={this.onSubmit}>
           {store.viewType === REPLY ? <QuickReplies /> : null}
+          {store.includeTitle ? (
+            <div>
+              <label htmlFor="input-title">Title</label>
+              <input
+                id="input-title"
+                type="text"
+                name="title"
+                value={draft.title}
+                onInput={this.updateTitle}
+                disabled={isLoading}
+              />
+            </div>
+          ) : null}
           <div>
             <label htmlFor="input-content">Content</label>
             <textarea
@@ -87,6 +100,11 @@ export default class NoteForm extends Component {
 
   focus = () => {
     this.content.focus();
+  };
+
+  updateTitle = e => {
+    const title = e.target.value;
+    this.props.draft.setTitle(title);
   };
 
   updateSlug = e => {

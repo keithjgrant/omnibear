@@ -27,5 +27,6 @@ module.exports = {
     setTimeout: true,
     clearTimeout: true,
     chrome: true,
+    browser: true,
   },
 };
