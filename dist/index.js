@@ -19354,7 +19354,11 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
       isOpen: false,
       options: options
     };
-    _this.selectEntry(options[options.length - 1]);
+    if (options[1].isDisabled) {
+      _this.selectEntry(options[0]);
+    } else {
+      _this.selectEntry(options[1]);
+    }
     return _this;
   }
 

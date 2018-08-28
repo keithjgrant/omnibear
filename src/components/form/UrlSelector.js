@@ -12,7 +12,11 @@ export default class UrlSelector extends Component {
       isOpen: false,
       options,
     };
-    this.selectEntry(options[options.length - 1]);
+    if (options[1].isDisabled) {
+      this.selectEntry(options[0]);
+    } else {
+      this.selectEntry(options[1]);
+    }
   }
 
   componentDidMount() {
