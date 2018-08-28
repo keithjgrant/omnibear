@@ -1,21 +1,21 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
 import {BOOKMARK, LIKE, REPOST} from '../../constants';
-import {getPageUrl} from '../../util/utils';
 
 @inject('store')
 @observer
 export default class UrlSelector extends Component {
   constructor(props) {
     super(props);
+    const options = this.loadOptions();
     this.state = {
       isOpen: false,
-      options: [],
+      options,
     };
+    this.selectEntry(options[options.length - 1]);
   }
 
   componentDidMount() {
-    this.refreshUrls();
     document.addEventListener('click', this.close);
   }
 
@@ -31,11 +31,14 @@ export default class UrlSelector extends Component {
             className="dropdown__toggle"
             onClick={this.toggle}
           >
-            <div className="nowrap">{store.selectedUrl}</div>
+            <div className="nowrap">{store.selectedEntry.url}</div>
           </button>
           <div className="dropdown__drawer">
             {options.map(option =>
-              this.renderUrlOption(option, option.url === store.selectedUrl)
+              this.renderUrlOption(
+                option,
+                option.url === store.selectedEntry.url
+              )
             )}
           </div>
         </div>
@@ -51,7 +54,7 @@ export default class UrlSelector extends Component {
         className={`url-option${isActive ? ' is-active' : ''} ${
           isOpen ? ' is-in' : ''
         }`}
-        onClick={this.selectUrl.bind(this, option.url)}
+        onClick={this.selectEntry.bind(this, option)}
         disabled={option.isDisabled}
       >
         <div className="url-option__type">{option.name}</div>
@@ -86,9 +89,8 @@ export default class UrlSelector extends Component {
     const {store} = this.props;
     const {options} = this.state;
     return (
-      options.find(option => option.url === store.selectedUrl) || {
-        url: store.selectedUrl,
-      }
+      options.find(option => option.url === store.selectedEntry.url) ||
+      store.selectedEntry
     );
   }
 
@@ -100,36 +102,46 @@ export default class UrlSelector extends Component {
     this.setState({isOpen: false});
   };
 
-  selectUrl(url) {
+  selectEntry(entry) {
     this.setState({
       isOpen: false,
     });
-    this.props.store.setSelectedUrl(url);
+    this.props.store.setSelectedEntry(entry);
   }
 
   refreshUrls() {
     const {store} = this.props;
-    getPageUrl().then(url => {
-      const options = [
-        {
-          name: 'Current page',
-          url,
-        },
-      ];
-      const selectedEntry = localStorage.getItem('selectedEntry');
-      if (selectedEntry) {
-        options.push({name: 'Selected entry', url: selectedEntry});
-      } else {
-        options.push({
-          name: 'Selected entry',
-          url: '- none -',
-          isDisabled: true,
-        });
-      }
-      this.setState({options});
-      if (!store.selectedUrl) {
-        store.setSelectedUrl(selectedEntry || url);
-      }
-    });
+    const options = this.loadOptions();
+    this.setState({options});
+    if (!store.selectedEntry) {
+      store.setSelectedEntry(options[options.length - 1]);
+    }
+  }
+
+  loadOptions() {
+    const pageEntry = JSON.parse(localStorage.getItem('pageEntry'));
+    const options = [
+      {
+        name: 'Current page',
+        url: pageEntry.url,
+        title: pageEntry.title,
+      },
+    ];
+    const itemEntry = JSON.parse(localStorage.getItem('itemEntry'));
+    if (itemEntry) {
+      options.push({
+        name: 'Selected entry',
+        url: itemEntry.url,
+        title: itemEntry.title,
+      });
+    } else {
+      options.push({
+        name: 'Selected entry',
+        url: '- none -',
+        title: '',
+        isDisabled: true,
+      });
+    }
+    return options;
   }
 }

@@ -2,8 +2,9 @@ import {
   clearItem,
   removeHighlight,
   focusClickedEntry,
-  getCurrentItemUrl,
+  getCurrentItem,
 } from './page/entry';
+import {cleanUrl} from './util/url';
 
 (function() {
   document.body.addEventListener('click', clearItem);
@@ -41,11 +42,25 @@ import {
   }
 
   function sendFocusMessage() {
-    const url = getCurrentItemUrl();
+    const pageEntry = {
+      type: 'page',
+      url: cleanUrl(document.location.href),
+      title: document.title,
+    };
+    const itemEntry = getCurrentItem();
+    let selectedEntry = null;
+    if (itemEntry) {
+      selectedEntry = {
+        type: 'item',
+        url: cleanUrl(itemEntry.url),
+        title: itemEntry.title,
+      };
+    }
     chrome.runtime.sendMessage({
       action: 'focus-window',
       payload: {
-        selectedEntry: url,
+        pageEntry,
+        selectedEntry,
       },
     });
   }

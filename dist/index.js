@@ -17898,48 +17898,29 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(App, _Component);
 
-  function App(props) {
+  function App() {
     _classCallCheck(this, App);
 
-    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
-
-    _this.displayMessage = function (message, status, location) {
-      _this.setState({
-        currentView: 'feedback',
-        message: message,
-        postLocation: typeof location === 'string' ? location : null
-      });
-    };
-
-    _this.handleSettings = function () {
-      _this.setState({ currentView: _constants.SETTINGS });
-    };
-
-    _this.handleLogs = function () {
-      _this.setState({ currentView: _constants.LOGS });
-    };
-
-    _this.handleLogout = function () {
-      (0, _utils.logout)();
-      _this.setState({ currentView: _constants.LOGIN });
-    };
-
-    var settings = (0, _settings.getSettings)();
-    _this.state = {
-      pageUrl: '',
-      userDomain: localStorage.getItem('domain'),
-      settings: settings
-    };
-    // this.setDefaultView();
-    return _this;
+    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
   }
 
   _createClass(App, [{
     key: 'render',
-    value: function render() {
-      var store = this.props.store;
-      var userDomain = this.state.userDomain;
 
+    // constructor(props) {
+    //   super(props);
+    //   const settings = getSettings();
+    //   this.state = {
+    //     pageUrl: '',
+    //     userDomain: localStorage.getItem('domain'),
+    //     settings: settings,
+    //   };
+    //   // this.setDefaultView();
+    // }
+
+    value: function render() {
+      // const {store} = this.props;
+      // const {userDomain} = this.state;
       return (0, _preact.h)(
         'div',
         { className: 'l-main' },
@@ -17953,17 +17934,36 @@ var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreac
         (0, _preact.h)(_Footer2.default, null)
       );
     }
-  }, {
-    key: 'getPageUrl',
-    value: function getPageUrl() {
-      var _this2 = this;
 
-      (0, _utils.getPageUrl)().then(function (url) {
-        _this2.setState({
-          pageUrl: url
-        });
-      });
-    }
+    // getPageUrl() {
+    //   getPageUrl().then(url => {
+    //     this.setState({
+    //       pageUrl: url,
+    //     });
+    //   });
+    // }
+    //
+    // displayMessage = (message, status, location) => {
+    //   this.setState({
+    //     currentView: 'feedback',
+    //     message: message,
+    //     postLocation: typeof location === 'string' ? location : null,
+    //   });
+    // };
+    //
+    // handleSettings = () => {
+    //   this.setState({currentView: SETTINGS});
+    // };
+    //
+    // handleLogs = () => {
+    //   this.setState({currentView: LOGS});
+    // };
+    //
+    // handleLogout = () => {
+    //   logout();
+    //   this.setState({currentView: LOGIN});
+    // };
+
   }]);
 
   return App;
@@ -19327,8 +19327,6 @@ var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-pr
 
 var _constants = __webpack_require__(/*! ../../constants */ "./src/constants.js");
 
-var _utils = __webpack_require__(/*! ../../util/utils */ "./src/util/utils.js");
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -19351,17 +19349,18 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
       _this.setState({ isOpen: false });
     };
 
+    var options = _this.loadOptions();
     _this.state = {
       isOpen: false,
-      options: []
+      options: options
     };
+    _this.selectEntry(options[options.length - 1]);
     return _this;
   }
 
   _createClass(UrlSelector, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.refreshUrls();
       document.addEventListener('click', this.close);
     }
   }, {
@@ -19397,14 +19396,14 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
             (0, _preact.h)(
               'div',
               { className: 'nowrap' },
-              store.selectedUrl
+              store.selectedEntry.url
             )
           ),
           (0, _preact.h)(
             'div',
             { className: 'dropdown__drawer' },
             options.map(function (option) {
-              return _this2.renderUrlOption(option, option.url === store.selectedUrl);
+              return _this2.renderUrlOption(option, option.url === store.selectedEntry.url);
             })
           )
         )
@@ -19420,7 +19419,7 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
         {
           type: 'button',
           className: 'url-option' + (isActive ? ' is-active' : '') + ' ' + (isOpen ? ' is-in' : ''),
-          onClick: this.selectUrl.bind(this, option.url),
+          onClick: this.selectEntry.bind(this, option),
           disabled: option.isDisabled
         },
         (0, _preact.h)(
@@ -19466,46 +19465,53 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
       var options = this.state.options;
 
       return options.find(function (option) {
-        return option.url === store.selectedUrl;
-      }) || {
-        url: store.selectedUrl
-      };
+        return option.url === store.selectedEntry.url;
+      }) || store.selectedEntry;
     }
   }, {
-    key: 'selectUrl',
-    value: function selectUrl(url) {
+    key: 'selectEntry',
+    value: function selectEntry(entry) {
       this.setState({
         isOpen: false
       });
-      this.props.store.setSelectedUrl(url);
+      this.props.store.setSelectedEntry(entry);
     }
   }, {
     key: 'refreshUrls',
     value: function refreshUrls() {
-      var _this3 = this;
-
       var store = this.props.store;
 
-      (0, _utils.getPageUrl)().then(function (url) {
-        var options = [{
-          name: 'Current page',
-          url: url
-        }];
-        var selectedEntry = localStorage.getItem('selectedEntry');
-        if (selectedEntry) {
-          options.push({ name: 'Selected entry', url: selectedEntry });
-        } else {
-          options.push({
-            name: 'Selected entry',
-            url: '- none -',
-            isDisabled: true
-          });
-        }
-        _this3.setState({ options: options });
-        if (!store.selectedUrl) {
-          store.setSelectedUrl(selectedEntry || url);
-        }
-      });
+      var options = this.loadOptions();
+      this.setState({ options: options });
+      if (!store.selectedEntry) {
+        store.setSelectedEntry(options[options.length - 1]);
+      }
+    }
+  }, {
+    key: 'loadOptions',
+    value: function loadOptions() {
+      var pageEntry = JSON.parse(localStorage.getItem('pageEntry'));
+      var options = [{
+        name: 'Current page',
+        url: pageEntry.url,
+        title: pageEntry.title
+      }];
+      var itemEntry = JSON.parse(localStorage.getItem('itemEntry'));
+      if (itemEntry) {
+        options.push({
+          name: 'Selected entry',
+          url: itemEntry.url,
+          title: itemEntry.title
+        });
+      } else {
+        options.push({
+          name: 'Selected entry',
+          url: '- none -',
+          title: '',
+          isDisabled: true
+        });
+      }
+      return options;
     }
   }]);
 
@@ -21445,7 +21451,7 @@ var Store = (_class = function () {
 
     _initDefineProp(this, 'currentItemUrl', _descriptor3, this);
 
-    _initDefineProp(this, 'selectedUrl', _descriptor4, this);
+    _initDefineProp(this, 'selectedEntry', _descriptor4, this);
 
     _initDefineProp(this, 'isSending', _descriptor5, this);
 
@@ -21475,14 +21481,19 @@ var Store = (_class = function () {
       if (type !== _constants.MESSAGE) {
         this.flashMessage = null;
       }
-      if (type !== _constants.BOOKMARK) {
+      if (type === _constants.BOOKMARK) {
+        this.draft.title = this.selectedEntry ? this.selectedEntry.title : '';
+      } else {
         this.draft.title = '';
       }
     }
   }, {
-    key: 'setSelectedUrl',
-    value: function setSelectedUrl(url) {
-      this.selectedUrl = url;
+    key: 'setSelectedEntry',
+    value: function setSelectedEntry(entry) {
+      this.selectedEntry = entry;
+      if (this.viewType === _constants.BOOKMARK) {
+        this.draft.title = entry.title;
+      }
     }
   }, {
     key: 'logout',
@@ -21561,7 +21572,7 @@ var Store = (_class = function () {
 }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'currentItemUrl', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'selectedUrl', [_mobx.observable], {
+}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'selectedEntry', [_mobx.observable], {
   enumerable: true,
   initializer: null
 }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'isSending', [_mobx.observable], {
@@ -21570,7 +21581,7 @@ var Store = (_class = function () {
 }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'flashMessage', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class.prototype, 'includeTitle', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'includeTitle'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setViewType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setViewType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSelectedUrl', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSelectedUrl'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'logout', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'logout'), _class.prototype), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'sendNote', [_mobx.action], {
+}), _applyDecoratedDescriptor(_class.prototype, 'includeTitle', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'includeTitle'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setViewType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setViewType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSelectedEntry', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSelectedEntry'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'logout', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'logout'), _class.prototype), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'sendNote', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this = this;
@@ -21625,7 +21636,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              if (_this2.selectedUrl) {
+              if (!(!_this2.selectedEntry || !_this2.selectedEntry.url)) {
                 _context2.next = 3;
                 break;
               }
@@ -21639,7 +21650,7 @@ var Store = (_class = function () {
 
               (0, _log.info)('Sending reply...');
               _context2.next = 8;
-              return (0, _micropub.postReply)(_this2.draft, _this2.selectedUrl, _this2.settings.aliases);
+              return (0, _micropub.postReply)(_this2.draft, _this2.selectedEntry.url, _this2.settings.aliases);
 
             case 8:
               location = _context2.sent;
@@ -21678,7 +21689,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              if (_this3.selectedUrl) {
+              if (!(!_this3.selectedEntry || !_this3.selectedEntry.url)) {
                 _context3.next = 3;
                 break;
               }
@@ -21692,7 +21703,7 @@ var Store = (_class = function () {
 
               (0, _log.info)('Sending bookmark...');
               _context3.next = 8;
-              return (0, _micropub.postBookmark)(_this3.draft, _this3.selectedUrl, _this3.settings.aliases);
+              return (0, _micropub.postBookmark)(_this3.draft, _this3.selectedEntry.url, _this3.settings.aliases);
 
             case 8:
               location = _context3.sent;
@@ -21731,7 +21742,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              if (_this4.selectedUrl) {
+              if (!(!_this4.selectedEntry || !_this4.selectedEntry.url)) {
                 _context4.next = 3;
                 break;
               }
@@ -21743,9 +21754,9 @@ var Store = (_class = function () {
               _this4.isSending = true;
               _context4.prev = 4;
 
-              (0, _log.info)('Sending like...', _this4.selectedUrl);
+              (0, _log.info)('Sending like...', _this4.selectedEntry);
               _context4.next = 8;
-              return (0, _micropub.postLike)(_this4.selectedUrl);
+              return (0, _micropub.postLike)(_this4.selectedEntry.url);
 
             case 8:
               location = _context4.sent;
@@ -21785,7 +21796,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              if (_this5.selectedUrl) {
+              if (!(!_this5.selectedEntry || !_this5.selectedEntry.url)) {
                 _context5.next = 3;
                 break;
               }
@@ -21797,9 +21808,9 @@ var Store = (_class = function () {
               _this5.isSending = true;
               _context5.prev = 4;
 
-              (0, _log.info)('Sending repost...', _this5.selectedUrl);
+              (0, _log.info)('Sending repost...', _this5.selectedEntry);
               _context5.next = 8;
-              return (0, _micropub.postRepost)(_this5.selectedUrl);
+              return (0, _micropub.postRepost)(_this5.selectedEntry.url);
 
             case 8:
               location = _context5.sent;

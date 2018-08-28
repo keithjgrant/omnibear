@@ -1692,10 +1692,10 @@ function handleMessage(request, sender, sendResponse) {
       handleBeginAuth(request.payload);
       break;
     case 'focus-window':
-      updateFocusedWindow(sender.tab.id, sender.url, request.payload.selectedEntry);
+      updateFocusedWindow(sender.tab.id, request.payload.pageEntry, request.payload.selectedEntry);
       break;
     case 'select-entry':
-      selectEntry(request.payload.url);
+      selectEntry(request.payload);
       break;
     case 'clear-entry':
       clearEntry();
@@ -1712,8 +1712,8 @@ function handleBeginAuth(payload) {
   });
 }
 
-function updateFocusedWindow(tabId, url, selectedEntry) {
-  localStorage.setItem('pageUrl', (0, _url.cleanUrl)(url));
+function updateFocusedWindow(tabId, pageEntry, selectedEntry) {
+  localStorage.setItem('pageEntry', JSON.stringify(pageEntry));
   localStorage.setItem('pageTabId', tabId);
   if (selectedEntry) {
     selectEntry(selectedEntry);
@@ -1722,12 +1722,12 @@ function updateFocusedWindow(tabId, url, selectedEntry) {
   }
 }
 
-function selectEntry(url) {
-  localStorage.setItem('selectedEntry', url);
+function selectEntry(entry) {
+  localStorage.setItem('itemEntry', JSON.stringify(entry));
 }
 
 function clearEntry() {
-  localStorage.removeItem('selectedEntry');
+  localStorage.removeItem('itemEntry');
 }
 
 function handleTabChange(tabId, changeInfo, tab) {

@@ -1,4 +1,4 @@
-import {getParamFromUrl, cleanUrl} from './util/url';
+import {getParamFromUrl} from './util/url';
 import {fetchToken, fetchSyndicationTargets} from './background/authentication';
 import {logout} from './util/utils';
 import {info, error} from './util/log';
@@ -14,12 +14,12 @@ function handleMessage(request, sender, sendResponse) {
     case 'focus-window':
       updateFocusedWindow(
         sender.tab.id,
-        sender.url,
+        request.payload.pageEntry,
         request.payload.selectedEntry
       );
       break;
     case 'select-entry':
-      selectEntry(request.payload.url);
+      selectEntry(request.payload);
       break;
     case 'clear-entry':
       clearEntry();
@@ -36,8 +36,8 @@ function handleBeginAuth(payload) {
   });
 }
 
-function updateFocusedWindow(tabId, url, selectedEntry) {
-  localStorage.setItem('pageUrl', cleanUrl(url));
+function updateFocusedWindow(tabId, pageEntry, selectedEntry) {
+  localStorage.setItem('pageEntry', JSON.stringify(pageEntry));
   localStorage.setItem('pageTabId', tabId);
   if (selectedEntry) {
     selectEntry(selectedEntry);
@@ -46,12 +46,12 @@ function updateFocusedWindow(tabId, url, selectedEntry) {
   }
 }
 
-function selectEntry(url) {
-  localStorage.setItem('selectedEntry', url);
+function selectEntry(entry) {
+  localStorage.setItem('itemEntry', JSON.stringify(entry));
 }
 
 function clearEntry() {
-  localStorage.removeItem('selectedEntry');
+  localStorage.removeItem('itemEntry');
 }
 
 function handleTabChange(tabId, changeInfo, tab) {

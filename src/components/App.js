@@ -16,20 +16,20 @@ import {NOTE, SETTINGS, LOGS, LOGIN} from '../constants';
 @inject('store')
 @observer
 export default class App extends Component {
-  constructor(props) {
-    super(props);
-    const settings = getSettings();
-    this.state = {
-      pageUrl: '',
-      userDomain: localStorage.getItem('domain'),
-      settings: settings,
-    };
-    // this.setDefaultView();
-  }
+  // constructor(props) {
+  //   super(props);
+  //   const settings = getSettings();
+  //   this.state = {
+  //     pageUrl: '',
+  //     userDomain: localStorage.getItem('domain'),
+  //     settings: settings,
+  //   };
+  //   // this.setDefaultView();
+  // }
 
   render() {
-    const {store} = this.props;
-    const {userDomain} = this.state;
+    // const {store} = this.props;
+    // const {userDomain} = this.state;
     return (
       <div className="l-main">
         <nav className="l-main__sidebar">
@@ -42,32 +42,32 @@ export default class App extends Component {
     );
   }
 
-  getPageUrl() {
-    getPageUrl().then(url => {
-      this.setState({
-        pageUrl: url,
-      });
-    });
-  }
-
-  displayMessage = (message, status, location) => {
-    this.setState({
-      currentView: 'feedback',
-      message: message,
-      postLocation: typeof location === 'string' ? location : null,
-    });
-  };
-
-  handleSettings = () => {
-    this.setState({currentView: SETTINGS});
-  };
-
-  handleLogs = () => {
-    this.setState({currentView: LOGS});
-  };
-
-  handleLogout = () => {
-    logout();
-    this.setState({currentView: LOGIN});
-  };
+  // getPageUrl() {
+  //   getPageUrl().then(url => {
+  //     this.setState({
+  //       pageUrl: url,
+  //     });
+  //   });
+  // }
+  //
+  // displayMessage = (message, status, location) => {
+  //   this.setState({
+  //     currentView: 'feedback',
+  //     message: message,
+  //     postLocation: typeof location === 'string' ? location : null,
+  //   });
+  // };
+  //
+  // handleSettings = () => {
+  //   this.setState({currentView: SETTINGS});
+  // };
+  //
+  // handleLogs = () => {
+  //   this.setState({currentView: LOGS});
+  // };
+  //
+  // handleLogout = () => {
+  //   logout();
+  //   this.setState({currentView: LOGIN});
+  // };
 }

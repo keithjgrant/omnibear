@@ -25,7 +25,7 @@ class Store {
   @observable viewType;
   @observable currentPageUrl;
   @observable currentItemUrl;
-  @observable selectedUrl;
+  @observable selectedEntry;
   @observable isSending;
   @observable flashMessage;
 
@@ -48,14 +48,19 @@ class Store {
     if (type !== MESSAGE) {
       this.flashMessage = null;
     }
-    if (type !== BOOKMARK) {
+    if (type === BOOKMARK) {
+      this.draft.title = this.selectedEntry ? this.selectedEntry.title : '';
+    } else {
       this.draft.title = '';
     }
   }
 
   @action
-  setSelectedUrl(url) {
-    this.selectedUrl = url;
+  setSelectedEntry(entry) {
+    this.selectedEntry = entry;
+    if (this.viewType === BOOKMARK) {
+      this.draft.title = entry.title;
+    }
   }
 
   @action
@@ -97,7 +102,7 @@ class Store {
 
   @action
   sendReply = async () => {
-    if (!this.selectedUrl) {
+    if (!this.selectedEntry || !this.selectedEntry.url) {
       warning('Cannot send reply; no current URL found');
       return;
     }
@@ -106,7 +111,7 @@ class Store {
       info(`Sending reply...`);
       const location = await postReply(
         this.draft,
-        this.selectedUrl,
+        this.selectedEntry.url,
         this.settings.aliases
       );
       runInAction(() => {
@@ -122,7 +127,7 @@ class Store {
 
   @action
   sendBookmark = async () => {
-    if (!this.selectedUrl) {
+    if (!this.selectedEntry || !this.selectedEntry.url) {
       warning('Cannot send bookmark; no current URL found');
       return;
     }
@@ -131,7 +136,7 @@ class Store {
       info(`Sending bookmark...`);
       const location = await postBookmark(
         this.draft,
-        this.selectedUrl,
+        this.selectedEntry.url,
         this.settings.aliases
       );
       runInAction(() => {
@@ -147,14 +152,14 @@ class Store {
 
   @action
   sendLike = async () => {
-    if (!this.selectedUrl) {
+    if (!this.selectedEntry || !this.selectedEntry.url) {
       warning('Cannot send like; no current URL found');
       return;
     }
     this.isSending = true;
     try {
-      info('Sending like...', this.selectedUrl);
-      const location = await postLike(this.selectedUrl);
+      info('Sending like...', this.selectedEntry);
+      const location = await postLike(this.selectedEntry.url);
       runInAction(() => {
         this._flashSuccessMessage('Item liked successfully', location);
         this.isSending = false;
@@ -169,14 +174,14 @@ class Store {
 
   @action
   sendRepost = async () => {
-    if (!this.selectedUrl) {
+    if (!this.selectedEntry || !this.selectedEntry.url) {
       warning('Cannot send repost; no current URL found');
       return;
     }
     this.isSending = true;
     try {
-      info('Sending repost...', this.selectedUrl);
-      const location = await postRepost(this.selectedUrl);
+      info('Sending repost...', this.selectedEntry);
+      const location = await postRepost(this.selectedEntry.url);
       runInAction(() => {
         this._flashSuccessMessage('Item reposted successfully', location);
         this.isSending = false;

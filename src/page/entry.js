@@ -5,7 +5,7 @@ import {getAncestorNode, getAncestorNodeByClass} from './dom';
 
 const CLASS_NAME = '__omnibear-selected-item';
 let currentItem;
-let currentItemUrl;
+// let currentItemUrl;
 
 export function clearItem() {
   if (currentItem) {
@@ -18,9 +18,9 @@ export function clearItem() {
 
 export function removeHighlight() {
   if (currentItem) {
-    currentItem.classList.remove(CLASS_NAME);
+    currentItem.element.classList.remove(CLASS_NAME);
     currentItem = null;
-    currentItemUrl = null;
+    // currentItemUrl = null;
   }
 }
 
@@ -40,11 +40,16 @@ export function focusClickedEntry(e) {
   }
   chrome.runtime.sendMessage({
     action: 'select-entry',
-    payload: {url: entry.url},
+    payload: {
+      type: 'item',
+      url: entry.url,
+      title: entry.title || '',
+    },
   });
   entry.element.classList.add(CLASS_NAME);
-  currentItem = entry.element;
-  currentItemUrl = entry.url;
+  currentItem = entry;
+  // currentItem = entry.element;
+  // currentItemUrl = entry.url;
 }
 
 function findTweet(el) {
@@ -55,7 +60,13 @@ function findTweet(el) {
   const url = `https://twitter.com${element.getAttribute(
     'data-permalink-path'
   )}`;
-  return {element, url};
+  const name = element.getAttribute('data-name');
+  return {
+    element,
+    type: 'entry',
+    url,
+    title: `Tweet by ${name}`,
+  };
 }
 
 function findFacebookPost(el) {
@@ -75,7 +86,12 @@ function findFacebookPost(el) {
 
     const url = timestamp.href;
     if (url) {
-      return {element, url};
+      return {
+        element,
+        type: 'entry',
+        url,
+        title: 'Facebook post',
+      };
     }
   }
 
@@ -89,8 +105,12 @@ function findHEntry(el) {
   }
   const mf = microformat.get({node: element});
   let url;
+  let title = '';
   if (mf.items.length && mf.items[0].properties && mf.items[0].properties.url) {
     url = mf.items[0].properties.url[0];
+    if (mf.items[0].properties.name) {
+      title = mf.items[0].properties.name[0] || '';
+    }
   }
   if (!url) {
     if (element.tagName === 'BODY') {
@@ -102,9 +122,9 @@ function findHEntry(el) {
   if (typeof url !== 'string') {
     return false;
   }
-  return {element, url};
+  return {element, url, title};
 }
 
-export function getCurrentItemUrl() {
-  return currentItemUrl;
+export function getCurrentItem() {
+  return currentItem;
 }

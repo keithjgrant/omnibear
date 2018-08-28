@@ -4854,6 +4854,48 @@ var Microformats; // jshint ignore:line
 
 /***/ }),
 
+/***/ "./node_modules/parse-uri/index.js":
+/*!*****************************************!*\
+  !*** ./node_modules/parse-uri/index.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function parseURI (str, opts) {
+  opts = opts || {}
+
+  var o = {
+    key: ['source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'anchor'],
+    q: {
+      name: 'queryKey',
+      parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+    },
+    parser: {
+      strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+      loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+    }
+  }
+
+  var m = o.parser[opts.strictMode ? 'strict' : 'loose'].exec(str)
+  var uri = {}
+  var i = 14
+
+  while (i--) uri[o.key[i]] = m[i] || ''
+
+  uri[o.q.name] = {}
+  uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
+    if ($1) uri[o.q.name][$1] = $2
+  })
+
+  return uri
+}
+
+
+/***/ }),
+
 /***/ "./src/page.js":
 /*!*********************!*\
   !*** ./src/page.js ***!
@@ -4865,6 +4907,8 @@ var Microformats; // jshint ignore:line
 
 
 var _entry = __webpack_require__(/*! ./page/entry */ "./src/page/entry.js");
+
+var _url = __webpack_require__(/*! ./util/url */ "./src/util/url.js");
 
 (function () {
   document.body.addEventListener('click', _entry.clearItem);
@@ -4902,11 +4946,25 @@ var _entry = __webpack_require__(/*! ./page/entry */ "./src/page/entry.js");
   }
 
   function sendFocusMessage() {
-    var url = (0, _entry.getCurrentItemUrl)();
+    var pageEntry = {
+      type: 'page',
+      url: (0, _url.cleanUrl)(document.location.href),
+      title: document.title
+    };
+    var itemEntry = (0, _entry.getCurrentItem)();
+    var selectedEntry = null;
+    if (itemEntry) {
+      selectedEntry = {
+        type: 'item',
+        url: (0, _url.cleanUrl)(itemEntry.url),
+        title: itemEntry.title
+      };
+    }
     chrome.runtime.sendMessage({
       action: 'focus-window',
       payload: {
-        selectedEntry: url
+        pageEntry: pageEntry,
+        selectedEntry: selectedEntry
       }
     });
   }
@@ -4994,7 +5052,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.clearItem = clearItem;
 exports.removeHighlight = removeHighlight;
 exports.focusClickedEntry = focusClickedEntry;
-exports.getCurrentItemUrl = getCurrentItemUrl;
+exports.getCurrentItem = getCurrentItem;
 
 var _microformatShiv = __webpack_require__(/*! microformat-shiv */ "./node_modules/microformat-shiv/microformat-shiv.js");
 
@@ -5008,7 +5066,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // one that doesn't blow up while tests run in Node environment
 var CLASS_NAME = '__omnibear-selected-item';
 var currentItem = void 0;
-var currentItemUrl = void 0;
+// let currentItemUrl;
 
 function clearItem() {
   if (currentItem) {
@@ -5021,9 +5079,9 @@ function clearItem() {
 
 function removeHighlight() {
   if (currentItem) {
-    currentItem.classList.remove(CLASS_NAME);
+    currentItem.element.classList.remove(CLASS_NAME);
     currentItem = null;
-    currentItemUrl = null;
+    // currentItemUrl = null;
   }
 }
 
@@ -5043,11 +5101,16 @@ function focusClickedEntry(e) {
   }
   chrome.runtime.sendMessage({
     action: 'select-entry',
-    payload: { url: entry.url }
+    payload: {
+      type: 'item',
+      url: entry.url,
+      title: entry.title || ''
+    }
   });
   entry.element.classList.add(CLASS_NAME);
-  currentItem = entry.element;
-  currentItemUrl = entry.url;
+  currentItem = entry;
+  // currentItem = entry.element;
+  // currentItemUrl = entry.url;
 }
 
 function findTweet(el) {
@@ -5056,7 +5119,13 @@ function findTweet(el) {
     return false;
   }
   var url = 'https://twitter.com' + element.getAttribute('data-permalink-path');
-  return { element: element, url: url };
+  var name = element.getAttribute('data-name');
+  return {
+    element: element,
+    type: 'entry',
+    url: url,
+    title: 'Tweet by ' + name
+  };
 }
 
 function findFacebookPost(el) {
@@ -5076,7 +5145,12 @@ function findFacebookPost(el) {
 
     var url = timestamp.href;
     if (url) {
-      return { element: element, url: url };
+      return {
+        element: element,
+        type: 'entry',
+        url: url,
+        title: 'Facebook post'
+      };
     }
   }
 
@@ -5090,8 +5164,12 @@ function findHEntry(el) {
   }
   var mf = _microformatShiv2.default.get({ node: element });
   var url = void 0;
+  var title = '';
   if (mf.items.length && mf.items[0].properties && mf.items[0].properties.url) {
     url = mf.items[0].properties.url[0];
+    if (mf.items[0].properties.name) {
+      title = mf.items[0].properties.name[0] || '';
+    }
   }
   if (!url) {
     if (element.tagName === 'BODY') {
@@ -5103,11 +5181,89 @@ function findHEntry(el) {
   if (typeof url !== 'string') {
     return false;
   }
-  return { element: element, url: url };
+  return { element: element, url: url, title: title };
 }
 
-function getCurrentItemUrl() {
-  return currentItemUrl;
+function getCurrentItem() {
+  return currentItem;
+}
+
+/***/ }),
+
+/***/ "./src/util/url.js":
+/*!*************************!*\
+  !*** ./src/util/url.js ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getParamFromUrl = getParamFromUrl;
+exports.getParamFromUrlString = getParamFromUrlString;
+exports.cleanParams = cleanParams;
+exports.paramsToQueryString = paramsToQueryString;
+exports.getUrlOrigin = getUrlOrigin;
+exports.cleanUrl = cleanUrl;
+
+var _parseUri = __webpack_require__(/*! parse-uri */ "./node_modules/parse-uri/index.js");
+
+var _parseUri2 = _interopRequireDefault(_parseUri);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getParamFromUrl(paramName, url) {
+  var params = url.split('?')[1] || '';
+  return getParamFromUrlString(paramName, params);
+}
+
+function getParamFromUrlString(paramName, params) {
+  var matches = params.split('&').filter(function (param) {
+    return param.startsWith(paramName + '=');
+  });
+  if (matches && matches.length) {
+    var value = matches[0].substr(paramName.length + 1);
+    return decodeURIComponent(value);
+  } else {
+    return null;
+  }
+}
+
+function cleanParams(params) {
+  var clean = {};
+  for (var i in params) {
+    if (!i.startsWith('utm_')) {
+      clean[i] = params[i];
+    }
+  }
+  return clean;
+}
+
+function paramsToQueryString(params) {
+  var parts = [];
+  for (var i in params) {
+    parts.push(i + '=' + params[i]);
+  }
+  if (!parts.length) {
+    return '';
+  }
+  return '?' + parts.join('&');
+}
+
+function getUrlOrigin(url) {
+  var parts = (0, _parseUri2.default)(url);
+  return [parts.protocol, '://', parts.host, parts.port ? ':' + parts.port : ''].join('');
+}
+
+// strip hashes and utm_* query params
+function cleanUrl(url) {
+  var parts = (0, _parseUri2.default)(url);
+  var base = [parts.protocol, '://', parts.host, parts.port ? ':' + parts.port : '', parts.path, paramsToQueryString(cleanParams(parts.queryKey))].join('');
+  return base;
 }
 
 /***/ })
