@@ -29,6 +29,6 @@ export default class QuickReplies extends Component {
 
   send = content => {
     const {store} = this.props;
-    store.sendQuickReply(content);
+    store.addQuickReply(content);
   };
 }

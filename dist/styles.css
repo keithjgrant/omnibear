@@ -456,8 +456,9 @@ fieldset > * + * {
 .quick-replies button:hover,
 .quick-replies button:focus {
   border-radius: 0.1em;
+  background-color: hsla(41, 75%, 49%, 0.2);
   outline: none;
-  box-shadow: 0 0 0 5px hsla(41, 75%, 49%, 0.3);
+  box-shadow: none;
 }
 .quick-replies button[disabled] {
   color: var(--gray-60);

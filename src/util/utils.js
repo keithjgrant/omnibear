@@ -34,7 +34,7 @@ export function logout() {
   items.map(item => localStorage.removeItem(item));
 }
 
-const NON_ALPHANUM = /[^A-Za-z0-9\-]/g;
+const NON_ALPHANUM = /[^A-Za-z0-9-]/g;
 const FROM = 'áäâàãåčçćďéěëèêẽĕȇęėíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;';
 const TO = 'aaaaaacccdeeeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------';
 
@@ -48,13 +48,13 @@ export function generateSlug(content) {
     );
   }
   formatted = formatted.replace(NON_ALPHANUM, '');
-  formatted = formatted.replace(/\-\-+/g, '-');
+  formatted = formatted.replace(/--+/g, '-');
   const parts = formatted.split('-');
   return parts.splice(0, 6).join('-');
 }
 
 export function getPageUrl() {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     var tabId = localStorage.getItem('pageTabId');
     chrome.tabs.get(Number(tabId), tab => {
       resolve(tab.url);

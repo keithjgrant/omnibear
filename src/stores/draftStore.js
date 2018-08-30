@@ -67,6 +67,7 @@ class DraftStore {
 
   @action
   clear() {
+    this.title = '';
     this.content = '';
     this.tags = '';
     this.slug = '';

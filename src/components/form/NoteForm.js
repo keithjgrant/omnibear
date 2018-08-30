@@ -56,7 +56,7 @@ export default class NoteForm extends Component {
               }}
             />
             <div className="input-extra">{draft.content.length}</div>
-            {store.viewType === REPLY ? <QuickReplies /> : null}
+            <QuickReplies />
           </div>
           <div>
             <label htmlFor="input-tags">Tags (space separated)</label>

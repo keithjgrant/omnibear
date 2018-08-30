@@ -26,6 +26,7 @@ module.exports = {
     localStorage: true,
     setTimeout: true,
     clearTimeout: true,
+    Promise: true,
     chrome: true,
     browser: true,
   },

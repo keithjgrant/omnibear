@@ -2269,7 +2269,7 @@ function logout() {
   });
 }
 
-var NON_ALPHANUM = /[^A-Za-z0-9\-]/g;
+var NON_ALPHANUM = /[^A-Za-z0-9-]/g;
 var FROM = 'áäâàãåčçćďéěëèêẽĕȇęėíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;';
 var TO = 'aaaaaacccdeeeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------';
 
@@ -2280,13 +2280,13 @@ function generateSlug(content) {
     formatted = formatted.replace(new RegExp(FROM.charAt(i), 'g'), TO.charAt(i));
   }
   formatted = formatted.replace(NON_ALPHANUM, '');
-  formatted = formatted.replace(/\-\-+/g, '-');
+  formatted = formatted.replace(/--+/g, '-');
   var parts = formatted.split('-');
   return parts.splice(0, 6).join('-');
 }
 
 function getPageUrl() {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     var tabId = localStorage.getItem('pageTabId');
     chrome.tabs.get(Number(tabId), function (tab) {
       resolve(tab.url);

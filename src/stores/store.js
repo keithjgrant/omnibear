@@ -126,9 +126,8 @@ class Store {
   };
 
   @action
-  sendQuickReply = content => {
-    this.draft.content = content;
-    this.sendReply();
+  addQuickReply = reacji => {
+    this.draft.content = this.draft.content + reacji;
   };
 
   @action

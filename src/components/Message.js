@@ -1,6 +1,7 @@
 import {h, Component} from 'preact';
 import {observer} from 'mobx-preact';
 import {MESSAGE_SUCCESS, MESSAGE_ERROR, MESSAGE_INFO} from '../constants';
+import {openLink} from '../util/utils';
 
 @observer
 export default class Message extends Component {
@@ -13,7 +14,9 @@ export default class Message extends Component {
           <span>
             {':'}
             <br />
-            <a href={message.location}>{message.location}</a>
+            <a href={message.location} onClick={openLink}>
+              {message.location}
+            </a>
           </span>
         ) : null}
       </div>

@@ -18568,6 +18568,8 @@ var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-pr
 
 var _constants = __webpack_require__(/*! ../constants */ "./src/constants.js");
 
+var _utils = __webpack_require__(/*! ../util/utils */ "./src/util/utils.js");
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18602,7 +18604,7 @@ var Message = (0, _mobxPreact.observer)(_class = function (_Component) {
           (0, _preact.h)('br', null),
           (0, _preact.h)(
             'a',
-            { href: message.location },
+            { href: message.location, onClick: _utils.openLink },
             message.location
           )
         ) : null
@@ -18937,7 +18939,7 @@ var NoteForm = (_dec = (0, _mobxPreact.inject)('store', 'draft', 'settings'), _d
               { className: 'input-extra' },
               draft.content.length
             ),
-            store.viewType === _constants.REPLY ? (0, _preact.h)(_QuickReplies2.default, null) : null
+            (0, _preact.h)(_QuickReplies2.default, null)
           ),
           (0, _preact.h)(
             'div',
@@ -19061,7 +19063,7 @@ var QuickReplies = (_dec = (0, _mobxPreact.inject)('store', 'settings'), _dec(_c
     }, _this.send = function (content) {
       var store = _this.props.store;
 
-      store.sendQuickReply(content);
+      store.addQuickReply(content);
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
@@ -20849,6 +20851,7 @@ var DraftStore = (_class = function () {
   }, {
     key: 'clear',
     value: function clear() {
+      this.title = '';
       this.content = '';
       this.tags = '';
       this.slug = '';
@@ -21321,7 +21324,7 @@ var Store = (_class = function () {
 
     _initDefineProp(this, 'sendReply', _descriptor8, this);
 
-    _initDefineProp(this, 'sendQuickReply', _descriptor9, this);
+    _initDefineProp(this, 'addQuickReply', _descriptor9, this);
 
     _initDefineProp(this, 'sendBookmark', _descriptor10, this);
 
@@ -21540,14 +21543,13 @@ var Store = (_class = function () {
       }, _callee2, _this2, [[4, 12]]);
     }));
   }
-}), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'sendQuickReply', [_mobx.action], {
+}), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'addQuickReply', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this3 = this;
 
-    return function (content) {
-      _this3.draft.content = content;
-      _this3.sendReply();
+    return function (reacji) {
+      _this3.draft.content = _this3.draft.content + reacji;
     };
   }
 }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'sendBookmark', [_mobx.action], {
@@ -22160,7 +22162,7 @@ function logout() {
   });
 }
 
-var NON_ALPHANUM = /[^A-Za-z0-9\-]/g;
+var NON_ALPHANUM = /[^A-Za-z0-9-]/g;
 var FROM = 'áäâàãåčçćďéěëèêẽĕȇęėíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;';
 var TO = 'aaaaaacccdeeeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------';
 
@@ -22171,13 +22173,13 @@ function generateSlug(content) {
     formatted = formatted.replace(new RegExp(FROM.charAt(i), 'g'), TO.charAt(i));
   }
   formatted = formatted.replace(NON_ALPHANUM, '');
-  formatted = formatted.replace(/\-\-+/g, '-');
+  formatted = formatted.replace(/--+/g, '-');
   var parts = formatted.split('-');
   return parts.splice(0, 6).join('-');
 }
 
 function getPageUrl() {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     var tabId = localStorage.getItem('pageTabId');
     chrome.tabs.get(Number(tabId), function (tab) {
       resolve(tab.url);
