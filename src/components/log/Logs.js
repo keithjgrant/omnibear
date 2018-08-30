@@ -21,7 +21,9 @@ export default class Logs extends Component {
         <div className="container container--full">
           <h1 className="section-heading">Logs</h1>
           {logs.length ? (
-            <ul className="logs">{logs.map(log => <LogItem log={log} />)}</ul>
+            <ul className="logs">
+              {logs.map((log, i) => <LogItem key={i} log={log} />)}
+            </ul>
           ) : (
             <p className="metadata">No logs found</p>
           )}

@@ -26,6 +26,8 @@ module.exports = {
     localStorage: true,
     setTimeout: true,
     clearTimeout: true,
+    setInterval: true,
+    clearInterval: true,
     Promise: true,
     chrome: true,
     browser: true,

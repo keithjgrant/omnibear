@@ -14,7 +14,7 @@ export default class Tab extends Component {
   }
 
   getClass() {
-    let classes = 'tab';
+    let classes = '';
     if (this.props.isActive) {
       classes += ' is-active';
     }

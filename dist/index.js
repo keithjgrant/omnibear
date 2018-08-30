@@ -17845,29 +17845,9 @@ var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/prea
 
 var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
-var _LoginForm = __webpack_require__(/*! ./LoginForm */ "./src/components/LoginForm.js");
-
-var _LoginForm2 = _interopRequireDefault(_LoginForm);
-
 var _ChangeViewTabs = __webpack_require__(/*! ./ChangeViewTabs */ "./src/components/ChangeViewTabs.js");
 
 var _ChangeViewTabs2 = _interopRequireDefault(_ChangeViewTabs);
-
-var _NoteForm = __webpack_require__(/*! ./form/NoteForm */ "./src/components/form/NoteForm.js");
-
-var _NoteForm2 = _interopRequireDefault(_NoteForm);
-
-var _Logs = __webpack_require__(/*! ./log/Logs */ "./src/components/log/Logs.js");
-
-var _Logs2 = _interopRequireDefault(_Logs);
-
-var _Message = __webpack_require__(/*! ./Message */ "./src/components/Message.js");
-
-var _Message2 = _interopRequireDefault(_Message);
-
-var _SettingsForm = __webpack_require__(/*! ./settings/SettingsForm */ "./src/components/settings/SettingsForm.js");
-
-var _SettingsForm2 = _interopRequireDefault(_SettingsForm);
 
 var _Header = __webpack_require__(/*! ./Header */ "./src/components/Header.js");
 
@@ -17880,12 +17860,6 @@ var _MainPane2 = _interopRequireDefault(_MainPane);
 var _Footer = __webpack_require__(/*! ./Footer */ "./src/components/Footer.js");
 
 var _Footer2 = _interopRequireDefault(_Footer);
-
-var _utils = __webpack_require__(/*! ../util/utils */ "./src/util/utils.js");
-
-var _settings = __webpack_require__(/*! ../util/settings */ "./src/util/settings.js");
-
-var _constants = __webpack_require__(/*! ../constants */ "./src/constants.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17906,21 +17880,7 @@ var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreac
 
   _createClass(App, [{
     key: 'render',
-
-    // constructor(props) {
-    //   super(props);
-    //   const settings = getSettings();
-    //   this.state = {
-    //     pageUrl: '',
-    //     userDomain: localStorage.getItem('domain'),
-    //     settings: settings,
-    //   };
-    //   // this.setDefaultView();
-    // }
-
     value: function render() {
-      // const {store} = this.props;
-      // const {userDomain} = this.state;
       return (0, _preact.h)(
         'div',
         { className: 'l-main' },
@@ -17934,36 +17894,6 @@ var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreac
         (0, _preact.h)(_Footer2.default, null)
       );
     }
-
-    // getPageUrl() {
-    //   getPageUrl().then(url => {
-    //     this.setState({
-    //       pageUrl: url,
-    //     });
-    //   });
-    // }
-    //
-    // displayMessage = (message, status, location) => {
-    //   this.setState({
-    //     currentView: 'feedback',
-    //     message: message,
-    //     postLocation: typeof location === 'string' ? location : null,
-    //   });
-    // };
-    //
-    // handleSettings = () => {
-    //   this.setState({currentView: SETTINGS});
-    // };
-    //
-    // handleLogs = () => {
-    //   this.setState({currentView: LOGS});
-    // };
-    //
-    // handleLogout = () => {
-    //   logout();
-    //   this.setState({currentView: LOGIN});
-    // };
-
   }]);
 
   return App;
@@ -18291,19 +18221,7 @@ var _Message = __webpack_require__(/*! ./Message */ "./src/components/Message.js
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _Footer = __webpack_require__(/*! ./Footer */ "./src/components/Footer.js");
-
-var _Footer2 = _interopRequireDefault(_Footer);
-
 var _utils = __webpack_require__(/*! ../util/utils */ "./src/util/utils.js");
-
-var _micropub = __webpack_require__(/*! ../util/micropub */ "./src/util/micropub.js");
-
-var _micropub2 = _interopRequireDefault(_micropub);
-
-var _settings = __webpack_require__(/*! ../util/settings */ "./src/util/settings.js");
-
-var _log = __webpack_require__(/*! ../util/log */ "./src/util/log.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18721,7 +18639,7 @@ var Tab = function (_Component) {
   }, {
     key: 'getClass',
     value: function getClass() {
-      var classes = 'tab';
+      var classes = '';
       if (this.props.isActive) {
         classes += ' is-active';
       }
@@ -18851,8 +18769,6 @@ var _QuickReplies2 = _interopRequireDefault(_QuickReplies);
 var _SyndicateInputs = __webpack_require__(/*! ./SyndicateInputs */ "./src/components/form/SyndicateInputs.js");
 
 var _SyndicateInputs2 = _interopRequireDefault(_SyndicateInputs);
-
-var _constants = __webpack_require__(/*! ../../constants */ "./src/constants.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19584,7 +19500,7 @@ var LogDetails = function (_Component) {
 
       return (0, _preact.h)(
         'div',
-        { 'class': 'log-details' },
+        { className: 'log-details' },
         this.renderDetail(details, true)
       );
     }
@@ -19606,10 +19522,10 @@ var LogDetails = function (_Component) {
           'div',
           { style: { marginLeft: marginLeft } },
           '[',
-          detail.map(function (d) {
+          detail.map(function (d, i) {
             return (0, _preact.h)(
               'div',
-              { style: { marginLeft: marginLeft } },
+              { key: i, style: { marginLeft: marginLeft } },
               _this2.renderDetail(d),
               ','
             );
@@ -19619,15 +19535,15 @@ var LogDetails = function (_Component) {
       }
       return [(0, _preact.h)(
         'span',
-        null,
+        { key: 'open-brace' },
         '{'
       ), (0, _preact.h)(
         'div',
-        { style: { marginLeft: marginLeft } },
+        { key: 'content', style: { marginLeft: marginLeft } },
         Object.keys(detail).map(function (key) {
           return (0, _preact.h)(
             'div',
-            { style: { marginLeft: '1em' } },
+            { key: key, style: { marginLeft: '1em' } },
             key,
             ': ',
             _this2.renderDetail(detail[key])
@@ -19635,7 +19551,7 @@ var LogDetails = function (_Component) {
         })
       ), (0, _preact.h)(
         'span',
-        null,
+        { key: 'close-brace' },
         '}'
       )];
     }
@@ -19827,8 +19743,8 @@ var Logs = function (_Component) {
           logs.length ? (0, _preact.h)(
             'ul',
             { className: 'logs' },
-            logs.map(function (log) {
-              return (0, _preact.h)(_LogItem2.default, { log: log });
+            logs.map(function (log, i) {
+              return (0, _preact.h)(_LogItem2.default, { key: i, log: log });
             })
           ) : (0, _preact.h)(
             'p',
@@ -20007,6 +19923,136 @@ exports.default = AuthenticationFields;
 
 /***/ }),
 
+/***/ "./src/components/settings/EmojiSettings.js":
+/*!**************************************************!*\
+  !*** ./src/components/settings/EmojiSettings.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dec, _class;
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EmojiSettings = (_dec = (0, _mobxPreact.inject)('settings'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
+  _inherits(EmojiSettings, _Component);
+
+  function EmojiSettings(props) {
+    _classCallCheck(this, EmojiSettings);
+
+    var _this = _possibleConstructorReturn(this, (EmojiSettings.__proto__ || Object.getPrototypeOf(EmojiSettings)).call(this, props));
+
+    _this.renderReacji = function (char, i) {
+      return (0, _preact.h)(
+        'div',
+        { className: 'reacji-tag', key: char },
+        char,
+        (0, _preact.h)(
+          'button',
+          { type: 'button', onClick: _this.deleteReacji(i) },
+          '\xD7'
+        )
+      );
+    };
+
+    _this.update = function (e) {
+      _this.setState({ value: e.target.value });
+    };
+
+    _this.addReacji = function () {
+      var value = _this.state.value;
+      var settings = _this.props.settings;
+
+      if (value && settings.reacji.indexOf(value) === -1) {
+        settings.addReacji(value);
+        settings.save();
+        _this.setState({ value: '' });
+      }
+    };
+
+    _this.state = {
+      value: ''
+    };
+    return _this;
+  }
+
+  _createClass(EmojiSettings, [{
+    key: 'render',
+    value: function render() {
+      var settings = this.props.settings;
+
+      return (0, _preact.h)(
+        'div',
+        null,
+        (0, _preact.h)(
+          'label',
+          null,
+          'Quick emoji'
+        ),
+        (0, _preact.h)(
+          'div',
+          { className: 'reacji-row' },
+          settings.reacji.map(this.renderReacji)
+        ),
+        (0, _preact.h)(
+          'div',
+          { className: 'input-inline' },
+          (0, _preact.h)('input', {
+            type: 'text',
+            value: this.state.value,
+            onChange: this.update,
+            placeholder: 'Enter reaction emoji',
+            maxLength: '15'
+          }),
+          (0, _preact.h)(
+            'button',
+            { type: 'button', onClick: this.addReacji },
+            'Add'
+          )
+        )
+      );
+    }
+  }, {
+    key: 'deleteReacji',
+    value: function deleteReacji(index) {
+      var _this2 = this;
+
+      return function () {
+        var settings = _this2.props.settings;
+
+        var reacji = settings.reacji;
+        var before = reacji.slice(0, index);
+        var after = reacji.slice(index + 1);
+        settings.setReacji(before.concat(after));
+        settings.save();
+      };
+    }
+  }]);
+
+  return EmojiSettings;
+}(_preact.Component)) || _class) || _class);
+exports.default = EmojiSettings;
+
+/***/ }),
+
 /***/ "./src/components/settings/EndpointFields.js":
 /*!***************************************************!*\
   !*** ./src/components/settings/EndpointFields.js ***!
@@ -20152,136 +20198,6 @@ exports.default = EndpointFields;
 
 /***/ }),
 
-/***/ "./src/components/settings/ReacjiSettings.js":
-/*!***************************************************!*\
-  !*** ./src/components/settings/ReacjiSettings.js ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _dec, _class;
-
-var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
-
-var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ReacjiSettings = (_dec = (0, _mobxPreact.inject)('settings'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
-  _inherits(ReacjiSettings, _Component);
-
-  function ReacjiSettings(props) {
-    _classCallCheck(this, ReacjiSettings);
-
-    var _this = _possibleConstructorReturn(this, (ReacjiSettings.__proto__ || Object.getPrototypeOf(ReacjiSettings)).call(this, props));
-
-    _this.renderReacji = function (char, i) {
-      return (0, _preact.h)(
-        'div',
-        { className: 'reacji-tag', key: char },
-        char,
-        (0, _preact.h)(
-          'button',
-          { type: 'button', onClick: _this.deleteReacji(i) },
-          '\xD7'
-        )
-      );
-    };
-
-    _this.update = function (e) {
-      _this.setState({ value: e.target.value });
-    };
-
-    _this.addReacji = function () {
-      var value = _this.state.value;
-      var settings = _this.props.settings;
-
-      if (value && settings.reacji.indexOf(value) === -1) {
-        settings.addReacji(value);
-        settings.save();
-        _this.setState({ value: '' });
-      }
-    };
-
-    _this.state = {
-      value: ''
-    };
-    return _this;
-  }
-
-  _createClass(ReacjiSettings, [{
-    key: 'render',
-    value: function render() {
-      var settings = this.props.settings;
-
-      return (0, _preact.h)(
-        'div',
-        null,
-        (0, _preact.h)(
-          'label',
-          null,
-          'Quick replies (\u201CReacji\u201D)'
-        ),
-        (0, _preact.h)(
-          'div',
-          { className: 'reacji-row' },
-          settings.reacji.map(this.renderReacji)
-        ),
-        (0, _preact.h)(
-          'div',
-          { className: 'input-inline' },
-          (0, _preact.h)('input', {
-            type: 'text',
-            value: this.state.value,
-            onChange: this.update,
-            placeholder: 'Enter reaction emoji',
-            maxLength: '15'
-          }),
-          (0, _preact.h)(
-            'button',
-            { type: 'button', onClick: this.addReacji },
-            'Add'
-          )
-        )
-      );
-    }
-  }, {
-    key: 'deleteReacji',
-    value: function deleteReacji(index) {
-      var _this2 = this;
-
-      return function () {
-        var settings = _this2.props.settings;
-
-        var reacji = settings.reacji;
-        var before = reacji.slice(0, index);
-        var after = reacji.slice(index + 1);
-        settings.setReacji(before.concat(after));
-        settings.save();
-      };
-    }
-  }]);
-
-  return ReacjiSettings;
-}(_preact.Component)) || _class) || _class);
-exports.default = ReacjiSettings;
-
-/***/ }),
-
 /***/ "./src/components/settings/SettingsForm.js":
 /*!*************************************************!*\
   !*** ./src/components/settings/SettingsForm.js ***!
@@ -20305,9 +20221,9 @@ var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/prea
 
 var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
-var _ReacjiSettings = __webpack_require__(/*! ./ReacjiSettings */ "./src/components/settings/ReacjiSettings.js");
+var _EmojiSettings = __webpack_require__(/*! ./EmojiSettings */ "./src/components/settings/EmojiSettings.js");
 
-var _ReacjiSettings2 = _interopRequireDefault(_ReacjiSettings);
+var _EmojiSettings2 = _interopRequireDefault(_EmojiSettings);
 
 var _EndpointFields = __webpack_require__(/*! ./EndpointFields */ "./src/components/settings/EndpointFields.js");
 
@@ -20316,8 +20232,6 @@ var _EndpointFields2 = _interopRequireDefault(_EndpointFields);
 var _AuthenticationFields = __webpack_require__(/*! ./AuthenticationFields */ "./src/components/settings/AuthenticationFields.js");
 
 var _AuthenticationFields2 = _interopRequireDefault(_AuthenticationFields);
-
-var _log = __webpack_require__(/*! ../../util/log */ "./src/util/log.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20399,7 +20313,7 @@ var SettingsForm = (_dec = (0, _mobxPreact.inject)('settings'), _dec(_class = (0
                 'Record debug logs'
               )
             ),
-            (0, _preact.h)(_ReacjiSettings2.default, null),
+            (0, _preact.h)(_EmojiSettings2.default, null),
             (0, _preact.h)(_EndpointFields2.default, null),
             (0, _preact.h)(_AuthenticationFields2.default, null)
           )

@@ -1,11 +1,7 @@
 import {h, Component} from 'preact';
 import {observer, inject} from 'mobx-preact';
 import Message from './Message';
-import Footer from './Footer';
 import {openLink} from '../util/utils';
-import micropub from '../util/micropub';
-import {getSettings} from '../util/settings';
-import {info as log} from '../util/log';
 
 @inject('auth')
 @observer

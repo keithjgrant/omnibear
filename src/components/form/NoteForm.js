@@ -2,7 +2,6 @@ import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
 import QuickReplies from './QuickReplies';
 import SyndicateInputs from './SyndicateInputs';
-import {REPLY} from '../../constants';
 
 @inject('store', 'draft', 'settings')
 @observer

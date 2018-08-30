@@ -3,7 +3,9 @@ import {h, Component} from 'preact';
 export default class LogDetails extends Component {
   render() {
     const {details} = this.props;
-    return <div class="log-details">{this.renderDetail(details, true)}</div>;
+    return (
+      <div className="log-details">{this.renderDetail(details, true)}</div>
+    );
   }
 
   renderDetail(detail, isTopLevel) {
@@ -15,23 +17,25 @@ export default class LogDetails extends Component {
       return (
         <div style={{marginLeft}}>
           {'['}
-          {detail.map(d => (
-            <div style={{marginLeft}}>{this.renderDetail(d)},</div>
+          {detail.map((d, i) => (
+            <div key={i} style={{marginLeft}}>
+              {this.renderDetail(d)},
+            </div>
           ))}
           {']'}
         </div>
       );
     }
     return [
-      <span>{'{'}</span>,
-      <div style={{marginLeft}}>
+      <span key="open-brace">{'{'}</span>,
+      <div key="content" style={{marginLeft}}>
         {Object.keys(detail).map(key => (
-          <div style={{marginLeft: '1em'}}>
+          <div key={key} style={{marginLeft: '1em'}}>
             {key}: {this.renderDetail(detail[key])}
           </div>
         ))}
       </div>,
-      <span>{'}'}</span>,
+      <span key="close-brace">{'}'}</span>,
     ];
   }
 }

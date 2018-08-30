@@ -1,15 +1,7 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
 import UrlSelector from './form/UrlSelector';
-import {
-  NOTE,
-  REPLY,
-  BOOKMARK,
-  LIKE,
-  REPOST,
-  MESSAGE_SUCCESS,
-  MESSAGE_ERROR,
-} from '../constants';
+import {NOTE, REPLY, BOOKMARK, LIKE, REPOST} from '../constants';
 
 @inject('store')
 @observer

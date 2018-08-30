@@ -1,18 +1,16 @@
-import { h, Component } from 'preact';
-
+import {h, Component} from 'preact';
 
 export default class LinkButton extends Component {
   render() {
     return (
-      <button
-        className="button-link"
-        onClick={this.handleClick}
-      >{this.props.children}</button>
+      <button className="button-link" onClick={this.handleClick}>
+        {this.props.children}
+      </button>
     );
   }
 
-  handleClick = (e) => {
+  handleClick = e => {
     e.preventDefault();
     this.props.onClick();
-  }
+  };
 }

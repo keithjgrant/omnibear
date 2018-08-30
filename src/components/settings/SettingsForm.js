@@ -1,9 +1,8 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
-import ReacjiSettings from './ReacjiSettings';
+import EmojiSettings from './EmojiSettings';
 import EndpointFields from './EndpointFields';
 import AuthenticationFields from './AuthenticationFields';
-import {clearLogs} from '../../util/log';
 
 @inject('settings')
 @observer
@@ -55,7 +54,7 @@ export default class SettingsForm extends Component {
               </label>
             </div>
 
-            <ReacjiSettings />
+            <EmojiSettings />
             <EndpointFields />
             <AuthenticationFields />
           </form>

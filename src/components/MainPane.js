@@ -7,17 +7,7 @@ import RepostForm from './form/RepostForm';
 import SettingsForm from './settings/SettingsForm';
 import Message from './Message';
 import Logs from './log/Logs';
-import {
-  LOGIN,
-  NOTE,
-  REPLY,
-  BOOKMARK,
-  LIKE,
-  REPOST,
-  LOGS,
-  SETTINGS,
-  MESSAGE,
-} from '../constants';
+import {LOGIN, NOTE, LIKE, REPOST, LOGS, SETTINGS, MESSAGE} from '../constants';
 
 @inject('store')
 @observer

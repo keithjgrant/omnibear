@@ -3,7 +3,7 @@ import {inject, observer} from 'mobx-preact';
 
 @inject('settings')
 @observer
-export default class ReacjiSettings extends Component {
+export default class EmojiSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,7 +15,7 @@ export default class ReacjiSettings extends Component {
     const {settings} = this.props;
     return (
       <div>
-        <label>Quick replies (“Reacji”)</label>
+        <label>Quick emoji</label>
         <div className="reacji-row">
           {settings.reacji.map(this.renderReacji)}
         </div>

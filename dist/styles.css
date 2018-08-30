@@ -472,18 +472,6 @@ fieldset > * + * {
   flex: 1;
 }
 
-.inline-links {
-  font-size: 0.8em;
-}
-.inline-links > * + * {
-  margin-left: 0.5em;
-}
-.inline-links > * + *::before {
-  content: '|';
-  margin-right: 0.5em;
-  color: var(--gray-30);
-}
-
 .input-inline {
   display: flex;
 }
@@ -497,6 +485,12 @@ fieldset > * + * {
   min-height: 100%;
   padding: 0.5em 0;
 }
+@media (min-height: 450px) {
+  .side-nav {
+    height: calc(100vh - 1.9rem);
+    min-height: initial;
+  }
+}
 .side-nav > button {
   width: 100%;
   min-height: 3.125rem;
@@ -505,7 +499,7 @@ fieldset > * + * {
   border: 0;
   color: var(--gray-20);
   background: transparent;
-  font-size: 0.5rem;
+  font-size: 0.6rem;
   font-family: Jaldi, sans-serif;
   line-height: 1;
   text-transform: uppercase;
@@ -515,10 +509,19 @@ fieldset > * + * {
   margin: 0.5rem 1rem 0.3rem;
 }
 .side-nav > button:hover,
-.side-nav > button:focus,
-.side-nav > button.is-active {
+.side-nav > button:focus {
   color: var(--yellow);
   box-shadow: none;
+}
+.side-nav > button.is-active {
+  border: 1px solid var(--gray-90);
+  border-width: 1px 0;
+  background-color: white;
+}
+.side-nav > button.is-active:first-of-type {
+  /* stylelint-disable-next-line unit-whitelist */
+  padding-top: 1px;
+  border-top: 0;
 }
 .side-nav > button + button {
   margin-top: 0.5rem;
