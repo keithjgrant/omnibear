@@ -17995,6 +17995,38 @@ var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/prea
 
 var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
+var _Login = __webpack_require__(/*! ./svg/Login */ "./src/components/svg/Login.js");
+
+var _Login2 = _interopRequireDefault(_Login);
+
+var _Pen = __webpack_require__(/*! ./svg/Pen */ "./src/components/svg/Pen.js");
+
+var _Pen2 = _interopRequireDefault(_Pen);
+
+var _Reply = __webpack_require__(/*! ./svg/Reply */ "./src/components/svg/Reply.js");
+
+var _Reply2 = _interopRequireDefault(_Reply);
+
+var _Bookmark = __webpack_require__(/*! ./svg/Bookmark */ "./src/components/svg/Bookmark.js");
+
+var _Bookmark2 = _interopRequireDefault(_Bookmark);
+
+var _Heart = __webpack_require__(/*! ./svg/Heart */ "./src/components/svg/Heart.js");
+
+var _Heart2 = _interopRequireDefault(_Heart);
+
+var _Repost = __webpack_require__(/*! ./svg/Repost */ "./src/components/svg/Repost.js");
+
+var _Repost2 = _interopRequireDefault(_Repost);
+
+var _Logs = __webpack_require__(/*! ./svg/Logs */ "./src/components/svg/Logs.js");
+
+var _Logs2 = _interopRequireDefault(_Logs);
+
+var _Settings = __webpack_require__(/*! ./svg/Settings */ "./src/components/svg/Settings.js");
+
+var _Settings2 = _interopRequireDefault(_Settings);
+
 var _Tab = __webpack_require__(/*! ./Tab */ "./src/components/Tab.js");
 
 var _Tab2 = _interopRequireDefault(_Tab);
@@ -18012,7 +18044,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var UNICODE_NBSP = '\xA0';
-var ICONS = (_ICONS = {}, _defineProperty(_ICONS, _constants.LOGIN, '/icons/login.svg'), _defineProperty(_ICONS, _constants.NOTE, '/icons/pen.svg'), _defineProperty(_ICONS, _constants.REPLY, '/icons/reply.svg'), _defineProperty(_ICONS, _constants.BOOKMARK, '/icons/bookmark.svg'), _defineProperty(_ICONS, _constants.REPOST, '/icons/refresh.svg'), _defineProperty(_ICONS, _constants.LIKE, '/icons/heart.svg'), _defineProperty(_ICONS, _constants.LOGS, '/icons/alert.svg'), _defineProperty(_ICONS, _constants.SETTINGS, '/icons/settings.svg'), _defineProperty(_ICONS, 'quick', '/icons/flash.svg'), _ICONS);
+var ICONS = (_ICONS = {}, _defineProperty(_ICONS, _constants.LOGIN, _Login2.default), _defineProperty(_ICONS, _constants.NOTE, _Pen2.default), _defineProperty(_ICONS, _constants.REPLY, _Reply2.default), _defineProperty(_ICONS, _constants.BOOKMARK, _Bookmark2.default), _defineProperty(_ICONS, _constants.LIKE, _Heart2.default), _defineProperty(_ICONS, _constants.REPOST, _Repost2.default), _defineProperty(_ICONS, _constants.LOGS, _Logs2.default), _defineProperty(_ICONS, _constants.SETTINGS, _Settings2.default), _ICONS);
 
 var ChangeViewTabs = (_dec = (0, _mobxPreact.inject)('store', 'auth', 'settings'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(ChangeViewTabs, _Component);
@@ -18045,6 +18077,7 @@ var ChangeViewTabs = (_dec = (0, _mobxPreact.inject)('store', 'auth', 'settings'
       var onBottom = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
       var store = this.props.store;
 
+      var Icon = ICONS[postType];
       return (0, _preact.h)(
         _Tab2.default,
         {
@@ -18052,7 +18085,7 @@ var ChangeViewTabs = (_dec = (0, _mobxPreact.inject)('store', 'auth', 'settings'
           onClick: this.switchTo(postType),
           onBottom: onBottom
         },
-        (0, _preact.h)('img', { src: ICONS[postType], alt: label }),
+        (0, _preact.h)(Icon, null),
         label.replace(' ', UNICODE_NBSP)
       );
     }
@@ -19299,7 +19332,13 @@ var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/prea
 
 var _mobxPreact = __webpack_require__(/*! mobx-preact */ "./node_modules/mobx-preact/lib/index.module.js");
 
+var _DownArrow = __webpack_require__(/*! ../svg/DownArrow */ "./src/components/svg/DownArrow.js");
+
+var _DownArrow2 = _interopRequireDefault(_DownArrow);
+
 var _constants = __webpack_require__(/*! ../../constants */ "./src/constants.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -19375,6 +19414,11 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
               'div',
               { className: 'nowrap' },
               store.selectedEntry.url
+            ),
+            (0, _preact.h)(
+              'div',
+              { className: 'dropdown__toggle__arrow' },
+              (0, _preact.h)(_DownArrow2.default, null)
             )
           ),
           (0, _preact.h)(
@@ -20377,6 +20421,599 @@ exports.default = SettingsForm;
 
 /***/ }),
 
+/***/ "./src/components/svg/Bookmark.js":
+/*!****************************************!*\
+  !*** ./src/components/svg/Bookmark.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Bookmark = function (_Component) {
+  _inherits(Bookmark, _Component);
+
+  function Bookmark() {
+    _classCallCheck(this, Bookmark);
+
+    return _possibleConstructorReturn(this, (Bookmark.__proto__ || Object.getPrototypeOf(Bookmark)).apply(this, arguments));
+  }
+
+  _createClass(Bookmark, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "svg",
+        { className: "svg-bookmark", viewBox: "0 0 512 512" },
+        (0, _preact.h)(
+          "desc",
+          null,
+          "bookmark"
+        ),
+        (0, _preact.h)("path", {
+          d: "M429.998,431.996c-11.046,0-20,8.954-20,20c0,5.576-1.889,10.268-5.615,13.947c-3.91,3.861-9.583,6.098-15.132,6.054 c-5.475-0.07-9.919-1.935-13.587-5.705L270.333,358.048c-3.765-3.869-8.935-6.052-14.333-6.052s-10.568,2.183-14.333,6.052 L136.335,466.292c-3.641,3.742-8.118,5.608-13.686,5.706c-5.61,0.115-11.257-2.12-15.14-5.936 c-3.655-3.591-5.508-8.206-5.508-13.718V79.999c0-22.056,17.944-40,40-40h227.997c22.056,0,40,17.944,40,40v272.997 c0,11.046,8.954,20,20,20c11.046,0,20-8.954,20-20V79.999C449.997,35.888,414.11,0,369.998,0H142.001 C97.889,0,62.002,35.888,62.002,79.999v372.345c0,16.174,6.206,31.179,17.474,42.25C90.77,505.69,106.32,512,122.288,512 c0.355,0,0.711-0.003,1.066-0.009c16.191-0.285,30.592-6.441,41.648-17.804L256,400.673l90.998,93.514 c11.136,11.444,25.572,17.601,41.747,17.806c16.236,0.167,32.215-6.204,43.742-17.588c11.292-11.149,17.51-26.211,17.51-42.409 C449.998,440.95,441.044,431.996,429.998,431.996z",
+          fill: "currentColor"
+        })
+      );
+    }
+  }]);
+
+  return Bookmark;
+}(_preact.Component);
+
+exports.default = Bookmark;
+
+/***/ }),
+
+/***/ "./src/components/svg/DownArrow.js":
+/*!*****************************************!*\
+  !*** ./src/components/svg/DownArrow.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DownArrow = function (_Component) {
+  _inherits(DownArrow, _Component);
+
+  function DownArrow() {
+    _classCallCheck(this, DownArrow);
+
+    return _possibleConstructorReturn(this, (DownArrow.__proto__ || Object.getPrototypeOf(DownArrow)).apply(this, arguments));
+  }
+
+  _createClass(DownArrow, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "svg",
+        { className: "svg-down-arrow", viewBox: "0 0 512 512" },
+        (0, _preact.h)(
+          "desc",
+          null,
+          "DownArrow"
+        ),
+        (0, _preact.h)("path", {
+          d: "M506.157,132.386c-7.803-7.819-20.465-7.831-28.285-0.029l-207.73,207.299c-7.799,7.798-20.486,7.797-28.299-0.015 L34.128,132.357c-7.819-7.803-20.481-7.79-28.285,0.029c-7.802,7.819-7.789,20.482,0.029,28.284l207.701,207.27 c11.701,11.699,27.066,17.547,42.433,17.547c15.358,0,30.719-5.846,42.405-17.533L506.128,160.67 C513.946,152.868,513.959,140.205,506.157,132.386z",
+          fill: "currentColor"
+        })
+      );
+    }
+  }]);
+
+  return DownArrow;
+}(_preact.Component);
+
+exports.default = DownArrow;
+
+/***/ }),
+
+/***/ "./src/components/svg/Heart.js":
+/*!*************************************!*\
+  !*** ./src/components/svg/Heart.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Heart = function (_Component) {
+  _inherits(Heart, _Component);
+
+  function Heart() {
+    _classCallCheck(this, Heart);
+
+    return _possibleConstructorReturn(this, (Heart.__proto__ || Object.getPrototypeOf(Heart)).apply(this, arguments));
+  }
+
+  _createClass(Heart, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "svg",
+        { className: "svg-heart", viewBox: "0 0 512 512" },
+        (0, _preact.h)(
+          "desc",
+          null,
+          "Heart"
+        ),
+        (0, _preact.h)("path", {
+          d: "M471.67,79.174C446.515,53.701,411.829,39.672,374,39.672c-66.136,0-100.331,34.03-117.371,62.577 c-0.212,0.354-0.422,0.709-0.629,1.063c-0.207-0.354-0.417-0.709-0.629-1.063C238.331,73.702,204.136,39.672,138,39.672 c-37.829,0-72.515,14.029-97.67,39.503C13.946,105.894,0,142.469,0,184.946c0,90.198,80.181,150.001,150.922,202.764 c35.249,26.29,68.543,51.123,89.498,77.158c3.796,4.717,9.525,7.46,15.58,7.46s11.784-2.743,15.581-7.458 c10.778-13.392,25.76-27.631,47.152-44.812c8.611-6.917,9.985-19.506,3.068-28.118c-6.916-8.61-19.505-9.986-28.117-3.069 c-15.092,12.122-27.436,23.085-37.675,33.503c-22.608-23.047-51.223-44.39-81.172-66.727C108.547,306.204,40,255.077,40,184.946 c0-61.984,40.299-105.274,98-105.274c37.519,0,65.223,14.115,82.34,41.952c13.59,22.097,15.704,45.098,15.718,45.24 c0.802,10.419,9.488,18.508,19.937,18.508c10.451,0,19.136-8.001,19.938-18.42c0.021-0.23,2.135-23.231,15.725-45.328 C308.777,93.787,336.481,79.672,374,79.672c57.701,0,98,43.29,98,105.274c0,58.038-47.252,103.036-98.315,143.017 c-8.696,6.809-10.227,19.38-3.417,28.077c6.807,8.696,19.379,10.227,28.077,3.417c24.29-19.019,55.077-44.72,77.723-74.901 C500.246,252.333,512,219.75,512,184.946C512,142.469,498.054,105.894,471.67,79.174z",
+          fill: "currentColor"
+        })
+      );
+    }
+  }]);
+
+  return Heart;
+}(_preact.Component);
+
+exports.default = Heart;
+
+/***/ }),
+
+/***/ "./src/components/svg/Login.js":
+/*!*************************************!*\
+  !*** ./src/components/svg/Login.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Login = function (_Component) {
+  _inherits(Login, _Component);
+
+  function Login() {
+    _classCallCheck(this, Login);
+
+    return _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).apply(this, arguments));
+  }
+
+  _createClass(Login, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "svg",
+        { className: "svg-login", viewBox: "0 0 512 512" },
+        (0, _preact.h)(
+          "desc",
+          null,
+          "Login"
+        ),
+        (0, _preact.h)(
+          "g",
+          null,
+          (0, _preact.h)("path", {
+            d: "M131.5,472H60.693c-8.538,0-13.689-4.765-15.999-7.606c-3.988-4.906-5.533-11.29-4.236-17.519 c20.769-99.761,108.809-172.616,210.445-174.98c1.693,0.063,3.39,0.105,5.097,0.105c1.722,0,3.434-0.043,5.142-0.107 c24.853,0.567,49.129,5.24,72.236,13.917c10.34,3.885,21.871-1.352,25.754-11.693c3.883-10.34-1.352-21.871-11.693-25.754 c-3.311-1.244-6.645-2.408-9.995-3.512C370.545,220.021,392,180.469,392,136C392,61.01,330.991,0,256,0 c-74.991,0-136,61.01-136,136c0,44.509,21.492,84.092,54.643,108.918c-30.371,9.998-58.871,25.546-83.813,46.062 c-45.732,37.617-77.529,90.086-89.532,147.743c-3.762,18.066,0.744,36.622,12.363,50.908C25.221,503.847,42.364,512,60.693,512 H131.5c11.046,0,20-8.954,20-20C151.5,480.954,142.546,472,131.5,472z M160,136c0-52.935,43.065-96,96-96s96,43.065,96,96 c0,51.367-40.554,93.438-91.326,95.885c-1.557-0.028-3.114-0.052-4.674-0.052c-1.564,0-3.127,0.023-4.689,0.051 C200.546,229.43,160,187.362,160,136z",
+            fill: "currentColor"
+          }),
+          (0, _preact.h)("path", {
+            d: "M496.689,344.607c-8.561-19.15-27.845-31.558-49.176-31.607h-62.372c-0.045,0-0.087,0-0.133,0 c-22.5,0-42.13,13.26-50.029,33.807c-1.051,2.734-2.336,6.178-3.677,10.193H200.356c-5.407,0-10.583,2.189-14.35,6.068 l-34.356,35.388c-7.567,7.794-7.529,20.203,0.085,27.95l35,35.612c3.76,3.826,8.9,5.981,14.264,5.981h65c11.046,0,20-8.954,20-20 c0-11.046-8.954-20-20-20h-56.614l-15.428-15.698L208.814,397h137.491c9.214,0,17.235-6.295,19.426-15.244 c1.618-6.607,3.648-12.959,6.584-20.596c1.936-5.036,6.798-8.16,12.741-8.16c0.013,0,0.026,0,0.039,0h62.371 c5.656,0.013,10.524,3.053,12.705,7.932c5.369,12.012,11.78,30.608,11.828,50.986c0.048,20.529-6.356,39.551-11.739,51.894 c-2.17,4.978-7.079,8.188-12.56,8.188c-0.011,0-0.022,0-0.033,0h-63.125c-5.533-0.013-10.716-3.573-12.896-8.858 c-2.339-5.671-4.366-12.146-6.197-19.797c-2.571-10.742-13.367-17.366-24.105-14.796c-10.743,2.571-17.367,13.364-14.796,24.106 c2.321,9.699,4.978,18.118,8.121,25.738c8.399,20.364,27.939,33.555,49.827,33.606h63.125c0.043,0,0.083,0,0.126,0 c21.351-0.001,40.647-12.63,49.18-32.201c6.912-15.851,15.137-40.511,15.072-67.975 C511.935,384.434,503.638,360.153,496.689,344.607z",
+            fill: "currentColor"
+          }),
+          (0, _preact.h)("circle", { cx: "431", cy: "412", r: "20", fill: "currentColor" })
+        )
+      );
+    }
+  }]);
+
+  return Login;
+}(_preact.Component);
+
+exports.default = Login;
+
+/***/ }),
+
+/***/ "./src/components/svg/Logs.js":
+/*!************************************!*\
+  !*** ./src/components/svg/Logs.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Logs = function (_Component) {
+  _inherits(Logs, _Component);
+
+  function Logs() {
+    _classCallCheck(this, Logs);
+
+    return _possibleConstructorReturn(this, (Logs.__proto__ || Object.getPrototypeOf(Logs)).apply(this, arguments));
+  }
+
+  _createClass(Logs, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "svg",
+        { className: "svg-logs", viewBox: "0 0 512 512" },
+        (0, _preact.h)(
+          "desc",
+          null,
+          "Logs"
+        ),
+        (0, _preact.h)("path", {
+          d: "M272.393,220c0-11.046-8.954-20-20-20h-126c-11.046,0-20,8.954-20,20s8.954,20,20,20h126 C263.439,240,272.393,231.046,272.393,220z",
+          fill: "currentColor"
+        }),
+        (0, _preact.h)("path", {
+          d: "M126.393,280c-11.046,0-20,8.954-20,20c0,11.046,8.954,20,20,20h71.111c11.046,0,20-8.954,20-20c0-11.046-8.954-20-20-20 H126.393z",
+          fill: "currentColor"
+        }),
+        (0, _preact.h)("path", {
+          d: "M127.505,472h-21c-22.056,0-40-17.944-40-40V80c0-22.056,17.944-40,40-40h245.889c22.056,0,40,17.944,40,40v134 c0,11.046,8.954,20,20,20c11.046,0,20-8.954,20-20V80c0-44.112-35.888-80-80-80H106.505c-44.112,0-80,35.888-80,80v352 c0,44.112,35.888,80,80,80h21c11.046,0,20-8.954,20-20C147.505,480.954,138.551,472,127.505,472z",
+          fill: "currentColor"
+        }),
+        (0, _preact.h)("path", {
+          d: "M352.393,140c0-11.046-8.954-20-20-20h-206c-11.046,0-20,8.954-20,20s8.954,20,20,20h206 C343.439,160,352.393,151.046,352.393,140z",
+          fill: "currentColor"
+        }),
+        (0, _preact.h)("path", {
+          d: "M330.51,472h-0.01c-11.046,0-19.995,8.954-19.995,20c0,11.046,8.959,20,20.005,20s20-8.954,20-20 C350.51,480.954,341.556,472,330.51,472z",
+          fill: "currentColor"
+        }),
+        (0, _preact.h)("path", {
+          d: "M481.566,435.655l-0.607-1.522l-29.368-48.627l-72.897-118.028C368.453,250.898,350.709,241,331.228,241 c-19.479,0-37.224,9.898-47.464,26.478L185.34,426.834c-10.79,17.472-11.261,38.61-1.257,56.545 C194.078,501.3,212.292,512,232.806,512h27.699c11.046,0,20-8.954,20-20c0-11.046-8.954-20-20-20h-27.699 c-8.365,0-12.43-5.668-13.789-8.105c-1.363-2.443-4.057-8.898,0.355-16.042l98.424-159.355c4.18-6.767,10.787-7.498,13.433-7.498 s9.254,0.73,13.434,7.498l72.739,117.771l27.443,45.44c1.346,4.457,0.572,9.382-2.158,13.412 c-1.741,2.569-5.749,6.879-13.034,6.879h-27.147c-11.046,0-20,8.954-20,20c0,11.046,8.954,20,20,20h27.147 c18.526,0,35.778-9.137,46.148-24.441C486.235,472.159,488.39,452.755,481.566,435.655z",
+          fill: "currentColor"
+        }),
+        (0, _preact.h)("path", {
+          d: "M330.505,452c11.046,0,20-8.954,20-20v-75c0-11.046-8.954-20-20-20c-11.046,0-20,8.954-20,20v75 C310.505,443.046,319.459,452,330.505,452z",
+          fill: "currentColor"
+        })
+      );
+    }
+  }]);
+
+  return Logs;
+}(_preact.Component);
+
+exports.default = Logs;
+
+/***/ }),
+
+/***/ "./src/components/svg/Pen.js":
+/*!***********************************!*\
+  !*** ./src/components/svg/Pen.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Pen = function (_Component) {
+  _inherits(Pen, _Component);
+
+  function Pen() {
+    _classCallCheck(this, Pen);
+
+    return _possibleConstructorReturn(this, (Pen.__proto__ || Object.getPrototypeOf(Pen)).apply(this, arguments));
+  }
+
+  _createClass(Pen, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "svg",
+        { className: "svg-pen", viewBox: "0 0 512 512" },
+        (0, _preact.h)(
+          "desc",
+          null,
+          "Pen"
+        ),
+        (0, _preact.h)("path", {
+          d: "M493.89,45.897l-28.461-28.397c-23.419-23.367-61.485-23.325-84.843,0.083l-61.68,61.713l-143.454,34.759 c-41.205,9.984-74.403,41.403-86.639,81.995L1.338,486.225c-2.127,7.057-0.201,14.712,5.013,19.921 c3.806,3.803,8.913,5.853,14.139,5.853c1.932,0,3.881-0.28,5.786-0.856l289.14-87.414c40.62-12.281,72.021-45.54,81.947-86.797 l13.259-55.105c2.584-10.74-4.027-21.541-14.767-24.125c-10.742-2.58-21.541,4.028-24.125,14.768l-13.258,55.105 c-6.618,27.505-27.551,49.677-54.632,57.865L91.032,449.775l86.917-86.947c6.939-1.586,19.181-4.522,32.385-8.333 c38.753-11.188,50.758-19.657,56.886-25.786c23.005-23.005,23.005-60.438,0-83.442c-23.005-23.004-60.438-23.005-83.442,0 c-6.128,6.128-14.599,18.133-25.786,56.886c-3.814,13.214-6.752,25.463-8.337,32.4l-87.07,87.1l64.528-214.058 c8.157-27.061,30.29-48.007,57.759-54.664l138.665-33.599l76.833,76.796c3.75,3.749,8.836,5.854,14.14,5.854h0.005 c5.305-0.001,10.392-2.11,14.142-5.862l65.329-65.364c11.322-11.346,17.547-26.42,17.529-42.449 C511.495,72.279,505.237,57.217,493.89,45.897z M212.079,273.535c7.41-7.392,19.453-7.387,26.855,0.016 c7.408,7.408,7.408,19.463,0.025,26.847c-4.352,4.086-22.133,10.748-43.701,16.83 C201.335,295.674,207.992,277.905,212.079,273.535z M465.679,102.49L414.5,153.695l-56.729-56.703l51.118-51.146 c7.79-7.806,20.479-7.82,28.285-0.031l28.461,28.397c3.782,3.773,5.868,8.794,5.874,14.137 C471.516,93.692,469.442,98.719,465.679,102.49z",
+          fill: "currentColor"
+        })
+      );
+    }
+  }]);
+
+  return Pen;
+}(_preact.Component);
+
+exports.default = Pen;
+
+/***/ }),
+
+/***/ "./src/components/svg/Reply.js":
+/*!*************************************!*\
+  !*** ./src/components/svg/Reply.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Reply = function (_Component) {
+  _inherits(Reply, _Component);
+
+  function Reply() {
+    _classCallCheck(this, Reply);
+
+    return _possibleConstructorReturn(this, (Reply.__proto__ || Object.getPrototypeOf(Reply)).apply(this, arguments));
+  }
+
+  _createClass(Reply, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "svg",
+        { className: "svg-reply", viewBox: "0 0 512 512" },
+        (0, _preact.h)(
+          "desc",
+          null,
+          "Reply"
+        ),
+        (0, _preact.h)(
+          "g",
+          null,
+          (0, _preact.h)("path", {
+            d: "M171.154,312.882L45.846,187.142c-7.799-7.798-7.799-20.486-0.032-28.252L171.098,34.174 c7.828-7.793,7.856-20.456,0.063-28.284c-7.792-7.829-20.455-7.856-28.284-0.064L17.56,130.574 c-23.393,23.394-23.393,61.458-0.023,84.828l125.284,125.716c3.907,3.921,9.036,5.882,14.166,5.882 c5.107,0,10.215-1.944,14.119-5.834C178.929,333.369,178.952,320.706,171.154,312.882z",
+            fill: "currentColor"
+          }),
+          (0, _preact.h)("path", {
+            d: "M332.487,153h-213.5c-11.046,0-20,8.954-20,20s8.954,20,20,20h213.5c76.921,0,139.5,62.58,139.5,139.5 S409.408,472,332.487,472c-11.046,0-20,8.954-20,20c0,11.046,8.954,20,20,20c98.977,0,179.5-80.523,179.5-179.5 S431.464,153,332.487,153z",
+            fill: "currentColor"
+          })
+        )
+      );
+    }
+  }]);
+
+  return Reply;
+}(_preact.Component);
+
+exports.default = Reply;
+
+/***/ }),
+
+/***/ "./src/components/svg/Repost.js":
+/*!**************************************!*\
+  !*** ./src/components/svg/Repost.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Repost = function (_Component) {
+  _inherits(Repost, _Component);
+
+  function Repost() {
+    _classCallCheck(this, Repost);
+
+    return _possibleConstructorReturn(this, (Repost.__proto__ || Object.getPrototypeOf(Repost)).apply(this, arguments));
+  }
+
+  _createClass(Repost, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "svg",
+        { className: "svg-repost", viewBox: "0 0 512 512" },
+        (0, _preact.h)(
+          "desc",
+          null,
+          "Repost"
+        ),
+        (0, _preact.h)(
+          "g",
+          null,
+          (0, _preact.h)("path", {
+            d: " M 414.582 410.562 C 405.394 403.672 403.898 397.175 407.117 386.445 C 418.383 359.62 427.591 348.189 431.157 295.417 C 431.157 284.393 440.094 275.458 451.118 275.458 C 462.143 275.458 471.079 284.397 471.079 295.421 C 468.558 345.676 457.648 375.535 443.292 401.949 C 436.976 414.007 424.917 416.304 414.582 410.562 Z ",
+            fill: "currentColor"
+          }),
+          (0, _preact.h)("path", {
+            d: " M 103.064 142.984 C 143.781 102.267 197.917 79.843 255.5 79.843 L 328.619 79.843 L 283.234 34.005 C 275.478 26.17 275.541 13.532 283.375 5.776 C 291.21 -1.98 303.847 -1.917 311.604 5.916 L 362.904 57.73 C 385.82 80.876 385.952 118.669 363.199 141.976 L 312.81 193.593 C 308.899 197.6 303.715 199.61 298.525 199.61 C 293.498 199.61 288.465 197.721 284.583 193.933 C 276.694 186.232 276.542 173.595 284.243 165.706 L 329.09 119.765 L 255.5 119.765 C 158.643 119.765 79.844 198.564 79.844 295.421 C 80.964 358.883 130.082 468.852 250.667 470 C 285.694 468.852 297.343 468.56 334.667 451.333 C 346.066 447.058 356 445.333 364.667 456 C 370.667 466 365.894 475.589 355.227 481.589 C 338.575 490.776 308.273 508.092 252 508.667 C 117.634 508.092 69.348 404.253 67.866 401.64 C 49.585 369.408 39.922 332.679 39.922 295.421 C 39.922 237.838 62.346 183.702 103.064 142.984 Z ",
+            fill: "currentColor"
+          })
+        )
+      );
+    }
+  }]);
+
+  return Repost;
+}(_preact.Component);
+
+exports.default = Repost;
+
+/***/ }),
+
+/***/ "./src/components/svg/Settings.js":
+/*!****************************************!*\
+  !*** ./src/components/svg/Settings.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _preact = __webpack_require__(/*! preact */ "./node_modules/preact/dist/preact.mjs");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Settings = function (_Component) {
+  _inherits(Settings, _Component);
+
+  function Settings() {
+    _classCallCheck(this, Settings);
+
+    return _possibleConstructorReturn(this, (Settings.__proto__ || Object.getPrototypeOf(Settings)).apply(this, arguments));
+  }
+
+  _createClass(Settings, [{
+    key: "render",
+    value: function render() {
+      return (0, _preact.h)(
+        "svg",
+        { className: "svg-settings", viewBox: "0 0 512 512" },
+        (0, _preact.h)(
+          "desc",
+          null,
+          "Settings"
+        ),
+        (0, _preact.h)("path", {
+          d: "M256,140c-63.963,0-116,52.038-116,116s52.037,116,116,116c11.947,0,23.735-1.813,35.036-5.39 c10.531-3.333,16.365-14.572,13.032-25.103c-3.332-10.531-14.574-16.366-25.103-13.033C271.573,330.814,263.847,332,256,332 c-41.906,0-76-34.093-76-76s34.094-76,76-76s76,34.093,76,76c0,7.283-1.024,14.479-3.045,21.386 c-3.101,10.602,2.98,21.709,13.582,24.81c10.604,3.101,21.709-2.98,24.811-13.582C370.435,278.058,372,267.084,372,256 C372,192.038,319.963,140,256,140z",
+          fill: "currentColor"
+        }),
+        (0, _preact.h)("path", {
+          d: "M452,186.001h-10.071c-2.65,0-5.052-1.669-6.092-4.187l-0.178-0.432c-1.077-2.594-0.562-5.481,1.311-7.355l7.123-7.122 c23.394-23.394,23.394-61.459,0-84.853L429.951,67.91c-11.333-11.333-26.401-17.574-42.427-17.574 c-16.028,0-31.095,6.241-42.427,17.574l-7.121,7.121c-1.875,1.875-4.765,2.389-7.347,1.316l-0.377-0.156 c-2.583-1.067-4.251-3.468-4.251-6.117V60c0-33.084-26.916-60-60-60h-20c-33.084,0-60,26.916-60,60v10.074 c0,2.649-1.668,5.05-4.229,6.107l-0.391,0.162c-2.591,1.078-5.481,0.563-7.354-1.311l-7.122-7.122 c-11.332-11.333-26.4-17.574-42.427-17.574c-16.027,0-31.094,6.241-42.427,17.574L67.909,82.05 c-23.394,23.395-23.394,61.459,0.001,84.854l7.121,7.121c1.874,1.875,2.388,4.762,1.281,7.43l-0.121,0.292 c-1.066,2.583-3.469,4.252-6.118,4.252H60c-33.084,0-60,26.916-60,60v20c0,33.084,26.916,60,60,60h10.072 c2.65,0,5.051,1.669,6.092,4.187l0.178,0.432c1.077,2.594,0.562,5.481-1.312,7.355l-7.121,7.122 c-11.333,11.333-17.574,26.4-17.574,42.427c0,16.026,6.241,31.093,17.573,42.426L82.05,444.09 c11.333,11.333,26.401,17.574,42.427,17.574c16.028,0,31.095-6.241,42.427-17.574l7.121-7.121 c1.873-1.875,4.764-2.389,7.347-1.316l0.377,0.156c2.583,1.067,4.251,3.468,4.251,6.117V452c0,33.084,26.916,60,60,60h20 c33.084,0,60-26.916,60-60v-10.074c0-2.649,1.668-5.05,4.229-6.107l0.391-0.162c2.593-1.076,5.481-0.562,7.354,1.311l7.122,7.122 c11.332,11.333,26.4,17.574,42.427,17.574c16.027,0,31.094-6.241,42.427-17.574l14.142-14.142 c11.332-11.332,17.573-26.4,17.573-42.426c0-16.027-6.241-31.094-17.573-42.426l-7.122-7.122 c-1.875-1.874-2.389-4.761-1.312-7.355l0.151-0.366c1.067-2.583,3.469-4.252,6.118-4.252H452c33.084,0,60-26.916,60-60v-20 C512,212.917,485.084,186.001,452,186.001z M472,266c0,11.028-8.972,20-20,20h-10.073c-18.905,0-35.818,11.376-43.089,28.983 l-0.13,0.314c-7.298,17.599-3.384,37.6,9.976,50.961l7.123,7.122c3.777,3.777,5.857,8.8,5.857,14.142 c0,5.342-2.08,10.364-5.858,14.142l-14.141,14.142c-3.779,3.777-8.801,5.858-14.143,5.858c-5.343,0-10.365-2.08-14.142-5.858 l-7.123-7.123c-13.368-13.365-33.381-17.276-50.991-9.962l-0.282,0.117C297.377,406.108,286,423.021,286,441.926V452 c0,11.028-8.972,20-20,20h-20c-11.028,0-20-8.972-20-20v-10.074c0-18.905-11.377-35.818-29.005-43.097l-0.27-0.112 c-5.89-2.447-12.047-3.636-18.137-3.636c-12.111,0-23.951,4.709-32.846,13.603l-7.122,7.123 c-3.778,3.777-8.799,5.857-14.142,5.857c-5.342,0-10.365-2.081-14.142-5.858l-14.142-14.142c-3.778-3.778-5.858-8.8-5.858-14.142 c0-5.342,2.08-10.365,5.858-14.142l7.122-7.122c13.361-13.361,17.275-33.362,9.976-50.961l-0.13-0.314 C105.89,297.376,88.977,286,70.073,286H60c-11.028,0-20-8.972-20-20v-20c0-11.028,8.972-20,20-20h10.073 c18.905,0,35.818-11.376,43.116-29.047l0.093-0.227c7.312-17.604,3.4-37.616-9.967-50.984l-7.121-7.121 c-7.799-7.799-7.799-20.487,0-28.285l14.141-14.142c3.779-3.777,8.801-5.858,14.143-5.858c5.343,0,10.365,2.08,14.142,5.858 l7.123,7.123c13.369,13.366,33.382,17.278,50.991,9.962l0.282-0.117C214.623,105.892,226,88.979,226,70.074V60 c0-11.028,8.972-20,20-20h20c11.028,0,20,8.972,20,20v10.074c0,18.905,11.377,35.818,29.005,43.096l0.27,0.112 c17.601,7.31,37.614,3.399,50.983-9.967l7.122-7.123c3.778-3.777,8.799-5.857,14.142-5.857c5.342,0,10.365,2.081,14.142,5.858 l14.142,14.142c7.799,7.798,7.799,20.486,0.001,28.284l-7.123,7.123c-13.366,13.368-17.278,33.379-9.996,50.91l0.15,0.365 C406.11,214.624,423.023,226,441.927,226H452c11.028,0,20,8.972,20,20V266z",
+          fill: "currentColor"
+        })
+      );
+    }
+  }]);
+
+  return Settings;
+}(_preact.Component);
+
+exports.default = Settings;
+
+/***/ }),
+
 /***/ "./src/constants.js":
 /*!**************************!*\
   !*** ./src/constants.js ***!
@@ -20645,6 +21282,14 @@ var AuthStore = (_class = function () {
       this.domain = '';
       this.token = '';
       this.micropubEndpoint = '';
+      this.save();
+    }
+  }, {
+    key: 'save',
+    value: function save() {
+      localStorage.setItem('domain', this.domain);
+      localStorage.setItem('token', this.token);
+      localStorage.setItem('micropubEndpoint', this.micropubEndpoint);
     }
   }]);
 
@@ -21231,7 +21876,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13;
 
 var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
 
@@ -21320,17 +21965,19 @@ var Store = (_class = function () {
 
     _initDefineProp(this, 'flashMessage', _descriptor6, this);
 
-    _initDefineProp(this, 'sendNote', _descriptor7, this);
+    _initDefineProp(this, 'logout', _descriptor7, this);
 
-    _initDefineProp(this, 'sendReply', _descriptor8, this);
+    _initDefineProp(this, 'sendNote', _descriptor8, this);
 
-    _initDefineProp(this, 'addQuickReply', _descriptor9, this);
+    _initDefineProp(this, 'sendReply', _descriptor9, this);
 
-    _initDefineProp(this, 'sendBookmark', _descriptor10, this);
+    _initDefineProp(this, 'addQuickReply', _descriptor10, this);
 
-    _initDefineProp(this, 'sendLike', _descriptor11, this);
+    _initDefineProp(this, 'sendBookmark', _descriptor11, this);
 
-    _initDefineProp(this, 'sendRepost', _descriptor12, this);
+    _initDefineProp(this, 'sendLike', _descriptor12, this);
+
+    _initDefineProp(this, 'sendRepost', _descriptor13, this);
 
     this.auth = _authStore2.default;
     this.draft = _draftStore2.default;
@@ -21359,12 +22006,6 @@ var Store = (_class = function () {
       if (this.viewType === _constants.BOOKMARK) {
         this.draft.title = entry.title;
       }
-    }
-  }, {
-    key: 'logout',
-    value: function logout() {
-      this.auth.clearCredentials();
-      this.viewType = _constants.LOGIN;
     }
   }, {
     key: 'send',
@@ -21446,10 +22087,20 @@ var Store = (_class = function () {
 }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'flashMessage', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class.prototype, 'includeTitle', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'includeTitle'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setViewType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setViewType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSelectedEntry', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSelectedEntry'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'logout', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'logout'), _class.prototype), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'sendNote', [_mobx.action], {
+}), _applyDecoratedDescriptor(_class.prototype, 'includeTitle', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'includeTitle'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setViewType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setViewType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSelectedEntry', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSelectedEntry'), _class.prototype), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'logout', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this = this;
+
+    return function () {
+      _this.auth.clearCredentials();
+      _this.viewType = _constants.LOGIN;
+    };
+  }
+}), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'sendNote', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this2 = this;
 
     return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
       var location;
@@ -21457,20 +22108,20 @@ var Store = (_class = function () {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _this.isSending = true;
+              _this2.isSending = true;
               _context.prev = 1;
 
               (0, _log.info)('Sending note...');
               _context.next = 5;
-              return (0, _micropub.postNote)(_this.draft, _this.settings.aliases);
+              return (0, _micropub.postNote)(_this2.draft, _this2.settings.aliases);
 
             case 5:
               location = _context.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this.draft.clear();
-                _this._flashSuccessMessage('Note sucessfully sent', location);
-                _this.isSending = false;
+                _this2.draft.clear();
+                _this2._flashSuccessMessage('Note sucessfully sent', location);
+                _this2.isSending = false;
               });
               _context.next = 13;
               break;
@@ -21479,21 +22130,21 @@ var Store = (_class = function () {
               _context.prev = 9;
               _context.t0 = _context['catch'](1);
 
-              _this._flashErrorMessage('Error sending note', _context.t0);
-              _this.isSending = false;
+              _this2._flashErrorMessage('Error sending note', _context.t0);
+              _this2.isSending = false;
 
             case 13:
             case 'end':
               return _context.stop();
           }
         }
-      }, _callee, _this, [[1, 9]]);
+      }, _callee, _this2, [[1, 9]]);
     }));
   }
-}), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'sendReply', [_mobx.action], {
+}), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'sendReply', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
-    var _this2 = this;
+    var _this3 = this;
 
     return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
       var location;
@@ -21501,7 +22152,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              if (!(!_this2.selectedEntry || !_this2.selectedEntry.url)) {
+              if (!(!_this3.selectedEntry || !_this3.selectedEntry.url)) {
                 _context2.next = 3;
                 break;
               }
@@ -21510,20 +22161,20 @@ var Store = (_class = function () {
               return _context2.abrupt('return');
 
             case 3:
-              _this2.isSending = true;
+              _this3.isSending = true;
               _context2.prev = 4;
 
               (0, _log.info)('Sending reply...');
               _context2.next = 8;
-              return (0, _micropub.postReply)(_this2.draft, _this2.selectedEntry.url, _this2.settings.aliases);
+              return (0, _micropub.postReply)(_this3.draft, _this3.selectedEntry.url, _this3.settings.aliases);
 
             case 8:
               location = _context2.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this2.draft.clear();
-                _this2._flashSuccessMessage('Reply sucessfully sent', location);
-                _this2.isSending = false;
+                _this3.draft.clear();
+                _this3._flashSuccessMessage('Reply sucessfully sent', location);
+                _this3.isSending = false;
               });
               _context2.next = 16;
               break;
@@ -21532,30 +22183,30 @@ var Store = (_class = function () {
               _context2.prev = 12;
               _context2.t0 = _context2['catch'](4);
 
-              _this2._flashErrorMessage('Error sending reply', _context2.t0);
-              _this2.isSending = false;
+              _this3._flashErrorMessage('Error sending reply', _context2.t0);
+              _this3.isSending = false;
 
             case 16:
             case 'end':
               return _context2.stop();
           }
         }
-      }, _callee2, _this2, [[4, 12]]);
+      }, _callee2, _this3, [[4, 12]]);
     }));
   }
-}), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, 'addQuickReply', [_mobx.action], {
-  enumerable: true,
-  initializer: function initializer() {
-    var _this3 = this;
-
-    return function (reacji) {
-      _this3.draft.content = _this3.draft.content + reacji;
-    };
-  }
-}), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'sendBookmark', [_mobx.action], {
+}), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, 'addQuickReply', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this4 = this;
+
+    return function (reacji) {
+      _this4.draft.content = _this4.draft.content + reacji;
+    };
+  }
+}), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, 'sendBookmark', [_mobx.action], {
+  enumerable: true,
+  initializer: function initializer() {
+    var _this5 = this;
 
     return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
       var location;
@@ -21563,7 +22214,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              if (!(!_this4.selectedEntry || !_this4.selectedEntry.url)) {
+              if (!(!_this5.selectedEntry || !_this5.selectedEntry.url)) {
                 _context3.next = 3;
                 break;
               }
@@ -21572,20 +22223,20 @@ var Store = (_class = function () {
               return _context3.abrupt('return');
 
             case 3:
-              _this4.isSending = true;
+              _this5.isSending = true;
               _context3.prev = 4;
 
               (0, _log.info)('Sending bookmark...');
               _context3.next = 8;
-              return (0, _micropub.postBookmark)(_this4.draft, _this4.selectedEntry.url, _this4.settings.aliases);
+              return (0, _micropub.postBookmark)(_this5.draft, _this5.selectedEntry.url, _this5.settings.aliases);
 
             case 8:
               location = _context3.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this4.draft.clear();
-                _this4._flashSuccessMessage('Bookmark sucessfully sent', location);
-                _this4.isSending = false;
+                _this5.draft.clear();
+                _this5._flashSuccessMessage('Bookmark sucessfully sent', location);
+                _this5.isSending = false;
               });
               _context3.next = 16;
               break;
@@ -21594,21 +22245,21 @@ var Store = (_class = function () {
               _context3.prev = 12;
               _context3.t0 = _context3['catch'](4);
 
-              _this4._flashErrorMessage('Error sending bookmark', _context3.t0);
-              _this4.isSending = false;
+              _this5._flashErrorMessage('Error sending bookmark', _context3.t0);
+              _this5.isSending = false;
 
             case 16:
             case 'end':
               return _context3.stop();
           }
         }
-      }, _callee3, _this4, [[4, 12]]);
+      }, _callee3, _this5, [[4, 12]]);
     }));
   }
-}), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, 'sendLike', [_mobx.action], {
+}), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, 'sendLike', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
-    var _this5 = this;
+    var _this6 = this;
 
     return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
       var location;
@@ -21616,7 +22267,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              if (!(!_this5.selectedEntry || !_this5.selectedEntry.url)) {
+              if (!(!_this6.selectedEntry || !_this6.selectedEntry.url)) {
                 _context4.next = 3;
                 break;
               }
@@ -21625,19 +22276,19 @@ var Store = (_class = function () {
               return _context4.abrupt('return');
 
             case 3:
-              _this5.isSending = true;
+              _this6.isSending = true;
               _context4.prev = 4;
 
-              (0, _log.info)('Sending like...', _this5.selectedEntry);
+              (0, _log.info)('Sending like...', _this6.selectedEntry);
               _context4.next = 8;
-              return (0, _micropub.postLike)(_this5.selectedEntry.url);
+              return (0, _micropub.postLike)(_this6.selectedEntry.url);
 
             case 8:
               location = _context4.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this5._flashSuccessMessage('Item liked successfully', location);
-                _this5.isSending = false;
+                _this6._flashSuccessMessage('Item liked successfully', location);
+                _this6.isSending = false;
               });
               _context4.next = 15;
               break;
@@ -21647,8 +22298,8 @@ var Store = (_class = function () {
               _context4.t0 = _context4['catch'](4);
 
               (0, _mobx.runInAction)(function () {
-                _this5._flashErrorMessage('Error sending like', _context4.t0);
-                _this5.isSending = false;
+                _this6._flashErrorMessage('Error sending like', _context4.t0);
+                _this6.isSending = false;
               });
 
             case 15:
@@ -21656,13 +22307,13 @@ var Store = (_class = function () {
               return _context4.stop();
           }
         }
-      }, _callee4, _this5, [[4, 12]]);
+      }, _callee4, _this6, [[4, 12]]);
     }));
   }
-}), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, 'sendRepost', [_mobx.action], {
+}), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, 'sendRepost', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
-    var _this6 = this;
+    var _this7 = this;
 
     return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
       var location;
@@ -21670,7 +22321,7 @@ var Store = (_class = function () {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              if (!(!_this6.selectedEntry || !_this6.selectedEntry.url)) {
+              if (!(!_this7.selectedEntry || !_this7.selectedEntry.url)) {
                 _context5.next = 3;
                 break;
               }
@@ -21679,19 +22330,19 @@ var Store = (_class = function () {
               return _context5.abrupt('return');
 
             case 3:
-              _this6.isSending = true;
+              _this7.isSending = true;
               _context5.prev = 4;
 
-              (0, _log.info)('Sending repost...', _this6.selectedEntry);
+              (0, _log.info)('Sending repost...', _this7.selectedEntry);
               _context5.next = 8;
-              return (0, _micropub.postRepost)(_this6.selectedEntry.url);
+              return (0, _micropub.postRepost)(_this7.selectedEntry.url);
 
             case 8:
               location = _context5.sent;
 
               (0, _mobx.runInAction)(function () {
-                _this6._flashSuccessMessage('Item reposted successfully', location);
-                _this6.isSending = false;
+                _this7._flashSuccessMessage('Item reposted successfully', location);
+                _this7.isSending = false;
               });
               _context5.next = 15;
               break;
@@ -21701,8 +22352,8 @@ var Store = (_class = function () {
               _context5.t0 = _context5['catch'](4);
 
               (0, _mobx.runInAction)(function () {
-                _this6._flashErrorMessage('Error reposting', _context5.t0);
-                _this6.isSending = false;
+                _this7._flashErrorMessage('Error reposting', _context5.t0);
+                _this7.isSending = false;
               });
 
             case 15:
@@ -21710,7 +22361,7 @@ var Store = (_class = function () {
               return _context5.stop();
           }
         }
-      }, _callee5, _this6, [[4, 12]]);
+      }, _callee5, _this7, [[4, 12]]);
     }));
   }
 })), _class);

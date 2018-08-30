@@ -1,5 +1,13 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
+import Login from './svg/Login';
+import Pen from './svg/Pen';
+import Reply from './svg/Reply';
+import Bookmark from './svg/Bookmark';
+import Heart from './svg/Heart';
+import Repost from './svg/Repost';
+import Logs from './svg/Logs';
+import Settings from './svg/Settings';
 import Tab from './Tab';
 import {
   LOGIN,
@@ -14,15 +22,14 @@ import {
 
 const UNICODE_NBSP = '\u00a0';
 const ICONS = {
-  [LOGIN]: '/icons/login.svg',
-  [NOTE]: '/icons/pen.svg',
-  [REPLY]: '/icons/reply.svg',
-  [BOOKMARK]: '/icons/bookmark.svg',
-  [REPOST]: '/icons/refresh.svg',
-  [LIKE]: '/icons/heart.svg',
-  [LOGS]: '/icons/alert.svg',
-  [SETTINGS]: '/icons/settings.svg',
-  quick: '/icons/flash.svg',
+  [LOGIN]: Login,
+  [NOTE]: Pen,
+  [REPLY]: Reply,
+  [BOOKMARK]: Bookmark,
+  [LIKE]: Heart,
+  [REPOST]: Repost,
+  [LOGS]: Logs,
+  [SETTINGS]: Settings,
 };
 
 @inject('store', 'auth', 'settings')
@@ -40,7 +47,6 @@ export default class ChangeViewTabs extends Component {
               this.renderTab(BOOKMARK, 'Bookmark'),
               this.renderTab(LIKE, 'Like'),
               this.renderTab(REPOST, 'Repost'),
-              /* {this.renderTab('quick', 'Quick actions')} */
             ]
           : this.renderTab(LOGIN, 'Sign in')}
         {settings.debugLog ? this.renderTab(LOGS, 'Logs', true) : null}
@@ -51,13 +57,14 @@ export default class ChangeViewTabs extends Component {
 
   renderTab(postType, label, onBottom = false) {
     const {store} = this.props;
+    const Icon = ICONS[postType];
     return (
       <Tab
         isActive={store.viewType === postType}
         onClick={this.switchTo(postType)}
         onBottom={onBottom}
       >
-        <img src={ICONS[postType]} alt={label} />
+        <Icon />
         {label.replace(' ', UNICODE_NBSP)}
       </Tab>
     );

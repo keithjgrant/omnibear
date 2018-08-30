@@ -1,5 +1,6 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
+import DownArrow from '../svg/DownArrow';
 import {BOOKMARK, LIKE, REPOST} from '../../constants';
 
 @inject('store')
@@ -36,6 +37,9 @@ export default class UrlSelector extends Component {
             onClick={this.toggle}
           >
             <div className="nowrap">{store.selectedEntry.url}</div>
+            <div className="dropdown__toggle__arrow">
+              <DownArrow />
+            </div>
           </button>
           <div className="dropdown__drawer">
             {options.map(option =>

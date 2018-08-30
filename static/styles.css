@@ -5,6 +5,8 @@
   --gray-50: hsl(198, 10%, 50%);
   --gray-40: hsl(198, 5%, 43%);
   --gray-30: hsl(198, 5%, 30%);
+  --gray-20: hsl(198, 5%, 20%);
+  --gray-10: hsl(198, 5%, 10%);
 
   --yellow: hsl(41, 75%, 49%);
   --yellow-light: hsl(41, 75%, 90%);
@@ -135,15 +137,6 @@ label {
     hsl(45, 75%, 65%)
   );
   z-index: -1;
-}
-
-.svg-heart {
-  height: 1em;
-  vertical-align: -0.2em;
-}
-.svg-repost {
-  height: 0.8em;
-  vertical-align: 0;
 }
 
 .input-extra {
@@ -329,15 +322,17 @@ fieldset > * + * {
   background-color: hsl(41, 50%, 75%, 0.5);
   box-shadow: none;
 }
-.dropdown__toggle::after {
+.dropdown__toggle__arrow {
   position: absolute;
   top: calc(50% - 0.25em);
   right: 0.5em;
   content: '';
   width: 0.5em;
   height: 0.5em;
-  background-image: url('/icons/down-arrow.svg');
   transform-origin: center 0.25em;
+}
+.dropdown__toggle__arrow svg {
+  display: block;
 }
 .dropdown__drawer {
   position: absolute;
@@ -364,7 +359,7 @@ fieldset > * + * {
   backdrop-filter: blur(10px);
   z-index: -1;
 }
-.dropdown.is-open > .dropdown__toggle::after {
+.dropdown.is-open .dropdown__toggle__arrow {
   transform: rotate(180deg);
 }
 .dropdown.is-open > .dropdown__drawer {
@@ -508,7 +503,7 @@ fieldset > * + * {
   padding: 0;
   overflow: hidden;
   border: 0;
-  color: var(--gray-60);
+  color: var(--gray-20);
   background: transparent;
   font-size: 0.5rem;
   font-family: Jaldi, sans-serif;
@@ -516,7 +511,7 @@ fieldset > * + * {
   text-transform: uppercase;
   text-align: center;
 }
-.side-nav > button > img {
+.side-nav > button > svg {
   margin: 0.5rem 1rem 0.3rem;
 }
 .side-nav > button:hover,
