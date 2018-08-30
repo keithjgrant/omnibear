@@ -22058,6 +22058,9 @@ var Store = (_class = function () {
       if (!this.auth.isLoggedIn()) {
         return _constants.LOGIN;
       }
+      if (this.settings.defaultToCurrentPage) {
+        return _constants.REPLY;
+      }
       var type = (0, _url.getParamFromUrl)('type', window.location.search);
       return type || _constants.NOTE;
     }

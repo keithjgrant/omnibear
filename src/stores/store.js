@@ -230,6 +230,9 @@ class Store {
     if (!this.auth.isLoggedIn()) {
       return LOGIN;
     }
+    if (this.settings.defaultToCurrentPage) {
+      return REPLY;
+    }
     const type = getParamFromUrl('type', window.location.search);
     return type || NOTE;
   }
