@@ -84,6 +84,13 @@ class AuthStore {
     this.domain = '';
     this.token = '';
     this.micropubEndpoint = '';
+    this.save();
+  }
+
+  save() {
+    localStorage.setItem('domain', this.domain);
+    localStorage.setItem('token', this.token);
+    localStorage.setItem('micropubEndpoint', this.micropubEndpoint);
   }
 }
 

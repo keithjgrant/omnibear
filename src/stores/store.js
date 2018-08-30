@@ -64,10 +64,10 @@ class Store {
   }
 
   @action
-  logout() {
+  logout = () => {
     this.auth.clearCredentials();
     this.viewType = LOGIN;
-  }
+  };
 
   send() {
     switch (this.viewType) {
