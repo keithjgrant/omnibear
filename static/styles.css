@@ -226,6 +226,11 @@ fieldset > * + * {
   animation: spin 500ms linear infinite;
 }
 
+.button svg {
+  height: 1em;
+  vertical-align: -0.2em;
+}
+
 .button-link {
   display: inline;
   border: 0;
@@ -425,11 +430,21 @@ fieldset > * + * {
   text-align: center;
   font-size: 0.8em;
 }
-.footer > button:first-of-type {
+.footer > .footer__right {
   margin-left: auto;
+}
+.footer > .footer__right ~ * {
+  margin-left: 1em;
 }
 .footer > button + button {
   margin-left: 1em;
+}
+.footer a {
+  text-decoration: none;
+}
+.footer a:hover {
+  color: var(--orange);
+  text-decoration: underline;
 }
 
 .quick-replies {
@@ -607,9 +622,10 @@ legend + .settings-form__description {
   text-align: left;
   cursor: default;
   -webkit-user-select: text;
-  -moz-user-select: all;
-  -ms-user-select: all;
-  user-select: all;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  -o-user-select: text;
+  user-select: text;
 }
 .log--info {
   color: var(--gray-30);
