@@ -3883,16 +3883,20 @@ function append(message, data, type) {
   };
   if (data) {
     if (data instanceof Error) {
-      entry.data = {
-        message: data.message,
-        stack: data.stack.trim().split('\n')
-      };
+      entry.data = serializeError(data);
     } else {
       entry.data = data;
     }
   }
   log.push(entry);
   saveLog(log);
+}
+
+function serializeError(err) {
+  return {
+    message: err.message,
+    stack: err.stack.trim().split('\n')
+  };
 }
 
 function info(message, data) {
@@ -4183,6 +4187,7 @@ exports.getAuthTab = getAuthTab;
 exports.logout = logout;
 exports.generateSlug = generateSlug;
 exports.getPageUrl = getPageUrl;
+exports.sanitizeError = sanitizeError;
 function openLink(e) {
   e.preventDefault();
   if (e.target.href) {
@@ -4236,6 +4241,37 @@ function getPageUrl() {
       resolve(tab.url);
     });
   });
+}
+
+function sanitizeError(error) {
+  if (!error) {
+    return null;
+  }
+  var clean = {
+    message: error.message,
+    status: Number(error.status)
+  };
+  var config = error.config || error.error && error.error.config;
+  if (!config) {
+    return clean;
+  }
+  clean.data = config.data;
+  clean.method = config.method;
+  clean.url = config.url;
+  if (config.headers) {
+    clean.headers = {
+      Accept: config.headers.Accept,
+      'Content-Type': config.headers['Content-Type']
+    };
+  }
+  if (config.response) {
+    clean.response = {
+      data: config.response.data,
+      status: config.response.status,
+      statusText: config.response.statusText
+    };
+  }
+  return clean;
 }
 
 /***/ })

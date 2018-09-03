@@ -41,16 +41,20 @@ function append(message, data, type) {
   };
   if (data) {
     if (data instanceof Error) {
-      entry.data = {
-        message: data.message,
-        stack: data.stack.trim().split('\n'),
-      };
+      entry.data = serializeError(data);
     } else {
       entry.data = data;
     }
   }
   log.push(entry);
   saveLog(log);
+}
+
+function serializeError(err) {
+  return {
+    message: err.message,
+    stack: err.stack.trim().split('\n'),
+  };
 }
 
 export function info(message, data) {

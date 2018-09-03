@@ -21259,7 +21259,7 @@ var LogDetails = function (_Component) {
       var _this2 = this;
 
       var marginLeft = (isTopLevel ? 0 : 1) + 'em';
-      if (typeof detail === 'string') {
+      if (typeof detail === 'string' || typeof detail === 'number') {
         return (0, _preact.h)(
           'span',
           null,
@@ -22584,7 +22584,7 @@ var Repost = function (_Component) {
     value: function render() {
       return (0, _preact.h)(
         "svg",
-        { className: "svg-repost", viewBox: "0 0 512 512" },
+        { className: "svg-repost", viewBox: "0 0 344 344" },
         (0, _preact.h)(
           "desc",
           null,
@@ -22594,11 +22594,11 @@ var Repost = function (_Component) {
           "g",
           null,
           (0, _preact.h)("path", {
-            d: " M 414.582 410.562 C 405.394 403.672 403.898 397.175 407.117 386.445 C 418.383 359.62 427.591 348.189 431.157 295.417 C 431.157 284.393 440.094 275.458 451.118 275.458 C 462.143 275.458 471.079 284.397 471.079 295.421 C 468.558 345.676 457.648 375.535 443.292 401.949 C 436.976 414.007 424.917 416.304 414.582 410.562 Z ",
+            d: "M334.485,37.463c-6.753-1.449-13.396,2.853-14.842,9.603l-9.084,42.391C281.637,40.117,228.551,9.155,170.368,9.155 c-89.603,0-162.5,72.896-162.5,162.5c0,6.903,5.596,12.5,12.5,12.5c6.903,0,12.5-5.597,12.5-12.5 c0-75.818,61.682-137.5,137.5-137.5c49.429,0,94.515,26.403,118.925,68.443l-41.674-8.931c-6.752-1.447-13.396,2.854-14.841,9.604 c-1.446,6.75,2.854,13.396,9.604,14.842l71.536,15.33c1.215,0.261,2.449,0.336,3.666,0.234c2.027-0.171,4.003-0.836,5.743-1.962 c2.784-1.801,4.738-4.634,5.433-7.875l15.331-71.536C345.535,45.555,341.235,38.911,334.485,37.463z",
             fill: "currentColor"
           }),
           (0, _preact.h)("path", {
-            d: " M 103.064 142.984 C 143.781 102.267 197.917 79.843 255.5 79.843 L 328.619 79.843 L 283.234 34.005 C 275.478 26.17 275.541 13.532 283.375 5.776 C 291.21 -1.98 303.847 -1.917 311.604 5.916 L 362.904 57.73 C 385.82 80.876 385.952 118.669 363.199 141.976 L 312.81 193.593 C 308.899 197.6 303.715 199.61 298.525 199.61 C 293.498 199.61 288.465 197.721 284.583 193.933 C 276.694 186.232 276.542 173.595 284.243 165.706 L 329.09 119.765 L 255.5 119.765 C 158.643 119.765 79.844 198.564 79.844 295.421 C 80.964 358.883 130.082 468.852 250.667 470 C 285.694 468.852 297.343 468.56 334.667 451.333 C 346.066 447.058 356 445.333 364.667 456 C 370.667 466 365.894 475.589 355.227 481.589 C 338.575 490.776 308.273 508.092 252 508.667 C 117.634 508.092 69.348 404.253 67.866 401.64 C 49.585 369.408 39.922 332.679 39.922 295.421 C 39.922 237.838 62.346 183.702 103.064 142.984 Z ",
+            d: "M321.907,155.271c-6.899,0.228-12.309,6.006-12.081,12.905c1.212,36.708-11.942,71.689-37.042,98.504 c-25.099,26.812-59.137,42.248-95.844,43.46c-1.53,0.05-3.052,0.075-4.576,0.075c-47.896-0.002-92.018-24.877-116.936-65.18 l43.447,11.65c6.668,1.787,13.523-2.168,15.311-8.837c1.788-6.668-2.168-13.522-8.836-15.312l-70.664-18.946 c-3.202-0.857-6.615-0.409-9.485,1.247c-2.872,1.656-4.967,4.387-5.826,7.589L0.43,293.092 c-1.788,6.668,2.168,13.522,8.836,15.311c1.085,0.291,2.173,0.431,3.245,0.431c5.518,0,10.569-3.684,12.066-9.267l10.649-39.717 c29.624,46.647,81.189,75.367,137.132,75.365c1.797,0,3.604-0.029,5.408-0.089c43.381-1.434,83.608-19.674,113.271-51.362 s45.209-73.031,43.776-116.413C334.586,160.453,328.805,155.026,321.907,155.271z",
             fill: "currentColor"
           })
         )
@@ -23563,6 +23563,8 @@ var _url = __webpack_require__(/*! ../util/url */ "./src/util/url.js");
 
 var _log = __webpack_require__(/*! ../util/log */ "./src/util/log.js");
 
+var _utils = __webpack_require__(/*! ../util/utils */ "./src/util/utils.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -23700,11 +23702,11 @@ var Store = (_class = function () {
   }, {
     key: '_flashErrorMessage',
     value: function _flashErrorMessage(message, err) {
-      (0, _log.error)(message, err);
+      (0, _log.error)(message, (0, _utils.sanitizeError)(err));
       this.flashMessage = {
         message: message,
         type: _constants.MESSAGE_ERROR,
-        error: _log.error
+        err: err
       };
       this._closeAfterDelay();
     }
@@ -23789,17 +23791,19 @@ var Store = (_class = function () {
                 _this2._flashSuccessMessage('Note sucessfully sent', location);
                 _this2.isSending = false;
               });
-              _context.next = 13;
+              _context.next = 12;
               break;
 
             case 9:
               _context.prev = 9;
               _context.t0 = _context['catch'](1);
 
-              _this2._flashErrorMessage('Error sending note', _context.t0);
-              _this2.isSending = false;
+              (0, _mobx.runInAction)(function () {
+                _this2._flashErrorMessage('Error sending note', _context.t0);
+                _this2.isSending = false;
+              });
 
-            case 13:
+            case 12:
             case 'end':
               return _context.stop();
           }
@@ -23842,17 +23846,19 @@ var Store = (_class = function () {
                 _this3._flashSuccessMessage('Reply sucessfully sent', location);
                 _this3.isSending = false;
               });
-              _context2.next = 16;
+              _context2.next = 15;
               break;
 
             case 12:
               _context2.prev = 12;
               _context2.t0 = _context2['catch'](4);
 
-              _this3._flashErrorMessage('Error sending reply', _context2.t0);
-              _this3.isSending = false;
+              (0, _mobx.runInAction)(function () {
+                _this3._flashErrorMessage('Error sending reply', _context2.t0);
+                _this3.isSending = false;
+              });
 
-            case 16:
+            case 15:
             case 'end':
               return _context2.stop();
           }
@@ -23904,17 +23910,19 @@ var Store = (_class = function () {
                 _this5._flashSuccessMessage('Bookmark sucessfully sent', location);
                 _this5.isSending = false;
               });
-              _context3.next = 16;
+              _context3.next = 15;
               break;
 
             case 12:
               _context3.prev = 12;
               _context3.t0 = _context3['catch'](4);
 
-              _this5._flashErrorMessage('Error sending bookmark', _context3.t0);
-              _this5.isSending = false;
+              (0, _mobx.runInAction)(function () {
+                _this5._flashErrorMessage('Error sending bookmark', _context3.t0);
+                _this5.isSending = false;
+              });
 
-            case 16:
+            case 15:
             case 'end':
               return _context3.stop();
           }
@@ -24149,16 +24157,20 @@ function append(message, data, type) {
   };
   if (data) {
     if (data instanceof Error) {
-      entry.data = {
-        message: data.message,
-        stack: data.stack.trim().split('\n')
-      };
+      entry.data = serializeError(data);
     } else {
       entry.data = data;
     }
   }
   log.push(entry);
   saveLog(log);
+}
+
+function serializeError(err) {
+  return {
+    message: err.message,
+    stack: err.stack.trim().split('\n')
+  };
 }
 
 function info(message, data) {
@@ -24449,6 +24461,7 @@ exports.getAuthTab = getAuthTab;
 exports.logout = logout;
 exports.generateSlug = generateSlug;
 exports.getPageUrl = getPageUrl;
+exports.sanitizeError = sanitizeError;
 function openLink(e) {
   e.preventDefault();
   if (e.target.href) {
@@ -24502,6 +24515,37 @@ function getPageUrl() {
       resolve(tab.url);
     });
   });
+}
+
+function sanitizeError(error) {
+  if (!error) {
+    return null;
+  }
+  var clean = {
+    message: error.message,
+    status: Number(error.status)
+  };
+  var config = error.config || error.error && error.error.config;
+  if (!config) {
+    return clean;
+  }
+  clean.data = config.data;
+  clean.method = config.method;
+  clean.url = config.url;
+  if (config.headers) {
+    clean.headers = {
+      Accept: config.headers.Accept,
+      'Content-Type': config.headers['Content-Type']
+    };
+  }
+  if (config.response) {
+    clean.response = {
+      data: config.response.data,
+      status: config.response.status,
+      statusText: config.response.statusText
+    };
+  }
+  return clean;
 }
 
 /***/ }),

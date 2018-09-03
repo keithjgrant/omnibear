@@ -10,7 +10,7 @@ export default class LogDetails extends Component {
 
   renderDetail(detail, isTopLevel) {
     const marginLeft = `${isTopLevel ? 0 : 1}em`;
-    if (typeof detail === 'string') {
+    if (typeof detail === 'string' || typeof detail === 'number') {
       return <span>{detail}</span>;
     }
     if (Array.isArray(detail)) {

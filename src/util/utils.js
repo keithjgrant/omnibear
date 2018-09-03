@@ -12,7 +12,7 @@ export function clone(obj) {
 export function getAuthTab() {
   return new Promise(function(resolve, reject) {
     chrome.tabs.query({url: 'https://omnibear.com/auth/success*'}, function(
-      tabs
+      tabs,
     ) {
       if (tabs.length) {
         resolve(tabs[0]);
@@ -44,7 +44,7 @@ export function generateSlug(content) {
   for (let i = 0, l = FROM.length; i < l; i++) {
     formatted = formatted.replace(
       new RegExp(FROM.charAt(i), 'g'),
-      TO.charAt(i)
+      TO.charAt(i),
     );
   }
   formatted = formatted.replace(NON_ALPHANUM, '');
@@ -60,4 +60,35 @@ export function getPageUrl() {
       resolve(tab.url);
     });
   });
+}
+
+export function sanitizeError(error) {
+  if (!error) {
+    return null;
+  }
+  const clean = {
+    message: error.message,
+    status: Number(error.status),
+  };
+  const config = error.config || (error.error && error.error.config);
+  if (!config) {
+    return clean;
+  }
+  clean.data = config.data;
+  clean.method = config.method;
+  clean.url = config.url;
+  if (config.headers) {
+    clean.headers = {
+      Accept: config.headers.Accept,
+      'Content-Type': config.headers['Content-Type'],
+    };
+  }
+  if (config.response) {
+    clean.response = {
+      data: config.response.data,
+      status: config.response.status,
+      statusText: config.response.statusText,
+    };
+  }
+  return clean;
 }

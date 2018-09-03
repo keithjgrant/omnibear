@@ -20,6 +20,7 @@ import {
 } from '../util/micropub';
 import {getParamFromUrl} from '../util/url';
 import {info, warning, error} from '../util/log';
+import {sanitizeError} from '../util/utils';
 
 class Store {
   @observable viewType;
@@ -95,8 +96,10 @@ class Store {
         this.isSending = false;
       });
     } catch (err) {
-      this._flashErrorMessage('Error sending note', err);
-      this.isSending = false;
+      runInAction(() => {
+        this._flashErrorMessage('Error sending note', err);
+        this.isSending = false;
+      });
     }
   };
 
@@ -112,7 +115,7 @@ class Store {
       const location = await postReply(
         this.draft,
         this.selectedEntry.url,
-        this.settings.aliases
+        this.settings.aliases,
       );
       runInAction(() => {
         this.draft.clear();
@@ -120,8 +123,10 @@ class Store {
         this.isSending = false;
       });
     } catch (err) {
-      this._flashErrorMessage('Error sending reply', err);
-      this.isSending = false;
+      runInAction(() => {
+        this._flashErrorMessage('Error sending reply', err);
+        this.isSending = false;
+      });
     }
   };
 
@@ -142,7 +147,7 @@ class Store {
       const location = await postBookmark(
         this.draft,
         this.selectedEntry.url,
-        this.settings.aliases
+        this.settings.aliases,
       );
       runInAction(() => {
         this.draft.clear();
@@ -150,8 +155,10 @@ class Store {
         this.isSending = false;
       });
     } catch (err) {
-      this._flashErrorMessage('Error sending bookmark', err);
-      this.isSending = false;
+      runInAction(() => {
+        this._flashErrorMessage('Error sending bookmark', err);
+        this.isSending = false;
+      });
     }
   };
 
@@ -211,11 +218,11 @@ class Store {
   }
 
   _flashErrorMessage(message, err) {
-    error(message, err);
+    error(message, sanitizeError(err));
     this.flashMessage = {
       message,
       type: MESSAGE_ERROR,
-      error,
+      err,
     };
     this._closeAfterDelay();
   }
