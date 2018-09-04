@@ -42,10 +42,12 @@ import {cleanUrl} from './util/url';
   }
 
   function sendFocusMessage() {
+    const supportsWebmention = pageSupportsWebmention();
     const pageEntry = {
       type: 'page',
       url: cleanUrl(document.location.href),
       title: document.title,
+      webmention: supportsWebmention,
     };
     const itemEntry = getCurrentItem();
     let selectedEntry = null;
@@ -54,6 +56,7 @@ import {cleanUrl} from './util/url';
         type: 'item',
         url: cleanUrl(itemEntry.url),
         title: itemEntry.title,
+        webmention: supportsWebmention,
       };
     }
     chrome.runtime.sendMessage({
@@ -63,5 +66,9 @@ import {cleanUrl} from './util/url';
         selectedEntry,
       },
     });
+  }
+
+  function pageSupportsWebmention() {
+    return !!document.querySelector('link[rel="webmention"]');
   }
 })();

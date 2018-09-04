@@ -145,6 +145,19 @@ label {
   font-size: 0.8rem;
 }
 
+.url-selector {
+  position: relative;
+}
+
+.wm-overlay {
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  width: 1rem;
+  color: black;
+  opacity: 0.3;
+}
+
 textarea:focus,
 button:focus,
 input[type='text']:focus {

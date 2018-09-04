@@ -1,6 +1,7 @@
 import {h, Component} from 'preact';
 import {inject, observer} from 'mobx-preact';
 import DownArrow from '../svg/DownArrow';
+import WebmentionSvg from '../svg/Webmention';
 import {BOOKMARK, LIKE, REPOST} from '../../constants';
 
 @inject('store')
@@ -12,6 +13,7 @@ export default class UrlSelector extends Component {
     this.state = {
       isOpen: false,
       options,
+      supportsWebmention: false,
     };
     if (options[1].isDisabled) {
       this.selectEntry(options[0]);
@@ -25,10 +27,15 @@ export default class UrlSelector extends Component {
   }
 
   render() {
-    const {isOpen, options} = this.state;
+    const {isOpen, options, supportsWebmention} = this.state;
     const {store} = this.props;
     return (
-      <div onClick={e => e.stopPropagation()}>
+      <div className="url-selector" onClick={e => e.stopPropagation()}>
+        {supportsWebmention ? (
+          <div className="wm-overlay">
+            <WebmentionSvg title="This page supports webmention" />
+          </div>
+        ) : null}
         <h2 className="header-title">{this.getLabel()}</h2>
         <div className={`dropdown ${isOpen ? ' is-open' : ''}`}>
           <button
@@ -113,6 +120,7 @@ export default class UrlSelector extends Component {
   selectEntry(entry) {
     this.setState({
       isOpen: false,
+      supportsWebmention: entry.webmention,
     });
     this.props.store.setSelectedEntry(entry);
   }
@@ -133,6 +141,7 @@ export default class UrlSelector extends Component {
         name: 'Current page',
         url: pageEntry.url,
         title: pageEntry.title,
+        webmention: pageEntry.webmention,
       },
     ];
     const itemEntry = JSON.parse(localStorage.getItem('itemEntry'));
@@ -141,6 +150,7 @@ export default class UrlSelector extends Component {
         name: 'Selected entry',
         url: itemEntry.url,
         title: itemEntry.title,
+        webmention: itemEntry.webmention,
       });
     } else {
       options.push({
