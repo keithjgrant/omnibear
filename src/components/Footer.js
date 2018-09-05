@@ -34,6 +34,14 @@ export default class Footer extends Component {
               <div key="message" className="footer__message">
                 Not authenticated
               </div>,
+              <a
+                key="help"
+                href="https://omnibear.com/help"
+                className="footer__right"
+                onClick={openLink}
+              >
+                Help
+              </a>,
             ]}
       </footer>
     );
