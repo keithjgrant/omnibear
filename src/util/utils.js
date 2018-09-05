@@ -12,7 +12,7 @@ export function clone(obj) {
 export function getAuthTab() {
   return new Promise(function(resolve, reject) {
     chrome.tabs.query({url: 'https://omnibear.com/auth/success*'}, function(
-      tabs,
+      tabs
     ) {
       if (tabs.length) {
         resolve(tabs[0]);
@@ -44,7 +44,7 @@ export function generateSlug(content) {
   for (let i = 0, l = FROM.length; i < l; i++) {
     formatted = formatted.replace(
       new RegExp(FROM.charAt(i), 'g'),
-      TO.charAt(i),
+      TO.charAt(i)
     );
   }
   formatted = formatted.replace(NON_ALPHANUM, '');
@@ -62,7 +62,7 @@ export function getPageUrl() {
   });
 }
 
-export function sanitizeError(error) {
+export function sanitizeMicropubError(error) {
   if (!error) {
     return null;
   }

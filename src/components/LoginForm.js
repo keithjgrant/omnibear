@@ -2,6 +2,7 @@ import {h, Component} from 'preact';
 import {observer, inject} from 'mobx-preact';
 import Message from './Message';
 import {openLink} from '../util/utils';
+import {MESSAGE_ERROR, MESSAGE_INFO} from '../constants';
 
 @inject('auth')
 @observer
@@ -58,7 +59,21 @@ export default class LoginForm extends Component {
           </div>
 
           {auth.hasErrors ? (
-            <Message type="error">{auth.errorMessage || 'Error'}</Message>
+            <Message
+              message={{
+                type: MESSAGE_ERROR,
+                message: auth.errorMessage || 'Error',
+              }}
+            />
+          ) : null}
+          {auth.authorizationPageOpened ? (
+            <Message
+              message={{
+                type: MESSAGE_INFO,
+                message:
+                  'Your authorization page has been opened in a new tab. You may close this window and complete your login there.',
+              }}
+            />
           ) : null}
         </form>
       </div>
@@ -74,7 +89,7 @@ export default class LoginForm extends Component {
   handleSubmit = async e => {
     e.preventDefault();
     const domain = this.getNormalizedDomain();
-    this.setState({isLoading: true, domain});
+    this.setState({domain});
     await this.props.auth.login(domain);
   };
 

@@ -1,5 +1,6 @@
 import {observable, action, runInAction} from 'mobx';
 import micropub from '../util/micropub';
+import {sanitizeMicropubError} from '../util/utils';
 import {info as log, error} from '../util/log';
 
 class AuthStore {
@@ -9,6 +10,7 @@ class AuthStore {
   @observable isLoading = false;
   @observable hasErrors = false;
   @observable errorMessage = '';
+  @observable authorizationPageOpened = false;
 
   constructor() {
     this.loadSettings();
@@ -69,10 +71,14 @@ class AuthStore {
           },
         },
       });
+      runInAction(() => {
+        this.authorizationPageOpened = true;
+      });
     } catch (err) {
-      error(err.message, err);
+      error(err.message, sanitizeMicropubError(err));
       runInAction(() => {
         this.hasErrors = true;
+        this.authorizationPageOpened = false;
         this.errorMessage = `Missing micropub data on ${domain}. Please ensure the following links are present: authorization_endpoint, token_endpoint, micropub`;
         this.isLoading = false;
       });

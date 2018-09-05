@@ -20,7 +20,7 @@ import {
 } from '../util/micropub';
 import {getParamFromUrl} from '../util/url';
 import {info, warning, error} from '../util/log';
-import {sanitizeError} from '../util/utils';
+import {sanitizeMicropubError} from '../util/utils';
 
 class Store {
   @observable viewType;
@@ -218,7 +218,7 @@ class Store {
   }
 
   _flashErrorMessage(message, err) {
-    error(message, sanitizeError(err));
+    error(message, sanitizeMicropubError(err));
     this.flashMessage = {
       message,
       type: MESSAGE_ERROR,
