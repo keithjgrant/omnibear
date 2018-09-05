@@ -34,16 +34,28 @@ class DraftStore {
   @action
   setTitle(title) {
     this.title = title;
-    // TODO: make slug match Title for bookmarks?
+    this.updateSlug();
+    this.save();
   }
 
   @action
   setContent(content) {
     this.content = content;
-    if (this.shouldAutoSlug()) {
-      this.slug = generateSlug(content);
-    }
+    this.updateSlug();
     this.save();
+  }
+
+  @action
+  updateSlug() {
+    if (!this.shouldAutoSlug() || this._isSlugModified) {
+      return;
+    }
+
+    if (this.title) {
+      this.slug = generateSlug(this.title);
+    } else {
+      this.slug = generateSlug(this.content);
+    }
   }
 
   @action
@@ -77,6 +89,7 @@ class DraftStore {
 
   save() {
     saveDraft({
+      title: this.title,
       content: this.content,
       category: this.tagsArray,
       slug: this.slug,

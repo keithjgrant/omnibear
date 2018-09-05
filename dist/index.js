@@ -23240,16 +23240,28 @@ var DraftStore = (_class = function () {
     key: 'setTitle',
     value: function setTitle(title) {
       this.title = title;
-      // TODO: make slug match Title for bookmarks?
+      this.updateSlug();
+      this.save();
     }
   }, {
     key: 'setContent',
     value: function setContent(content) {
       this.content = content;
-      if (this.shouldAutoSlug()) {
-        this.slug = (0, _utils.generateSlug)(content);
-      }
+      this.updateSlug();
       this.save();
+    }
+  }, {
+    key: 'updateSlug',
+    value: function updateSlug() {
+      if (!this.shouldAutoSlug() || this._isSlugModified) {
+        return;
+      }
+
+      if (this.title) {
+        this.slug = (0, _utils.generateSlug)(this.title);
+      } else {
+        this.slug = (0, _utils.generateSlug)(this.content);
+      }
     }
   }, {
     key: 'setSlug',
@@ -23272,6 +23284,7 @@ var DraftStore = (_class = function () {
     key: 'save',
     value: function save() {
       (0, _draft.saveDraft)({
+        title: this.title,
         content: this.content,
         category: this.tagsArray,
         slug: this.slug,
@@ -23314,7 +23327,7 @@ var DraftStore = (_class = function () {
   initializer: function initializer() {
     return [];
   }
-}), _applyDecoratedDescriptor(_class.prototype, 'tagsArray', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'tagsArray'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setTitle', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setTitle'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setContent', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setContent'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSlug'), _class.prototype), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'setTags', [_mobx.action], {
+}), _applyDecoratedDescriptor(_class.prototype, 'tagsArray', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'tagsArray'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setTitle', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setTitle'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setContent', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setContent'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'updateSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'updateSlug'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSlug'), _class.prototype), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'setTags', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this = this;
@@ -23761,9 +23774,9 @@ var Store = (_class = function () {
         this.flashMessage = null;
       }
       if (type === _constants.BOOKMARK) {
-        this.draft.title = this.selectedEntry ? this.selectedEntry.title : '';
+        this.draft.setTitle(this.selectedEntry ? this.selectedEntry.title : '');
       } else {
-        this.draft.title = '';
+        this.draft.setTitle('');
       }
     }
   }, {
@@ -23771,7 +23784,7 @@ var Store = (_class = function () {
     value: function setSelectedEntry(entry) {
       this.selectedEntry = entry;
       if (this.viewType === _constants.BOOKMARK) {
-        this.draft.title = entry.title;
+        this.draft.setTitle(entry.title);
       }
     }
   }, {
@@ -23974,7 +23987,7 @@ var Store = (_class = function () {
     var _this4 = this;
 
     return function (reacji) {
-      _this4.draft.content = _this4.draft.content + reacji;
+      _this4.draft.setContent(_this4.draft.content + reacji);
     };
   }
 }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, 'sendBookmark', [_mobx.action], {

@@ -50,9 +50,9 @@ class Store {
       this.flashMessage = null;
     }
     if (type === BOOKMARK) {
-      this.draft.title = this.selectedEntry ? this.selectedEntry.title : '';
+      this.draft.setTitle(this.selectedEntry ? this.selectedEntry.title : '');
     } else {
-      this.draft.title = '';
+      this.draft.setTitle('');
     }
   }
 
@@ -60,7 +60,7 @@ class Store {
   setSelectedEntry(entry) {
     this.selectedEntry = entry;
     if (this.viewType === BOOKMARK) {
-      this.draft.title = entry.title;
+      this.draft.setTitle(entry.title);
     }
   }
 
@@ -115,7 +115,7 @@ class Store {
       const location = await postReply(
         this.draft,
         this.selectedEntry.url,
-        this.settings.aliases,
+        this.settings.aliases
       );
       runInAction(() => {
         this.draft.clear();
@@ -132,7 +132,7 @@ class Store {
 
   @action
   addQuickReply = reacji => {
-    this.draft.content = this.draft.content + reacji;
+    this.draft.setContent(this.draft.content + reacji);
   };
 
   @action
@@ -147,7 +147,7 @@ class Store {
       const location = await postBookmark(
         this.draft,
         this.selectedEntry.url,
-        this.settings.aliases,
+        this.settings.aliases
       );
       runInAction(() => {
         this.draft.clear();
