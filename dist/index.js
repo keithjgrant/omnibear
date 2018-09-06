@@ -18123,6 +18123,15 @@ var Footer = (_dec = (0, _mobxPreact.inject)('store', 'auth'), _dec(_class = fun
           'div',
           { key: 'message', className: 'footer__message' },
           'Not authenticated'
+        ), (0, _preact.h)(
+          'a',
+          {
+            key: 'help',
+            href: 'https://omnibear.com/help',
+            className: 'footer__right',
+            onClick: _utils.openLink
+          },
+          'Help'
         )]
       );
     }
@@ -19337,9 +19346,9 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
       supportsWebmention: false
     };
     if (options[1].isDisabled) {
-      _this.selectEntry(options[0]);
+      _this.selectEntry(options[0], true);
     } else {
-      _this.selectEntry(options[1]);
+      _this.selectEntry(options[1], true);
     }
     return _this;
   }
@@ -19467,12 +19476,12 @@ var UrlSelector = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _m
     }
   }, {
     key: 'selectEntry',
-    value: function selectEntry(entry) {
+    value: function selectEntry(entry, initialLoad) {
       this.setState({
         isOpen: false,
         supportsWebmention: entry.webmention
       });
-      this.props.store.setSelectedEntry(entry);
+      this.props.store.setSelectedEntry(entry, initialLoad);
     }
   }, {
     key: 'refreshUrls',
@@ -21439,7 +21448,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
+var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8;
 
 var _mobx = __webpack_require__(/*! mobx */ "./node_modules/mobx/lib/mobx.module.js");
 
@@ -21510,19 +21519,23 @@ var DraftStore = (_class = function () {
 
     _initDefineProp(this, 'slug', _descriptor4, this);
 
-    _initDefineProp(this, 'syndicateList', _descriptor5, this);
+    _initDefineProp(this, 'type', _descriptor5, this);
 
-    _initDefineProp(this, 'setTags', _descriptor6, this);
+    _initDefineProp(this, 'syndicateList', _descriptor6, this);
 
-    _initDefineProp(this, 'setSyndicateList', _descriptor7, this);
+    _initDefineProp(this, 'setTags', _descriptor7, this);
+
+    _initDefineProp(this, 'setSyndicateList', _descriptor8, this);
 
     var savedDraft = (0, _draft.getDraft)();
+    this.title = savedDraft.title;
     this.content = savedDraft.content;
     this.tags = savedDraft.category.join(' ');
     // backwards support to <= v1.1.0 'mp-slug'
     this.slug = savedDraft.slug || savedDraft['mp-slug'];
     // backwards support to <= v1.1.0 'mp-syndicate to'
     this.syndicateList = savedDraft.syndicateTo || savedDraft['mp-syndicate-to'];
+    this.type = savedDraft.type;
     this._settings = _settingsStore2.default;
     this._isSlugModified = false;
   }
@@ -21562,12 +21575,19 @@ var DraftStore = (_class = function () {
       this.save();
     }
   }, {
+    key: 'setType',
+    value: function setType(type) {
+      this.type = type;
+      this.save();
+    }
+  }, {
     key: 'clear',
     value: function clear() {
       this.title = '';
       this.content = '';
       this.tags = '';
       this.slug = '';
+      this.type = null;
       this._isSlugModified = false;
       this.save();
     }
@@ -21579,7 +21599,8 @@ var DraftStore = (_class = function () {
         content: this.content,
         category: this.tagsArray,
         slug: this.slug,
-        syndicateTo: this.syndicateList
+        syndicateTo: this.syndicateList,
+        type: this.type
       });
     }
   }, {
@@ -21598,6 +21619,12 @@ var DraftStore = (_class = function () {
     get: function get() {
       return this.tags.trim().replace(/[\s+]/g, ' ').split(' ');
     }
+  }, {
+    key: 'isEmpty',
+    get: function get() {
+      var x = !this.content && !this.slug && !this.title;
+      return x;
+    }
   }]);
 
   return DraftStore;
@@ -21613,12 +21640,15 @@ var DraftStore = (_class = function () {
 }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'slug', [_mobx.observable], {
   enumerable: true,
   initializer: null
-}), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'syndicateList', [_mobx.observable], {
+}), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'type', [_mobx.observable], {
+  enumerable: true,
+  initializer: null
+}), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'syndicateList', [_mobx.observable], {
   enumerable: true,
   initializer: function initializer() {
     return [];
   }
-}), _applyDecoratedDescriptor(_class.prototype, 'tagsArray', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'tagsArray'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setTitle', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setTitle'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setContent', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setContent'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'updateSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'updateSlug'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSlug'), _class.prototype), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'setTags', [_mobx.action], {
+}), _applyDecoratedDescriptor(_class.prototype, 'tagsArray', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'tagsArray'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'isEmpty', [_mobx.computed], Object.getOwnPropertyDescriptor(_class.prototype, 'isEmpty'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setTitle', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setTitle'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setContent', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setContent'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'updateSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'updateSlug'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'setSlug', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setSlug'), _class.prototype), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'setTags', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this = this;
@@ -21628,7 +21658,7 @@ var DraftStore = (_class = function () {
       _this.save();
     };
   }
-}), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'setSyndicateList', [_mobx.action], {
+}), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, 'setSyndicateList', [_mobx.action], {
   enumerable: true,
   initializer: function initializer() {
     var _this2 = this;
@@ -21638,7 +21668,7 @@ var DraftStore = (_class = function () {
       _this2.save();
     };
   }
-}), _applyDecoratedDescriptor(_class.prototype, 'clear', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'clear'), _class.prototype)), _class);
+}), _applyDecoratedDescriptor(_class.prototype, 'setType', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'setType'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'clear', [_mobx.action], Object.getOwnPropertyDescriptor(_class.prototype, 'clear'), _class.prototype)), _class);
 exports.default = new DraftStore();
 
 /***/ }),
@@ -22069,11 +22099,15 @@ var Store = (_class = function () {
       } else {
         this.draft.setTitle('');
       }
+      this.draft.setType(type);
     }
   }, {
     key: 'setSelectedEntry',
-    value: function setSelectedEntry(entry) {
+    value: function setSelectedEntry(entry, preserveDraftTitle) {
       this.selectedEntry = entry;
+      if (preserveDraftTitle && this.draft.title) {
+        return;
+      }
       if (this.viewType === _constants.BOOKMARK) {
         this.draft.setTitle(entry.title);
       }
@@ -22128,6 +22162,9 @@ var Store = (_class = function () {
     value: function _determineInitialView() {
       if (!this.auth.isLoggedIn()) {
         return _constants.LOGIN;
+      }
+      if (!this.draft.isEmpty && this.draft.type) {
+        return this.draft.type;
       }
       if (this.settings.defaultToCurrentPage) {
         return _constants.REPLY;
@@ -22464,13 +22501,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getDraft = getDraft;
 exports.saveDraft = saveDraft;
-var KEYS = ['content', 'category', 'slug', 'syndicateTo'];
+var KEYS = ['title', 'content', 'category', 'slug', 'syndicateTo', 'type'];
 
 var EMPTY_DRAFT = {
+  title: '',
   content: '',
   category: [],
   slug: '',
-  syndicateTo: []
+  syndicateTo: [],
+  type: null
 };
 
 function getDraft() {

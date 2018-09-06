@@ -54,11 +54,15 @@ class Store {
     } else {
       this.draft.setTitle('');
     }
+    this.draft.setType(type);
   }
 
   @action
-  setSelectedEntry(entry) {
+  setSelectedEntry(entry, preserveDraftTitle) {
     this.selectedEntry = entry;
+    if (preserveDraftTitle && this.draft.title) {
+      return;
+    }
     if (this.viewType === BOOKMARK) {
       this.draft.setTitle(entry.title);
     }
@@ -236,6 +240,9 @@ class Store {
   _determineInitialView() {
     if (!this.auth.isLoggedIn()) {
       return LOGIN;
+    }
+    if (!this.draft.isEmpty && this.draft.type) {
+      return this.draft.type;
     }
     if (this.settings.defaultToCurrentPage) {
       return REPLY;

@@ -16,9 +16,9 @@ export default class UrlSelector extends Component {
       supportsWebmention: false,
     };
     if (options[1].isDisabled) {
-      this.selectEntry(options[0]);
+      this.selectEntry(options[0], true);
     } else {
-      this.selectEntry(options[1]);
+      this.selectEntry(options[1], true);
     }
   }
 
@@ -117,12 +117,12 @@ export default class UrlSelector extends Component {
     this.setState({isOpen: false});
   };
 
-  selectEntry(entry) {
+  selectEntry(entry, initialLoad) {
     this.setState({
       isOpen: false,
       supportsWebmention: entry.webmention,
     });
-    this.props.store.setSelectedEntry(entry);
+    this.props.store.setSelectedEntry(entry, initialLoad);
   }
 
   refreshUrls() {

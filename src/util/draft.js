@@ -1,10 +1,12 @@
-const KEYS = ['content', 'category', 'slug', 'syndicateTo'];
+const KEYS = ['title', 'content', 'category', 'slug', 'syndicateTo', 'type'];
 
 const EMPTY_DRAFT = {
+  title: '',
   content: '',
   category: [],
   slug: '',
   syndicateTo: [],
+  type: null,
 };
 
 export function getDraft() {

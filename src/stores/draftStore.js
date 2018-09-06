@@ -8,10 +8,12 @@ class DraftStore {
   @observable content;
   @observable tags;
   @observable slug;
+  @observable type;
   @observable syndicateList = [];
 
   constructor() {
     const savedDraft = getDraft();
+    this.title = savedDraft.title;
     this.content = savedDraft.content;
     this.tags = savedDraft.category.join(' ');
     // backwards support to <= v1.1.0 'mp-slug'
@@ -19,6 +21,7 @@ class DraftStore {
     // backwards support to <= v1.1.0 'mp-syndicate to'
     this.syndicateList =
       savedDraft.syndicateTo || savedDraft['mp-syndicate-to'];
+    this.type = savedDraft.type;
     this._settings = settingsStore;
     this._isSlugModified = false;
   }
@@ -29,6 +32,12 @@ class DraftStore {
       .trim()
       .replace(/[\s+]/g, ' ')
       .split(' ');
+  }
+
+  @computed
+  get isEmpty() {
+    const x = !this.content && !this.slug && !this.title;
+    return x;
   }
 
   @action
@@ -78,11 +87,18 @@ class DraftStore {
   };
 
   @action
+  setType(type) {
+    this.type = type;
+    this.save();
+  }
+
+  @action
   clear() {
     this.title = '';
     this.content = '';
     this.tags = '';
     this.slug = '';
+    this.type = null;
     this._isSlugModified = false;
     this.save();
   }
@@ -94,6 +110,7 @@ class DraftStore {
       category: this.tagsArray,
       slug: this.slug,
       syndicateTo: this.syndicateList,
+      type: this.type,
     });
   }
 
