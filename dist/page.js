@@ -4920,14 +4920,12 @@ var _url = __webpack_require__(/*! ./util/url */ "./src/util/url.js");
       case 'fetch-token-error':
         handleTokenError(request.payload.error);
         break;
+      case 'auth-status-update':
+        handleStatusUpdate(request.payload);
+        break;
     }
   }
   chrome.runtime.onMessage.addListener(handleMessage);
-
-  if (!document.hidden) {
-    sendFocusMessage();
-  }
-  window.addEventListener('focus', sendFocusMessage);
 
   function handleTokenError(error) {
     if (!isAuthPage) {
@@ -4944,6 +4942,27 @@ var _url = __webpack_require__(/*! ./util/url */ "./src/util/url.js");
     var l = document.location;
     return l.hostname === 'omnibear.com' && l.pathname === '/auth/success/';
   }
+
+  function handleStatusUpdate(payload) {
+    var message = payload.message,
+        isError = payload.isError;
+
+    var list = document.getElementById('status-list');
+    if (!list) {
+      return;
+    }
+    var item = document.createElement('li');
+    item.innerText = message;
+    if (isError) {
+      item.classList.add('is-error');
+    }
+    list.appendChild(item);
+  }
+
+  if (!document.hidden) {
+    sendFocusMessage();
+  }
+  window.addEventListener('focus', sendFocusMessage);
 
   function sendFocusMessage() {
     var supportsWebmention = pageSupportsWebmention();
@@ -4974,6 +4993,14 @@ var _url = __webpack_require__(/*! ./util/url */ "./src/util/url.js");
 
   function pageSupportsWebmention() {
     return !!document.querySelector('link[rel="webmention"]');
+  }
+
+  if (isAuthPage()) {
+    // hide paragraph used by old versions of Omnibear
+    var paragraph = document.getElementById('status-paragraph');
+    if (paragraph) {
+      paragraph.parentElement.removeChild(paragraph);
+    }
   }
 })();
 
@@ -5088,7 +5115,6 @@ function removeHighlight() {
   if (currentItem) {
     currentItem.element.classList.remove(CLASS_NAME);
     currentItem = null;
-    // currentItemUrl = null;
   }
 }
 
@@ -5116,8 +5142,6 @@ function focusClickedEntry(e) {
   });
   entry.element.classList.add(CLASS_NAME);
   currentItem = entry;
-  // currentItem = entry.element;
-  // currentItemUrl = entry.url;
 }
 
 function findTweet(el) {

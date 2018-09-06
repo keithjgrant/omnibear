@@ -1,9 +1,4 @@
-import {
-  clearItem,
-  removeHighlight,
-  focusClickedEntry,
-  getCurrentItem,
-} from './page/entry';
+import {clearItem, focusClickedEntry, getCurrentItem} from './page/entry';
 import {cleanUrl} from './util/url';
 
 (function() {
@@ -16,14 +11,12 @@ import {cleanUrl} from './util/url';
       case 'fetch-token-error':
         handleTokenError(request.payload.error);
         break;
+      case 'auth-status-update':
+        handleStatusUpdate(request.payload);
+        break;
     }
   }
   chrome.runtime.onMessage.addListener(handleMessage);
-
-  if (!document.hidden) {
-    sendFocusMessage();
-  }
-  window.addEventListener('focus', sendFocusMessage);
 
   function handleTokenError(error) {
     if (!isAuthPage) {
@@ -40,6 +33,25 @@ import {cleanUrl} from './util/url';
     const l = document.location;
     return l.hostname === 'omnibear.com' && l.pathname === '/auth/success/';
   }
+
+  function handleStatusUpdate(payload) {
+    const {message, isError} = payload;
+    const list = document.getElementById('status-list');
+    if (!list) {
+      return;
+    }
+    const item = document.createElement('li');
+    item.innerText = message;
+    if (isError) {
+      item.classList.add('is-error');
+    }
+    list.appendChild(item);
+  }
+
+  if (!document.hidden) {
+    sendFocusMessage();
+  }
+  window.addEventListener('focus', sendFocusMessage);
 
   function sendFocusMessage() {
     const supportsWebmention = pageSupportsWebmention();
@@ -70,5 +82,13 @@ import {cleanUrl} from './util/url';
 
   function pageSupportsWebmention() {
     return !!document.querySelector('link[rel="webmention"]');
+  }
+
+  if (isAuthPage()) {
+    // hide paragraph used by old versions of Omnibear
+    const paragraph = document.getElementById('status-paragraph');
+    if (paragraph) {
+      paragraph.parentElement.removeChild(paragraph);
+    }
   }
 })();

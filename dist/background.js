@@ -1683,14 +1683,13 @@ module.exports = g;
 
 var _url = __webpack_require__(/*! ./util/url */ "./src/util/url.js");
 
-var _authentication = __webpack_require__(/*! ./background/authentication */ "./src/background/authentication.js");
-
 var _utils = __webpack_require__(/*! ./util/utils */ "./src/util/utils.js");
+
+var _authentication = __webpack_require__(/*! ./background/authentication */ "./src/background/authentication.js");
 
 var _log = __webpack_require__(/*! ./util/log */ "./src/util/log.js");
 
 var authTabId = null;
-var menuId = void 0;
 
 function handleMessage(request, sender, sendResponse) {
   switch (request.action) {
@@ -1741,16 +1740,30 @@ function handleTabChange(tabId, changeInfo, tab) {
     return;
   }
   var code = (0, _url.getParamFromUrl)('code', changeInfo.url);
-  (0, _log.info)('Auth code found beginning \'' + code.substr(0, 6) + '\'. Fetching token\u2026');
-  (0, _authentication.fetchToken)(code).then(function () {
-    (0, _log.info)('Token retrieved. Fetching syndication targets…');
-    return (0, _authentication.fetchSyndicationTargets)();
-  }).then(function () {
-    (0, _log.info)('Authentication complete. Closing authentication tab.');
-    chrome.tabs.remove(tab.id);
-    authTabId = null;
-  }).catch(function (err) {
-    (0, _log.error)(err.message, err);
+  setTimeout(function () {
+    sendAuthStatusUpdate('Retrieving access token\u2026');
+    (0, _authentication.fetchToken)(code).then(function () {
+      sendAuthStatusUpdate('Fetching syndication targets…');
+      return (0, _authentication.fetchSyndicationTargets)();
+    }).then(function () {
+      sendAuthStatusUpdate('Authentication complete.');
+      authTabId = null;
+      setTimeout(function () {
+        chrome.tabs.remove(tab.id);
+      }, 500);
+    }).catch(function (err) {
+      (0, _log.error)(err.message, err);
+    });
+  }, 500);
+}
+
+function sendAuthStatusUpdate(message) {
+  (0, _log.info)(message);
+  (0, _utils.getAuthTab)().then(function (tab) {
+    chrome.tabs.sendMessage(tab.id, {
+      action: 'auth-status-update',
+      payload: { message: message }
+    });
   });
 }
 
@@ -1761,7 +1774,7 @@ function isAuthRedirect(changeInfo) {
 
 chrome.runtime.onMessage.addListener(handleMessage);
 chrome.tabs.onUpdated.addListener(handleTabChange);
-menuId = chrome.contextMenus.create({
+chrome.contextMenus.create({
   title: 'Reply to entry',
   contexts: ['page', 'selection'],
   onclick: function onclick() {
@@ -1802,8 +1815,6 @@ exports.fetchSyndicationTargets = fetchSyndicationTargets;
 var _micropub = __webpack_require__(/*! ../util/micropub */ "./src/util/micropub.js");
 
 var _micropub2 = _interopRequireDefault(_micropub);
-
-var _url = __webpack_require__(/*! ../util/url */ "./src/util/url.js");
 
 var _utils = __webpack_require__(/*! ../util/utils */ "./src/util/utils.js");
 

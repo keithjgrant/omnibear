@@ -20,7 +20,6 @@ export function removeHighlight() {
   if (currentItem) {
     currentItem.element.classList.remove(CLASS_NAME);
     currentItem = null;
-    // currentItemUrl = null;
   }
 }
 
@@ -48,8 +47,6 @@ export function focusClickedEntry(e) {
   });
   entry.element.classList.add(CLASS_NAME);
   currentItem = entry;
-  // currentItem = entry.element;
-  // currentItemUrl = entry.url;
 }
 
 function findTweet(el) {

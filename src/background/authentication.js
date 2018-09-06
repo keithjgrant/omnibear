@@ -1,5 +1,4 @@
 import micropub from '../util/micropub';
-import {getParamFromUrl, getUrlOrigin} from '../util/url';
 import {getAuthTab, logout} from '../util/utils';
 import {info, warning, error} from '../util/log';
 
