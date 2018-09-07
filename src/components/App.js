@@ -15,8 +15,10 @@ export default class App extends Component {
           <ChangeViewTabs />
         </nav>
         <div className="l-main__full">
-          <Header />
-          <MainPane />
+          <div className="gradient-wrapper">
+            <Header />
+            <MainPane />
+          </div>
         </div>
         <Footer />
       </div>

@@ -9,19 +9,17 @@ export default class LikeForm extends Component {
   render() {
     const {store} = this.props;
     return (
-      <div className="l-main__main">
-        <div className="container text-center">
-          <p>Like this entry?</p>
-          {store.flashMessage ? <Message message={store.flashMessage} /> : null}
-          <button
-            type="button"
-            className={`button${store.isSending ? ' is-loading' : ''}`}
-            onClick={store.sendLike}
-            disabled={store.isSending}
-          >
-            Like <HeartSvg />
-          </button>
-        </div>
+      <div className="container text-center">
+        <p>Like this entry?</p>
+        {store.flashMessage ? <Message message={store.flashMessage} /> : null}
+        <button
+          type="button"
+          className={`button${store.isSending ? ' is-loading' : ''}`}
+          onClick={store.sendLike}
+          disabled={store.isSending}
+        >
+          Like <HeartSvg />
+        </button>
       </div>
     );
   }

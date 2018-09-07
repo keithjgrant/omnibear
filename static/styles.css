@@ -163,6 +163,19 @@ label {
   z-index: 2;
 }
 
+.gradient-wrapper {
+  background-image: linear-gradient(
+    to right,
+    hsl(20, 75%, 65%),
+    hsl(45, 75%, 65%)
+  );
+}
+
+.main-header {
+  min-height: 5.2em;
+  padding: 1em 0;
+}
+
 .input-extra {
   float: right;
   color: var(--gray-60);
@@ -333,7 +346,7 @@ fieldset > * + * {
 }
 
 .header-title {
-  margin: 0.5rem 0 0;
+  margin: 0;
   padding: 0 1rem;
   color: white;
   font-size: 1rem;

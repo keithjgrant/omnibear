@@ -27,10 +27,8 @@ export default class MainPane extends Component {
         return <RepostForm />;
       case MESSAGE:
         return (
-          <div className="l-main__full">
-            <div className="container container--full">
-              <Message message={store.flashMessage} />
-            </div>
+          <div className="container container--full">
+            <Message message={store.flashMessage} />
           </div>
         );
       default:

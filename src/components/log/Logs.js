@@ -17,27 +17,20 @@ export default class Logs extends Component {
     const {onClose} = this.props;
     const logs = getLogs();
     return (
-      <div className="l-main__full">
-        <div className="container container--full">
-          <h1 className="section-heading">Logs</h1>
-          {logs.length ? (
-            <ul className="logs">
-              {logs.map((log, i) => <LogItem key={i} log={log} />)}
-            </ul>
-          ) : (
-            <p className="metadata">No logs found</p>
-          )}
-          <p className="text-right">
-            <button type="button" onClick={this.clearLogs}>
-              Clear logs
-            </button>
-          </p>
-        </div>
-        <footer className="footer">
-          <button className="button-link" type="button" onClick={onClose}>
-            Close logs
+      <div className="container container--full">
+        <h1 className="section-heading">Logs</h1>
+        {logs.length ? (
+          <ul className="logs">
+            {logs.map((log, i) => <LogItem key={i} log={log} />)}
+          </ul>
+        ) : (
+          <p className="metadata">No logs found</p>
+        )}
+        <p className="text-right">
+          <button type="button" onClick={this.clearLogs}>
+            Clear logs
           </button>
-        </footer>
+        </p>
       </div>
     );
   }
