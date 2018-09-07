@@ -3,6 +3,8 @@ import micropub from '../util/micropub';
 import {sanitizeMicropubError} from '../util/utils';
 import {info as log, error} from '../util/log';
 
+const __browser__ = browser || chrome;
+
 class AuthStore {
   @observable domain;
   @observable token;
@@ -59,7 +61,7 @@ class AuthStore {
     try {
       const url = await micropub.getAuthUrl();
       log(`authorization_endpoint found: ${url}`);
-      chrome.runtime.sendMessage({
+      __browser__.runtime.sendMessage({
         action: 'begin-auth',
         payload: {
           authUrl: url,

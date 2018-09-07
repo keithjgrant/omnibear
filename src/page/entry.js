@@ -3,13 +3,15 @@
 import microformat from 'microformat-shiv';
 import {getAncestorNode, getAncestorNodeByClass} from './dom';
 
+const __browser__ = browser || chrome;
+
 const CLASS_NAME = '__omnibear-selected-item';
 let currentItem;
 // let currentItemUrl;
 
 export function clearItem() {
   if (currentItem) {
-    chrome.runtime.sendMessage({
+    __browser__.runtime.sendMessage({
       action: 'clear-entry',
     });
     removeHighlight();
@@ -37,7 +39,7 @@ export function focusClickedEntry(e) {
   if (!entry) {
     return;
   }
-  chrome.runtime.sendMessage({
+  __browser__.runtime.sendMessage({
     action: 'select-entry',
     payload: {
       type: 'item',

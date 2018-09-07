@@ -2,6 +2,8 @@ import micropub from '../util/micropub';
 import {getAuthTab, logout} from '../util/utils';
 import {info, warning, error} from '../util/log';
 
+const __browser__ = browser || chrome;
+
 export function fetchToken(code) {
   micropub.options.me = localStorage.getItem('domain');
   micropub.options.tokenEndpoint = localStorage.getItem('tokenEndpoint');
@@ -20,7 +22,7 @@ export function fetchToken(code) {
     .catch(function(err) {
       error('Error fetching token', err);
       getAuthTab().then(tab => {
-        chrome.tabs.sendMessage(tab.id, {
+        __browser__.tabs.sendMessage(tab.id, {
           action: 'fetch-token-error',
           payload: {
             error: err,

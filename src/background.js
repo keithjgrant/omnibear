@@ -5,6 +5,8 @@ import {info, error} from './util/log';
 
 let authTabId = null;
 
+const __browser__ = browser || chrome;
+
 function handleMessage(request, sender, sendResponse) {
   switch (request.action) {
     case 'begin-auth':
@@ -30,7 +32,7 @@ function handleBeginAuth(payload) {
   localStorage.setItem('authEndpoint', payload.metadata.authEndpoint);
   localStorage.setItem('tokenEndpoint', payload.metadata.tokenEndpoint);
   localStorage.setItem('micropubEndpoint', payload.metadata.micropub);
-  chrome.tabs.create({url: payload.authUrl}, tab => {
+  __browser__.tabs.create({url: payload.authUrl}, tab => {
     authTabId = tab.id;
   });
 }
@@ -69,7 +71,7 @@ function handleTabChange(tabId, changeInfo, tab) {
         sendAuthStatusUpdate(`Authentication complete.`);
         authTabId = null;
         setTimeout(() => {
-          chrome.tabs.remove(tab.id);
+          __browser__.tabs.remove(tab.id);
         }, 500);
       })
       .catch(err => {
@@ -81,7 +83,7 @@ function handleTabChange(tabId, changeInfo, tab) {
 function sendAuthStatusUpdate(message) {
   info(message);
   getAuthTab().then(tab => {
-    chrome.tabs.sendMessage(tab.id, {
+    __browser__.tabs.sendMessage(tab.id, {
       action: 'auth-status-update',
       payload: {message},
     });
@@ -93,9 +95,9 @@ function isAuthRedirect(changeInfo) {
   return changeInfo.url && changeInfo.url.startsWith(url);
 }
 
-chrome.runtime.onMessage.addListener(handleMessage);
-chrome.tabs.onUpdated.addListener(handleTabChange);
-chrome.contextMenus.create({
+__browser__.runtime.onMessage.addListener(handleMessage);
+__browser__.tabs.onUpdated.addListener(handleTabChange);
+__browser__.contextMenus.create({
   title: 'Reply to entry',
   contexts: ['page', 'selection'],
   onclick: function() {

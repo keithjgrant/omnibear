@@ -21233,6 +21233,8 @@ function _initializerWarningHelper(descriptor, context) {
   throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
 }
 
+var __browser__ = browser || chrome;
+
 var AuthStore = (_class = function () {
   function AuthStore() {
     _classCallCheck(this, AuthStore);
@@ -21292,7 +21294,7 @@ var AuthStore = (_class = function () {
                 url = _context.sent;
 
                 (0, _log.info)('authorization_endpoint found: ' + url);
-                chrome.runtime.sendMessage({
+                __browser__.runtime.sendMessage({
                   action: 'begin-auth',
                   payload: {
                     authUrl: url,
@@ -22907,10 +22909,12 @@ exports.logout = logout;
 exports.generateSlug = generateSlug;
 exports.getPageUrl = getPageUrl;
 exports.sanitizeMicropubError = sanitizeMicropubError;
+var __browser__ = browser || chrome;
+
 function openLink(e) {
   e.preventDefault();
   if (e.target.href) {
-    chrome.tabs.create({ url: e.target.href });
+    __browser__.tabs.create({ url: e.target.href });
   }
 }
 
@@ -22920,7 +22924,7 @@ function clone(obj) {
 
 function getAuthTab() {
   return new Promise(function (resolve, reject) {
-    chrome.tabs.query({ url: 'https://omnibear.com/auth/success*' }, function (tabs) {
+    __browser__.tabs.query({ url: 'https://omnibear.com/auth/success*' }, function (tabs) {
       if (tabs.length) {
         resolve(tabs[0]);
       } else {
@@ -22956,7 +22960,7 @@ function generateSlug(content) {
 function getPageUrl() {
   return new Promise(function (resolve) {
     var tabId = localStorage.getItem('pageTabId');
-    chrome.tabs.get(Number(tabId), function (tab) {
+    __browser__.tabs.get(Number(tabId), function (tab) {
       resolve(tab.url);
     });
   });

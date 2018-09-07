@@ -1,6 +1,8 @@
 import {clearItem, focusClickedEntry, getCurrentItem} from './page/entry';
 import {cleanUrl} from './util/url';
 
+const __browser__ = browser || chrome;
+
 (function() {
   document.body.addEventListener('click', clearItem);
 
@@ -16,7 +18,7 @@ import {cleanUrl} from './util/url';
         break;
     }
   }
-  chrome.runtime.onMessage.addListener(handleMessage);
+  __browser__.runtime.onMessage.addListener(handleMessage);
 
   function handleTokenError(error) {
     if (!isAuthPage) {
@@ -71,7 +73,7 @@ import {cleanUrl} from './util/url';
         webmention: supportsWebmention,
       };
     }
-    chrome.runtime.sendMessage({
+    __browser__.runtime.sendMessage({
       action: 'focus-window',
       payload: {
         pageEntry,

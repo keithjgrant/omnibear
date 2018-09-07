@@ -1691,6 +1691,8 @@ var _log = __webpack_require__(/*! ./util/log */ "./src/util/log.js");
 
 var authTabId = null;
 
+var __browser__ = browser || chrome;
+
 function handleMessage(request, sender, sendResponse) {
   switch (request.action) {
     case 'begin-auth':
@@ -1712,7 +1714,7 @@ function handleBeginAuth(payload) {
   localStorage.setItem('authEndpoint', payload.metadata.authEndpoint);
   localStorage.setItem('tokenEndpoint', payload.metadata.tokenEndpoint);
   localStorage.setItem('micropubEndpoint', payload.metadata.micropub);
-  chrome.tabs.create({ url: payload.authUrl }, function (tab) {
+  __browser__.tabs.create({ url: payload.authUrl }, function (tab) {
     authTabId = tab.id;
   });
 }
@@ -1749,7 +1751,7 @@ function handleTabChange(tabId, changeInfo, tab) {
       sendAuthStatusUpdate('Authentication complete.');
       authTabId = null;
       setTimeout(function () {
-        chrome.tabs.remove(tab.id);
+        __browser__.tabs.remove(tab.id);
       }, 500);
     }).catch(function (err) {
       (0, _log.error)(err.message, err);
@@ -1760,7 +1762,7 @@ function handleTabChange(tabId, changeInfo, tab) {
 function sendAuthStatusUpdate(message) {
   (0, _log.info)(message);
   (0, _utils.getAuthTab)().then(function (tab) {
-    chrome.tabs.sendMessage(tab.id, {
+    __browser__.tabs.sendMessage(tab.id, {
       action: 'auth-status-update',
       payload: { message: message }
     });
@@ -1772,9 +1774,9 @@ function isAuthRedirect(changeInfo) {
   return changeInfo.url && changeInfo.url.startsWith(url);
 }
 
-chrome.runtime.onMessage.addListener(handleMessage);
-chrome.tabs.onUpdated.addListener(handleTabChange);
-chrome.contextMenus.create({
+__browser__.runtime.onMessage.addListener(handleMessage);
+__browser__.tabs.onUpdated.addListener(handleTabChange);
+__browser__.contextMenus.create({
   title: 'Reply to entry',
   contexts: ['page', 'selection'],
   onclick: function onclick() {
@@ -1822,6 +1824,8 @@ var _log = __webpack_require__(/*! ../util/log */ "./src/util/log.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var __browser__ = browser || chrome;
+
 function fetchToken(code) {
   _micropub2.default.options.me = localStorage.getItem('domain');
   _micropub2.default.options.tokenEndpoint = localStorage.getItem('tokenEndpoint');
@@ -1835,7 +1839,7 @@ function fetchToken(code) {
   }).catch(function (err) {
     (0, _log.error)('Error fetching token', err);
     (0, _utils.getAuthTab)().then(function (tab) {
-      chrome.tabs.sendMessage(tab.id, {
+      __browser__.tabs.sendMessage(tab.id, {
         action: 'fetch-token-error',
         payload: {
           error: err
@@ -2261,10 +2265,12 @@ exports.logout = logout;
 exports.generateSlug = generateSlug;
 exports.getPageUrl = getPageUrl;
 exports.sanitizeMicropubError = sanitizeMicropubError;
+var __browser__ = browser || chrome;
+
 function openLink(e) {
   e.preventDefault();
   if (e.target.href) {
-    chrome.tabs.create({ url: e.target.href });
+    __browser__.tabs.create({ url: e.target.href });
   }
 }
 
@@ -2274,7 +2280,7 @@ function clone(obj) {
 
 function getAuthTab() {
   return new Promise(function (resolve, reject) {
-    chrome.tabs.query({ url: 'https://omnibear.com/auth/success*' }, function (tabs) {
+    __browser__.tabs.query({ url: 'https://omnibear.com/auth/success*' }, function (tabs) {
       if (tabs.length) {
         resolve(tabs[0]);
       } else {
@@ -2310,7 +2316,7 @@ function generateSlug(content) {
 function getPageUrl() {
   return new Promise(function (resolve) {
     var tabId = localStorage.getItem('pageTabId');
-    chrome.tabs.get(Number(tabId), function (tab) {
+    __browser__.tabs.get(Number(tabId), function (tab) {
       resolve(tab.url);
     });
   });

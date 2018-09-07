@@ -1,7 +1,9 @@
+const __browser__ = browser || chrome;
+
 export function openLink(e) {
   e.preventDefault();
   if (e.target.href) {
-    chrome.tabs.create({url: e.target.href});
+    __browser__.tabs.create({url: e.target.href});
   }
 }
 
@@ -11,15 +13,16 @@ export function clone(obj) {
 
 export function getAuthTab() {
   return new Promise(function(resolve, reject) {
-    chrome.tabs.query({url: 'https://omnibear.com/auth/success*'}, function(
-      tabs
-    ) {
-      if (tabs.length) {
-        resolve(tabs[0]);
-      } else {
-        reject('Auth tab not found');
+    __browser__.tabs.query(
+      {url: 'https://omnibear.com/auth/success*'},
+      function(tabs) {
+        if (tabs.length) {
+          resolve(tabs[0]);
+        } else {
+          reject('Auth tab not found');
+        }
       }
-    });
+    );
   });
 }
 
@@ -56,7 +59,7 @@ export function generateSlug(content) {
 export function getPageUrl() {
   return new Promise(resolve => {
     var tabId = localStorage.getItem('pageTabId');
-    chrome.tabs.get(Number(tabId), tab => {
+    __browser__.tabs.get(Number(tabId), tab => {
       resolve(tab.url);
     });
   });

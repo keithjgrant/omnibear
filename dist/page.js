@@ -4910,6 +4910,8 @@ var _entry = __webpack_require__(/*! ./page/entry */ "./src/page/entry.js");
 
 var _url = __webpack_require__(/*! ./util/url */ "./src/util/url.js");
 
+var __browser__ = browser || chrome;
+
 (function () {
   document.body.addEventListener('click', _entry.clearItem);
 
@@ -4925,7 +4927,7 @@ var _url = __webpack_require__(/*! ./util/url */ "./src/util/url.js");
         break;
     }
   }
-  chrome.runtime.onMessage.addListener(handleMessage);
+  __browser__.runtime.onMessage.addListener(handleMessage);
 
   function handleTokenError(error) {
     if (!isAuthPage) {
@@ -4982,7 +4984,7 @@ var _url = __webpack_require__(/*! ./util/url */ "./src/util/url.js");
         webmention: supportsWebmention
       };
     }
-    chrome.runtime.sendMessage({
+    __browser__.runtime.sendMessage({
       action: 'focus-window',
       payload: {
         pageEntry: pageEntry,
@@ -5098,13 +5100,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // TODO: replace this lib with a better mf parser, preferably
 // one that doesn't blow up while tests run in Node environment
+var __browser__ = browser || chrome;
+
 var CLASS_NAME = '__omnibear-selected-item';
 var currentItem = void 0;
 // let currentItemUrl;
 
 function clearItem() {
   if (currentItem) {
-    chrome.runtime.sendMessage({
+    __browser__.runtime.sendMessage({
       action: 'clear-entry'
     });
     removeHighlight();
@@ -5132,7 +5136,7 @@ function focusClickedEntry(e) {
   if (!entry) {
     return;
   }
-  chrome.runtime.sendMessage({
+  __browser__.runtime.sendMessage({
     action: 'select-entry',
     payload: {
       type: 'item',
