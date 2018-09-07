@@ -1,11 +1,10 @@
+import __browser__ from './browser';
 import {getParamFromUrl} from './util/url';
 import {getAuthTab} from './util/utils';
 import {fetchToken, fetchSyndicationTargets} from './background/authentication';
 import {info, error} from './util/log';
 
 let authTabId = null;
-
-const __browser__ = browser || chrome;
 
 function handleMessage(request, sender, sendResponse) {
   switch (request.action) {
@@ -16,7 +15,7 @@ function handleMessage(request, sender, sendResponse) {
       updateFocusedWindow(
         sender.tab.id,
         request.payload.pageEntry,
-        request.payload.selectedEntry
+        request.payload.selectedEntry,
       );
       break;
     case 'select-entry':
@@ -106,7 +105,7 @@ __browser__.contextMenus.create({
       window.open(
         'index.html?type=reply',
         'extension_popup',
-        'width=450,height=510,status=no,scrollbars=yes,resizable=no,top=80,left=2000'
+        'width=450,height=510,status=no,scrollbars=yes,resizable=no,top=80,left=2000',
       );
     } else {
       // Firefox (and others?)

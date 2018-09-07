@@ -4896,6 +4896,28 @@ module.exports = function parseURI (str, opts) {
 
 /***/ }),
 
+/***/ "./src/browser.js":
+/*!************************!*\
+  !*** ./src/browser.js ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+if (typeof browser === 'undefined') {
+  // Chrome
+  var browser = chrome;
+}
+
+exports.default = browser;
+
+/***/ }),
+
 /***/ "./src/page.js":
 /*!*********************!*\
   !*** ./src/page.js ***!
@@ -4906,11 +4928,15 @@ module.exports = function parseURI (str, opts) {
 "use strict";
 
 
+var _browser = __webpack_require__(/*! ./browser */ "./src/browser.js");
+
+var _browser2 = _interopRequireDefault(_browser);
+
 var _entry = __webpack_require__(/*! ./page/entry */ "./src/page/entry.js");
 
 var _url = __webpack_require__(/*! ./util/url */ "./src/util/url.js");
 
-var __browser__ = browser || chrome;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (function () {
   document.body.addEventListener('click', _entry.clearItem);
@@ -4927,7 +4953,7 @@ var __browser__ = browser || chrome;
         break;
     }
   }
-  __browser__.runtime.onMessage.addListener(handleMessage);
+  _browser2.default.runtime.onMessage.addListener(handleMessage);
 
   function handleTokenError(error) {
     if (!isAuthPage) {
@@ -4984,7 +5010,7 @@ var __browser__ = browser || chrome;
         webmention: supportsWebmention
       };
     }
-    __browser__.runtime.sendMessage({
+    _browser2.default.runtime.sendMessage({
       action: 'focus-window',
       payload: {
         pageEntry: pageEntry,
@@ -5090,6 +5116,10 @@ exports.removeHighlight = removeHighlight;
 exports.focusClickedEntry = focusClickedEntry;
 exports.getCurrentItem = getCurrentItem;
 
+var _browser = __webpack_require__(/*! ../browser */ "./src/browser.js");
+
+var _browser2 = _interopRequireDefault(_browser);
+
 var _microformatShiv = __webpack_require__(/*! microformat-shiv */ "./node_modules/microformat-shiv/microformat-shiv.js");
 
 var _microformatShiv2 = _interopRequireDefault(_microformatShiv);
@@ -5098,17 +5128,15 @@ var _dom = __webpack_require__(/*! ./dom */ "./src/page/dom.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// TODO: replace this lib with a better mf parser, preferably
+var CLASS_NAME = '__omnibear-selected-item'; // TODO: replace this lib with a better mf parser, preferably
 // one that doesn't blow up while tests run in Node environment
-var __browser__ = browser || chrome;
 
-var CLASS_NAME = '__omnibear-selected-item';
 var currentItem = void 0;
 // let currentItemUrl;
 
 function clearItem() {
   if (currentItem) {
-    __browser__.runtime.sendMessage({
+    _browser2.default.runtime.sendMessage({
       action: 'clear-entry'
     });
     removeHighlight();
@@ -5136,7 +5164,7 @@ function focusClickedEntry(e) {
   if (!entry) {
     return;
   }
-  __browser__.runtime.sendMessage({
+  _browser2.default.runtime.sendMessage({
     action: 'select-entry',
     payload: {
       type: 'item',

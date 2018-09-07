@@ -1,8 +1,7 @@
+import __browser__ from '../browser';
 import micropub from '../util/micropub';
 import {getAuthTab, logout} from '../util/utils';
 import {info, warning, error} from '../util/log';
-
-const __browser__ = browser || chrome;
 
 export function fetchToken(code) {
   micropub.options.me = localStorage.getItem('domain');
@@ -13,7 +12,7 @@ export function fetchToken(code) {
     .then(function(token) {
       if (!token) {
         throw new Error(
-          'Token not found in token endpoint response. Missing expected field `access_token`'
+          'Token not found in token endpoint response. Missing expected field `access_token`',
         );
       }
       localStorage.setItem('token', token);
@@ -41,7 +40,7 @@ export function fetchSyndicationTargets() {
       localStorage.setItem('syndicateTo', JSON.stringify(syndicateTo));
     } else {
       warning(
-        `Syndication targets not in array format. Saving as empty array.`
+        `Syndication targets not in array format. Saving as empty array.`,
       );
       localStorage.setItem('syndicateTo', JSON.stringify([]));
     }

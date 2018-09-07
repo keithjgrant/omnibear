@@ -1,9 +1,8 @@
 // TODO: replace this lib with a better mf parser, preferably
 // one that doesn't blow up while tests run in Node environment
+import __browser__ from '../browser';
 import microformat from 'microformat-shiv';
 import {getAncestorNode, getAncestorNodeByClass} from './dom';
-
-const __browser__ = browser || chrome;
 
 const CLASS_NAME = '__omnibear-selected-item';
 let currentItem;
@@ -57,7 +56,7 @@ function findTweet(el) {
     return false;
   }
   const url = `https://twitter.com${element.getAttribute(
-    'data-permalink-path'
+    'data-permalink-path',
   )}`;
   const name = element.getAttribute('data-name');
   return {

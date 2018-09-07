@@ -1,4 +1,4 @@
-const __browser__ = browser || chrome;
+import __browser__ from '../browser';
 
 export function openLink(e) {
   e.preventDefault();
@@ -21,7 +21,7 @@ export function getAuthTab() {
         } else {
           reject('Auth tab not found');
         }
-      }
+      },
     );
   });
 }
@@ -47,7 +47,7 @@ export function generateSlug(content) {
   for (let i = 0, l = FROM.length; i < l; i++) {
     formatted = formatted.replace(
       new RegExp(FROM.charAt(i), 'g'),
-      TO.charAt(i)
+      TO.charAt(i),
     );
   }
   formatted = formatted.replace(NON_ALPHANUM, '');

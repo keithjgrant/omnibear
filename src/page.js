@@ -1,7 +1,6 @@
+import __browser__ from './browser';
 import {clearItem, focusClickedEntry, getCurrentItem} from './page/entry';
 import {cleanUrl} from './util/url';
-
-const __browser__ = browser || chrome;
 
 (function() {
   document.body.addEventListener('click', clearItem);
