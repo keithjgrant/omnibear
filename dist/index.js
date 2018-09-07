@@ -19660,8 +19660,12 @@ var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreac
           { className: 'l-main__sidebar' },
           (0, _preact.h)(_ChangeViewTabs2.default, null)
         ),
-        (0, _preact.h)(_Header2.default, null),
-        (0, _preact.h)(_MainPane2.default, null),
+        (0, _preact.h)(
+          'div',
+          { className: 'l-main__full' },
+          (0, _preact.h)(_Header2.default, null),
+          (0, _preact.h)(_MainPane2.default, null)
+        ),
         (0, _preact.h)(_Footer2.default, null)
       );
     }

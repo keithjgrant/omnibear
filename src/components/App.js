@@ -14,8 +14,10 @@ export default class App extends Component {
         <nav className="l-main__sidebar">
           <ChangeViewTabs />
         </nav>
-        <Header />
-        <MainPane />
+        <div className="l-main__full">
+          <Header />
+          <MainPane />
+        </div>
         <Footer />
       </div>
     );
