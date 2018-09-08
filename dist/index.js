@@ -19640,7 +19640,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
+var App = (_dec = (0, _mobxPreact.inject)('auth'), _dec(_class = (0, _mobxPreact.observer)(_class = function (_Component) {
   _inherits(App, _Component);
 
   function App() {
@@ -19654,7 +19654,7 @@ var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreac
     value: function render() {
       return (0, _preact.h)(
         'div',
-        { className: 'l-main' },
+        { className: this.getClass() },
         (0, _preact.h)(
           'nav',
           { className: 'l-main__sidebar' },
@@ -19672,6 +19672,14 @@ var App = (_dec = (0, _mobxPreact.inject)('store'), _dec(_class = (0, _mobxPreac
         ),
         (0, _preact.h)(_Footer2.default, null)
       );
+    }
+  }, {
+    key: 'getClass',
+    value: function getClass() {
+      var auth = this.props.auth;
+
+      var height = auth.isLoggedIn() ? 'l-main--tall' : 'l-main--short';
+      return 'l-main ' + height;
     }
   }]);
 

@@ -7,7 +7,7 @@ import {cleanUrl} from './util/url';
 
   document.body.addEventListener('contextmenu', focusClickedEntry);
 
-  function handleMessage(request, sender, sendResponse) {
+  function handleMessage(request) {
     switch (request.action) {
       case 'fetch-token-error':
         handleTokenError(request.payload.error);

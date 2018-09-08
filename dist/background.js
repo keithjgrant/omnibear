@@ -3635,7 +3635,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var authTabId = null;
 
-function handleMessage(request, sender, sendResponse) {
+function handleMessage(request, sender) {
   switch (request.action) {
     case 'begin-auth':
       handleBeginAuth(request.payload);

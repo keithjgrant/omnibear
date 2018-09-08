@@ -6,7 +6,7 @@ import {info, error} from './util/log';
 
 let authTabId = null;
 
-function handleMessage(request, sender, sendResponse) {
+function handleMessage(request, sender) {
   switch (request.action) {
     case 'begin-auth':
       handleBeginAuth(request.payload);

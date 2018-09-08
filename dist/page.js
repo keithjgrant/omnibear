@@ -4943,7 +4943,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
   document.body.addEventListener('contextmenu', _entry.focusClickedEntry);
 
-  function handleMessage(request, sender, sendResponse) {
+  function handleMessage(request) {
     switch (request.action) {
       case 'fetch-token-error':
         handleTokenError(request.payload.error);
