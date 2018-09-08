@@ -4,8 +4,7 @@
   "description": "A micropub Chrome extension",
   "main": "dist/index.html",
   "scripts": {
-    "test":
-      "mocha-webpack --webpack-config webpack.test.js \"src/**/*.test.js\"",
+    "test": "mocha-webpack --webpack-config webpack.test.js \"src/**/*.test.js\"",
     "start": "webpack --config webpack.dev.js --watch",
     "build": "webpack --config webpack.prod.js"
   },
@@ -13,7 +12,9 @@
     "type": "git",
     "url": "git+https://github.com/keithjgrant/omnibear.git"
   },
-  "keywords": ["micropub"],
+  "keywords": [
+    "micropub"
+  ],
   "author": "Keith J. Grant",
   "license": "MIT",
   "bugs": {
