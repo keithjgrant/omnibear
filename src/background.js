@@ -105,7 +105,7 @@ __browser__.contextMenus.create({
       window.open(
         'index.html?type=reply',
         'extension_popup',
-        'width=450,height=510,status=no,scrollbars=yes,resizable=no,top=80,left=2000',
+        'width=450,height=580,status=no,scrollbars=yes,resizable=no,top=80,left=2000',
       );
     } else {
       // Firefox (and others?)
