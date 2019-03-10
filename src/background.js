@@ -51,6 +51,7 @@ function selectEntry(entry) {
 }
 
 function clearEntry() {
+  localStorage.removeItem('syndicateTo');
   localStorage.removeItem('itemEntry');
 }
 
