@@ -33,6 +33,7 @@ export function logout() {
     'authEndpoint',
     'tokenEndpoint',
     'micropubEndpoint',
+    'syndicateTo',
   ];
   items.map(item => localStorage.removeItem(item));
 }
