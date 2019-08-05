@@ -17,6 +17,10 @@ const stores = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
+  if (window.location.search.includes("location=sidebar")) {
+    document.body.classList.add('sidebar');
+  }
+
   render(
     <Provider {...stores}>
       <App />
