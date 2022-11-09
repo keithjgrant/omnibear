@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "microformat-shiv": "^2.0.3",
-    "micropub-helper": "1.3.13",
+    "micropub-helper": "1.6.2",
     "mobx": "^5.0.4",
     "mobx-preact": "^3.0.0",
     "parse-uri": "^1.0.0",
