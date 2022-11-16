@@ -1,12 +1,12 @@
-import {h, Component} from 'preact';
-import {inject, observer} from 'mobx-preact';
+import { Component } from 'preact';
+// import { inject, observer } from 'mobx-preact';
 import ChangeViewTabs from './ChangeViewTabs';
 import Header from './Header';
 import MainPane from './MainPane';
 import Footer from './Footer';
 
-@inject('auth')
-@observer
+// @inject('auth')
+// @observer
 export default class App extends Component {
   render() {
     return (
@@ -26,7 +26,7 @@ export default class App extends Component {
   }
 
   getClass() {
-    const {auth} = this.props;
+    const { auth } = this.props;
     const height = auth.isLoggedIn() ? 'l-main--tall' : 'l-main--short';
     return `l-main ${height}`;
   }

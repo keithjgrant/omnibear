@@ -2,11 +2,13 @@
   "name": "omnibear",
   "version": "1.2.0",
   "description": "A micropub Chrome extension",
-  "main": "dist/index.html",
+  "type": "module",
   "scripts": {
-    "test": "mocha-webpack --webpack-config webpack.test.js \"src/**/*.test.js\"",
-    "start": "webpack --config webpack.dev.js --watch",
-    "build": "webpack --config webpack.prod.js"
+    "dev": "vite",
+    "build": "vite build && cp static/* dist/",
+    "build-only": "vite build",
+    "preview": "vite preview",
+    "//test": "mocha-webpack --webpack-config webpack.test.js \"src/**/*.test.js\""
   },
   "repository": {
     "type": "git",
@@ -21,7 +23,7 @@
     "url": "https://github.com/keithjgrant/omnibear/issues"
   },
   "homepage": "https://omnibear.com",
-  "devDependencies": {
+  "_devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
@@ -50,12 +52,18 @@
     "webpack-node-externals": "^1.7.2",
     "webpack-stream": "^5.1.1"
   },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.4.0",
+    "vite": "^3.2.3"
+  },
   "dependencies": {
     "microformat-shiv": "^2.0.3",
     "micropub-helper": "1.6.2",
-    "mobx": "^5.0.4",
-    "mobx-preact": "^3.0.0",
     "parse-uri": "^1.0.0",
-    "preact": "^8.3.0"
+    "preact": "^10.11.2"
+  },
+  "_dependencies": {
+    "mobx": "^5.0.4",
+    "mobx-preact": "^3.0.0"
   }
 }

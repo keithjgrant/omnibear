@@ -1,5 +1,4 @@
-/* LEGACY index file */
-import { h, render } from 'preact';
+import { render } from 'preact';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-preact';
 import App from './components/App';
@@ -7,6 +6,7 @@ import store from './stores/store';
 import authStore from './stores/authStore';
 import draftStore from './stores/draftStore';
 import settingsStore from './stores/settingsStore';
+import './index.css';
 
 configure({ enforceActions: true });
 
@@ -22,10 +22,5 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.classList.add('sidebar');
   }
 
-  render(
-    <Provider {...stores}>
-      <App />
-    </Provider>,
-    document.body
-  );
+  render(<App />, document.getElementById('app'));
 });
