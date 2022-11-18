@@ -61,9 +61,5 @@
     "micropub-helper": "1.6.2",
     "parse-uri": "^1.0.0",
     "preact": "^10.11.2"
-  },
-  "_dependencies": {
-    "mobx": "^5.0.4",
-    "mobx-preact": "^3.0.0"
   }
 }

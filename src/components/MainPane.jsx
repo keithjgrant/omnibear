@@ -1,3 +1,4 @@
+import { useContext } from 'preact/hooks';
 import AppContext from '../contexts/App';
 import LoginForm from './LoginForm';
 import NoteForm from './form/NoteForm';

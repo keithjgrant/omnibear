@@ -1,4 +1,4 @@
-import { useContext } from 'preact';
+import { useContext } from 'preact/hooks';
 import AppContext from '../../contexts/App';
 import Message from '../Message';
 import HeartSvg from '../svg/Heart';

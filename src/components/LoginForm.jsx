@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'preact';
+import { useState, useEffect, useContext, useRef } from 'preact/hooks';
 import Auth from '../contexts/Auth';
 import Message from './Message';
 import { openLink } from '../util/utils';
@@ -11,7 +11,9 @@ export default function LoginForm() {
 
   useEffect(() => {
     setTimeout(() => {
-      this.input.current.focus();
+      if (input.current) {
+        input.current.focus();
+      }
     }, 150);
   }, []);
 
@@ -25,7 +27,7 @@ export default function LoginForm() {
     e.preventDefault();
     const normalized = getNormalizedDomain();
     setDomain(normalized);
-    await this.props.auth.login(normalized);
+    await auth.login(normalized);
   };
 
   const getNormalizedDomain = () => {
@@ -40,7 +42,7 @@ export default function LoginForm() {
     <form
       className="container container--full"
       method="GET"
-      onSubmit={this.handleSubmit}
+      onSubmit={handleSubmit}
     >
       <p>
         To use Omnibear, sign in with your domain. Your website will need to
@@ -58,7 +60,7 @@ export default function LoginForm() {
           placeholder="https://example.com"
           className="fields-inline__fill"
           value={domain}
-          onInput={(e) => this.setDomain(e.target.value)}
+          onInput={(e) => setDomain(e.target.value)}
           disabled={auth.isLoading}
           ref={input}
         />

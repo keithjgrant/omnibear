@@ -1,4 +1,5 @@
-import { createContext, useState } from 'preact';
+import { createContext } from 'preact';
+import { useState } from 'preact/hooks';
 import authStore from './Auth';
 // import settingsStore from './settingsStore';
 import {
@@ -21,6 +22,7 @@ import { getParamFromUrl } from '../util/url';
 import { info, warning, error } from '../util/log';
 import { sanitizeMicropubError } from '../util/utils';
 
+// TODO: rename to publish context? Draft context?
 const App = createContext({});
 
 function AppProvider({ children }) {
@@ -66,6 +68,7 @@ function AppProvider({ children }) {
     send: () => {}, // TODO
     sendLike: () => {}, // TODO
     sendRepost: () => {}, // TODO
+    addQuickReply: () => {}, // TODO
   };
 
   return <App.Provider value={value}>{children}</App.Provider>;

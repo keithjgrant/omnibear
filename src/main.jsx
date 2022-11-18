@@ -15,8 +15,11 @@ import App from './components/App';
 //   settings: settingsStore,
 // };
 
+console.log('A');
 document.addEventListener('DOMContentLoaded', function () {
+  console.log('B');
   if (window.location.search.includes('location=sidebar')) {
+    console.log('sidebar');
     document.body.classList.add('sidebar');
   }
 

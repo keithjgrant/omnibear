@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef } from 'preact';
+import { useState, useEffect, useContext, useRef } from 'preact/hooks';
 import AppContext from '../../contexts/App';
 import Draft from '../../contexts/Draft';
 import Settings from '../../contexts/Settings';
@@ -6,7 +6,7 @@ import QuickReplies from './QuickReplies';
 import SyndicateInputs from './SyndicateInputs';
 import Message from '../Message';
 
-export default function NoteForm({ draft }) {
+export default function NoteForm() {
   const app = useContext(AppContext);
   const draft = useContext(Draft);
   const settings = useContext(Settings);

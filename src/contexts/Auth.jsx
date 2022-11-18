@@ -1,5 +1,7 @@
-import { createContext, useState } from 'preact';
+import { createContext } from 'preact';
+import { useState } from 'preact/hooks';
 
+console.log('init context');
 const Auth = createContext({});
 
 function AuthProvider({ children }) {
@@ -12,6 +14,7 @@ function AuthProvider({ children }) {
     errorMessage: '',
     authorizationPageOpened: false,
   });
+  console.log('render AuthProvider');
 
   const value = {
     isLoggedIn: () => state.token && state.micropubEndpoint,

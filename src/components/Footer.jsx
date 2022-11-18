@@ -1,3 +1,4 @@
+import { useContext } from 'preact/hooks';
 import AppContext from '../contexts/App';
 import Auth from '../contexts/Auth';
 import { openLink } from '../util/utils';

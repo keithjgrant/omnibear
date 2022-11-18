@@ -1,18 +1,19 @@
-import { Component } from 'preact';
-// import { inject, observer } from 'mobx-preact';
 import Layout from './Layout';
-import ChangeViewTabs from './ChangeViewTabs';
-import Header from './Header';
-import MainPane from './MainPane';
-import Footer from './Footer';
-import Auth from '../contexts/Auth';
+import { AppProvider } from '../contexts/App';
+import { AuthProvider } from '../contexts/Auth';
+import { SettingsProvider } from '../contexts/Settings';
+import { DraftProvider } from '../contexts/Draft';
 
-// @inject('auth')
-// @observer
 export default function App() {
   return (
-    <Auth.Provider>
-      <Layout />
-    </Auth.Provider>
+    <AppProvider>
+      <AuthProvider>
+        <SettingsProvider>
+          <DraftProvider>
+            <Layout />
+          </DraftProvider>
+        </SettingsProvider>
+      </AuthProvider>
+    </AppProvider>
   );
 }

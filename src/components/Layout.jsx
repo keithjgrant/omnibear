@@ -1,4 +1,4 @@
-import { useContext } from 'preact';
+import { useContext } from 'preact/hooks';
 import Auth from '../contexts/Auth';
 import ChangeViewTabs from './ChangeViewTabs';
 import Header from './Header';
@@ -6,7 +6,10 @@ import MainPane from './MainPane';
 import Footer from './Footer';
 
 export default function Layout() {
+  console.log('render Layout');
   const auth = useContext(Auth);
+
+  console.log(auth);
 
   const getClass = () => {
     const height = auth.isLoggedIn() ? 'l-main--tall' : 'l-main--short';

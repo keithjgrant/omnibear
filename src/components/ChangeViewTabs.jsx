@@ -1,4 +1,5 @@
-import AppContext from '../contexts/Ap';
+import { useContext } from 'preact/hooks';
+import AppContext from '../contexts/App';
 import Auth from '../contexts/Auth';
 import SettingsContext from '../contexts/Settings';
 import Login from './svg/Login';

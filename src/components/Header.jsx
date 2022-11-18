@@ -1,3 +1,4 @@
+import { useContext } from 'preact/hooks';
 import AppContext from '../contexts/App';
 import UrlSelector from './form/UrlSelector';
 import { NOTE, REPLY, BOOKMARK, LIKE, REPOST } from '../constants';
