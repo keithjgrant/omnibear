@@ -1,3 +1,7 @@
+## Seeking new ownership
+
+I have turned off domain renewal for https://omnibear.com. If anybody is interested in taking over this project, reach out to me at barkeep @ keithjgrant.com
+
 # Omnibear
 
 For general usage information, see https://omnibear.com.
